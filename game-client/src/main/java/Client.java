@@ -2634,7 +2634,7 @@ public class Client extends RSApplet {
 		toggleSize(0);
 		socketStream = null;
 		loggedIn = false;
-		loginScreenState = 0;
+		loginScreenState = 2;
 		// myUsername = "";
 		// myPassword = "";
 		unlinkMRUNodes();
@@ -3189,7 +3189,7 @@ public class Client extends RSApplet {
 		sprite.method346(-128, 0);
 		aRSImageProducer_1108.initDrawingArea();
 		sprite.method346(-202, -371);
-		aRSImageProducer_1109.initDrawingArea();
+		titleScreen.initDrawingArea();
 		sprite.method346(-202, -171);
 		aRSImageProducer_1112.initDrawingArea();
 		sprite.method346(0, -265);
@@ -3663,7 +3663,7 @@ public class Client extends RSApplet {
 		DrawingArea.setAllPixelsToZero();
 		aRSImageProducer_1108 = new RSImageProducer(360, 132, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
-		aRSImageProducer_1109 = new RSImageProducer(360, 200, getGameComponent());
+		titleScreen = new RSImageProducer(360, 200, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
 		aRSImageProducer_1112 = new RSImageProducer(202, 238, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
@@ -3691,7 +3691,7 @@ public class Client extends RSApplet {
 			super.drawLoadingText(i, s);
 			return;
 		}
-		aRSImageProducer_1109.initDrawingArea();
+		titleScreen.initDrawingArea();
 		char c = '\u0168';
 		char c1 = '\310';
 		byte byte1 = 20;
@@ -3702,7 +3702,7 @@ public class Client extends RSApplet {
 		DrawingArea.drawPixels(30, j + 2, c / 2 - 150, 0x8c1111, i * 3);
 		DrawingArea.drawPixels(30, j + 2, (c / 2 - 150) + i * 3, 0, 300 - i * 3);
 		chatTextDrawingArea.drawText(0xffffff, s, (c1 / 2 + 5) - byte1, c / 2);
-		aRSImageProducer_1109.drawGraphics(171, super.graphics, 202);
+		titleScreen.drawGraphics(171, super.graphics, 202);
 		if(welcomeScreenRaised)
 		{
 			welcomeScreenRaised = false;
@@ -5148,7 +5148,7 @@ public class Client extends RSApplet {
 		aRSImageProducer_1111 = null;
 		aRSImageProducer_1107 = null;
 		aRSImageProducer_1108 = null;
-		aRSImageProducer_1109 = null;
+		titleScreen = null;
 		aRSImageProducer_1112 = null;
 		aRSImageProducer_1113 = null;
 		aRSImageProducer_1114 = null;
@@ -6611,7 +6611,7 @@ public class Client extends RSApplet {
 		super.fullGameScreen = null;
 		aRSImageProducer_1107 = null;
 		aRSImageProducer_1108 = null;
-		aRSImageProducer_1109 = null;
+		titleScreen = null;
 		aRSImageProducer_1110 = null;
 		aRSImageProducer_1111 = null;
 		aRSImageProducer_1112 = null;
@@ -9565,7 +9565,7 @@ public class Client extends RSApplet {
 	public int centerY = clientHeight / 2;
 
 	public void refreshClientScreen() {
-		aRSImageProducer_1109 = new RSImageProducer(clientWidth, clientHeight, getGameComponent());
+		titleScreen = new RSImageProducer(clientWidth, clientHeight, getGameComponent());
 		DrawingArea.setAllPixelsToZero();
 	}
 
@@ -10422,65 +10422,29 @@ public class Client extends RSApplet {
 
 	private void drawLoginScreen(boolean flag) {
 		resetImageProducers();
-		aRSImageProducer_1109.initDrawingArea();
+		titleScreen.initDrawingArea();
 		aBackground_966.drawBackground(0, 0);
-		char c = '\u0168';
+		char positionX = '\u0168';
 		char c1 = '\310';
-		if (loginScreenState == 0) {
-			int i = c1 / 2 + 80;
-			smallText.method382(0x75a9a9, c / 2, onDemandFetcher.statusString, i, true);
-			i = c1 / 2 - 20;
-			chatTextDrawingArea.method382(0xffff00, c / 2, "Welcome to RuneScape", i, true);
-			i += 30;
-			int l = c / 2 - 80;
-			int k1 = c1 / 2 + 20;
-			aBackground_967.drawBackground(l - 73, k1 - 20);
-			chatTextDrawingArea.method382(0xffffff, l, "New User", k1 + 5, true);
-			l = c / 2 + 80;
-			aBackground_967.drawBackground(l - 73, k1 - 20);
-			chatTextDrawingArea.method382(0xffffff, l, "Existing User", k1 + 5, true);
+
+		int i = c1 / 2 + 80;
+		smallText.method382(0x75a9a9, positionX / 2, onDemandFetcher.statusString, i, true);
+
+		int positionY = c1 / 2 - 40;
+		if (loginMessage1.length() > 0) {
+			chatTextDrawingArea.method382(0xffff00, positionX / 2, loginMessage1, positionY - 15, true);
+			chatTextDrawingArea.method382(0xffff00, positionX / 2, loginMessage2, positionY, true);
+			positionY += 30;
+		} else {
+			chatTextDrawingArea.method382(0xffff00, positionX / 2, loginMessage2, positionY - 7, true);
+			positionY += 30;
 		}
-		if (loginScreenState == 2) {
-			int j = c1 / 2 - 40;
-			if (loginMessage1.length() > 0) {
-				chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage1, j - 15, true);
-				chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j, true);
-				j += 30;
-			} else {
-				chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j - 7, true);
-				j += 30;
-			}
-			chatTextDrawingArea.method389(true, c / 2 - 90, 0xffffff, "Username: " + myUsername + ((loginScreenCursorPos == 0) & (loopCycle % 40 < 20) ? "@yel@|" : ""), j);
-			j += 15;
-			chatTextDrawingArea.method389(true, c / 2 - 88, 0xffffff, "Password: " + TextClass.passwordAsterisks(myPassword) + ((loginScreenCursorPos == 1) & (loopCycle % 40 < 20) ? "@yel@|" : ""), j);
-			j += 15;
-			if (!flag) {
-				int i1 = c / 2 - 80;
-				int l1 = c1 / 2 + 50;
-				aBackground_967.drawBackground(i1 - 73, l1 - 20);
-				chatTextDrawingArea.method382(0xffffff, i1, "Login", l1 + 5, true);
-				i1 = c / 2 + 80;
-				aBackground_967.drawBackground(i1 - 73, l1 - 20);
-				chatTextDrawingArea.method382(0xffffff, i1, "Cancel", l1 + 5, true);
-			}
-		}
-		if (loginScreenState == 3) {
-			chatTextDrawingArea.method382(0xffff00, c / 2, "Create a free account", c1 / 2 - 60, true);
-			int k = c1 / 2 - 35;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "To create a new account you need to", k, true);
-			k += 15;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "go back to the main RuneScape webpage", k, true);
-			k += 15;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "and choose the red 'create account'", k, true);
-			k += 15;
-			chatTextDrawingArea.method382(0xffffff, c / 2, "button at the top right of that page.", k, true);
-			k += 15;
-			int j1 = c / 2;
-			int i2 = c1 / 2 + 50;
-			aBackground_967.drawBackground(j1 - 73, i2 - 20);
-			chatTextDrawingArea.method382(0xffffff, j1, "Cancel", i2 + 5, true);
-		}
-		aRSImageProducer_1109.drawGraphics(171, super.graphics, 202);
+		chatTextDrawingArea.method389(true, positionX / 2 - 90, 0xffffff, "Username: " + myUsername + ((loginScreenCursorPos == 0) & (loopCycle % 40 < 20) ? "@yel@|" : ""), positionY);
+		positionY += 15;
+		chatTextDrawingArea.method389(true, positionX / 2 - 88, 0xffffff, "Password: " + TextClass.passwordAsterisks(myPassword) + ((loginScreenCursorPos == 1) & (loopCycle % 40 < 20) ? "@yel@|" : ""), positionY);
+		positionY += 15;
+
+		titleScreen.drawGraphics(171, super.graphics, 202);
 		if (welcomeScreenRaised) {
 			welcomeScreenRaised = false;
 			aRSImageProducer_1107.drawGraphics(0, super.graphics, 128);
@@ -10848,7 +10812,7 @@ public class Client extends RSApplet {
 			int l = super.myHeight / 2 + 20;
 			l += 20;
 			if (super.clickMode3 == 1 && super.saveClickX >= i - 75 && super.saveClickX <= i + 75 && super.saveClickY >= l - 20 && super.saveClickY <= l + 20) {
-				loginScreenState = 3;
+				loginScreenState = 2;
 				loginScreenCursorPos = 0;
 			}
 			i = super.myWidth / 2 + 80;
@@ -10880,7 +10844,7 @@ public class Client extends RSApplet {
 				}
 				i1 = super.myWidth / 2 + 80;
 				if (super.clickMode3 == 1 && super.saveClickX >= i1 - 75 && super.saveClickX <= i1 + 75 && super.saveClickY >= k1 - 20 && super.saveClickY <= k1 + 20) {
-					loginScreenState = 0;
+					loginScreenState = 2;
 				}
 				do {
 					int l1 = readChar(-796);
@@ -10921,7 +10885,7 @@ public class Client extends RSApplet {
 				int j1 = super.myHeight / 2 + 50;
 				j1 += 20;
 				if (super.clickMode3 == 1 && super.saveClickX >= k - 75 && super.saveClickX <= k + 75 && super.saveClickY >= j1 - 20 && super.saveClickY <= j1 + 20)
-					loginScreenState = 0;
+					loginScreenState = 2;
 			}
 		}
 	}
@@ -12784,7 +12748,7 @@ public class Client extends RSApplet {
 	private int anInt1104;
 	private RSImageProducer aRSImageProducer_1107;
 	private RSImageProducer aRSImageProducer_1108;
-	private RSImageProducer aRSImageProducer_1109;
+	private RSImageProducer titleScreen;
 	private RSImageProducer aRSImageProducer_1110;
 	private RSImageProducer aRSImageProducer_1111;
 	private RSImageProducer aRSImageProducer_1112;
@@ -12968,7 +12932,7 @@ public class Client extends RSApplet {
 		aRSImageProducer_1125 = null;
 		aRSImageProducer_1107 = null;
 		aRSImageProducer_1108 = null;
-		aRSImageProducer_1109 = null;
+		titleScreen = null;
 		aRSImageProducer_1110 = null;
 		aRSImageProducer_1111 = null;
 		aRSImageProducer_1112 = null;
