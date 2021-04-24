@@ -11,10 +11,6 @@ plugins {
     id("io.spring.dependency-management") version "1.0.7.RELEASE"
 }
 
-application {
-    mainClassName = "net.dodian.uber.game.Server"
-}
-
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -25,7 +21,13 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.0.rc1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
+    implementation("org.springframework.boot:spring-boot-starter-web:$springVersion")
+    implementation("org.springframework.boot:spring-boot-starter-security:$springVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springVersion")
+
     implementation("org.apache.commons:commons-compress:1.20")
     implementation("org.quartz-scheduler:quartz:2.3.2")
-    implementation("mysql:mysql-connector-java:8.0.24")
+
+    runtimeOnly("mysql:mysql-connector-java")
+    runtimeOnly("com.h2database:h2:1.4.200")
 }
