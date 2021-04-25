@@ -1,4 +1,7 @@
 package net.dodian.repositories.definitions.spawns;
 
-public class ObjectSpawnRepository {
+import net.dodian.models.definitions.spawn.ObjectSpawnDefinition;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ObjectSpawnRepository extends JpaRepository<ObjectSpawnDefinition, Integer> {
 }

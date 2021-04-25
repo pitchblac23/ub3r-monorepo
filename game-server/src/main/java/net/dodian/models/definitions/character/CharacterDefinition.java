@@ -17,4 +17,28 @@ public class CharacterDefinition {
     //private List<int> friends;
     //private List<int> ignores;
     private int fightStyle;
+
+    public int getId() {
+        return id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public CharacterAppearance getAppearance() {
+        return appearance;
+    }
+
+    public Timestamp getLastLogin() {
+        return lastLogin;
+    }
+
+    public int getAutoCastSpell() {
+        return autoCastSpell;
+    }
+
+    public int getFightStyle() {
+        return fightStyle;
+    }
 }

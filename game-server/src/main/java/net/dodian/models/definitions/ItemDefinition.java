@@ -36,6 +36,122 @@ public class ItemDefinition {
     private int magicDamageBonus;
     private int prayerBonus;
 
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public EquipmentSlot getSlot() {
+        return slot;
+    }
+
+    public boolean isStackAble() {
+        return stackAble;
+    }
+
+    public boolean isNoteAble() {
+        return noteAble;
+    }
+
+    public int getShopSellValue() {
+        return shopSellValue;
+    }
+
+    public int getShopBuyValue() {
+        return shopBuyValue;
+    }
+
+    public int getAlchemyValue() {
+        return alchemyValue;
+    }
+
+    public int getStandAnimation() {
+        return standAnimation;
+    }
+
+    public int getWalkAnimation() {
+        return walkAnimation;
+    }
+
+    public int getRunAnimation() {
+        return runAnimation;
+    }
+
+    public int getAttackAnimation() {
+        return attackAnimation;
+    }
+
+    public boolean isPremiumOnly() {
+        return premiumOnly;
+    }
+
+    public EquipmentType getEquipmentType() {
+        return equipmentType;
+    }
+
+    public int getAttackStabBonus() {
+        return attackStabBonus;
+    }
+
+    public int getAttackSlashBonus() {
+        return attackSlashBonus;
+    }
+
+    public int getAttackCrushBonus() {
+        return attackCrushBonus;
+    }
+
+    public int getAttackMagicBonus() {
+        return attackMagicBonus;
+    }
+
+    public int getAttackRangeBonus() {
+        return attackRangeBonus;
+    }
+
+    public int getDefenceStabBonus() {
+        return defenceStabBonus;
+    }
+
+    public int getDefenceSlashBonus() {
+        return defenceSlashBonus;
+    }
+
+    public int getDefenceCrushBonus() {
+        return defenceCrushBonus;
+    }
+
+    public int getDefenceMagicBonus() {
+        return defenceMagicBonus;
+    }
+
+    public int getDefenceRangeBonus() {
+        return defenceRangeBonus;
+    }
+
+    public int getMeleeStrengthBonus() {
+        return meleeStrengthBonus;
+    }
+
+    public int getRangedStrengthBonus() {
+        return rangedStrengthBonus;
+    }
+
+    public int getMagicDamageBonus() {
+        return magicDamageBonus;
+    }
+
+    public int getPrayerBonus() {
+        return prayerBonus;
+    }
+
     public enum EquipmentType {
         TWO_HANDED,
         FULL_HELM,

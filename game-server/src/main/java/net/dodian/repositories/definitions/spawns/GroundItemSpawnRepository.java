@@ -1,4 +1,7 @@
 package net.dodian.repositories.definitions.spawns;
 
-public class GroundItemSpawnRepository {
+import net.dodian.models.definitions.spawn.GroundItemSpawnDefinition;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface GroundItemSpawnRepository extends JpaRepository<GroundItemSpawnDefinition, Integer> {
 }

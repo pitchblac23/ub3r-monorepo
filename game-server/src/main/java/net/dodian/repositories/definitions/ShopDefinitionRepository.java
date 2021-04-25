@@ -1,4 +1,4 @@
 package net.dodian.repositories.definitions;
 
-public class ShopDefinitionRepository {
+public interface ShopDefinitionRepository {
 }
