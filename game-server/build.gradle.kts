@@ -10,7 +10,7 @@ plugins {
 }
 
 application {
-    mainClassName = "net.dodian.uber.game.Server"
+    mainClass.set("net.dodian.uber.game.Server")
 }
 
 java {
