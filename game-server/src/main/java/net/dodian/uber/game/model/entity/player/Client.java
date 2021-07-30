@@ -1002,7 +1002,7 @@ public class Client extends Player implements Runnable {
             println_debug("Invalid player name");
             return;
         }
-        if (logout) {
+        if (logout && !(inTrade || inDuel)) {
             saving = true;
       /*for (Player p : PlayerHandler.players) {
         if (p != null && !p.disconnected && p.dbId > 0) {
@@ -1022,6 +1022,8 @@ public class Client extends Player implements Runnable {
                     c.refreshFriends();
                 }
             }
+        } else {
+            saveStats(logout, updateProgress);
         }
         if (logout && inTrade) {
             declineTrade();
@@ -1032,7 +1034,7 @@ public class Client extends Player implements Runnable {
             p.duelWin = true;
             p.DuelVictory();
         }
-        if (Config.getWorldId() < 2 || getPlayerName().toLowerCase().startsWith("pro noob"))
+        if (Config.getWorldId() < 2 || getPlayerName().toLowerCase().startsWith("pro noob") && (!inTrade || !inDuel))
             try {
                 Statement statement = Database.conn.createStatement();
                 long allxp = 0;
@@ -7337,12 +7339,14 @@ public class Client extends Player implements Runnable {
             send(new SendMessage("Trading has been temporarily disabled"));
             return;
         }
+
         for (int a = 0; a < PlayerHandler.players.length; a++) {
             Client o = getClient(a);
             if (a != getSlot() && validClient(a) && o.dbId > 0 && o.dbId == dbId) {
                 logout();
             }
         }
+
         Client other = (Client) PlayerHandler.players[id];
         if (validClient(trade_reqId)) {
             setFocus(other.getPosition().getX(), other.getPosition().getY());
@@ -7355,6 +7359,7 @@ public class Client extends Player implements Runnable {
                 return;
             }
         }
+
         if (dbId == other.dbId) {
             return;
         }
@@ -7383,6 +7388,7 @@ public class Client extends Player implements Runnable {
         String SendAmount;
         int Count = 0;
         Client other = getClient(trade_reqId);
+
         for (GameItem item : offeredItems) {
             if (item.getId() > 0) {
                 if (item.getAmount() >= 1000 && item.getAmount() < 1000000) {
