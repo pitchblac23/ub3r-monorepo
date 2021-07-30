@@ -1024,6 +1024,7 @@ public class Client extends Player implements Runnable {
             }
         } else {
             saveStats(logout, updateProgress);
+            return;
         }
         if (logout && inTrade) {
             declineTrade();
