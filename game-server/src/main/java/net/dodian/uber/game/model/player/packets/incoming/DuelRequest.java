@@ -14,7 +14,7 @@ public class DuelRequest implements Packet {
         if (!client.validClient(PID)) {
             return;
         }
-        if (client.inTrade || client.inDuel || (client.duelFight && client.duel_with != PID)) {
+        if (client.inTrade || client.inDuel || (client.duelFight && client.duelWithPid != PID)) {
             client.send(new SendMessage("You are busy at the moment"));
             return;
         }

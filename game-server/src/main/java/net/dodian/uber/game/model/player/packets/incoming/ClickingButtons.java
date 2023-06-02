@@ -164,14 +164,14 @@ public class ClickingButtons implements Packet {
                 } else {
                     client.lastButton = System.currentTimeMillis();
                 }
-                Client dw = client.getClient(client.duel_with);
+                Client dw = client.getClient(client.duelWithPid);
                 /*
                  * Danno: Sometimes dcs a player. So we break if other player is null.
                  */
                 if (dw == null)
                     break;
                 client.canOffer = false;
-                if (!client.validClient(client.duel_with)) {
+                if (!client.validClient(client.duelWithPid)) {
                     client.declineDuel();
                 }
                 if (client.duelConfirmed2) {
@@ -466,7 +466,7 @@ public class ClickingButtons implements Packet {
             case 6236: // accurate (long bow)
             case 17102: // accurate (darts)
             case 8234: // stab (dagger)
-                client.FightType = 0;
+                client.fightType = 0;
                 break;
 
             case 1175: // Gmaul!
@@ -479,7 +479,7 @@ public class ClickingButtons implements Packet {
             case 33019: // fend (hally)
             case 18078: // block (spear)
             case 8235: // block (dagger)
-                client.FightType = 1;
+                client.fightType = 1;
                 break;
 
             case 9127: // Controlled
@@ -490,7 +490,7 @@ public class ClickingButtons implements Packet {
             case 18080: // swipe (spear)
             case 18079: // pound (spear)
             case 17100: // longrange (darts)
-                client.FightType = 3;
+                client.fightType = 3;
                 // client.SkillID = 3;
                 break;
 
@@ -507,7 +507,7 @@ public class ClickingButtons implements Packet {
             case 17101: // repid (darts)
             case 8237: // lunge (dagger)
             case 8236: // slash (dagger)
-                client.FightType = 2;
+                client.fightType = 2;
                 // client.SkillID = 2;
                 break;
 
@@ -708,10 +708,10 @@ public class ClickingButtons implements Packet {
                 client.setSidebarInterface(0, 328);
                 break;
             case 26018:
-                if (!client.inDuel || !client.validClient(client.duel_with)) {
+                if (!client.inDuel || !client.validClient(client.duelWithPid)) {
                     break;
                 }
-                Client o = client.getClient(client.duel_with);
+                Client o = client.getClient(client.duelWithPid);
                 boolean sendMsgToOther = o.getCurrentHealth() != o.getMaxHealth() && client.getCurrentHealth() == client.getMaxHealth();
                 if (o.getCurrentHealth() != o.getMaxHealth() || client.getCurrentHealth() != client.getMaxHealth()) {
                     client.send(new SendMessage(sendMsgToOther ? "Your opponent is low on health!" : "You are low on health, so please heal up!"));

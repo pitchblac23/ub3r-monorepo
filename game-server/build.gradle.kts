@@ -38,6 +38,8 @@ dependencies {
 
     implementation("mysql:mysql-connector-java:8.0.29")
     implementation("org.mybatis:mybatis:3.5.10")
+
+    implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.16")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

@@ -100,7 +100,7 @@ public class LoginManager {
                     p.addItem(1856, 1);
                     p.addItem(4155, 1);
                 }
-                p.FightType = results.getInt("fightStyle");
+                p.fightType = results.getInt("fightStyle");
                 p.setTask(results.getString("slayerData"));
                 p.setTravel(results.getString("travel"));
                 p.agilityCourseStage = results.getInt("agility");

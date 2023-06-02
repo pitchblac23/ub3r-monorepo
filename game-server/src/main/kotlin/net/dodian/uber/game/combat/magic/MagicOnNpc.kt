@@ -29,7 +29,7 @@ fun Client.handleMagic(): Int {
     }
 
     if (!runeCheck(autocast_spellIndex)) {
-        ResetAttack()
+        resetAttack()
         return 0
     }
 

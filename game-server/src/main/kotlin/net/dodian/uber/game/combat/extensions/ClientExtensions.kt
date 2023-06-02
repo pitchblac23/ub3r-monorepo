@@ -47,11 +47,11 @@ fun Client.meleeMaxHit(): Int {
     val voidBonus = 0.0 // TODO: Probably not relevant for Dodian, at least not for a while
     val specialBonus = 0.0 // TODO: Calculate special bonus
 
-    val styleBonus = when (FightType) {
+    val styleBonus = when (fightType) {
         0, 1 -> 0 // Accurate & Defensive
         2 -> 3 // Aggressive
         3 -> 1 // Controlled
-        else -> error("Fight style ID '$FightType' was unexpected!")
+        else -> error("Fight style ID '$fightType' was unexpected!")
     }
     val strengthBonus = playerBonus[10]
 
@@ -70,10 +70,10 @@ fun Client.rangedMaxHit(): Int {
     val otherBonus = 0.0 // TODO: Not sure what this is
     val specialBonus = 0.0 // TODO: Calculate special bonus
 
-    val styleBonus = when (FightType) {
+    val styleBonus = when (fightType) {
         1 -> 3 // Accurate
         2, 3 -> 0 // Long Range & Rapid
-        else -> error("Fight style ID '$FightType' was unexpected!")
+        else -> error("Fight style ID '$fightType' was unexpected!")
     }
     val rangedBonus = playerBonus[4]
 

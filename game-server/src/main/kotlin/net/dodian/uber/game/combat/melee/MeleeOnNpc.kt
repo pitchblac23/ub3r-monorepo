@@ -26,12 +26,12 @@ fun Client.handleMelee(): Int {
         selectedNpc.dealDamage(this, hit + criticalDamageBonus, true)
     else selectedNpc.dealDamage(this, hit, false)
 
-    if (FightType == 3) {
+    if (fightType == 3) {
         val xp = (15 * hit) * CombatExpRate
         giveExperience(xp, Skill.ATTACK)
         giveExperience(xp, Skill.DEFENCE)
         giveExperience(xp, Skill.STRENGTH)
-    } else giveExperience((40 * hit) * CombatExpRate, Skill.getSkill(FightType))
+    } else giveExperience((40 * hit) * CombatExpRate, Skill.getSkill(fightType))
 
     giveExperience((15 * hit) * CombatExpRate, Skill.HITPOINTS)
     if (debug) send(SendMessage("hit = $hit, elapsed = ${time - lastAttack}"))

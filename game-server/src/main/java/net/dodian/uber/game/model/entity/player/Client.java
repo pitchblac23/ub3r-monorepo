@@ -35,7 +35,6 @@ import net.dodian.uber.game.security.*;
 import net.dodian.utilities.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -44,7 +43,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
 
 import static net.dodian.DotEnvKt.*;
 import static net.dodian.uber.game.combat.PlayerOnNpcCombatKt.attackNpc;
@@ -110,7 +108,7 @@ public class Client extends Player implements Runnable {
 	public int[] duelLine = {6698, 6699, 6697, 7817, 669, 6696, 6701, 6702, 6703, 6704, 6731};
 	public boolean duelRequested = false, inDuel = false, duelConfirmed = false, duelConfirmed2 = false,
 			duelFight = false;
-	public int duel_with = 0;
+	public int duelWithPid = 0;
 	public boolean tradeRequested = false, inTrade = false, canOffer = true, tradeConfirmed = false,
 			tradeConfirmed2 = false, tradeResetNeeded = false;
 	public int trade_reqId = 0;
@@ -473,7 +471,7 @@ public class Client extends Player implements Runnable {
 	public int WanneBank = 0;
 	public int WanneShop = 0;
 	public int WanneThieve = 0;
-	public int AttackingOn = 0;
+	public int attackingOnPid = 0;
 
 	public static final int bufferSize = 1000000;
 	private java.net.Socket mySock;
@@ -989,8 +987,8 @@ public class Client extends Player implements Runnable {
 			declineTrade();
 		} else if (logout && inDuel && !duelFight) {
 			declineDuel();
-		} else if (logout && duel_with > 0 && validClient(duel_with) && inDuel && duelFight) {
-			Client p = getClient(duel_with);
+		} else if (logout && duelWithPid > 0 && validClient(duelWithPid) && inDuel && duelFight) {
+			Client p = getClient(duelWithPid);
 			p.duelWin = true;
 			p.DuelVictory();
 		}
@@ -1066,7 +1064,7 @@ public class Client extends Player implements Runnable {
 				}
 				statement.executeUpdate("UPDATE " + DbTables.GAME_CHARACTERS + " SET uuid= '" + LoginManager.UUID + "', lastvote=" + lastVoted + ", pkrating=" + 1500 + ", health="
 						+ getCurrentHealth() + ", equipment='" + equipment + "', inventory='" + inventory + "', bank='" + bank
-						+ "', friends='" + list + "', fightStyle = " + FightType + ", slayerData='" + saveTaskAsString() + "', essence_pouch='" + getPouches() + "'"
+						+ "', friends='" + list + "', fightStyle = " + fightType + ", slayerData='" + saveTaskAsString() + "', essence_pouch='" + getPouches() + "'"
 						+ ", autocast=" + autocast_spellIndex + ", news=" + latestNews + ", agility = '" + agilityCourseStage + "', height = " + getPosition().getZ() + ", x = " + getPosition().getX()
 						+ ", y = " + getPosition().getY() + ", lastlogin = '" + System.currentTimeMillis() + "', Boss_Log='"
 						+ boss_log + "', songUnlocked='" + getSongUnlockedSaveText() + "', travel='" + saveTravelAsString() + "', look='" + getLook() + "', unlocks='" + saveUnlocksAsString() + "'" +
@@ -2615,17 +2613,17 @@ public class Client extends Player implements Runnable {
 
 		// Attacking in wilderness
 		if (IsAttacking && !attackingNpc && deathStage == 0) {
-			if (PlayerHandler.players[AttackingOn] != null) {
-				if (PlayerHandler.players[AttackingOn].getCurrentHealth() > 0) {
+			if (PlayerHandler.players[attackingOnPid] != null) {
+				if (PlayerHandler.players[attackingOnPid].getCurrentHealth() > 0) {
 					// TODO: Handle PVP!
 					//Attack();
 				} else {
-					ResetAttack();
+					resetAttack();
 					// if(duelStatus == 3)
 					// DuelVictory(p.absX, p.absY);
 				}
 			} else {
-				ResetAttack();
+				resetAttack();
 			}
 		}
 		// Attacking an NPC
@@ -2639,9 +2637,9 @@ public class Client extends Player implements Runnable {
 				selectedNpc.removeEnemy(this);
 				resetAttackNpc();
 			} else if (IsAttacking)
-				ResetAttack();
-			Client p = getClient(duel_with);
-			if (duel_with > 0 && validClient(duel_with) && inDuel && duelFight) {
+				resetAttack();
+			Client p = getClient(duelWithPid);
+			if (duelWithPid > 0 && validClient(duelWithPid) && inDuel && duelFight) {
 				p.duelWin = true;
 				p.DuelVictory();
 			}
@@ -3618,9 +3616,9 @@ public class Client extends Player implements Runnable {
 
 	public boolean usingBow = false;
 
-	public boolean ResetAttack() {
+	public boolean resetAttack() {
 		IsAttacking = false;
-		AttackingOn = 0;
+		attackingOnPid = 0;
 		rerequestAnim();
 		faceNPC(65535);
 		return true;
@@ -5601,8 +5599,8 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void DuelVictory() {
-		Client other = getClient(duel_with);
-		if (validClient(duel_with)) {
+		Client other = getClient(duelWithPid);
+		if (validClient(duelWithPid)) {
 			send(new SendMessage("You have defeated " + other.getPlayerName() + "!"));
 			send(new SendString("" + other.determineCombatLevel(), 6839));
 			send(new SendString(other.getPlayerName(), 6840));
@@ -5622,7 +5620,7 @@ public class Client extends Player implements Runnable {
 				stake = true;
 			}
 		}
-		ResetAttack();
+		resetAttack();
 
 		if (stake) {
 			DuelLog.recordDuel(this.getPlayerName(), other.getPlayerName(), playerStake, opponentStake, this.getPlayerName());
@@ -5630,7 +5628,7 @@ public class Client extends Player implements Runnable {
 			acceptDuelWon();
 			other.resetDuel();
 		} else {
-			if (validClient(duel_with))
+			if (validClient(duelWithPid))
 				other.resetDuel();
 			resetDuel();
 			// duelStatus = -1;
@@ -5672,8 +5670,8 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void refreshDuelScreen() {
-		Client other = getClient(duel_with);
-		if (!validClient(duel_with)) {
+		Client other = getClient(duelWithPid);
+		if (!validClient(duelWithPid)) {
 			return;
 		}
 		getOutputStream().createFrameVarSizeWord(53);
@@ -5738,8 +5736,8 @@ public class Client extends Player implements Runnable {
 			send(new SendMessage("You can't trade that item"));
 			return false;
 		}
-		Client other = getClient(duel_with);
-		if (!inDuel || !validClient(duel_with)) {
+		Client other = getClient(duelWithPid);
+		if (!inDuel || !validClient(duelWithPid)) {
 			declineDuel();
 			return false;
 		}
@@ -5812,8 +5810,8 @@ public class Client extends Player implements Runnable {
 		} else {
 			return false;
 		}
-		Client other = getClient(duel_with);
-		if (!inDuel || !validClient(duel_with)) {
+		Client other = getClient(duelWithPid);
+		if (!inDuel || !validClient(duelWithPid)) {
 			declineDuel();
 			return false;
 		}
@@ -7065,9 +7063,9 @@ public class Client extends Player implements Runnable {
 				logout();
 			}
 		}
-		duel_with = pid;
+		duelWithPid = pid;
 		duelRequested = true;
-		if (!validClient(duel_with)) {
+		if (!validClient(duelWithPid)) {
 			return;
 		}
 		setFocus(other.getPosition().getX(), other.getPosition().getY());
@@ -7084,7 +7082,7 @@ public class Client extends Player implements Runnable {
 			// duelRequested = false;
 			// return;
 		}
-		if (duelRequested && other.duelRequested && duel_with == other.getSlot() && other.duel_with == getSlot()) {
+		if (duelRequested && other.duelRequested && duelWithPid == other.getSlot() && other.duelWithPid == getSlot()) {
 			openDuel();
 			other.openDuel();
 		} else {
@@ -7097,7 +7095,7 @@ public class Client extends Player implements Runnable {
 		RefreshDuelRules();
 		refreshDuelScreen();
 		inDuel = true;
-		Client other = getClient(duel_with);
+		Client other = getClient(duelWithPid);
 		send(new SendString("Dueling with: " + other.getPlayerName() + " (level-" + other.determineCombatLevel() + ")", 6671));
 		send(new SendString("", 6684));
 		send(new InventoryInterface(6575, 3321));
@@ -7106,14 +7104,14 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void declineDuel() {
-		Client other = getClient(duel_with);
+		Client other = getClient(duelWithPid);
 		inDuel = false;
-		if (validClient(duel_with) && other.inDuel) {
+		if (validClient(duelWithPid) && other.inDuel) {
 			other.declineDuel();
 		}
 		send(new RemoveInterfaces());
 		canOffer = true;
-		duel_with = 0;
+		duelWithPid = 0;
 		duelRequested = false;
 		duelConfirmed = false;
 		duelConfirmed2 = false;
@@ -7139,8 +7137,8 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void confirmDuel() {
-		Client other = getClient(duel_with);
-		if (!validClient(duel_with)) {
+		Client other = getClient(duelWithPid);
+		if (!validClient(duelWithPid)) {
 			declineDuel();
 		}
 		StringBuilder out = new StringBuilder();
@@ -7183,7 +7181,7 @@ public class Client extends Player implements Runnable {
 			rangePot = 0.0;
 			updatePotions();
 		}
-		Client other = getClient(duel_with);
+		Client other = getClient(duelWithPid);
 		for (GameItem item : other.offeredItems) {
 			otherOfferedItems.add(new GameItem(item.getId(), item.getAmount()));
 		}
@@ -7218,7 +7216,7 @@ public class Client extends Player implements Runnable {
 		send(new RemoveInterfaces());
 		duelWin = false;
 		canOffer = true;
-		duel_with = 0;
+		duelWithPid = 0;
 		duelRequested = false;
 		duelConfirmed = false;
 		duelConfirmed2 = false;
@@ -7245,7 +7243,7 @@ public class Client extends Player implements Runnable {
 	}
 
 	public boolean duelButton(int button) {
-		Client other = getClient(duel_with);
+		Client other = getClient(duelWithPid);
 		boolean found = false;
 		if (System.currentTimeMillis() - lastButton < 800) {
 			return false;
@@ -7281,7 +7279,7 @@ public class Client extends Player implements Runnable {
 	}
 
 	public boolean duelButton2(int button) {
-		Client other = getClient(duel_with);
+		Client other = getClient(duelWithPid);
 		/*
 		 * Danno: Null check :p
 		 */
@@ -7974,7 +7972,7 @@ public class Client extends Player implements Runnable {
 			} else {
 				lastButton = System.currentTimeMillis();
 			}
-			Client other = getClient(duel_with);
+			Client other = getClient(duelWithPid);
 			CopyOnWriteArrayList<GameItem> offerCopy = new CopyOnWriteArrayList<GameItem>();
 			CopyOnWriteArrayList<GameItem> otherOfferCopy = new CopyOnWriteArrayList<GameItem>();
 			for (GameItem item : otherOfferedItems) {
@@ -8001,7 +7999,7 @@ public class Client extends Player implements Runnable {
 				TradeLog.recordTrade(dbId, otherdbId, offerCopy, otherOfferCopy, false);
 			resetDuel();
 			saveStats(false);
-			if (validClient(duel_with)) {
+			if (validClient(duelWithPid)) {
 				other.resetDuel();
 				other.saveStats(false);
 			}
@@ -8096,10 +8094,10 @@ public class Client extends Player implements Runnable {
 	 * @return if player has enough space to remove items.
 	 */
 	public boolean hasEnoughSpace() {
-		if (!inDuel || !validClient(duel_with)) {
+		if (!inDuel || !validClient(duelWithPid)) {
 			return false;
 		}
-		Client o = getClient(duel_with);
+		Client o = getClient(duelWithPid);
 		int spaces = 0;
 		for (int i = 0; i < duelBodyRules.length; i++) {
 			if (!duelBodyRules[i])

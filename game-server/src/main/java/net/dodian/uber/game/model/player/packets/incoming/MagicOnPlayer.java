@@ -37,11 +37,11 @@ public class MagicOnPlayer implements Packet {
         }
         int diff = Math.abs(castOnPlayer.determineCombatLevel() - client.determineCombatLevel());
         if (!((castOnPlayer.inWildy() && diff <= client.wildyLevel && diff <= castOnPlayer.wildyLevel)
-                || client.duelFight && client.duel_with == castOnPlayer.getSlot()) || castOnPlayer.saving) {
+                || client.duelFight && client.duelWithPid == castOnPlayer.getSlot()) || castOnPlayer.saving) {
             client.send(new SendMessage("You can't attack that player"));
             return;
         }
-        if (!(client.duelFight && client.duel_with == playerIndex) && !Server.pking) {
+        if (!(client.duelFight && client.duelWithPid == playerIndex) && !Server.pking) {
             client.send(new SendMessage("Pking has been disabled"));
             return;
         }
@@ -57,7 +57,7 @@ public class MagicOnPlayer implements Packet {
         System.currentTimeMillis();
 
         int wildLevel = client.getWildLevel();
-        if ((playerIndex == client.duel_with && client.duelFight) || wildLevel > 0) {
+        if ((playerIndex == client.duelWithPid && client.duelFight) || wildLevel > 0) {
             for (int i2 = 0; i2 < client.ancientId.length; i2++) {
                 if (spellID == client.ancientId[i2]) {
                     if (System.currentTimeMillis() - client.lastAttack < client.coolDown[client.coolDownGroup[i2]]) {

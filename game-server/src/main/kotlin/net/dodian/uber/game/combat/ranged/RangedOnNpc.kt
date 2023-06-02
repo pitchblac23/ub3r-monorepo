@@ -66,9 +66,9 @@ fun Client.handleRanged(): Int {
         selectedNpc.dealDamage(this, (hit + Utils.dRandom2(extra)).toInt(), true)
     else selectedNpc.dealDamage(this, hit, false)
 
-    val xp = (if (FightType != 3) 40 * hit else 20 * hit) * CombatExpRate
+    val xp = (if (fightType != 3) 40 * hit else 20 * hit) * CombatExpRate
     giveExperience(xp, Skill.RANGED)
-    if (FightType == 3) giveExperience(xp, Skill.DEFENCE)
+    if (fightType == 3) giveExperience(xp, Skill.DEFENCE)
 
     giveExperience((15 * hit) * CombatExpRate, Skill.HITPOINTS)
 

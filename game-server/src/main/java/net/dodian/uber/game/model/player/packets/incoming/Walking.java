@@ -98,7 +98,7 @@ public class Walking implements Packet {
             }
             // attack check
             if (client.IsAttacking == true) {
-                client.ResetAttack();
+                client.resetAttack();
             }
             // smithing check
             if (client.smithing[0] > 0) {

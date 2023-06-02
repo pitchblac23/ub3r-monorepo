@@ -11,14 +11,14 @@ public class AttackPlayer implements Packet {
     public void ProcessPacket(Client client, int packetType, int packetSize) {
         int victim = client.getInputStream().readSignedWordBigEndian();
         // client.getCombat().initialize(PlayerHandler.players[victim]);
-        client.AttackingOn = victim;
+        client.attackingOnPid = victim;
         if (!client.canAttack) {
             client.send(new SendMessage("You cannot attack your oppenent yet!"));
             return;
         }
-        client.faceNPC(32768 + client.AttackingOn);
-        if (client.AttackingOn >= PlayerHandler.players.length || client.AttackingOn < 1) {
-            client.AttackingOn = -1;
+        client.faceNPC(32768 + client.attackingOnPid);
+        if (client.attackingOnPid >= PlayerHandler.players.length || client.attackingOnPid < 1) {
+            client.attackingOnPid = -1;
             client.IsAttacking = false;
             return;
         }

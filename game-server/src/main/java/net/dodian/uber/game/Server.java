@@ -114,12 +114,12 @@ public class Server implements Runnable {
         //new Thread(new VotingIncentiveManager()).start();
         /* Processes */
         job = new JobScheduler();
-        job.ScheduleStaticRepeatForeverJob(60000, WorldProcessor.class);
-        job.ScheduleStaticRepeatForeverJob(600, PlayerProcessor.class);
-        job.ScheduleStaticRepeatForeverJob(600, ItemProcessor.class);
-        job.ScheduleStaticRepeatForeverJob(600, ShopProcessor.class);
-        job.ScheduleStaticRepeatForeverJob(600, GroundItemProcessor.class);
-        job.ScheduleStaticRepeatForeverJob(600, ObjectProcess.class);
+        JobScheduler.ScheduleStaticRepeatForeverJob(60000, WorldProcessor.class);
+        JobScheduler.ScheduleStaticRepeatForeverJob(600, PlayerProcessor.class);
+        JobScheduler.ScheduleStaticRepeatForeverJob(600, ItemProcessor.class);
+        JobScheduler.ScheduleStaticRepeatForeverJob(600, ShopProcessor.class);
+        JobScheduler.ScheduleStaticRepeatForeverJob(600, GroundItemProcessor.class);
+        JobScheduler.ScheduleStaticRepeatForeverJob(600, ObjectProcess.class);
         /* Done loading */
         System.gc();
         System.out.println("Server is now running on world " + getGameWorldId() + "!");
