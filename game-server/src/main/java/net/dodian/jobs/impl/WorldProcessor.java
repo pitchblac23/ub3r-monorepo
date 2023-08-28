@@ -52,7 +52,7 @@ public class WorldProcessor implements Job {
                     System.out.println("Error in checking sql!!" + e.getMessage() + ", " + e);
                     e.printStackTrace();
                 }
-                try {
+                /*try {
                     for (Player p : PlayerHandler.players) {
                         if(p != null) {
                             Client c = ((Client) p);
@@ -69,8 +69,8 @@ public class WorldProcessor implements Job {
                 } catch (Exception e) {
                     System.out.println("Error in checking sql!!" + e.getMessage() + ", " + e);
                     e.printStackTrace();
-                }
-                Server.chat.clear(); //Not sure what this do, but empty it just incase!
+                }*/
+                //Server.chat.clear(); //Not sure what this do, but empty it just incase!
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("world process ended for some reason...");

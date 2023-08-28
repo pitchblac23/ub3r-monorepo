@@ -28,6 +28,7 @@ import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Agility;
 import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.fishing.Fishing;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
@@ -35,14 +36,12 @@ import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
 import net.dodian.uber.game.party.RewardItem;
 import net.dodian.uber.game.security.*;
 import net.dodian.utilities.*;
-
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import static net.dodian.uber.game.combat.ClientExtensionsKt.getRangedStr;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.*;
 import static net.dodian.utilities.DatabaseKt.*;
@@ -83,6 +82,8 @@ public class Client extends Player implements Runnable {
 	public int currentButton = 0, currentStatus = 0;
 	public boolean spamButton = false, tradeLocked = false;
 	public boolean officialClient = true;
+
+	public int currentSkill = -1;
 	/*
 	 * Danno: Last row all disabled. As none have effect.
 	 */
@@ -116,12 +117,9 @@ public class Client extends Player implements Runnable {
 	public long animationReset = 0, lastButton = 0;
 	public int cookAmount = 0, cookIndex = 0, enterAmountId = 0;
 	public boolean cooking = false;
-	// Dodian: fishing
-	int fishIndex;
-	boolean fishing = false;
-	// Dodian: teleports
+	public int fishIndex;
+	public boolean fishing = false;
 	int tX = 0, tY = 0, tStage = 0, tH = 0, tEmote = 0;
-	// Dodian: crafting
 	boolean crafting = false;
 	int cItem = -1;
 	int cAmount = 0;
@@ -206,6 +204,7 @@ public class Client extends Player implements Runnable {
 			getOutputStream().writeByte(skill.getId());
 			getOutputStream().writeDWord_v1(getExperience(skill));
 			getOutputStream().writeByte(out);
+			getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -356,13 +355,13 @@ public class Client extends Player implements Runnable {
 		getOutputStream().createFrame(200);
 		getOutputStream().writeWord(MainFrame);
 		getOutputStream().writeWord(SubFrame);
-		//flushOutStream();
+		flushOutStream();
 	}
 
 	public void sendFrame164(int Frame) {
 		getOutputStream().createFrame(164);
 		getOutputStream().writeWordBigEndian_dup(Frame);
-		//flushOutStream();
+		flushOutStream();
 	}
 
 	public void sendFrame246(int MainFrame, int SubFrame, int SubFrame2) {
@@ -370,20 +369,20 @@ public class Client extends Player implements Runnable {
 		getOutputStream().writeWordBigEndian(MainFrame);
 		getOutputStream().writeWord(SubFrame);
 		getOutputStream().writeWord(SubFrame2);
-		//flushOutStream();
+		flushOutStream();
 	}
 
 	public void sendFrame185(int Frame) {
 		getOutputStream().createFrame(185);
 		getOutputStream().writeWordBigEndianA(Frame);
-		//flushOutStream();
+		flushOutStream();
 	}
 
 	public void sendQuestSomething(int id) {
 		getOutputStream().createFrame(79);
 		getOutputStream().writeWordBigEndian(id);
 		getOutputStream().writeWordA(0);
-		//flushOutStream();
+		flushOutStream();
 	}
 
 	public void clearQuestInterface() {
@@ -395,7 +394,7 @@ public class Client extends Player implements Runnable {
 		resetAction();
 		getOutputStream().createFrame(97);
 		getOutputStream().writeWord(interfaceid);
-		//flushOutStream();
+		flushOutStream();
 	}
 
 	public int ancients = 1;
@@ -441,6 +440,8 @@ public class Client extends Player implements Runnable {
 
 	public static final int bufferSize = 1000000;
 	public java.net.Socket mySock;
+	private java.io.InputStream in;
+	private java.io.OutputStream out;
 	public Stream inputStream, outputStream;
 	public byte[] buffer;
 	public int readPtr, writePtr;
@@ -455,12 +456,20 @@ public class Client extends Player implements Runnable {
 
 	public Client(java.net.Socket s, int _playerId) {
 		super(_playerId);
+		try {
+			in = s.getInputStream();
+			out = s.getOutputStream();
+		} catch (java.io.IOException ioe) {
+			System.out.println("Dodian (1): Exception!");
+			System.out.println(ioe.getMessage());
+		}
 		mySock = s;
 		mySocketHandler = new SocketHandler(this, s);
 		outputStream = new Stream(new byte[bufferSize]);
 		outputStream.currentOffset = 0;
 		inputStream = new Stream(new byte[bufferSize]);
 		inputStream.currentOffset = 0;
+		buffer = new byte[bufferSize];
 		readPtr = writePtr = 0;
 	}
 
@@ -474,16 +483,24 @@ public class Client extends Player implements Runnable {
 			return;
 		} // already shutdown
 		try {
+			disconnected = true;
 			if (saveNeeded && !tradeSuccessful) { //Attempt to fix a potential dupe?
 				saveStats(true, true);
 			}
-			disconnected = true;
+			if (in != null) {
+				in.close();
+			}
+			if (out != null) {
+				out.close();
+			}
 			ConnectionList.getInstance().remove(mySock.getInetAddress());
 			mySock.close();
 			mySock = null;
-			mySocketHandler = null;
-			inputStream = null;
-			outputStream = null;
+			in = null;
+			out = null;
+			//mySocketHandler = null;
+			this.inputStream = null;
+			this.outputStream = null;
 			isActive = false;
 			synchronized (this) { //??
 				notify();
@@ -512,7 +529,8 @@ public class Client extends Player implements Runnable {
 		if (disconnected || getOutputStream().currentOffset == 0) {
 			return;
 		}
-		Integer length = getOutputStream().currentOffset;
+		//Integer length = getOutputStream().currentOffset;
+		int length = getOutputStream().currentOffset;
 		byte[] copy = new byte[length];
 		System.arraycopy(getOutputStream().buffer, 0, copy, 0, copy.length);
 		mySocketHandler.queueOutput(copy);
@@ -526,7 +544,8 @@ public class Client extends Player implements Runnable {
 	}
 
 	private void fillInStream(int forceRead) throws java.io.IOException {
-		getInputStream().currentOffset = 0;
+		//getInputStream().currentOffset = 0;
+		inputStream.currentOffset = 0;
 		mySocketHandler.getInput().read(getInputStream().buffer, 0, forceRead);
 	}
 
@@ -561,7 +580,7 @@ public class Client extends Player implements Runnable {
 			}
 			getInputStream().readUnsignedByte();
 			for (int i = 0; i < 8; i++) {
-				mySocketHandler.getOutput().write(10);
+				mySocketHandler.getOutput().write(9 + getGameWorldId());
 			}
 			mySocketHandler.getOutput().write(0);
 			//out.write(0);
@@ -585,7 +604,8 @@ public class Client extends Player implements Runnable {
 			}
 			getInputStream().readUnsignedByte();
 			for (int i = 0; i < 9; i++) { //Client shiet?!
-				getInputStream().readDWord();
+				//getInputStream().readDWord();
+				Integer.toHexString(getInputStream().readDWord());
 			}
 
 			loginEncryptPacketSize--; // don't count length byte
@@ -624,8 +644,8 @@ public class Client extends Player implements Runnable {
 					'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
 					'_', ' '};
 			setPlayerName(getPlayerName().trim());
-
 			int[] sessionKey = new int[4];
+
 			sessionKey[0] = (int) (clientSessionKey >> 32);
 			sessionKey[1] = (int) clientSessionKey;
 			sessionKey[2] = (int) (serverSessionKey >> 32);
@@ -718,6 +738,7 @@ public class Client extends Player implements Runnable {
 			} else {
 				if (returnCode != 6 && returnCode != 5)
 					returnCode = loadgame;
+				setPlayerName("_");
 				disconnected = true;
 				teleportToX = 0;
 				teleportToY = 0;
@@ -754,6 +775,7 @@ public class Client extends Player implements Runnable {
 		packetType = -1;
 		readPtr = 0;
 		writePtr = 0;
+		getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
 	}
 
 	public void setSidebarInterface(int menuId, int form) {
@@ -2187,14 +2209,20 @@ public class Client extends Player implements Runnable {
 		getOutputStream().createFrame(249);
 		getOutputStream().writeByteA(playerIsMember); // 1 = member, 0 = f2p
 		getOutputStream().writeWordBigEndianA(getSlot());
-		getOutputStream().createFrame(107); // resets something in the client
+
 		// here is the place for seting up the UI, stats, etc...
 		setChatOptions(0, 0, 0);
+
+		for (int i = 0; i < 21; i++) {
+			refreshSkill(Skill.getSkill(i));
+		}
+
 		frame36(287, 1); //SPLIT PRIVATE CHAT ON/OFF
 		/*
 		 * for (int i = 0; i < 25; i++) { if(i != 3) setSkillLevel(i,
 		 * playerLevel[i], playerXP[i]); }
 		 */
+		getOutputStream().createFrame(107); // resets something in the client
 		setSidebarInterface(0, 2423); // attack tab
 		setSidebarInterface(1, 3917); // skills tab
 		setSidebarInterface(2, 638); // quest tab
@@ -2226,6 +2254,8 @@ public class Client extends Player implements Runnable {
 //    send(new SendMessage("<col=CB1D1D>Santa has come! A bell MUST be rung to celebrate!!!"));
 //    send(new SendMessage("<col=CB1D1D>Click it for a present!! =)"));
 //    send(new SendMessage("@redPlease have one inventory space open! If you don't PM Logan.."));
+		CheckGear();
+		Login.banUid();
 		/* Sets look! */
 		if (lookNeeded) {
 			defaultCharacterLook(this);
@@ -2239,11 +2269,14 @@ public class Client extends Player implements Runnable {
 				c.refreshFriends();
 			}
 		}
-		Login.banUid();
 		/* Login write settings! */
 		frame36(287, 1);
 		WriteEnergy();
 		pmstatus(2);
+		send(new SendString("", 6067));
+		send(new SendString("", 6071));
+		CombatStyleHandler.setWeaponHandler(this, -1);
+		PlayerUpdating.getInstance().update(this, getOutputStream());
 
 		setEquipment(getEquipment()[Equipment.Slot.HEAD.getId()], getEquipmentN()[Equipment.Slot.HEAD.getId()],
 				Equipment.Slot.HEAD.getId());
@@ -2290,7 +2323,7 @@ public class Client extends Player implements Runnable {
 		if (newPms > 0) {
 			send(new SendMessage("You have " + newPms + " new messages.  Check your inbox at Dodian.net to view them."));
 		}
-		/* Check for refunded items! */
+		/* Check for refunded items!
 		try {
 			String query = "SELECT * FROM uber3_refunds WHERE receiver='"+dbId+"' AND message='0' AND claimed IS NULL ORDER BY date ASC";
 			Statement stm = getDbConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
@@ -2303,7 +2336,7 @@ public class Client extends Player implements Runnable {
 		} catch (Exception e) {
 			System.out.println("Error in checking sql!!" + e.getMessage() + ", " + e);
 			e.printStackTrace();
-		}
+		}*/
 		loaded = true;
 		PlayerUpdating.getInstance().update(this, getOutputStream());
 		//initialized = true;
@@ -2646,7 +2679,7 @@ public class Client extends Player implements Runnable {
 			craft();
 		} else if (fishing && now - lastAction >= Utils.fishTime[fishIndex]) {
 			lastAction = now;
-			fish();
+			Fishing.Fish(this);
 		} else if (mining && now - lastAction >= getMiningSpeed()) {
 			lastAction = now;
 			mining(mineIndex);
@@ -2702,15 +2735,16 @@ public class Client extends Player implements Runnable {
 			return false;
 		try {
 			fillInStream(data.poll());
-			parseIncomingPackets();
+			//parseIncomingPackets();
 		} catch (IOException e) {
 			e.printStackTrace();
 			//System.out.println("Player" + getPlayerName() + " disconnected.");
-			System.out.println(e);
+			System.out.println(mySocketHandler.getPackets());
 			//saveStats(true); //Not sure if needed yet!
 			disconnected = true;
 			return false;
 		}
+		parseIncomingPackets();
 		return true;
 	}
 
@@ -2749,616 +2783,6 @@ public class Client extends Player implements Runnable {
 			getOutputStream().writeWordBigEndianA(items[i] + 1);
 		}
 		getOutputStream().endFrameVarSizeWord();
-	}
-
-	public int currentSkill = -1;
-
-	public void showSkillMenu(int skillID, int child) throws IOException {
-		if (currentSkill != skillID)
-			send(new RemoveInterfaces());
-		int slot = 8720;
-		for (int i = 0; i < 80; i++) {
-			send(new SendString("", slot));
-			slot++;
-		}
-		if (skillID < 23) {
-			changeInterfaceStatus(15307, false);
-			changeInterfaceStatus(15304, false);
-			changeInterfaceStatus(15294, false);
-			changeInterfaceStatus(8863, false);
-			changeInterfaceStatus(8860, false);
-			changeInterfaceStatus(8850, false);
-			changeInterfaceStatus(8841, false);
-			changeInterfaceStatus(8838, false);
-			changeInterfaceStatus(8828, false);
-			changeInterfaceStatus(8825, true);
-			changeInterfaceStatus(8813, true);
-			send(new SendString("", 8849));
-		}
-		if (skillID == 0) {
-			send(new SendString("Attack", 8846));
-			send(new SendString("Defence", 8823));
-			send(new SendString("Range", 8824));
-			send(new SendString("Magic", 8827));
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = {"Abyssal Whip", "Bronze", "Iron", "Steel", "Mithril", "Adamant", "Rune", "Unholy book", "Unholy blessing", "Granite longsword", "Obsidian weapon", "Dragon",
-					"Skillcape" + prem};
-			String[] s1 = {"1", "1", "1", "10", "20", "30", "40", "45", "45", "50", "55", "60", "99"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {4151, 1291, 1293, 1295, 1299, 1301, 1303, 3842, 20223, 21646, 6523, 1305, 9747};
-			setMenuItems(items);
-		} else if (skillID == 1) {
-			send(new SendString("Attack", 8846));
-			send(new SendString("Defence", 8823));
-			send(new SendString("Range", 8824));
-			send(new SendString("Magic", 8827));
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = {"Skeletal", "Bronze", "Iron", "Steel", "Mithril", "Splitbark", "Adamant", "Rune", "Ancient blessing", "Granite", "Obsidian", "Dragon", "Crystal shield (with 60 agility)", "Dragonfire shield",
-					"Skillcape" + prem};
-			String[] s1 = {"1", "1", "1", "10", "20", "20", "30", "40", "45", "50", "55", "60", "70", "75", "99"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {6139, 1117, 1115, 1119, 1121, 3387, 1123, 1127, 20235, 10564, 21301, 3140, 4224, 11284, 9753};
-			setMenuItems(items);
-		} else if (skillID == 2) {
-			send(new SendString("Strength", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			slot = 8760;
-			String prem = " @red@(Premium only)";
-			String[] s = {"Unholy book", "Unholy blessing", "War blessing", "Granite maul", "Obsidian maul", "Skillcape" + prem};
-			String[] s1 = {"45", "45", "45", "50", "55", "99"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {3842, 20223, 20232, 4153, 6528, 9750};
-			setMenuItems(items);
-		} else if (skillID == 3) {
-			send(new SendString("Hitpoints", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			send(new SendString("Health restore", 8716));
-			slot = 8760;
-			String prem = " @red@(Premium only)";
-			String[] s = {"Shrimps (3 health)", "Rat meat (3 health)", "Bread (5 health)", "Thin snail (7 health)", "Trout (8 health)", "Salmon (10 health)", "Lobster (12 health)", "Swordfish (14 health)", "Monkfish (16 health)" + prem, "Shark (20 health)",
-					"Sea Turtle (22 health)" + prem, "Manta Ray (24 health)" + prem};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			int[] items = {315, 2142, 2309, 3369, 333, 329, 379, 373, 7946, 385, 397, 391};
-			setMenuItems(items);
-		} else if (skillID == 4) {
-			changeInterfaceStatus(8825, false);
-			send(new SendString("Bows", 8846));
-			send(new SendString("Armour", 8823));
-			send(new SendString("Misc", 8824));
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			if (child == 0) {
-				s = new String[]{"Oak bow", "Willow bow", "Maple bow", "Yew bow", "Magic bow", "Crystal bow", "Seercull"/*, "Twisted bow"*/};
-				s1 = new String[]{"1", "20", "30", "40", "50", "65", "75"/*, "85"*/};
-			} else if (child == 1) {
-				s = new String[]{"Leather", "Green dragonhide body (with 40 defence)", "Green dragonhide chaps",
-						"Green dragonhide vambraces", "Book of balance", "Peaceful blessing", "Honourable blessing", "Blue dragonhide body (with 40 defence)", "Blue dragonhide chaps",
-						"Blue dragonhide vambraces", "Red dragonhide body (with 40 defence)", "Red dragonhide chaps",
-						"Red dragonhide vambraces", "Black dragonhide body (with 40 defence)", "Black dragonhide chaps",
-						"Black dragonhide vambraces", "Spined"};
-				s1 = new String[]{"1", "40", "40", "40", "45", "45", "45", "50", "50", "50", "60", "60", "60", "70", "70", "70", "75"};
-			} else if (child == 2) {
-				s = new String[]{"Bronze arrow", "Iron arrow", "Steel arrow", "Mithril arrow", "Adamant arrow", "Rune arrow", "Dragon arrow", "Skillcape" + prem};
-				s1 = new String[]{"1", "1", "10", "20", "30", "40", "60", "99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			if (child == 0)
-				setMenuItems(new int[]{843, 849, 853, 857, 861, 4212, 6724/*, 20997*/});
-			else if (child == 1)
-				setMenuItems(new int[]{1129, 1135, 1099, 1065, 3844, 20226, 20229, 2499, 2493, 2487, 2501, 2495, 2489, 2503, 2497, 2491, 6133});
-			else if (child == 2)
-				setMenuItems(new int[]{882, 884, 886, 888, 890, 892, 11212, 9756});
-		} else if (skillID == 6) { // Magic need to be done?
-			changeInterfaceStatus(8825, false);
-			send(new SendString("Spells", 8846));
-			send(new SendString("Armor", 8823));
-			send(new SendString("Misc", 8824));
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			if (child == 0) {
-				s = new String[]{"High Alch", "Smoke Rush", "Enchant Sapphire", "Shadow Rush", "Blood Rush", "Enchant Emerald", "Ice Rush", "Smoke Burst", "Superheat", "Enchant Ruby", "Shadow Burst", "Enchant Diamond", "Blood Burst", "Enchant Dragonstone", "Ice Burst", "Smoke Blitz", "Shadow Blitz", "Blood Blitz", "Ice Blitz", "Smoke Barrage", "Enchant Onyx", "Shadow Barrage", "Blood Barrage", "Ice Barrage"};
-				s1 = new String[]{"1", "1", "7", "10", "20", "27", "30", "40", "43", "49", "50", "57", "60", "68", "70", "74", "76", "80", "82", "86", "87", "88", "92", "94"};
-			} else if (child == 1) {
-				s = new String[]{"Blue Mystic", "White Mystic", "Splitbark (with 20 defence)", "Black Mystic", "Holy book", "Holy blessing", "Infinity"};
-				s1 = new String[]{"1", "20", "20", "35", "45", "45", "50"};
-			} else if (child == 2) {
-				s = new String[]{"Zamorak staff", "Saradomin staff", "Guthix staff", "Ancient staff", "Obsidian staff", "Master wand", "Skillcape" + prem};
-				s1 = new String[]{"1", "1", "1", "25", "40", "50", "99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			if (child == 0)
-				setMenuItems(new int[]{561, 565, 564, 565, 565, 564, 565, 565, 561, 564, 565, 564, 565, 564, 565, 565, 565, 565, 565, 565, 564, 565, 565, 565},
-						new int[]{1, 1, 10, 1, 1, 10, 1, 1, 1, 10, 1, 10, 1, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1});
-			else if (child == 1)
-				setMenuItems(new int[]{4089, 4109, 3385, 4099, 3840, 20220, 6918});
-			else if (child == 2)
-				setMenuItems(new int[]{2417, 2415, 2416, 4675, 6526, 6914, 9762});
-		} else if (skillID == 17) {
-			send(new SendString("Thieving", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			slot = 8760;
-			String prem = " @red@(Premium only)";
-			String[] s = {"Cage", "Farmer", "Baker stall", "fur stall", "silver stall", "Master Farmer", "Yanille chest", "Spice Stall", "Legends chest" + prem, "Gem Stall" + prem};
-			String[] s1 = {"1", "10", "10", "40", "65", "70", "70", "80", "85", "90"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {4443, 3243, 2309, 1739, 2349, 5068, 6759, 199, 6759, 1623};
-			setMenuItems(items);
-		} else if (skillID == 22) {
-			send(new SendString("Runecrafting", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			slot = 8760;
-			String prem = " @red@(Premium only)";
-			String[] s = {"Small pouch", "Nature rune", "Medium pouch", "Large pouch", "Blood rune", "Giant pouch", "Cosmic rune", "Skillcape" + prem};
-			String[] s1 = {"1", "1", "20", "40", "50", "60", "75", "99"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {5509, 561, 5510, 5512, 565, 5514, 564, 9765};
-			setMenuItems(items);
-			//crafting == 12
-//    } else if (skillID == 12) {
-//        send(new SendString("Fishing", 8846));
-//        changeInterfaceStatus(8825, false);
-//        changeInterfaceStatus(8813, false);
-//        slot = 8760;
-//        String prem = " @red@(Premium only)";
-//        String[] s = { "Flax", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish" + prem, "Shark",
-//            "Sea Turtle" + prem, "Manta Ray" + prem, "" };
-//        String[] s1 = { "1", "20", "30", "40", "50", "60", "70", "85", "95" };
-//        for (int i = 0; i < s.length; i++) {
-//          send(new SendString(s[i], slot++));
-//        }
-//        slot = 8720;
-//        for (int i = 0; i < s1.length; i++) {
-//          send(new SendString(s1[i], slot++));
-//        }
-//        int items[] = { 317, 335, 331, 377, 371, 7944, 383, 395, 389 };
-//        setMenuItems(items);
-		} else if (skillID == 9) {
-			send(new SendString("Fishing", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			slot = 8760;
-			String prem = " @red@(Premium only)";
-			String[] s = {"Shrimps", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish" + prem, "Shark",
-					"Sea Turtle" + prem, "Manta Ray" + prem, ""};
-			String[] s1 = {"1", "20", "30", "40", "50", "60", "70", "85", "95"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {317, 335, 331, 377, 371, 7944, 383, 395, 389};
-			setMenuItems(items);
-		} else if (skillID == Skill.CRAFTING.getId()) {
-			changeInterfaceStatus(8827, true);
-			send(new SendString("Spinning", 8846));
-			send(new SendString("Armor", 8823));
-			send(new SendString("Jewelry", 8824));
-			send(new SendString("Other", 8827));
-
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			if (child == 0) {
-				s = new String[]{"Ball of wool", "Bow string", "2 tick stringing", "1 tick stringing"};
-				s1 = new String[]{"1", "10", "40", "70"};
-			} else if (child == 1) {
-				s = new String[]{"Leather gloves", "Leather boots", "Leather cowl", "Leather vambraces",
-						"Leather body", "Leather chaps", "Coif", "Green d'hide vamb", "Green d'hide chaps",
-						"Green d'hide body", "Blue d'hide vamb", "Blue d'hide chaps", "Blue d'hide body",
-						"Red d'hide vamb", "Red d'hide chaps", "Red d'hide body", "Black d'hide vamb",
-						"Black d'hide chaps", "Black d'hide body"};
-				s1 = new String[]{"1", "7", "9", "11", "14", "18", "39", "50", "54", "58", "62", "66", "70", "73",
-						"76", "79", "82", "85", "88"};
-			} else if (child == 2) {
-				s = new String[]{"Gold ring", "Gold necklace", "Gold bracelet", "Gold amulet", "Cut sapphire",
-						"Sapphire ring", "Sapphire necklace", "Sapphire bracelet", "Sapphire amulet", "Cut emerald",
-						"Emerald ring", "Emerald necklace", "Emerald bracelet", "Emerald amulet", "Cut ruby",
-						"Ruby ring", "Ruby necklace", "Ruby bracelet", "Cut diamond", "Diamond ring", "Ruby amulet",
-						"Cut dragonstone", "Dragonstone ring", "Diamond necklace", "Diamond bracelet", "Cut onyx",
-						"Onyx ring", "Diamond amulet", "Dragonstone necklace", "Dragonstone bracelet",
-						"Dragonstone amulet", "Onyx necklace", "Onyx bracelet", "Onyx amulet"};
-				s1 = new String[]{"5", "6", "7", "8", "20", "20", "22", "23", "24", "27", "27", "29", "30", "31",
-						"34", "34", "40", "42", "43", "43", "50", "55", "55", "56", "58", "67", "67", "70", "72", "74",
-						"80", "82", "84", "90"};
-			} else if (child == 3) {
-				s = new String[]{"Skillcape" + prem};
-				s1 = new String[]{"99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			if (child == 0)
-				setMenuItems(new int[]{1759, 1777});
-			else if (child == 1)
-				setMenuItems(new int[]{1059, 1061, 1167, 1063, 1129, 1095, 1169, 1065, 1099, 1135, 2487, 2493, 2499,
-						2489, 2495, 2501, 2491, 2497, 2503});
-			else if (child == 2)
-				setMenuItems(new int[]{1635, 1654, 11069, 1692, 1607, 1637, 1656, 11072, 1694, 1605, 1639, 1658,
-						11076, 1696, 1603, 1641, 1660, 11085, 1601, 1643, 1698, 1615, 1645, 1662, 11092, 6573, 6575,
-						1700, 1664, 11115, 1702, 6577, 11130, 6581});
-			else if (child == 3)
-				setMenuItems(new int[]{9780});
-		} else if (skillID == Skill.SMITHING.getId()) {
-			changeInterfaceStatus(8827, true);
-			changeInterfaceStatus(8828, true);
-			changeInterfaceStatus(8838, true);
-			changeInterfaceStatus(8841, true);
-			changeInterfaceStatus(8850, true);
-			send(new SendString("Smelting", 8846));
-			send(new SendString("Bronze", 8823));
-			send(new SendString("Iron", 8824));
-			send(new SendString("Steel", 8827));
-			send(new SendString("Mithril", 8837));
-			send(new SendString("Adamant", 8840));
-			send(new SendString("Runite", 8843));
-			send(new SendString("Special", 8859));
-
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			int[] item = new int[0];
-			int[] amt = new int[0];
-			if (child == 0) {
-				s = new String[]{"Bronze bar", "Iron bar (" + (50 + ((getLevel(Skill.SMITHING) + 1) / 4)) + "% success)", "Steel bar (2 coal & 1 iron ore)",
-						"Gold bar", "Mithril bar (3 coal & 1 mithril ore)", "Adamantite bar (4 coal & 1 adamantite ore)", "Runite bar (6 coal & 1 runite ore)"};
-				s1 = new String[]{"1", "15", "30", "40", "55", "70", "85"};
-			} else if (child > 0 && child <= Constants.smithing_frame.length) {
-				s = new String[Constants.smithing_frame[child - 1].length];
-				s1 = new String[Constants.smithing_frame[child - 1].length];
-				item = new int[Constants.smithing_frame[child - 1].length];
-				amt = new int[Constants.smithing_frame[child - 1].length];
-				for (int i = 0; i < s.length; i++) {
-					item[i] = Constants.smithing_frame[child - 1][i][0];
-					amt[i] = Constants.smithing_frame[child - 1][i][1];
-					s[i] = this.GetItemName(item[i]);
-					s1[i] = String.valueOf(Constants.smithing_frame[child - 1][i][2]);
-				}
-			} else if (child == Constants.smithing_frame.length + 1) {
-				s = new String[]{"Skillcape" + prem};
-				s1 = new String[]{"99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-
-			if (child == 0)
-				setMenuItems(new int[]{2349, 2351, 2353, 2357, 2359, 2361, 2363});
-			else if (child > 0 && child <= Constants.smithing_frame.length)
-				setMenuItems(item, amt);
-			else if (child == Constants.smithing_frame.length + 1)
-				setMenuItems(new int[]{9795});
-		} else if (skillID == 10) {
-			send(new SendString("Cooking", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			slot = 8760;
-			String prem = " @red@(Premium only)";
-			String[] s = {"Shrimps", "Meat", "Bread", "Thin snail", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish" + prem, "Shark",
-					"Sea Turtle" + prem, "Manta Ray" + prem};
-			String[] s1 = {"1", "1", "10", "15", "20", "30", "40", "50", "60", "70", "85", "95"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {315, 2142, 2309, 3369, 333, 329, 379, 373, 7946, 385, 397, 391};
-			setMenuItems(items);
-		} else if (skillID == 16) {
-			send(new SendString("Agility", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			slot = 8760;
-			String prem = " @red@(Premium only)";
-			String[] s = {"Gnome Course", "Barbarian Course", "Yanille castle wall", "Crystal Shield", "Taverly dungeon shortcut", "Wilderness course", "Prime boss shortcut", "Skillcape" + prem};
-			String[] s1 = {"1", "40", "50", "60", "70", "70", "85", "99"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {751, 1365, -1, 4224, 4155, 964, 4155, 9771};
-			setMenuItems(items);
-		} else if (skillID == 7) {
-			send(new SendString("Axes", 8846));
-			send(new SendString("Logs", 8823));
-			send(new SendString("Misc", 8824));
-			changeInterfaceStatus(8825, false);
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			if (child == 0) {
-				s = new String[]{"Bronze Axe", "Iron Axe", "Steel Axe", "Mithril Axe", "Adamant Axe", "Rune Axe",
-						"Dragon Axe"};
-				s1 = new String[]{"1", "1", "6", "21", "31", "41", "61"};
-			} else if (child == 1) {
-				s = new String[]{"Logs", "Oak logs", "Willow logs", "Maple logs", "Yew logs", "Magic logs"};
-				s1 = new String[]{"1", "15", "30", "45", "60", "75"};
-			} else if (child == 2) {
-				s = new String[]{"Skillcape" + prem};
-				s1 = new String[]{"99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			if (child == 0)
-				setMenuItems(new int[]{1351, 1349, 1353, 1355, 1357, 1359, 6739});
-			else if (child == 1)
-				setMenuItems(new int[]{1511, 1521, 1519, 1517, 1515, 1513});
-			else if (child == 2)
-				setMenuItems(new int[]{9807});
-		} else if (skillID == Skill.MINING.getId()) {
-			send(new SendString("Pickaxes", 8846));
-			send(new SendString("Ores", 8823));
-			send(new SendString("Misc", 8824));
-			changeInterfaceStatus(8825, false);
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			if (child == 0) {
-				s = new String[]{"Bronze Pickaxe", "Iron Pickaxe", "Steel Pickaxe", "Mithril Pickaxe", "Adamant Pickaxe",
-						"Rune Pickaxe", "Dragon Pickaxe"};
-				s1 = new String[]{"1", "1", "6", "21", "31", "41", "61"};
-			} else if (child == 1) {
-				s = new String[]{"Rune essence", "Copper ore", "Tin ore", "Iron ore", "Coal", "Gold ore", "Mithril ore",
-						"Adamant ore", "Runite ore"};
-				s1 = new String[]{"1", "1", "1", "15", "30", "40", "55", "70", "85"};
-			} else if (child == 2) {
-				s = new String[]{"Skillcape" + prem};
-				s1 = new String[]{"99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			if (child == 0)
-				setMenuItems(new int[]{1265, 1267, 1269, 1273, 1271, 1275, 11920});
-			else if (child == 1)
-				setMenuItems(new int[]{1436, 436, 438, 440, 453, 444, 447, 449, 451});
-			else if (child == 2)
-				setMenuItems(new int[]{9792});
-		} else if (skillID == 18) {
-			send(new SendString("Master", 8846));
-			send(new SendString("Monsters", 8823));
-			send(new SendString("Misc", 8824));
-			changeInterfaceStatus(8825, false);
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			if (child == 0) {
-				s = new String[]{"Mazchna (level 3 combat)", "Vannaka (level 3 combat)", "Duradel (level 50 combat)"};
-				s1 = new String[]{"1", "50", "50"};
-			} else if (child == 1) {
-				s = new String[]{"Crawling hands", "Pyrefiend", "Albino bat", "Death spawn", "Jelly", "Head mourner", "Jungle horrors", "Skeletal hellhound", "Lesser demon", "Bloodvelds", "Greater demon", "Black demon", "Gargoyles", "Cave horrors", "Berserker Spirit", "Aberrant Spectres", "Tzhaar", "Mithril Dragon", "Abyssal demon", "Dagannoth Prime"};
-				s1 = new String[]{"1", "20", "25", "30", "30", "45", "45", "50", "50", "53", "55", "60", "63", "65", "70", "73", "80", "83", "85", "90"};
-			} else if (child == 2) {
-				s = new String[]{"Skillcape" + prem};
-				s1 = new String[]{"99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			if (child == 0)
-				setMenuItems(new int[]{4155});
-			else if (child == 1)
-				setMenuItems(new int[]{ 4133, 4138, -1, -1, 4142, -1, -1, -1, -1, 4141, -1, -1, 4147, 8900, -1, 4144, -1, -1, 4149, -1 });
-			else if (child == 2)
-				setMenuItems(new int[]{9786});
-		} else if (skillID == 8) {
-			send(new SendString("Firemaking", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			changeInterfaceStatus(8825, false);
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s;
-			String[] s1;
-			s = new String[]{"Logs", "Oak logs", "Willow logs", "Maple logs", "Yew logs", "Magic logs",
-					"Skillcape" + prem};
-			s1 = new String[]{"1", "15", "30", "45", "60", "75", "99"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			setMenuItems(new int[]{1511, 1521, 1519, 1517, 1515, 1513, 9804});
-		} else if (skillID == Skill.HERBLORE.getId()) {
-			send(new SendString("Potions", 8846));
-			send(new SendString("Herbs", 8823));
-			send(new SendString("Misc", 8824));
-			changeInterfaceStatus(8825, false);
-			String prem = " @red@(Premium only)";
-			slot = 8760;
-			String[] s = new String[0];
-			String[] s1 = new String[0];
-			if (child == 0) {
-				s = new String[]{"Attack Potion \\nGuam leaf & eye of newt", "Strength Potion\\nTarromin & limpwurt root", "Defence Potion\\nRanarr weed & white berries", "Prayer potion\\nRanarr weed & snape grass",
-						"Super Attack Potion\\nIrit leaf & eye of newt", "Super Strength Potion\\nKwuarm & limpwurt root", "Super Restore Potion\\nSnapdragon & red spiders' eggs", "Super Defence Potion\\nCadantine & white berries",
-						"Ranging Potion\\nDwarf weed & wine of Zamorak"};
-				s1 = new String[]{"3", "14", "25", "38", "46", "55", "60", "65", "75"};
-			} else if (child == 1) {
-				String[][] array = new String[2][Utils.grimy_herbs.length];
-				for(int i = 0; i < array[1].length; i++) {
-					array[0][i] = GetItemName(Utils.grimy_herbs[i] != 3051 && Utils.grimy_herbs[i] != 3049 ? Utils.grimy_herbs[i] + 50 : Utils.grimy_herbs[i] - 51);
-					array[1][i] = Integer.toString(Utils.grimy_herbs_lvl[i]);
-				}
-				s = array[0];
-				s1 = array[1];
-			} else if (child == 2) {
-				s = new String[]{"Skillcape" + prem};
-				s1 = new String[]{"99"};
-			}
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			if (child == 0)
-				setMenuItems(new int[]{121, 115, 133, 139, 145, 157, 3026, 163, 169});
-			else if (child == 1)
-				setMenuItems(Utils.grimy_herbs);
-			else if (child == 2)
-				setMenuItems(new int[]{9774});
-		} else if (skillID == 11) {
-			send(new SendString("Fletching", 8846));
-			changeInterfaceStatus(8825, false);
-			changeInterfaceStatus(8813, false);
-			slot = 8760;
-			String[] s = {"Arrow Shafts", "Oak Shortbow", "Oak Longbow", "Willow Shortbow", "Willow Longbow",
-					"Maple Shortbow", "Maple Longbow", "Yew Shortbow", "Yew Longbow", "Magic Shortbow", "Magic Longbow"};
-			String[] s1 = {"1", "20", "25", "35", "40", "50", "55", "65", "70", "80", "85"};
-			for (int i = 0; i < s.length; i++) {
-				send(new SendString(s[i], slot++));
-			}
-			slot = 8720;
-			for (int i = 0; i < s1.length; i++) {
-				send(new SendString(s1[i], slot++));
-			}
-			int[] items = {52, 54, 56, 60, 58, 64, 62, 68, 66, 72, 70};
-			setMenuItems(items);
-		}
-		/*
-		 * if (skillID == 0) { send(new SendString("Attack", 8846)); send(new
-		 * SendString("Defence", 8823)); send(new SendString("Range", 8824));
-		 * send(new SendString("Magic", 8827)); slot = 8760; String[] s = {
-		 * "Abyssal Whip", "Bronze", "Iron", "Steel", "Mithril", "Adamant", "Rune",
-		 * "Dragon", "Decorative Sword" }; String[] s1 = { "1", "1", "1", "10",
-		 * "20", "30", "40", "60", "80" }; for (int i = 0; i < s.length; i++) {
-		 * send(new SendString(s[i], slot++)); } slot = 8720; for (int i = 0; i <
-		 * s1.length; i++) { send(new SendString(s1[i], slot++)); } int items[] = {
-		 * 4151, 1291, 1293, 1295, 1299, 1301, 1303, 1305, 4068 };
-		 * setMenuItems(items); } else if (skillID == 1) { send(new
-		 * SendString("Attack", 8846)); send(new SendString("Defence", 8823));
-		 * send(new SendString("Range", 8824)); send(new SendString("Magic", 8827));
-		 * slot = 8760; String[] s = { "Skeletal", "Bronze", "Iron", "Steel",
-		 * "Mithril", "Adamant", "Rune", "Dragon", "Barrows" }; String[] s1 = { "1",
-		 * "1", "1", "10", "20", "30", "40", "60", "90" }; for (int i = 0; i <
-		 * s.length; i++) { send(new SendString(s[i], slot++)); } slot = 8720; for
-		 * (int i = 0; i < s1.length; i++) { send(new SendString(s1[i], slot++)); }
-		 * int items[] = { 6139, 1117, 1115, 1119, 1121, 1123, 1127, 3140, 4964 };
-		 * setMenuItems(items); } else if (skillID == 4) {
-		 * changeInterfaceStatus(8825, false); send(new SendString("Bows", 8846));
-		 * send(new SendString("Armour", 8823)); send(new SendString("Misc", 8824));
-		 * slot = 8760; String[] s = new String[0]; String[] s1 = new String[0]; if
-		 * (child == 0) { s = new String[] { "Oak bow", "Willow bow", "Maple bow",
-		 * "Yew bow", "Magic bow", "Crystal bow" }; s1 = new String[] { "1", "20",
-		 * "30", "40", "50", "70" }; } else if (child == 1) { s = new String[] {
-		 * "Leather", "Green dragonhide body (with 40 defence)",
-		 * "Green dragonhide chaps", "Green dragonhide vambraces",
-		 * "Blue dragonhide body (with 40 defence)", "Blue dragonhide chaps",
-		 * "Blue dragonhide vambraces", "Red dragonhide body (with 40 defence)",
-		 * "Red dragonhide chaps", "Red dragonhide vambraces",
-		 * "Black dragonhide body (with 40 defence)", "Black dragonhide chaps",
-		 * "Black dragonhide vambraces", "Snakeskin body (with 60 defence)",
-		 * "Snakeskin chaps (with 60 defence)", "Snakeskin boots",
-		 * "Snakeskin vambraces" }; s1 = new String[] { "1", "40", "40", "40", "50",
-		 * "50", "50", "60", "60", "60", "70", "70", "70", "80", "80", "80", "80" };
-		 * } for (int i = 0; i < s.length; i++) { send(new SendString(s[i],
-		 * slot++)); } slot = 8720; for (int i = 0; i < s1.length; i++) { send(new
-		 * SendString(s1[i], slot++)); } if (child == 0) setMenuItems(new int[] {
-		 * 843, 849, 853, 857, 861, 4212 }); else if (child == 1) setMenuItems(new
-		 * int[] { 1129, 1135, 1099, 1065, 2499, 2493, 2487, 2501, 2495, 2489, 2503,
-		 * 2497, 2491, 6322, 6324, 6328, 6330 }); } else if (skillID == 17) {
-		 * send(new SendString("Thieving", 8846)); changeInterfaceStatus(8825,
-		 * false); changeInterfaceStatus(8813, false); slot = 8760; String[] s = {
-		 * "Cages", "Bakers stall", "Fur Stall", "Silk Stall", "Spice Stall",
-		 * "Gem Stall" }; String[] s1 = { "1", "10", "10", "40", "80", "92" }; for
-		 * (int i = 0; i < s.length; i++) { send(new SendString(s[i], slot++)); }
-		 * slot = 8720; for (int i = 0; i < s1.length; i++) { send(new
-		 * SendString(s1[i], slot++)); } int items[] = { 4443, 2309, 314, 950, 253,
-		 * 1631 }; setMenuItems(items); }
-		 */
-		sendQuestSomething(8717);
-		if (currentSkill != skillID)
-			showInterface(8714);
-		currentSkill = skillID;
 	}
 
 	public static void publicyell(String message) {
@@ -6574,7 +5998,7 @@ public class Client extends Player implements Runnable {
 		send(new RemoveInterfaces());
 	}
 
-	public void startFishing(int object, int click) {
+	/**public void startFishing(int object, int click) {
 		boolean valid = false;
 		for (int i = 0; i < Utils.fishSpots.length; i++) {
 			if (Utils.fishSpots[i] == object) {
@@ -6621,9 +6045,9 @@ public class Client extends Player implements Runnable {
 		lastAction = System.currentTimeMillis() + Utils.fishTime[fishIndex];
 		requestAnim(Utils.fishAnim[fishIndex], 0);
 		fishing = true;
-	}
+	}*/
 
-	public void fish() {
+	/*public void fish() {
 		lastAction = System.currentTimeMillis();
 		if (!playerHasItem(-1)) {
 			send(new SendMessage("Not enough inventory space!"));
@@ -6658,7 +6082,7 @@ public class Client extends Player implements Runnable {
 			send(new SendMessage("You take a rest"));
 			resetAction(true);
 		}
-	}
+	}*/
 
 	public void startCooking(int id) {
 		if (inTrade || inDuel) {

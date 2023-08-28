@@ -15,6 +15,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.party.Balloons;
@@ -123,9 +124,12 @@ public class ClickingButtons implements Packet {
                 client.skillX == 3511 && client.skillY == 3505 ? 2: 0;
                 client.travelTrigger(pos);
                 break;
+
             case 84237: //Home teleport aka Yanille
+            case 75010:
                 client.triggerTele(2606, 3102, 0, false);
                 break;
+
             case 50235: //Seers
                 client.triggerTele(2723, 3485, 0, false);
                 break;
@@ -151,8 +155,10 @@ public class ClickingButtons implements Packet {
                 client.triggerTele(3087, 3492, 0, false);
                 break;
             case 74212:
+
             case 49047: // old magic on
             case 49046: // old magic off
+
                 if (client.ancients == 1) {
                     client.setSidebarInterface(6, 1151); // magic tab (ancient =
                     // 12855);
@@ -796,126 +802,126 @@ public class ClickingButtons implements Packet {
 
             case 33206:
                 try {
-                    client.showSkillMenu(0, 0);
+                    SkillGuides.showSkillMenu(0, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33207:
                 try {
-                    client.showSkillMenu(3, 0);
+                    SkillGuides.showSkillMenu(3, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33208:
                 try {
-                    client.showSkillMenu(Skill.MINING.getId(), 0);
+                    SkillGuides.showSkillMenu(Skill.MINING.getId(), 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33209:
                 try {
-                    client.showSkillMenu(2, 0);
+                    SkillGuides.showSkillMenu(2, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33210:
                 try {
-                    client.showSkillMenu(16, 0);
+                    SkillGuides.showSkillMenu(16, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33212:
                 try {
-                    client.showSkillMenu(1, 0);
+                    SkillGuides.showSkillMenu(1, 0, client);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
                 break;
             case 33215:
                 try {
-                    client.showSkillMenu(4, 0);
+                    SkillGuides.showSkillMenu(4, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33216:
                 try {
-                    client.showSkillMenu(17, 0);
+                    SkillGuides.showSkillMenu(17, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33213:
                 try {
-                    client.showSkillMenu(Skill.HERBLORE.getId(), 0);
+                    SkillGuides.showSkillMenu(Skill.HERBLORE.getId(), 0, client);
                 } catch (IOException e5) {
                     e5.printStackTrace();
                 }
                 break;
             case 33219: //Crafting
                 try {
-                    client.showSkillMenu(Skill.CRAFTING.getId(), 0);
+                    SkillGuides.showSkillMenu(Skill.CRAFTING.getId(), 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33211: //Smithing
                 try {
-                    client.showSkillMenu(Skill.SMITHING.getId(), 0);
+                    SkillGuides.showSkillMenu(Skill.SMITHING.getId(), 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33220:
                 try {
-                    client.showSkillMenu(8, 0);
+                    SkillGuides.showSkillMenu(8, 0, client);
                 } catch (IOException e4) {
                     e4.printStackTrace();
                 }
                 break;
             case 33221:
                 try {
-                    client.showSkillMenu(6, 0);
+                    SkillGuides.showSkillMenu(6, 0, client);
                 } catch (IOException e3) {
                     e3.printStackTrace();
                 }
                 break;
             case 33222:
                 try {
-                    client.showSkillMenu(11, 0);
+                    SkillGuides.showSkillMenu(11, 0, client);
                 } catch (IOException e2) {
                     e2.printStackTrace();
                 }
                 break;
             case 33223:
                 try {
-                    client.showSkillMenu(7, 0);
+                    SkillGuides.showSkillMenu(7, 0, client);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
                 break;
             case 33224:
                 try {
-                    client.showSkillMenu(22, 0);
+                    SkillGuides.showSkillMenu(22, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33214:
                 try {
-                    client.showSkillMenu(9, 0);
+                    SkillGuides.showSkillMenu(9, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 33217:
                 try {
-                    client.showSkillMenu(10, 0);
+                    SkillGuides.showSkillMenu(10, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -923,9 +929,9 @@ public class ClickingButtons implements Packet {
             case 34142:
                 try {
                     if (client.currentSkill < 2)
-                        client.showSkillMenu(0, 0);
+                        SkillGuides.showSkillMenu(0, 0, client);
                     else
-                        client.showSkillMenu(client.currentSkill, 0);
+                        SkillGuides.showSkillMenu(client.currentSkill, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -933,9 +939,9 @@ public class ClickingButtons implements Packet {
             case 34119:
                 try {
                     if (client.currentSkill < 2)
-                        client.showSkillMenu(1, 0);
+                        SkillGuides.showSkillMenu(1, 0, client);
                     else
-                        client.showSkillMenu(client.currentSkill, 1);
+                        SkillGuides.showSkillMenu(client.currentSkill, 1, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -943,13 +949,13 @@ public class ClickingButtons implements Packet {
             case 34120:
                 if (client.currentSkill < 2)
                     try {
-                        client.showSkillMenu(4, 0);
+                        SkillGuides.showSkillMenu(4, 0, client);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 else
                     try {
-                        client.showSkillMenu(client.currentSkill, 2);
+                        SkillGuides.showSkillMenu(client.currentSkill, 2, client);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -959,42 +965,42 @@ public class ClickingButtons implements Packet {
                     client.send(new SendMessage("Coming soon!"));
                 else
                     try {
-                        client.showSkillMenu(client.currentSkill, 3);
+                        SkillGuides.showSkillMenu(client.currentSkill, 3, client);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 break;
             case 34133:
                 try {
-                    client.showSkillMenu(client.currentSkill, 4);
+                    SkillGuides.showSkillMenu(client.currentSkill, 4, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 34136:
                 try {
-                    client.showSkillMenu(client.currentSkill, 5);
+                    SkillGuides.showSkillMenu(client.currentSkill, 5, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 34139:
                 try {
-                    client.showSkillMenu(client.currentSkill, 6);
+                    SkillGuides.showSkillMenu(client.currentSkill, 6, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 34155:
                 try {
-                    client.showSkillMenu(client.currentSkill, 7);
+                    SkillGuides.showSkillMenu(client.currentSkill, 7, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case 47130:
                 try {
-                    client.showSkillMenu(18, 0);
+                    SkillGuides.showSkillMenu(18, 0, client);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

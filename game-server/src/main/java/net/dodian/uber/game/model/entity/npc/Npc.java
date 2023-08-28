@@ -461,7 +461,7 @@ public class Npc extends Entity {
                                 + target.GetItemName(drop.getId()).toLowerCase() + " from " + npcName().toLowerCase() + (killCount(target) > 0 && boss ? " (Kill: " + killCount(target) + ")" : "");
                         target.yell("<col=FFFF00>System<col=000000> <col=FFFF00>" + yell);
                     }
-                    DropLog.recordDrop(target, drop.getId(), drop.getAmount(), Server.npcManager.getName(id), pos, "Npc Drop");
+                    //DropLog.recordDrop(target, drop.getId(), drop.getAmount(), Server.npcManager.getName(id), pos, "Npc Drop");
                 } else if (!itemDropped && checkChance < 100.0)
                     currentChance += checkChance;
             }

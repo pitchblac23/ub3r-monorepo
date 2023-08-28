@@ -11,6 +11,9 @@ import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
+import net.dodian.uber.game.model.player.skills.fishing.Fishing;
+
+import static net.dodian.uber.game.model.player.skills.fishing.Fishing.startFishing;
 
 public class ClickNpc implements Packet {
 
@@ -66,6 +69,7 @@ public class ClickNpc implements Packet {
         // TurnPlayerTo(tempNpc.getX(), tempNpc.getY());
         client.skillX = tempNpc.getPosition().getX();
         client.setSkillY(tempNpc.getPosition().getY());
+        startFishing(client, npcId, 1);
         if (npcId == 5809) {
             client.NpcWanneTalk = 804;
             // openTan();
@@ -88,7 +92,6 @@ public class ClickNpc implements Packet {
             }
             client.showNPCChat(3306, 590, new String[]{"There is currently " + peopleInWild + " player" + (peopleInWild != 1 ? "s" : "") + " in the wild!", "There is " + peopleInEdge + " player" + (peopleInEdge != 1 ? "s" : "") + " in Edgeville!"});
         }
-        client.startFishing(npcId, 1);
         if (npcId == 394 || npcId == 395 || npcId == 7677) { /* Banking */
             client.NpcWanneTalk = 1;
             client.convoId = 0;

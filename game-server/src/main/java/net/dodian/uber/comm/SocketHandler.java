@@ -195,7 +195,7 @@ public class SocketHandler implements Runnable {
         for (int i = 0; i < 20; i++) {
             if (outData.isEmpty())
                 return false;
-            byte[] data = outData.poll();
+            byte[] data = (byte[]) outData.poll();
             if (data == null)
                 continue;
             write(data);

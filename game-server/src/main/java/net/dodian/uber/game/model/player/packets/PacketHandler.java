@@ -64,13 +64,13 @@ public class PacketHandler {
     }
 
     public static void process(Client client, int packetType, int packetSize) {
-        if (packetType < 0 || packets.length <= packetType || packetType == -1) {
+        if (packetType == -1)
             return;
-        }
+        if (packetType < 0 || packets.length <= packetType)
+            return;
         Packet packet = packets[packetType];
-        if (packet == null) {
+        if (packet == null)
             return;
-        }
         packet.ProcessPacket(client, packetType, packetSize);
     }
 

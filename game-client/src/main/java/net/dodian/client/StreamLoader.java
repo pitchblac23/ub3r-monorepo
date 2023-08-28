@@ -61,6 +61,7 @@ final class StreamLoader {
     @SuppressWarnings("resource")
     public byte[] getBytesFromFile(File file) throws IOException {
         InputStream is = new FileInputStream(file);
+        is.close();
 
         // Get the size of the file
         long length = file.length();

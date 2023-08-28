@@ -615,9 +615,9 @@ public abstract class Player extends Entity {
     }
 
     public void clearUpdateFlags() {
+        getUpdateFlags().clear();
         IsStair = false; //What is this?!
         faceTarget(65535);
-        getUpdateFlags().clear();
     }
 
     public void faceTarget(int index) {

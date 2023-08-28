@@ -104,13 +104,13 @@ public class Server implements Runnable {
         new DoorHandler();
         setGlobalItems();
         /* Start Threads */
+        job = new JobScheduler();
         new Thread(EventManager.getInstance()).start();
         new Thread(npcManager).start();
         new Thread(clientHandler).start(); // launch server listener
         new Thread(login).start();
         //new Thread(new VotingIncentiveManager()).start();
         /* Processes */
-        job = new JobScheduler();
         job.ScheduleStaticRepeatForeverJob(60000, WorldProcessor.class);
         job.ScheduleStaticRepeatForeverJob(600, PlayerProcessor.class);
         job.ScheduleStaticRepeatForeverJob(600, ItemProcessor.class);
@@ -181,18 +181,6 @@ public class Server implements Runnable {
 
     public static void logError(String message) {
         Utils.println(message);
-    }
-
-    public static int totalHostConnection(String host) {
-        int num = 0;
-        for (int slot = 0; slot < PlayerHandler.players.length; slot++) {
-            Player p = PlayerHandler.players[slot];
-            if (p != null) {
-                if (host.equals(p.connectedFrom))
-                    num++;
-            }
-        }
-        return num;
     }
 
     public boolean checkHost(String host) {

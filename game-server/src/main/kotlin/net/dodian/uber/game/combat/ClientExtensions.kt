@@ -7,7 +7,6 @@ import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skill
-import net.dodian.uber.game.model.player.skills.prayer.Prayer
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask
 import net.dodian.utilities.Utils

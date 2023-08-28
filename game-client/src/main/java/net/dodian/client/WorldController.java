@@ -1977,6 +1977,7 @@ final class WorldController {
     };
     private static boolean[][][][] aBooleanArrayArrayArrayArray491 = new boolean[8][32][51][51];
     private static boolean[][] aBooleanArrayArray492;
+
     private static int anInt493;
     private static int anInt494;
     private static int anInt495;

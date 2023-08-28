@@ -28,7 +28,7 @@ public abstract class Entity {
 
     private int animationDelay;
     private int animationId;
-    private String text;
+    private String text;//
 
     private Map<Entity, Integer> damage = new HashMap<Entity, Integer>();
 
@@ -44,8 +44,8 @@ public abstract class Entity {
     }
 
     public void requestAnim(int id, int delay) {
-        setAnimationId(id);
         setAnimationDelay(delay * 10);
+        this.setAnimationId(id);//
         getUpdateFlags().setRequired(UpdateFlag.ANIM, true);
 
     }

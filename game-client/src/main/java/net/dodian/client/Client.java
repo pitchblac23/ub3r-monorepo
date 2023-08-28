@@ -8,7 +8,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Deque;
 
 import static net.dodian.client.config.Constants.*;
 
@@ -3368,7 +3370,7 @@ public class Client extends RSApplet {
             anInt1104--;
         if (anInt1011 > 0)
             anInt1011--;
-        for (int j = 0; j < 5; j++)
+        for (int j = 0; j < 50; j++)
             if (!parsePacket())
                 break;
 
@@ -4734,7 +4736,7 @@ public class Client extends RSApplet {
             RSInterface class9_4 = RSInterface.interfaceCache[k];
             String s5;
             if (class9_4 != null && class9_4.invStackSizes[j] >= 0x186a0)
-                s5 = class9_4.invStackSizes[j] + " x " + itemDef.name;
+                s5 = formatNumber(class9_4.invStackSizes[j]) + " x " + itemDef.name;
             else if (itemDef.description != null)
                 s5 = new String(itemDef.description);
             else
@@ -4798,6 +4800,10 @@ public class Client extends RSApplet {
         spellSelected = 0;
         needDrawTabArea = true;
 
+    }
+
+    public static String formatNumber(double number) {
+        return NumberFormat.getInstance().format(number);
     }
 
     private void method70() {
@@ -5327,6 +5333,14 @@ public class Client extends RSApplet {
                         toggleSize(1);
                     if (inputString.equals("::fullscreen"))
                         toggleSize(2);
+                    if (inputString.equals("::roofs")) {
+                        roofsOff = !roofsOff;
+                        if (roofsOff) {
+                            pushMessage("@gre@Roof's off", 0, "");
+                        } else {
+                            pushMessage("@red@Roof's on", 0, "");
+                        }
+                    }
 
                     if (inputString.startsWith("::") || inputString.startsWith("/")) {
                         int index = 2;
@@ -7398,7 +7412,7 @@ public class Client extends RSApplet {
                 for (int i1 = 4; i1 >= 0; i1--)
                     if (entityDef.actions[i1] != null && entityDef.actions[i1].equalsIgnoreCase("attack")) {
                         char c = '\0';
-                        if (entityDef.combatLevel > myPlayer.combatLevel)
+                        if (entityDef.combatLevel >= myPlayer.combatLevel)
                             c = '\u07D0';
                         menuActionName[menuActionRow] = entityDef.actions[i1] + " @yel@" + s;
                         if (i1 == 0)
@@ -8180,11 +8194,11 @@ public class Client extends RSApplet {
             if (animation == null)
                 return;
             if (entity.anInt1518 < animation.anInt352 && entity.anInt1519 > animation.method258(entity.anInt1518)) {
-                entity.anInt1519 = 0;
+                entity.anInt1519 = 1;
                 entity.anInt1518++;
             }
             if (entity.anInt1518 >= animation.anInt352) {
-                entity.anInt1519 = 0;
+                entity.anInt1519 = 1;
                 entity.anInt1518 = 0;
             }
         }
@@ -9516,6 +9530,9 @@ public class Client extends RSApplet {
 
     private int method120() {
         int j = 3;
+        if (roofsOff) {
+            return plane;
+        }
         if (yCameraCurve < 310) {
             int k = xCameraPos >> 7;
             int l = yCameraPos >> 7;
@@ -9583,6 +9600,9 @@ public class Client extends RSApplet {
     }
 
     private int method121() {
+        if (roofsOff) {
+            return plane;
+        }
         int j = method42(plane, yCameraPos, xCameraPos);
         if (j - zCameraPos < 800 && (byteGroundArray[plane][xCameraPos >> 7][yCameraPos >> 7] & 4) != 0)
             return plane;
@@ -9782,6 +9802,11 @@ public class Client extends RSApplet {
     private Sprite heartIcon;
     private Sprite hitPointsBg;
 
+    public void loadOrbs() {
+        drawHPOrb();
+        drawPrayerOrb();
+    }
+
     public void drawHPOrb() {
         int health;
         String cHP = RSInterface.interfaceCache[4016].message;
@@ -9813,11 +9838,6 @@ public class Client extends RSApplet {
         /* Draws inside orb sprites */
     }
 
-    public void loadOrbs() {
-        drawHPOrb();
-        drawPrayerOrb();
-    }
-
     public void drawPrayerOrb() {
         int prayer;
         String cP = RSInterface.interfaceCache[4012].message;
@@ -9826,12 +9846,12 @@ public class Client extends RSApplet {
         int maxPrayer = Integer.parseInt(mP);
         prayer = (int) (((double) currentPrayer / (double) maxPrayer) * 100D);
         /* Draws empty orb */
-        //prayerBg.drawSprite(209, 78);
-        //emptyOrb.drawSprite(171, 49);
-        //prayerFill.drawSprite(209, 78);
-        //prayerIcon.drawSprite(209, 78);
+        prayerBg.drawSprite(195, 52);
+        //emptyOrb.drawSprite(220, 78);
+        prayerFill.drawSprite(222, 56);
+        prayerIcon.drawSprite(225, 58);
         /* Draws current HP text */
-		/*if(prayer <= 100 && prayer >= 75) {
+		if(prayer <= 100 && prayer >= 75) {
 			smallText.method382(65280, 209, cP, 78, true);
 		}
 		else if(prayer <= 74 && prayer >= 50) {
@@ -9842,7 +9862,7 @@ public class Client extends RSApplet {
 		}
 		else if(prayer <= 24 && prayer >= 0) {
 			smallText.method382(0xf50d0d, 209, cP, 78, true);
-		}*/
+		}
         /* Draws inside orb sprites */
     }
 
@@ -10126,6 +10146,8 @@ public class Client extends RSApplet {
         aSocket832.setSoTimeout(10000);
         java.io.InputStream inputstream = aSocket832.getInputStream();
         OutputStream outputstream = aSocket832.getOutputStream();
+        inputstream.close();
+        outputstream.close();
         outputstream.write(("JAGGRAB /" + s + "\n\n").getBytes());
         return new DataInputStream(inputstream);
     }
@@ -11131,8 +11153,8 @@ public class Client extends RSApplet {
                         message = inStream.readString();
                         clanname = inStream.readString();
                         rights = inStream.readUnsignedWord();
-                        // message = TextInput.processText(message);
-                        // message = Censor.doCensor(message);
+                        message = TextInput.processText(message);
+                        message = Censor.doCensor(message);
                         System.out.println(clanname);
                         pushMessage(message, 16, name);
                     } catch (Exception e) {
@@ -11736,8 +11758,8 @@ public class Client extends RSApplet {
                     }
                     if (!flag5 && anInt1251 == 0)
                         try {
-                            //anIntArray1240[anInt1169] = j18;
-                            //anInt1169 = (anInt1169 + 1) % 100;
+                            anIntArray1240[anInt1169] = j18;
+                            anInt1169 = (anInt1169 + 1) % 100;
                             String s9 = TextInput.method525(pktSize - 13, inStream);
                             // if(l21 != 3)
                             // s9 = Censor.doCensor(s9);
@@ -12132,7 +12154,7 @@ public class Client extends RSApplet {
             if (aBooleanArray876[4] && anIntArray1203[4] + 128 > i)
                 i = anIntArray1203[4] + 128;
             int k = minimapInt1 + anInt896 & 0x7ff;
-            setCameraPos(cameraPos2 + i * (clientSize == 0 ? cameraPos1 : 5), i, anInt1014, method42(plane, myPlayer.y, myPlayer.x) - 50, k, anInt1015);
+            setCameraPos(cameraPos2 + i * (clientSize == 0 ? cameraPos1 : 5) * zoom, i, anInt1014, method42(plane, myPlayer.y, myPlayer.x) - 50, k, anInt1015);
         }
         int j;
         if (!aBoolean1160)
@@ -12176,6 +12198,7 @@ public class Client extends RSApplet {
         method37(k2);
         if (loggedIn) {
             drawUnfixedGame();
+            //render_ground_item_names()
             draw3dScreen();
         }
         if (loggedIn) {
@@ -12678,6 +12701,7 @@ public class Client extends RSApplet {
     private int unreadMessages;
     private static int anInt1155;
     private static boolean fpsOn;
+    private static boolean roofsOff;
     public boolean loggedIn;
     private boolean canMute;
     private boolean aBoolean1159;
@@ -12727,6 +12751,7 @@ public class Client extends RSApplet {
     private int minimapInt2;
     public int anInt1210;
     static int chatScrollMax;
+    public static int zoom = 1;
     private String promptInput;
     private int anInt1213;
     private int[][][] intGroundArray;

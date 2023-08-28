@@ -326,8 +326,8 @@ public class Commands implements Packet {
                             case "mod":
                                 rankId = 5;
                                 break;
-                            case "trial":
-                                rankId = 9;
+                            case "dev":
+                                rankId = 6;
                                 break;
                         }
                         if (rankId == -1) {

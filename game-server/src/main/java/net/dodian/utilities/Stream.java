@@ -44,9 +44,7 @@ public class Stream {
         return -buffer[currentOffset++] & 0xff;
     }
 
-    public int readUnsignedByteS() {
-        return 128 - buffer[currentOffset++] & 0xff;
-    }
+    public int readUnsignedByteS() { return 128 - buffer[currentOffset++] & 0xff; }
 
     public void writeByteA(int i) {
         buffer[currentOffset++] = (byte) (i + 128);

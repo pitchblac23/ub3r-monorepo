@@ -14,6 +14,7 @@ import java.util.Map;
  *
  * @author Logan G
  */
+
 public final class ConnectionList {
     public static int MAX_CONNECTIONS_PER_IP = 2;
     private static ConnectionList instance = null;

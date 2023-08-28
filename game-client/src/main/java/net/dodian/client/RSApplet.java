@@ -188,6 +188,22 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
         }
     }
 
+    public boolean badZoomPosition() {
+        if((mouseX > 0 && mouseY > 340 && mouseX < 510 && mouseY < 500) ||
+                (mouseY > 210 && mouseY < 473 && mouseX > 514 && mouseX < 762)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean tabOpen() {
+        if((Client.tabInterfaceIDs[Client.tabID] == 638) || (Client.tabInterfaceIDs[Client.tabID] == 147) || (Client.tabInterfaceIDs[Client.tabID] == 638) || (Client.tabInterfaceIDs[Client.tabID] == 18128)
+                || (Client.tabInterfaceIDs[Client.tabID] == 5715) || (Client.tabInterfaceIDs[Client.tabID] == 5065) || (Client.openInterfaceID == 5292)) {
+            return true;
+        }
+        return false;
+    }
+
     private void exit() {
         anInt4 = -2;
         cleanUpForQuit();
@@ -300,6 +316,14 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
             }
         } else
             handleInterfaceScrolling(event);
+        if (rotation == -1 && !tabOpen() && !badZoomPosition()) {
+            if (Client.zoom > -1)
+                Client.zoom--;
+        } else {
+            if (Client.zoom < 2 && !tabOpen() && !badZoomPosition())
+                Client.zoom++;
+
+        }
     }
 
     public void handleInterfaceScrolling(MouseWheelEvent event) {

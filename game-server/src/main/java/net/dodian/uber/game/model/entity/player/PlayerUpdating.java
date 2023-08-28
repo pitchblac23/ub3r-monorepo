@@ -94,9 +94,9 @@ public class PlayerUpdating extends EntityUpdating<Player> {
 
 
     public void updateLocalPlayerMovement(Player player, Stream stream) {
-        stream.createFrameVarSizeWord(81);
-        stream.initBitAccess();
         if (player.didTeleport()) {
+            stream.createFrameVarSizeWord(81);
+            stream.initBitAccess();
             stream.writeBits(1, 1);
             stream.writeBits(2, 3); // updateType
             stream.writeBits(2, player.getPosition().getZ());
@@ -106,24 +106,30 @@ public class PlayerUpdating extends EntityUpdating<Player> {
             stream.writeBits(7, player.getCurrentX());
         } else
         if (player.getPrimaryDirection() == -1) {
+            stream.createFrameVarSizeWord(81);
+            stream.initBitAccess();
             if (player.getUpdateFlags().isUpdateRequired()) {
                 stream.writeBits(1, 1);
                 stream.writeBits(2, 0);
             } else
                 stream.writeBits(1, 0);
-        } else
+        } else {
+            stream.createFrameVarSizeWord(81);
+            stream.initBitAccess();
+            stream.writeBits(1, 1);
             if (player.getSecondaryDirection() == -1) {
-                stream.writeBits(1, 1);
+               //stream.writeBits(1, 1);
                 stream.writeBits(2, 1);
                 stream.writeBits(3, Utils.xlateDirectionToClient[player.getPrimaryDirection()]);
                 stream.writeBits(1, player.getUpdateFlags().isUpdateRequired() ? 1 : 0);
             } else {
-                stream.writeBits(1, 1);
+                //stream.writeBits(1, 1);
                 stream.writeBits(2, 2);
                 stream.writeBits(3, Utils.xlateDirectionToClient[player.getPrimaryDirection()]);
                 stream.writeBits(3, Utils.xlateDirectionToClient[player.getSecondaryDirection()]);
                 stream.writeBits(1, player.getUpdateFlags().isUpdateRequired() ? 1 : 0);
             }
+        }
     }
 
 

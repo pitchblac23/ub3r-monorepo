@@ -9,6 +9,9 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Thieving;
+import net.dodian.uber.game.model.player.skills.fishing.Fishing;
+
+import static net.dodian.uber.game.model.player.skills.fishing.Fishing.startFishing;
 
 public class ClickNpc2 implements Packet {
 
@@ -72,7 +75,7 @@ public class ClickNpc2 implements Packet {
 
         client.skillX = npcX;
         client.setSkillY(npcY);
-        client.startFishing(npcId, 2);
+        startFishing(client, npcId, 2);
 
         switch (npcId) {
             case 3086:
