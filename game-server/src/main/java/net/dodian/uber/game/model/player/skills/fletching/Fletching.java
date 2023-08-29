@@ -4,7 +4,7 @@ import net.dodian.uber.game.Constants;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 
 public class Fletching {
 
@@ -27,7 +27,7 @@ public class Fletching {
             player.deleteItem(player.fletchOtherId1, player.fletchOtherAmt);
             player.deleteItem(player.fletchOtherId2, player.fletchOtherAmt);
             player.addItem(player.fletchOtherId3, player.fletchOtherAmt);
-            player.giveExperience(player.fletchOtherXp * player.fletchOtherAmt, Skill.FLETCHING);
+            player.giveExperience(player.fletchOtherXp * player.fletchOtherAmt, Skills.FLETCHING);
             player.triggerRandom(player.fletchOtherXp * player.fletchOtherAmt);
         } else {
             if (player.fletchOtherAmt == 15)
@@ -39,7 +39,7 @@ public class Fletching {
     public void fletchBow(Client player, boolean shortBow, int amount) {
         player.send(new RemoveInterfaces());
         if (shortBow) {
-            if (player.getLevel(Skill.FLETCHING) < Constants.shortreq[player.fletchLog]) {
+            if (player.getLevel(Skills.FLETCHING) < Constants.shortreq[player.fletchLog]) {
                 player.send(new SendMessage("Requires fletching " + Constants.shortreq[player.fletchLog] + "!"));
                 player.resetAction();
                 return;
@@ -47,7 +47,7 @@ public class Fletching {
             player.fletchId = Constants.shortbows[player.fletchLog];
             player.fletchExp = Constants.shortexp[player.fletchLog];
         } else {
-            if (player.getLevel(Skill.FLETCHING) < Constants.longreq[player.fletchLog]) {
+            if (player.getLevel(Skills.FLETCHING) < Constants.longreq[player.fletchLog]) {
                 player.send(new SendMessage("Requires fletching " + Constants.longreq[player.fletchLog] + "!"));
                 player.resetAction();
                 return;
@@ -71,7 +71,7 @@ public class Fletching {
         if (player.playerHasItem(Constants.logs[player.fletchLog])) {
             player.deleteItem(Constants.logs[player.fletchLog], 1);
             player.addItem(player.fletchId, 1);
-            player.giveExperience(player.fletchExp, Skill.FLETCHING);
+            player.giveExperience(player.fletchExp, Skills.FLETCHING);
             player.triggerRandom(player.fletchExp);
         } else {
             player.resetAction();

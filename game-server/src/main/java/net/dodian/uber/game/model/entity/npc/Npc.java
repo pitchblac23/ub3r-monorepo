@@ -14,7 +14,7 @@ import net.dodian.uber.game.model.item.Ground;
 import net.dodian.uber.game.model.item.GroundItem;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendString;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
 import net.dodian.uber.game.security.DropLog;
 import net.dodian.utilities.Misc;
@@ -337,7 +337,7 @@ public class Npc extends Entity {
     }
 
     public boolean landHit(Client p, boolean melee) {
-        double defLevel = p.getLevel(Skill.DEFENCE);
+        double defLevel = p.getLevel(Skills.DEFENCE);
         double defBonus = 0.0;
         double atkLevel = (melee ? getAttack() : getRange()) * (getId() == 2261 && enraged(20000) ? 1.15 : 1.0);
         double atkBonus = 0.0;
@@ -394,7 +394,7 @@ public class Npc extends Entity {
         if (task != null) {
             if (task.ordinal() == p.getSlayerData().get(1) && p.getSlayerData().get(3) > 0) {
                 p.getSlayerData().set(3, p.getSlayerData().get(3) - 1);
-                p.giveExperience(maxHealth * 11, Skill.SLAYER);
+                p.giveExperience(maxHealth * 11, Skills.SLAYER);
                 p.triggerRandom(maxHealth * 11);
                     if(p.getSlayerData().get(3) == 0) { // Finish task!
                         p.getSlayerData().set(4, p.getSlayerData().get(4) + 1);
@@ -406,7 +406,7 @@ public class Npc extends Entity {
                         for(int i = 0; i < taskStreak.length && bonusXp == -1; i++)
                             if(p.getSlayerData().get(4)%taskStreak[i] == 0) {
                                 bonusXp = experience[i] * p.getSlayerData().get(2) * maxHealth;
-                                p.giveExperience(bonusXp, Skill.SLAYER);
+                                p.giveExperience(bonusXp, Skills.SLAYER);
                                 p.send(new SendMessage("You have gained some bonus experience from finishing your " + taskStreak[i] + " task in a row."));
                             }
                     }
@@ -461,7 +461,7 @@ public class Npc extends Entity {
                                 + target.GetItemName(drop.getId()).toLowerCase() + " from " + npcName().toLowerCase() + (killCount(target) > 0 && boss ? " (Kill: " + killCount(target) + ")" : "");
                         target.yell("<col=FFFF00>System<col=000000> <col=FFFF00>" + yell);
                     }
-                    //DropLog.recordDrop(target, drop.getId(), drop.getAmount(), Server.npcManager.getName(id), pos, "Npc Drop");
+                    DropLog.recordDrop(target, drop.getId(), drop.getAmount(), Server.npcManager.getName(id), pos, "Npc Drop");
                 } else if (!itemDropped && checkChance < 100.0)
                     currentChance += checkChance;
             }

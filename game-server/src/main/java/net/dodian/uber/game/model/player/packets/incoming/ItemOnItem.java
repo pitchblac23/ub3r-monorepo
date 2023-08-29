@@ -3,12 +3,10 @@ package net.dodian.uber.game.model.player.packets.incoming;
 import net.dodian.uber.game.Constants;
 import net.dodian.uber.game.Server;
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.item.ItemHandler;
-import net.dodian.uber.game.model.item.ItemManager;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendString;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Utils;
 
 public class ItemOnItem implements Packet {
@@ -36,7 +34,7 @@ public class ItemOnItem implements Packet {
         int otherItem = client.playerItems[usedWithSlot] - 1;
         boolean knife = (useWith == 946 || itemUsed == 946) || (useWith == 5605 || itemUsed == 5605) ? true : false;
         if ((itemUsed == 2383 && useWith == 2382) || (itemUsed == 2382 && useWith == 2383)) {
-            if (client.getSkillLevel(Skill.CRAFTING) >= 60) {
+            if (client.getSkillLevel(Skills.CRAFTING) >= 60) {
                 client.deleteItem(itemUsed, itemUsedSlot, 1);
                 client.deleteItem(otherItem, usedWithSlot, 1);
                 client.addItem(989, 1);
@@ -55,7 +53,7 @@ public class ItemOnItem implements Packet {
                     client.send(new SendMessage("Need premium to mix these pots!"));
                     return;
                 }
-                if (client.getSkillLevel(Skill.HERBLORE) < Utils.req[h]) {
+                if (client.getSkillLevel(Skills.HERBLORE) < Utils.req[h]) {
                     client.send(new SendMessage("Requires herblore level " + Utils.req[h]));
                     return;
                 }
@@ -71,7 +69,7 @@ public class ItemOnItem implements Packet {
                     client.send(new SendMessage("Need premium to mix these pots!"));
                     return;
                 }
-                if (client.getLevel(Skill.HERBLORE) < Utils.req[h]) {
+                if (client.getLevel(Skills.HERBLORE) < Utils.req[h]) {
                     client.send(new SendMessage("Requires herblore level " + Utils.req[h]));
                     return;
                 }
@@ -208,7 +206,7 @@ public class ItemOnItem implements Packet {
                 if(itemUsed == otherSlayerItems[i] || otherItem == otherSlayerItems[i])
                     maskCreation = true;
             if(maskCreation) {
-                if(client.getSkillLevel(Skill.CRAFTING) >= 70) {
+                if(client.getSkillLevel(Skills.CRAFTING) >= 70) {
                     boolean gotItems = true;
                     for(int i = 0; i < otherSlayerItems.length && gotItems; i++)
                         if(!client.playerHasItem(otherSlayerItems[i])) {
@@ -250,7 +248,7 @@ public class ItemOnItem implements Packet {
             if ((itemUsed == Constants.darttip[d] || otherItem == Constants.darttip[d])
                     && (itemUsed == 314 || otherItem == 314)) {
                 client.resetAction();
-                if (client.getLevel(Skill.FLETCHING) < Constants.darttip_required[d]) {
+                if (client.getLevel(Skills.FLETCHING) < Constants.darttip_required[d]) {
                     client.send(new SendMessage("You need level " + Constants.darttip_required[d] + " fletcing to make " + client.GetItemName(Constants.darts[d]).toLowerCase() + ""));
                     return;
                 }
@@ -265,7 +263,7 @@ public class ItemOnItem implements Packet {
                 client.deleteItem(314, 10);
                 client.deleteItem(Constants.darttip[d], 10);
                 client.addItem(Constants.darts[d], 10);
-                client.giveExperience(Constants.darttip_xp[d] * 5, Skill.FLETCHING);
+                client.giveExperience(Constants.darttip_xp[d] * 5, Skills.FLETCHING);
                 client.send(new SendMessage("You fletch ten " + client.GetItemName(Constants.darts[d]).toLowerCase() + "s."));
             }
         }
@@ -273,7 +271,7 @@ public class ItemOnItem implements Packet {
             if ((itemUsed == Constants.heads[h] || otherItem == Constants.heads[h])
                     && (itemUsed == 53 || otherItem == 53)) {
                 client.resetAction();
-                if (client.getLevel(Skill.FLETCHING) < Constants.required[h]) {
+                if (client.getLevel(Skills.FLETCHING) < Constants.required[h]) {
                     client.send(new SendMessage("Requires level " + Constants.required[h]
                             + " fletching"));
                     return;
@@ -361,13 +359,13 @@ public class ItemOnItem implements Packet {
             }
             if (slot < 0)
                 return;
-            if (Utils.gemReq[slot] > client.getLevel(Skill.CRAFTING)) {
+            if (Utils.gemReq[slot] > client.getLevel(Skills.CRAFTING)) {
                 client.send(new SendMessage("You need a crafting level of " + Utils.gemReq[slot] + " to cut this."));
                 return;
             }
             client.deleteItem(gem, 1);
             client.addItem(Utils.cutGems[slot], 1);
-            client.giveExperience((int) (Utils.gemExp[slot] * 6), Skill.CRAFTING);
+            client.giveExperience((int) (Utils.gemExp[slot] * 6), Skills.CRAFTING);
             client.send(new SendMessage("You cut the " + client.GetItemName(Utils.cutGems[slot]) + ""));
         }
 
@@ -385,54 +383,53 @@ public class ItemOnItem implements Packet {
             client.deleteItem(amulet, 1);
             client.deleteItem(1759, 1);
             client.addItem(strung, 1);
-            client.giveExperience(60, Skill.CRAFTING);
+            client.giveExperience(60, Skills.CRAFTING);
         }
 
         if (itemUsed == 590 && useWith == 1511 || itemUsed == 1511 && useWith == 590) {
             client.deleteItem(1511, 1);
-            client.giveExperience(160, Skill.FIREMAKING);
+            client.giveExperience(160, Skills.FIREMAKING);
             client.resetAction();
         } else if (itemUsed == 1521 && useWith == 590 || itemUsed == 590 && useWith == 1521) {
-            if (client.getLevel(Skill.FIREMAKING) >= 15) {
+            if (client.getLevel(Skills.FIREMAKING) >= 15) {
                 client.deleteItem(1521, 1);
-                client.giveExperience(240, Skill.FIREMAKING);
+                client.giveExperience(240, Skills.FIREMAKING);
                 client.resetAction();
             } else {
                 client.send(new SendMessage("You need a firemaking level of 15 to burn oak logs."));
             }
         } else if (itemUsed == 1519 && useWith == 590 || itemUsed == 590 && useWith == 1519) {
-            if (client.getLevel(Skill.FIREMAKING) >= 30) {
+            if (client.getLevel(Skills.FIREMAKING) >= 30) {
                 client.deleteItem(1519, 1);
-                client.giveExperience(360, Skill.FIREMAKING);
+                client.giveExperience(360, Skills.FIREMAKING);
                 client.resetAction();
             } else {
                 client.send(new SendMessage("You need a firemaking of 30 to burn willow logs."));
             }
         } else if (itemUsed == 1517 && useWith == 590 || itemUsed == 590 && useWith == 1517) {
-            if (client.getLevel(Skill.FIREMAKING) >= 45) {
+            if (client.getLevel(Skills.FIREMAKING) >= 45) {
                 client.deleteItem(1517, 1);
-                client.giveExperience(540, Skill.FIREMAKING);
+                client.giveExperience(540, Skills.FIREMAKING);
                 client.resetAction();
             } else {
                 client.send(new SendMessage("You need a firemaking level of 45 to burn maple logs."));
             }
         } else if (itemUsed == 1515 && useWith == 590 || itemUsed == 590 && useWith == 1515) {
-            if (client.getLevel(Skill.FIREMAKING) >= 60) {
+            if (client.getLevel(Skills.FIREMAKING) >= 60) {
                 client.deleteItem(1515, 1);
-                client.giveExperience(812, Skill.FIREMAKING);
+                client.giveExperience(812, Skills.FIREMAKING);
                 client.resetAction();
             } else {
                 client.send(new SendMessage("You need a firemaking of 60 to burn yew logs."));
             }
         } else if (itemUsed == 1513 && useWith == 590 || itemUsed == 590 && useWith == 1513) {
-            if (client.getLevel(Skill.FIREMAKING) >= 75) {
+            if (client.getLevel(Skills.FIREMAKING) >= 75) {
                 client.deleteItem(1513, 1);
-                client.giveExperience(1216, Skill.FIREMAKING);
+                client.giveExperience(1216, Skills.FIREMAKING);
                 client.resetAction();
             } else {
                 client.send(new SendMessage("You need a firemaking level of 75 to burn magic logs."));
             }
         }
     }
-
 }

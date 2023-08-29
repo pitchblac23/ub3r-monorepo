@@ -1,4 +1,4 @@
-package net.dodian.uber.game.model.player.skills;
+package net.dodian.uber.game.model.player.skills.thieving;
 
 import net.dodian.uber.game.event.Event;
 import net.dodian.uber.game.event.EventManager;
@@ -7,6 +7,7 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.object.GlobalObject;
 import net.dodian.uber.game.model.object.Object;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Range;
 
 
@@ -152,7 +153,7 @@ public class Thieving {
             return;
         }
         final Object o = new Object(EMPTY_STALL_ID, position.getX(), position.getY(), position.getZ(), 10, face, data.getEntityId());
-        if (player.getLevel(Skill.THIEVING) < data.getRequiredLevel()) {
+        if (player.getLevel(Skills.THIEVING) < data.getRequiredLevel()) {
             player.send(new SendMessage("You need a thieving level of " + data.getRequiredLevel() + " to steal from " + data.toString().toLowerCase().replace('_', ' ') + "s."));
             return;
         }
@@ -195,7 +196,7 @@ public class Thieving {
                 }
 
                 if (player.hasSpace()) {
-                    player.giveExperience(data.getReceivedExperience(), Skill.THIEVING);
+                    player.giveExperience(data.getReceivedExperience(), Skills.THIEVING);
                     player.canPreformAction = false;
 
                     if (data.getItemId().length > 1) {

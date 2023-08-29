@@ -3,7 +3,7 @@ package net.dodian.uber.game.model.player.skills.mining;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
 
@@ -32,7 +32,7 @@ public class Mining {
 
     public static long getMiningSpeed(Client player) {
         double pickBonus = Utils.pickBonus[player.minePick];
-        double level = (double) player.getLevel(Skill.MINING) / 600;
+        double level = (double) player.getLevel(Skills.MINING) / 600;
         double random = (double) Misc.random(150) / 100;
         double bonus = 1 + pickBonus * random + level;
         double time = Utils.mineTimes[player.mineIndex] / bonus;
@@ -44,12 +44,12 @@ public class Mining {
         int weapon = player.getEquipment()[Equipment.Slot.WEAPON.getId()];
         for (int i = 0; i < Utils.picks.length; i++) {
             if (Utils.picks[i] == weapon) {
-                if (player.getLevel(Skill.MINING) >= Utils.pickReq[i])
+                if (player.getLevel(Skills.MINING) >= Utils.pickReq[i])
                     Eaxe = i;
             }
             for (int ii = 0; ii < player.playerItems.length; ii++) {
                 if (Utils.picks[i] == player.playerItems[ii] - 1) {
-                    if (player.getLevel(Skill.MINING) >= Utils.pickReq[i]) {
+                    if (player.getLevel(Skills.MINING) >= Utils.pickReq[i]) {
                         Iaxe = i;
                     }
                 }
@@ -83,7 +83,7 @@ public class Mining {
             player.send(new SendMessage("You mine some " + player.GetItemName(Utils.ore[index]).toLowerCase() + ""));
         }
         player.addItem(Utils.ore[index], 1);
-        player.giveExperience(Utils.oreExp[index], Skill.MINING);
+        player.giveExperience(Utils.oreExp[index], Skills.MINING);
         player.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
         player.triggerRandom(Utils.oreExp[index]);
         if (Misc.chance(30) == 1) {

@@ -6,7 +6,7 @@ import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
-import net.dodian.uber.game.model.player.skills.Skill
+import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask
 import net.dodian.utilities.Utils
@@ -26,19 +26,19 @@ fun Client.requireKey(keyId: Int, vararg npcId: Int): Boolean {
 
 fun Client.slayerLevelRequired(npcId: Int): Boolean {
     when (npcId) {
-        2266 -> if(getLevel(Skill.SLAYER) < 90) {
+        2266 -> if(getLevel(Skills.SLAYER) < 90) {
             send(SendMessage("You need a slayer level of 90 to harm this monster."))
             return false
         }
-        3209 -> if(getLevel(Skill.SLAYER) < 65) {
+        3209 -> if(getLevel(Skills.SLAYER) < 65) {
             send(SendMessage("You need a slayer level of 65 to harm this monster."))
             return false
         }
-        3204 -> if(getLevel(Skill.SLAYER) < 45) {
+        3204 -> if(getLevel(Skills.SLAYER) < 45) {
             send(SendMessage("You need a slayer level of 45 to harm this monster."))
             return false
         }
-        3201 -> if(getLevel(Skill.SLAYER) < 25) {
+        3201 -> if(getLevel(Skills.SLAYER) < 25) {
             send(SendMessage("You need a slayer level of 25 to harm this monster."))
             return false
         }
@@ -91,7 +91,7 @@ fun Client.meleeMaxHit(): Int {
     }
 
     val strengthBonus = playerBonus[10]
-    val strength = getLevel(Skill.STRENGTH)
+    val strength = getLevel(Skills.STRENGTH)
     val effectiveStrength = ((strength * (1 + prayerBonus)) + styleBonus + 8) * (1 + voidBonus)
     val baseDamage = 0.5 + effectiveStrength * (strengthBonus + 64) / 640
 
@@ -111,7 +111,7 @@ fun Client.rangedMaxHit(): Int {
         0, 3 -> 0 // Accuracy and Long range
         else -> error("Fight style ID '$FightType' was unexpected!")
     }
-    val ranged = getLevel(Skill.RANGED)
+    val ranged = getLevel(Skills.RANGED)
     val effectiveStrength = ((ranged * (1 + prayerBonus)) + styleBonus + 8) * (1 + voidBonus)
     val baseDamage = 0.5 + (effectiveStrength * (getRangedStr() + 64) / 640)
     return (baseDamage * (1 + specialBonus)).toInt()

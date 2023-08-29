@@ -7,7 +7,7 @@ import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
-import net.dodian.uber.game.model.player.skills.Skill
+import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.utilities.Misc
 import net.dodian.utilities.Utils
@@ -70,10 +70,10 @@ fun Client.handleRanged(): Int {
             maxHit *= 1.2
     }
     var hit = Utils.random(maxHit.toInt())
-    val criticalChance = getLevel(Skill.AGILITY) / 9
+    val criticalChance = getLevel(Skills.AGILITY) / 9
     if(equipment[Equipment.Slot.SHIELD.id]==4224)
         criticalChance * 1.5
-    val extra = getLevel(Skill.RANGED) * 0.195
+    val extra = getLevel(Skills.RANGED) * 0.195
     val landCrit = Math.random() * 100 <= criticalChance
     val landHit = landHitRanged(this, target)
     if (target is Npc) {
@@ -98,9 +98,9 @@ fun Client.handleRanged(): Int {
 
     if(target is Npc) {
         val xp = (if (FightType != 3) 40 * hit else 20 * hit) * CombatExpRate
-        giveExperience(xp, Skill.RANGED)
-        if (FightType == 3) giveExperience(xp, Skill.DEFENCE)
-        giveExperience((15 * hit) * CombatExpRate, Skill.HITPOINTS)
+        giveExperience(xp, Skills.RANGED)
+        if (FightType == 3) giveExperience(xp, Skills.DEFENCE)
+        giveExperience((15 * hit) * CombatExpRate, Skills.HITPOINTS)
     }
 
     if (debug) send(SendMessage("hit = $hit, elapsed = ${time - lastAttack}"))
@@ -119,9 +119,9 @@ fun landHitRanged(p: Client, t: Entity): Boolean {
     else 1.0
     if(t is Client) { //Pvp
         val atkBonus = p.playerBonus[4]
-        val atkLevel = p.getLevel(Skill.RANGED)
+        val atkLevel = p.getLevel(Skills.RANGED)
         val defBonus = t.playerBonus[9]
-        val defLevel = t.getLevel(Skill.DEFENCE)
+        val defLevel = t.getLevel(Skills.DEFENCE)
         val prayerDefBonus = if(t.prayerManager.isPrayerOn(Prayers.Prayer.THICK_SKIN)) 1.05
         else if(p.prayerManager.isPrayerOn(Prayers.Prayer.ROCK_SKIN)) 1.1
         else if(p.prayerManager.isPrayerOn(Prayers.Prayer.STEEL_SKIN)) 1.15
@@ -138,7 +138,7 @@ fun landHitRanged(p: Client, t: Entity): Boolean {
         return chance < (hitChance*100)
     } else if(t is Npc) { //Pve
         val atkBonus = p.playerBonus[4]
-        val atkLevel = p.getLevel(Skill.RANGED)
+        val atkLevel = p.getLevel(Skills.RANGED)
         val defLevel = t.defence
         val defBonus = 0.0
         val npcDef = defLevel * (defBonus + 64.0)

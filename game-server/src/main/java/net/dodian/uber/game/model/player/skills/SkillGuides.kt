@@ -37,7 +37,7 @@ class SkillGuides {
                 player.send(SendString("", 8716))
             }
 
-            if (skillID == Skill.ATTACK.id) {
+            if (skillID == Skills.ATTACK.id) {
                 player.send(SendString("Attack", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -50,7 +50,7 @@ class SkillGuides {
                 val items = intArrayOf(4151, 1291, 1293, 1295, 1299, 1301, 1303, 3842, 20223, 21646, 6523, 1305, 9747)
                 player.setMenuItems(items)
 
-            } else if (skillID == Skill.DEFENCE.id) {
+            } else if (skillID == Skills.DEFENCE.id) {
                 player.send(SendString("Defence", 8823))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -63,7 +63,7 @@ class SkillGuides {
                 val items = intArrayOf(6139, 1117, 1115, 1119, 1121, 3387, 1123, 1127, 20235, 10564, 21301, 3140, 4224, 11284, 9753)
                 player.setMenuItems(items)
 
-            } else if (skillID == Skill.STRENGTH.id) {
+            } else if (skillID == Skills.STRENGTH.id) {
                 player.send(SendString("Strength", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -76,7 +76,7 @@ class SkillGuides {
                 val items = intArrayOf(3842, 20223, 20232, 4153, 6528, 9750)
                 player.setMenuItems(items)
 
-            } else if (skillID == Skill.HITPOINTS.id) {
+            } else if (skillID == Skills.HITPOINTS.id) {
                 player.send(SendString("Hitpoints", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -86,7 +86,7 @@ class SkillGuides {
                 val items = intArrayOf(315, 2142, 2309, 3369, 333, 329, 379, 373, 7946, 385, 397, 391)
                 player.setMenuItems(items)
 
-            } else if (skillID == Skill.RANGED.id) {
+            } else if (skillID == Skills.RANGED.id) {
                 player.changeInterfaceStatus(8825, false)
                 player.send(SendString("Bows", 8846))
                 player.send(SendString("Armour", 8823))
@@ -111,7 +111,7 @@ class SkillGuides {
                 else if (child == 1) player.setMenuItems(intArrayOf(1129, 1135, 1099, 1065, 3844, 20226, 20229, 2499, 2493, 2487, 2501, 2495, 2489, 2503, 2497, 2491, 6133))
                 else if (child == 2) player.setMenuItems(intArrayOf(882, 884, 886, 888, 890, 892, 11212, 9756))
 
-            } else if (skillID == Skill.MAGIC.id) {
+            } else if (skillID == Skills.MAGIC.id) {
                 player.changeInterfaceStatus(8825, false)
                 player.send(SendString("Spells", 8846))
                 player.send(SendString("Armor", 8823))
@@ -215,7 +215,7 @@ class SkillGuides {
                 val items = intArrayOf(52, 54, 56, 60, 58, 64, 62, 68, 66, 72, 70)
                 player.setMenuItems(items)
 
-            } else if (skillID == Skill.CRAFTING.id) {
+            } else if (skillID == Skills.CRAFTING.id) {
                 player.changeInterfaceStatus(8827, true)
                 player.send(SendString("Spinning", 8846))
                 player.send(SendString("Armor", 8823))
@@ -244,7 +244,7 @@ class SkillGuides {
                 else if (child == 2) player.setMenuItems(intArrayOf(1635, 1654, 11069, 1692, 1607, 1637, 1656, 11072, 1694, 1605, 1639, 1658, 11076, 1696, 1603, 1641, 1660, 11085, 1601, 1643, 1698, 1615, 1645, 1662, 11092, 6573, 6575, 1700, 1664, 11115, 1702, 6577, 11130, 6581))
                 else if (child == 3) player.setMenuItems(intArrayOf(9780))
 
-            } else if (skillID == Skill.SMITHING.id) {
+            } else if (skillID == Skills.SMITHING.id) {
                 player.changeInterfaceStatus(8827, true)
                 player.changeInterfaceStatus(8828, true)
                 player.changeInterfaceStatus(8838, true)
@@ -264,7 +264,7 @@ class SkillGuides {
                 var item = IntArray(0)
                 var amt = IntArray(0)
                 if (child == 0) {
-                    s = arrayOf("Bronze bar", "Iron bar (" + (50 + (player.getLevel(Skill.SMITHING) + 1) / 4) + "% success)", "Steel bar (2 coal & 1 iron ore)", "Gold bar", "Mithril bar (3 coal & 1 mithril ore)", "Adamantite bar (4 coal & 1 adamantite ore)", "Runite bar (6 coal & 1 runite ore)")
+                    s = arrayOf("Bronze bar", "Iron bar (" + (50 + (player.getLevel(Skills.SMITHING) + 1) / 4) + "% success)", "Steel bar (2 coal & 1 iron ore)", "Gold bar", "Mithril bar (3 coal & 1 mithril ore)", "Adamantite bar (4 coal & 1 adamantite ore)", "Runite bar (6 coal & 1 runite ore)")
                     s1 = arrayOf("1", "15", "30", "40", "55", "70", "85")
                 } else if (child > 0 && child <= Constants.smithing_frame.size) {
                     s = arrayOfNulls(Constants.smithing_frame[child - 1].size)
@@ -288,7 +288,7 @@ class SkillGuides {
                 else if (child > 0 && child <= Constants.smithing_frame.size) player.setMenuItems(item, amt)
                 else if (child == Constants.smithing_frame.size + 1) player.setMenuItems(intArrayOf(9795))
 
-            } else if (skillID == Skill.MINING.id) {
+            } else if (skillID == Skills.MINING.id) {
                 player.send(SendString("Pickaxes", 8846))
                 player.send(SendString("Ores", 8823))
                 player.send(SendString("Misc", 8824))
@@ -314,7 +314,7 @@ class SkillGuides {
                 else if (child == 1) player.setMenuItems(intArrayOf(1436, 436, 438, 440, 453, 444, 447, 449, 451))
                 else if (child == 2) player.setMenuItems(intArrayOf(9792))
 
-            } else if (skillID == Skill.HERBLORE.id) {
+            } else if (skillID == Skills.HERBLORE.id) {
                 player.send(SendString("Potions", 8846))
                 player.send(SendString("Herbs", 8823))
                 player.send(SendString("Misc", 8824))

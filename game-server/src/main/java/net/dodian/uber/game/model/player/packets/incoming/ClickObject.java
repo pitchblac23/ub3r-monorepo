@@ -17,10 +17,12 @@ import net.dodian.uber.game.model.object.Object;
 import net.dodian.uber.game.model.object.RS2Object;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Agility;
-import net.dodian.uber.game.model.player.skills.Skill;
-import net.dodian.uber.game.model.player.skills.Thieving;
+import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.mining.Mining;
+import net.dodian.uber.game.model.player.skills.smithing.Smithing;
+import net.dodian.uber.game.model.player.skills.thieving.Thieving;
+import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
@@ -141,10 +143,10 @@ public class ClickObject implements Packet {
             for (int possibleBar : possibleBars)
                 if (client.contains(possibleBar))
                     type = possibleBar;
-            if (type != -1 && client.CheckSmithing(type) != -1) {
+            if (type != -1 && Smithing.CheckSmithing(type, client) != -1) {
                 client.skillX = objectPosition.getX();
                 client.setSkillY(objectPosition.getY());
-                client.OpenSmithingFrame(client.CheckSmithing(type));
+                Smithing.OpenSmithingFrame(Smithing.CheckSmithing(type, client), client);
             } else if (type == -1)
                 client.send(new SendMessage("You do not have any bars to smith!"));
         }
@@ -216,7 +218,7 @@ public class ClickObject implements Packet {
             client.GetBonus(true);
         }
         if (objectID == 16466) {
-            if (client.getLevel(Skill.AGILITY) < 75) {
+            if (client.getLevel(Skills.AGILITY) < 75) {
                 client.send(new SendMessage("You need level 75 agility to use this shortcut!"));
                 return;
             }
@@ -225,7 +227,7 @@ public class ClickObject implements Packet {
             client.newheightLevel = 0;
         }
         if (objectID == 882 && objectPosition.getX() == 2899 && objectPosition.getY() == 9728) {
-            if (client.getLevel(Skill.AGILITY) < 85) {
+            if (client.getLevel(Skills.AGILITY) < 85) {
                 client.send(new SendMessage("You need level 85 agility to use this shortcut!"));
                 return;
             }
@@ -234,7 +236,7 @@ public class ClickObject implements Packet {
             client.newheightLevel = 0;
         }
         if (objectID == 882 && objectPosition.getX() == 2885 && objectPosition.getY() == 9794) {
-            if (client.getLevel(Skill.AGILITY) < 85) {
+            if (client.getLevel(Skills.AGILITY) < 85) {
                 client.send(new SendMessage("You need level 85 agility to use this shortcut!"));
                 return;
             }
@@ -243,7 +245,7 @@ public class ClickObject implements Packet {
             client.newheightLevel = 0;
         }
         if (objectID == 16509) {
-            if (!client.checkItem(989) || client.getLevel(Skill.AGILITY) < 70) {
+            if (!client.checkItem(989) || client.getLevel(Skills.AGILITY) < 70) {
                 client.send(new SendMessage("You need a crystal key and 70 agility to use this shortcut!"));
                 return;
             }
@@ -256,7 +258,7 @@ public class ClickObject implements Packet {
             }
         }
         if (objectID == 16510) {
-            if (!client.checkItem(989) || client.getLevel(Skill.AGILITY) < 70) {
+            if (!client.checkItem(989) || client.getLevel(Skills.AGILITY) < 70) {
                 client.send(new SendMessage("You need a crystal key and 70 agility to use this shortcut!"));
                 return;
             }
@@ -284,7 +286,7 @@ public class ClickObject implements Packet {
             client.sendFrame164(2400);
         }
         if (objectID == 2309 && objectPosition.getX() == 2998 && objectPosition.getY() == 3917) {
-            if (client.getLevel(Skill.AGILITY) < 75) {
+            if (client.getLevel(Skills.AGILITY) < 75) {
                 client.send(new SendMessage("You need at least 75 agility to enter!"));
                 return;
             }
@@ -303,7 +305,7 @@ public class ClickObject implements Packet {
                 client.send(new SendMessage("You need a crystal key to open this door."));
                 return;
             }
-            if (client.getLevel(Skill.SLAYER) < 90) {
+            if (client.getLevel(Skills.SLAYER) < 90) {
                 client.send(new SendMessage("You need at least 90 slayer to enter!"));
                 return;
             }
@@ -318,7 +320,7 @@ public class ClickObject implements Packet {
                 client.send(new SendMessage("You need a crystal key to open this door."));
                 return;
             }
-            if (client.getLevel(Skill.SLAYER) < 90) {
+            if (client.getLevel(Skills.SLAYER) < 90) {
                 client.send(new SendMessage("You need at least 90 slayer to enter!"));
                 return;
             }
@@ -337,7 +339,7 @@ public class ClickObject implements Packet {
             }
         }
         if (objectID == 16680 && objectPosition.getX() == 2884 && objectPosition.getY() == 3397) {
-            if (client.getLevel(Skill.SLAYER) >= 50) {
+            if (client.getLevel(Skills.SLAYER) >= 50) {
                 client.teleportToX = 2884;
                 client.teleportToY = 9798;
             } else {
@@ -499,7 +501,7 @@ public class ClickObject implements Packet {
                     client.send(new SendMessage("You can not mine here or the Tzhaar's will be angry!"));
                     return;
                 }
-                if (client.getLevel(Skill.MINING) < Utils.rockLevels[r]) {
+                if (client.getLevel(Skills.MINING) < Utils.rockLevels[r]) {
                     client.send(new SendMessage("You need a mining level of " + Utils.rockLevels[r] + " to mine this rock"));
                     return;
                 }
@@ -593,7 +595,7 @@ public class ClickObject implements Packet {
             return;
         }
         if (objectID == 16520 || objectID == 16519) {
-            if (client.getLevel(Skill.AGILITY) < 50) {
+            if (client.getLevel(Skills.AGILITY) < 50) {
                 client.send(new SendMessage("You need level 50 agility to use this shortcut!"));
                 return;
             }
@@ -736,7 +738,7 @@ public class ClickObject implements Packet {
             if(client.chestEventOccur) {
                 return;
             }
-            if (client.getLevel(Skill.THIEVING) < 70) {
+            if (client.getLevel(Skills.THIEVING) < 70) {
                 client.send(new SendMessage("You must be level 70 thieving to open this chest"));
                 return;
             }
@@ -767,7 +769,7 @@ public class ClickObject implements Packet {
                 client.addItem(995, coins);
             }
             if (client.getEquipment()[Equipment.Slot.HEAD.getId()] == 2631)
-                client.giveExperience(300, Skill.THIEVING);
+                client.giveExperience(300, Skills.THIEVING);
             client.chestEvent++;
             client.stillgfx(444, objectPosition.getY(), objectPosition.getX());
             client.triggerRandom(900);
@@ -780,7 +782,7 @@ public class ClickObject implements Packet {
                 client.resetPos();
                 return;
             }
-            if (client.getLevel(Skill.THIEVING) < 85) {
+            if (client.getLevel(Skills.THIEVING) < 85) {
                 client.send(new SendMessage("You must be level 85 thieving to open this chest"));
                 return;
             }
@@ -811,7 +813,7 @@ public class ClickObject implements Packet {
                 client.addItem(995, coins);
             }
             if (client.getEquipment()[Equipment.Slot.HEAD.getId()] == 2631)
-                client.giveExperience(500, Skill.THIEVING);
+                client.giveExperience(500, Skills.THIEVING);
             client.chestEvent++;
             client.stillgfx(444, objectPosition.getY(), objectPosition.getX());
             client.triggerRandom(1500);
@@ -950,7 +952,7 @@ public class ClickObject implements Packet {
         // woodCutting
         // mining
         // if (actionTimer == 0) {
-        if (client.CheckObjectSkill(objectID, objectName)) {
+        if (Woodcutting.CheckObjectSkill(objectID, objectName, client)) {
             client.skillX = objectPosition.getX();
             client.setSkillY(objectPosition.getY());
         }
@@ -1148,7 +1150,7 @@ public class ClickObject implements Packet {
                 client.setSkillY(objectPosition.getY());
                 client.stairDistance = 1;
             } else if (objectID == 2113) { // Mining guild stairs
-                if (client.getLevel(Skill.MINING) >= 60) {
+                if (client.getLevel(Skills.MINING) >= 60) {
                     client.stairs = 3;
                     client.skillX = objectPosition.getX();
                     client.setSkillY(objectPosition.getY());
@@ -1195,5 +1197,4 @@ public class ClickObject implements Packet {
                 }
             }
     }
-
 }

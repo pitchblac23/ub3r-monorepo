@@ -6,7 +6,8 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendSideTab;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 
 public class MagicOnItems implements Packet {
 
@@ -26,7 +27,7 @@ public class MagicOnItems implements Packet {
         }
         if (castSpell == 1173) {
             client.resetAction();
-            if (client.getLevel(Skill.MAGIC) < 43) {
+            if (client.getLevel(Skills.MAGIC) < 43) {
                 client.send(new SendMessage("You need a magic level of 43 to cast this spell."));
                 return;
             }
@@ -34,10 +35,10 @@ public class MagicOnItems implements Packet {
                 client.send(new SendMessage("You need 1 nature runes to cast this spell!"));
                 return;
             }
-            client.superHeat(castOnItem);
+            Smithing.superHeat(castOnItem, client);
         }
         if (castSpell == 1155) {// Sapphire
-            if (client.getLevel(Skill.MAGIC) < 7) {
+            if (client.getLevel(Skills.MAGIC) < 7) {
                 client.send(new SendMessage("You need a magic level of 7 to cast this spell."));
                 return;
             }
@@ -64,10 +65,10 @@ public class MagicOnItems implements Packet {
             client.requestAnim(720, 0);
             client.callGfxMask(115, 100);
             client.send(new SendSideTab(6));
-            client.giveExperience(175, Skill.MAGIC);
+            client.giveExperience(175, Skills.MAGIC);
         }
         if (castSpell == 1165) {// Emerald
-            if (client.getLevel(Skill.MAGIC) < 27) {
+            if (client.getLevel(Skills.MAGIC) < 27) {
                 client.send(new SendMessage("You need a magic level of 27 to cast this spell."));
                 return;
             }
@@ -94,10 +95,10 @@ public class MagicOnItems implements Packet {
             client.requestAnim(720, 0);
             client.callGfxMask(115, 100);
             client.send(new SendSideTab(6));
-            client.giveExperience(370, Skill.MAGIC);
+            client.giveExperience(370, Skills.MAGIC);
         }
         if (castSpell == 1176) {// Ruby
-            if (client.getLevel(Skill.MAGIC) < 49) {
+            if (client.getLevel(Skills.MAGIC) < 49) {
                 client.send(new SendMessage("You need a magic level of 49 to cast this spell."));
                 return;
             }
@@ -124,10 +125,10 @@ public class MagicOnItems implements Packet {
             client.requestAnim(720, 0);
             client.callGfxMask(115, 100);
             client.send(new SendSideTab(6));
-            client.giveExperience(590, Skill.MAGIC);
+            client.giveExperience(590, Skills.MAGIC);
         }
         if (castSpell == 1180) {// Diamond
-            if (client.getLevel(Skill.MAGIC) < 57) {
+            if (client.getLevel(Skills.MAGIC) < 57) {
                 client.send(new SendMessage("You need a magic level of 57 to cast this spell."));
                 return;
             }
@@ -154,10 +155,10 @@ public class MagicOnItems implements Packet {
             client.requestAnim(720, 0);
             client.callGfxMask(115, 100);
             client.send(new SendSideTab(6));
-            client.giveExperience(670, Skill.MAGIC);
+            client.giveExperience(670, Skills.MAGIC);
         }
         if (castSpell == 1187) {// Dragonstone
-            if (client.getLevel(Skill.MAGIC) < 68) {
+            if (client.getLevel(Skills.MAGIC) < 68) {
                 client.send(new SendMessage("You need a magic level of 68 to cast this spell."));
                 return;
             }
@@ -184,10 +185,10 @@ public class MagicOnItems implements Packet {
             client.requestAnim(720, 0);
             client.callGfxMask(115, 100);
             client.send(new SendSideTab(6));
-            client.giveExperience(780, Skill.MAGIC);
+            client.giveExperience(780, Skills.MAGIC);
         }
         if (castSpell == 6003) {// Onyx
-            if (client.getLevel(Skill.MAGIC) < 87) {
+            if (client.getLevel(Skills.MAGIC) < 87) {
                 client.send(new SendMessage("You need a magic level of 87 to cast this spell."));
                 return;
             }
@@ -214,7 +215,7 @@ public class MagicOnItems implements Packet {
             client.requestAnim(720, 0);
             client.callGfxMask(115, 100);
             client.send(new SendSideTab(6));
-            client.giveExperience(1150, Skill.MAGIC);
+            client.giveExperience(1150, Skills.MAGIC);
         }
         if (castSpell == 1162 || castSpell == 1178) // Low Alch
         {
@@ -230,7 +231,7 @@ public class MagicOnItems implements Packet {
             client.deleteItem(castOnItem, castOnSlot, 1);
             client.deleteItem(561, 1);
             client.addItem(995, value);
-            client.giveExperience(600, Skill.MAGIC);
+            client.giveExperience(600, Skills.MAGIC);
             client.animationReset = System.currentTimeMillis() + 3200;
             // animation(113, absY, absX);
             // stillgfx(113, absY, absX);

@@ -14,10 +14,10 @@ import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
-import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
+import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Utils;
 
@@ -253,7 +253,7 @@ public class ClickingButtons implements Packet {
             case 29025:
             case 29024:
             case 29023:
-                client.startSmelt(client.actionButtonId);
+                Smithing.startSmelt(client.actionButtonId, client);
                 break;
             case 34185:
             case 34184: // vamps
@@ -420,7 +420,7 @@ public class ClickingButtons implements Packet {
                     if (client.inDuel || client.duelFight || client.IsBanking || client.checkBankInterface || !client.playerHasItem(2528)) //To prevent stuff!
                         break;
                     for (int i = 0; i < skillTrain.length; i++) {
-                        Skill trainedSkill = Skill.getSkill(i);
+                        Skills trainedSkill = Skills.getSkill(i);
                         if (trainedSkill != null && skillTrain[i] == client.actionButtonId && client.actionButtonId != 54090) {
                             client.deleteItem(2528, 1);
                             int level = Skills.getLevelForExperience(client.getExperience(trainedSkill));
@@ -816,7 +816,7 @@ public class ClickingButtons implements Packet {
                 break;
             case 33208:
                 try {
-                    SkillGuides.showSkillMenu(Skill.MINING.getId(), 0, client);
+                    SkillGuides.showSkillMenu(Skills.MINING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -858,21 +858,21 @@ public class ClickingButtons implements Packet {
                 break;
             case 33213:
                 try {
-                    SkillGuides.showSkillMenu(Skill.HERBLORE.getId(), 0, client);
+                    SkillGuides.showSkillMenu(Skills.HERBLORE.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33219: //Crafting
                 try {
-                    SkillGuides.showSkillMenu(Skill.CRAFTING.getId(), 0, client);
+                    SkillGuides.showSkillMenu(Skills.CRAFTING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33211: //Smithing
                 try {
-                    SkillGuides.showSkillMenu(Skill.SMITHING.getId(), 0, client);
+                    SkillGuides.showSkillMenu(Skills.SMITHING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

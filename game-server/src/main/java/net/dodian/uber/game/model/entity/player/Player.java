@@ -14,7 +14,6 @@ import net.dodian.uber.game.model.music.RegionSong;
 import net.dodian.uber.game.model.object.GlobalObject;
 import net.dodian.uber.game.model.object.Object;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
@@ -30,7 +29,8 @@ public abstract class Player extends Entity {
     public boolean saving = false;
     public long disconnectAt = 0, longName = 0;
     public int wildyLevel = 0;
-    public long lastAction = 0, lastMagic = 0;
+    public long lastAction = 0;
+    public long lastMagic = 0;
     public long lastPickAction = 0;
     public long lastTeleport = 0;
     private int playerNpc = -1;
@@ -67,7 +67,8 @@ public abstract class Player extends Entity {
     private int playerSE = 0x328; // SE = Standard Emotion
     private int playerSEW = 0x333; // SEW = Standard Emotion Walking
     private int playerSER = 0x338; // SER = Standard Emotion Run
-    public boolean IsCutting = false, IsAnvil = false;
+    public boolean IsCutting = false;
+    public static boolean IsAnvil = false;
     public boolean isFiremaking = false;
     public boolean attackingPlayer = false, attackingNpc = false;
     public int Essence;
@@ -116,8 +117,8 @@ public abstract class Player extends Entity {
     private final int[] playerEquipmentN = new int[14];
     private final int[] playerLevel = new int[21];
     private final int[] playerXP = new int[21];
-    public int maxHealth = 10, currentHealth = getLevel(Skill.HITPOINTS);
-    public int maxPrayer = 1, currentPrayer = getLevel(Skill.PRAYER);
+    public int maxHealth = 10, currentHealth = getLevel(Skills.HITPOINTS);
+    public int maxPrayer = 1, currentPrayer = getLevel(Skills.PRAYER);
     public final static int maxPlayerListSize = Constants.maxPlayers;
     public Player[] playerList = new Player[maxPlayerListSize]; // To remove -Dashboard
     public int playerListSize = 0;
@@ -509,23 +510,23 @@ public abstract class Player extends Entity {
         }
     }
 
-    public int getLevel(Skill skill) {
+    public int getLevel(Skills skill) {
         return playerLevel[skill.getId()];
     }
 
-    public int getExperience(Skill skill) {
+    public int getExperience(Skills skill) {
         return playerXP[skill.getId()];
     }
 
-    public void addExperience(int experience, Skill skill) {
+    public void addExperience(int experience, Skills skill) {
         playerXP[skill.getId()] += experience;
     }
 
-    public void setLevel(int level, Skill skill) {
+    public void setLevel(int level, Skills skill) {
         playerLevel[skill.getId()] = level;
     }
 
-    public void setExperience(int experience, Skill skill) {
+    public void setExperience(int experience, Skills skill) {
         playerXP[skill.getId()] = experience;
     }
 
@@ -774,7 +775,7 @@ public abstract class Player extends Entity {
         Client plr = ((Client) this);
         plr.debug("Dealing " + amt + " damage to you (hp=" + currentHealth + ")");
         double rolledChance = Math.random();
-        double level = ((getLevel(Skill.PRAYER) + 1) / 8D) / 100D;
+        double level = ((getLevel(Skills.PRAYER) + 1) / 8D) / 100D;
         double chance = level + 0.025; //(((Client) this).getEquipment()[3] == 11284 ? 0.1 : 0.0), maybe?!
         double dmg = ((Client) this).neglectDmg() / 10D;
         double reduceDamage = 1.0 - (dmg / 100);
@@ -796,7 +797,7 @@ public abstract class Player extends Entity {
             getDamage().put(plr.target, totalDmg);
         }
         this.crit = crit;
-        ((Client) this).refreshSkill(Skill.HITPOINTS);
+        ((Client) this).refreshSkill(Skills.HITPOINTS);
         getUpdateFlags().setRequired(UpdateFlag.HIT, true);
     }
 
@@ -1129,7 +1130,7 @@ public abstract class Player extends Entity {
         Client c = (Client) this;
         int maxLevel = getMaxHealth();
         setCurrentHealth(getCurrentHealth() + healing > maxLevel ? maxLevel : getCurrentHealth() + healing);
-        c.refreshSkill(Skill.HITPOINTS);
+        c.refreshSkill(Skills.HITPOINTS);
     }
     public void eat(int healing, int removeId, int removeSlot) {
         Client c = (Client) this;
@@ -1144,7 +1145,7 @@ public abstract class Player extends Entity {
         } else c.send(new SendMessage("You have full health already, so you spare the "+ Server.itemManager.getName(removeId).toLowerCase() +" for later."));
     }
 
-    public void boost(int boosted, Skill skill) {
+    public void boost(int boosted, Skills skill) {
         if(skill.getId() == 3 || skill.getId() == 5) { //Cant do health or prayer with this method!
             return;
         }
@@ -1177,7 +1178,7 @@ public abstract class Player extends Entity {
         Client c = (Client) this;
         int maxLevel = getMaxPrayer();
         setCurrentPrayer(getCurrentPrayer() + healing > maxLevel ? maxLevel : getCurrentPrayer() + healing);
-        c.refreshSkill(Skill.PRAYER);
+        c.refreshSkill(Skills.PRAYER);
     }
 
     public void setCrit(boolean crit) {
@@ -1206,13 +1207,13 @@ public abstract class Player extends Entity {
      * @return the combat level.
      */
     public int determineCombatLevel() {
-        int magLvl = Skills.getLevelForExperience(getExperience(Skill.MAGIC));
-        int ranLvl = Skills.getLevelForExperience(getExperience(Skill.RANGED));
-        int attLvl = Skills.getLevelForExperience(getExperience(Skill.ATTACK));
-        int strLvl = Skills.getLevelForExperience(getExperience(Skill.STRENGTH));
-        int defLvl = Skills.getLevelForExperience(getExperience(Skill.DEFENCE));
-        int hitLvl = Skills.getLevelForExperience(getExperience(Skill.HITPOINTS));
-        int prayLvl = Skills.getLevelForExperience(getExperience(Skill.PRAYER));
+        int magLvl = Skills.getLevelForExperience(getExperience(Skills.MAGIC));
+        int ranLvl = Skills.getLevelForExperience(getExperience(Skills.RANGED));
+        int attLvl = Skills.getLevelForExperience(getExperience(Skills.ATTACK));
+        int strLvl = Skills.getLevelForExperience(getExperience(Skills.STRENGTH));
+        int defLvl = Skills.getLevelForExperience(getExperience(Skills.DEFENCE));
+        int hitLvl = Skills.getLevelForExperience(getExperience(Skills.HITPOINTS));
+        int prayLvl = Skills.getLevelForExperience(getExperience(Skills.PRAYER));
         double mag = magLvl * 1.5;
         double ran = ranLvl * 1.5;
         double attstr = attLvl + strLvl;
@@ -1227,7 +1228,7 @@ public abstract class Player extends Entity {
         return customCombat > 0 ? customCombat : (int)combatLevel;
     }
 
-    public int getSkillLevel(Skill skill) {
+    public int getSkillLevel(Skills skill) {
         return Skills.getLevelForExperience(getExperience(skill));
     }
 
@@ -1287,8 +1288,8 @@ public abstract class Player extends Entity {
     }
 
     public int getSkillId(String name) {
-        for (int i = 0; i < Skill.values().length; i++)
-            if (Skill.values()[i].getName().startsWith(name.toLowerCase()))
+        for (int i = 0; i < Skills.values().length; i++)
+            if (Skills.values()[i].getName().startsWith(name.toLowerCase()))
                 return i;
         return -1;
     }

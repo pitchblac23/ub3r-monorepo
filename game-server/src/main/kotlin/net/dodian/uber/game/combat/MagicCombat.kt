@@ -6,7 +6,7 @@ import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
-import net.dodian.uber.game.model.player.skills.Skill
+import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.utilities.Misc
 import net.dodian.utilities.Utils
@@ -27,7 +27,7 @@ fun Client.handleMagic(): Int {
         lastCombat = System.currentTimeMillis()
     } else return 0
     setFocus(target.position.x, target.position.y)
-    if (getLevel(Skill.MAGIC) < requiredLevel[autocast_spellIndex]) {
+    if (getLevel(Skills.MAGIC) < requiredLevel[autocast_spellIndex]) {
         send(SendMessage("You need a magic level of ${requiredLevel[autocast_spellIndex]} to cast this spell!"))
         return 0
     }
@@ -59,8 +59,8 @@ fun Client.handleMagic(): Int {
         if (player.prayerManager.isPrayerOn(Prayers.Prayer.PROTECT_MAGIC)) maxHit /= 2.0
     }
     var hit = Utils.random(maxHit.toInt())
-    val criticalChance = getLevel(Skill.AGILITY) / 9
-    val extra = getLevel(Skill.MAGIC) * 0.195
+    val criticalChance = getLevel(Skills.AGILITY) / 9
+    val extra = getLevel(Skills.MAGIC) * 0.195
     val landCrit = Math.random() * 100 <= criticalChance
     if(equipment[Equipment.Slot.SHIELD.id]==4224)
         criticalChance * 1.5
@@ -82,8 +82,8 @@ fun Client.handleMagic(): Int {
         if(hit >= player.currentHealth)
             hit = player.currentHealth
         if(slot == 2) { //Heal effect!
-            currentHealth = min(getLevel(Skill.HITPOINTS), currentHealth + (hit / 3))
-            refreshSkill(Skill.HITPOINTS)
+            currentHealth = min(getLevel(Skills.HITPOINTS), currentHealth + (hit / 3))
+            refreshSkill(Skills.HITPOINTS)
         }
         player.dealDamage(hit, landCrit)
     }
@@ -96,8 +96,8 @@ fun Client.handleMagic(): Int {
         stillgfx(78, target.position.y, target.position.x)
 
     if(target is Npc) {
-        giveExperience(40 * hit, Skill.MAGIC)
-        giveExperience(15 * hit, Skill.HITPOINTS)
+        giveExperience(40 * hit, Skills.MAGIC)
+        giveExperience(15 * hit, Skills.HITPOINTS)
     }
 
     if (debug) send(SendMessage("hit = $hit, elapsed = ${time - lastAttack}"))

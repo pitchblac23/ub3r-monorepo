@@ -1,10 +1,11 @@
-package net.dodian.uber.game.model.player.skills;
+package net.dodian.uber.game.model.player.skills.agility;
 
 import net.dodian.uber.game.event.Event;
 import net.dodian.uber.game.event.EventManager;
 import net.dodian.uber.game.model.UpdateFlag;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Misc;
 
 public class Agility {
@@ -15,7 +16,7 @@ public class Agility {
     }
 
     public void giveEndExperience(int xp) {
-        c.giveExperience(xp, Skill.AGILITY);
+        c.giveExperience(xp, Skills.AGILITY);
         c.triggerRandom(xp);
     }
 
@@ -158,7 +159,7 @@ public class Agility {
                     c.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
                     if (c.agilityCourseStage == 6) {
                         giveEndExperience(1050);
-                        c.addItem(2996, 1 + Misc.random(c.getLevel(Skill.AGILITY) / 11));
+                        c.addItem(2996, 1 + Misc.random(c.getLevel(Skills.AGILITY) / 11));
                         c.agilityCourseStage = 0;
                         c.send(new SendMessage("You finished a gnome lap!"));
                         c.triggerRandom(1050);
@@ -182,7 +183,7 @@ public class Agility {
         if ((c.getPosition().getX() < 2550 && c.getPosition().getX() > 2552) || c.getPosition().getY() != 3554) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 40) {
+        if (c.getLevel(Skills.AGILITY) < 40) {
             c.send(new SendMessage("You need level 40 agility to use this!"));
             return;
         }
@@ -212,7 +213,7 @@ public class Agility {
         if (c.UsingAgility) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 40) {
+        if (c.getLevel(Skills.AGILITY) < 40) {
             c.send(new SendMessage("You need level 40 agility to use this!"));
             return;
         }
@@ -283,7 +284,7 @@ public class Agility {
         if (c.getPosition().getX() != 2539 && (c.getPosition().getY() != 3546 || c.getPosition().getY() != 3545)) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 40) {
+        if (c.getLevel(Skills.AGILITY) < 40) {
             c.send(new SendMessage("You need level 40 agility to use this!"));
             return;
         }
@@ -300,7 +301,7 @@ public class Agility {
         if (c.UsingAgility) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 40) {
+        if (c.getLevel(Skills.AGILITY) < 40) {
             c.send(new SendMessage("You need level 40 agility to use this!"));
             return;
         }
@@ -338,7 +339,7 @@ public class Agility {
         if (c.getPosition().getX() != 2535 && c.getPosition().getY() != 3553) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 40) {
+        if (c.getLevel(Skills.AGILITY) < 40) {
             c.send(new SendMessage("You need level 40 agility to use this!"));
             return;
         }
@@ -371,7 +372,7 @@ public class Agility {
         if (c.getPosition().getX() != 2535 && c.getPosition().getY() != 3553) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 40) {
+        if (c.getLevel(Skills.AGILITY) < 40) {
             c.send(new SendMessage("You need level 40 agility to use this!"));
             return;
         }
@@ -404,7 +405,7 @@ public class Agility {
         if (c.getPosition().getX() != 2535 && c.getPosition().getY() != 3553) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 40) {
+        if (c.getLevel(Skills.AGILITY) < 40) {
             c.send(new SendMessage("You need level 40 agility to use this!"));
             return;
         }
@@ -424,7 +425,7 @@ public class Agility {
                 c.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
                 if (c.agilityCourseStage == 6) {
                     giveEndExperience(1300);
-                    c.addItem(2996, 2 + Misc.random(c.getLevel(Skill.AGILITY) / 22));
+                    c.addItem(2996, 2 + Misc.random(c.getLevel(Skills.AGILITY) / 22));
                     c.agilityCourseStage = 0;
                     c.triggerRandom(1300);
                     c.send(new SendMessage("You finished a barbarian lap!"));
@@ -442,7 +443,7 @@ public class Agility {
             if (c.UsingAgility) {
                 return;
             }
-            if (c.getLevel(Skill.AGILITY) < 70) {
+            if (c.getLevel(Skills.AGILITY) < 70) {
                 c.send(new SendMessage("You need level 70 agility to use this!"));
                 return;
             }
@@ -480,7 +481,7 @@ public class Agility {
         if (c.UsingAgility) {
             return;
         }
-        if (c.getLevel(Skill.AGILITY) < 70) {
+        if (c.getLevel(Skills.AGILITY) < 70) {
             c.send(new SendMessage("You need level 70 agility to use this!"));
             return;
         }
@@ -524,7 +525,7 @@ public class Agility {
             if (c.UsingAgility) {
                 return;
             }
-            if (c.getLevel(Skill.AGILITY) < 70) {
+            if (c.getLevel(Skills.AGILITY) < 70) {
                 c.send(new SendMessage("You need level 70 agility to use this!"));
                 return;
             }
@@ -616,7 +617,7 @@ public class Agility {
             if (c.UsingAgility) {
                 return;
             }
-            if (c.getLevel(Skill.AGILITY) < 70) {
+            if (c.getLevel(Skills.AGILITY) < 70) {
                 c.send(new SendMessage("You need level 70 agility to use this!"));
                 return;
             }
@@ -634,7 +635,7 @@ public class Agility {
                     c.setWalkAnim(oldEmote);
                     if (c.agilityCourseStage == 4) {
                         giveEndExperience(2700);
-                        c.addItem(2996, 3 + Misc.random(c.getLevel(Skill.AGILITY) / 33));
+                        c.addItem(2996, 3 + Misc.random(c.getLevel(Skills.AGILITY) / 33));
                         c.agilityCourseStage = 0;
                         c.send(new SendMessage("You finished a wilderness lap!"));
                         c.triggerRandom(2700);
@@ -755,5 +756,4 @@ public class Agility {
             }
         });
     }
-
 }

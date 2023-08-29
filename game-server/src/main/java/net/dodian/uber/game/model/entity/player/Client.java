@@ -25,15 +25,16 @@ import net.dodian.uber.game.model.player.packets.OutgoingPacket;
 import net.dodian.uber.game.model.player.packets.PacketHandler;
 import net.dodian.uber.game.model.player.packets.outgoing.*;
 import net.dodian.uber.game.model.player.quests.QuestSend;
-import net.dodian.uber.game.model.player.skills.Agility;
-import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.fishing.Fishing;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
 import net.dodian.uber.game.model.player.skills.mining.Mining;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
+import net.dodian.uber.game.model.player.skills.smithing.Smithing;
+import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.RewardItem;
 import net.dodian.uber.game.security.*;
 import net.dodian.utilities.*;
@@ -131,6 +132,8 @@ public class Client extends Player implements Runnable {
 
 	public boolean spinning = false;
 	public int dialogInterface = 2459;
+	public int woodcuttingIndex = -1;
+
 	public boolean fletchings = false, fletchingOther = false;
 	public int fletchId = -1, fletchAmount = -1, fletchLog = -1, originalS = -1, fletchExp = 0;
 	public int fletchOtherId1 = -1, fletchOtherId2 = -1, fletchOtherId3 = -1,
@@ -193,11 +196,11 @@ public class Client extends Player implements Runnable {
 
 	public int resetanim = 8;
 
-	public void refreshSkill(Skill skill) {
+	public void refreshSkill(Skills skill) {
 		try {
 			int out = Skills.getLevelForExperience(getExperience(skill));
-			if (skill == Skill.HITPOINTS) out = getCurrentHealth();
-			else if (skill == Skill.PRAYER) out = getCurrentPrayer();
+			if (skill == Skills.HITPOINTS) out = getCurrentHealth();
+			else if (skill == Skills.PRAYER) out = getCurrentPrayer();
 			else if(boostedLevel[skill.getId()] != 0) out += boostedLevel[skill.getId()];
 			setSkillLevel(skill.getId(), out, getExperience(skill));
 			setLevel(out, skill);
@@ -936,19 +939,19 @@ public class Client extends Player implements Runnable {
 				long allxp = 0;
 				for (int i = 0; i < 21; i++) {
 					if (i != 18) {
-						allxp += getExperience(Skill.getSkill(i));
+						allxp += getExperience(Skills.getSkill(i));
 					}
 				}
 				int totallvl = 0;
 				for (int i = 0; i < 21; i++) {
-					totallvl += Skills.getLevelForExperience(getExperience(Skill.getSkill(i)));
+					totallvl += Skills.getLevelForExperience(getExperience(Skills.getSkill(i)));
 				}
 				String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 				StringBuilder query = new StringBuilder("UPDATE " + DbTables.GAME_CHARACTERS_STATS + " SET total=" + totallvl + ", combat=" + determineCombatLevel() + ", ");
 				StringBuilder query2 = new StringBuilder("INSERT INTO " + DbTables.GAME_CHARACTERS_STATS_PROGRESS + " SET updated='" + timeStamp + "', total=" + totallvl + ", combat=" + determineCombatLevel() + ", uid=" + dbId + ", ");
 				for (int i = 0; i < 21; i++) {
-					query.append(Objects.requireNonNull(Skill.getSkill(i)).getName()).append("=").append(getExperience(Skill.getSkill(i))).append(", ");
-					query2.append(Skill.getSkill(i).getName()).append("=").append(getExperience(Skill.getSkill(i))).append(", ");
+					query.append(Objects.requireNonNull(Skills.getSkill(i)).getName()).append("=").append(getExperience(Skills.getSkill(i))).append(", ");
+					query2.append(Skills.getSkill(i).getName()).append("=").append(getExperience(Skills.getSkill(i))).append(", ");
 				}
 				query.append("totalxp=").append(allxp).append(" WHERE uid=").append(dbId);
 				query2.append("totalxp=").append(allxp);
@@ -1142,7 +1145,7 @@ public class Client extends Player implements Runnable {
 		return slot == -1 ? 0 : bankItemsN[slot];
 	}
 
-	public boolean giveExperience(int amount, Skill skill) {
+	public boolean giveExperience(int amount, Skills skill) {
 		if (amount < 1)
 			return false;
 		if (randomed) {
@@ -1163,7 +1166,7 @@ public class Client extends Player implements Runnable {
 				publicyell(getPlayerName() + " has just reached the max level for " + skill.getName() + "!");
 			} else if (newLevel > 90)
 				publicyell(getPlayerName() + "'s " + skill.getName() + " level is now " + newLevel + "!");
-			send(new SendMessage("Congratulations, you just advanced " + (skill == Skill.ATTACK || skill == Skill.AGILITY ? "an" : "a") + " " + skill.getName() + " level."));
+			send(new SendMessage("Congratulations, you just advanced " + (skill == Skills.ATTACK || skill == Skills.AGILITY ? "an" : "a") + " " + skill.getName() + " level."));
 		}
 		if (oldXP < 50000000 && newXP >= 50000000) { // 50 million announcement!
 			animation = 623;
@@ -1201,11 +1204,11 @@ public class Client extends Player implements Runnable {
     	Balloons.triggerBalloonEvent(this);*/
 		setLevel(Skills.getLevelForExperience(getExperience(skill)), skill);
 		refreshSkill(skill);
-		if(skill == Skill.FIREMAKING)
+		if(skill == Skills.FIREMAKING)
 			updateBonus(11);
-		if(skill == Skill.HITPOINTS && newLevel > maxHealth)
+		if(skill == Skills.HITPOINTS && newLevel > maxHealth)
 			maxHealth = newLevel;
-		else if(skill == Skill.PRAYER && newLevel > maxPrayer)
+		else if(skill == Skills.PRAYER && newLevel > maxPrayer)
 			maxPrayer = newLevel;
 		if(animation != -1)
 			animation(animation, getPosition());
@@ -1510,33 +1513,6 @@ public class Client extends Player implements Runnable {
 				getOutputStream().writeByte(amt); // amount
 			}
 			getOutputStream().writeWordBigEndianA(id + 1); // itemID
-		}
-		getOutputStream().endFrameVarSizeWord();
-	}
-
-	public void SetSmithing(int WriteFrame) {
-		getOutputStream().createFrameVarSizeWord(53);
-		getOutputStream().writeWord(WriteFrame);
-		getOutputStream().writeWord(Constants.SmithingItems.length);
-		for (int i = 0; i < Constants.SmithingItems.length; i++) {
-			Constants.SmithingItems[i][0] += 1;
-			if (Constants.SmithingItems[i][1] > 254) {
-				getOutputStream().writeByte(255); // item's stack count. if over 254,
-				// write byte 255
-				getOutputStream().writeDWord_v2(Constants.SmithingItems[i][1]); // and
-				// then
-				// the real
-				// value
-				// with
-				// writeDWord_v2
-			} else {
-				getOutputStream().writeByte(Constants.SmithingItems[i][1]);
-			}
-			if (Constants.SmithingItems[i][0] < 0) {
-				playerItems[i] = 7500;
-			}
-			getOutputStream().writeWordBigEndianA(Constants.SmithingItems[i][0]); // item
-			// id
 		}
 		getOutputStream().endFrameVarSizeWord();
 	}
@@ -2058,27 +2034,27 @@ public class Client extends Player implements Runnable {
 		int CLRanged = GetCLRanged(id);
 		boolean failCheck = false;
 		String itemName = Server.itemManager.getName(id);
-		if (CLAttack > Skills.getLevelForExperience(getExperience(Skill.ATTACK))) {
+		if (CLAttack > Skills.getLevelForExperience(getExperience(Skills.ATTACK))) {
 			send(new SendMessage("You need " + CLAttack + " Attack to equip " + itemName.toLowerCase() + "."));
 			failCheck = true;
 		}
-		if (CLDefence > Skills.getLevelForExperience(getExperience(Skill.DEFENCE))) {
+		if (CLDefence > Skills.getLevelForExperience(getExperience(Skills.DEFENCE))) {
 			send(new SendMessage("You need " + CLDefence + " Defence to equip " + itemName.toLowerCase() + "."));
 			failCheck = true;
 		}
-		if (CLStrength > Skills.getLevelForExperience(getExperience(Skill.STRENGTH))) {
+		if (CLStrength > Skills.getLevelForExperience(getExperience(Skills.STRENGTH))) {
 			send(new SendMessage("You need " + CLStrength + " Strength to equip " + itemName.toLowerCase() + "."));
 			failCheck = true;
 		}
-		if (CLMagic > Skills.getLevelForExperience(getExperience(Skill.MAGIC))) {
+		if (CLMagic > Skills.getLevelForExperience(getExperience(Skills.MAGIC))) {
 			send(new SendMessage("You need " + CLMagic + " Magic to equip " + itemName.toLowerCase() + "."));
 			failCheck = true;
 		}
-		if (CLRanged > Skills.getLevelForExperience(getExperience(Skill.RANGED))) {
+		if (CLRanged > Skills.getLevelForExperience(getExperience(Skills.RANGED))) {
 			send(new SendMessage("You need " + CLRanged + " Ranged to equip " + itemName.toLowerCase() + "."));
 			failCheck = true;
 		}
-		if (Skills.getLevelForExperience(getExperience(Skill.AGILITY)) < 60 && id == 4224) {
+		if (Skills.getLevelForExperience(getExperience(Skills.AGILITY)) < 60 && id == 4224) {
 			send(new SendMessage("You need 60 Agility to equip " + itemName.toLowerCase() + "."));
 			failCheck = true;
 		}
@@ -2199,7 +2175,7 @@ public class Client extends Player implements Runnable {
 		setChatOptions(0, 0, 0);
 
 		for (int i = 0; i < 21; i++) {
-			refreshSkill(Skill.getSkill(i));
+			refreshSkill(Skills.getSkill(i));
 		}
 
 		frame36(287, 1); //SPLIT PRIVATE CHAT ON/OFF
@@ -2371,10 +2347,10 @@ public class Client extends Player implements Runnable {
 				lastRecoverEffect = 0;
 				lastRecover = 4;
 				for (int i = 0; i < 21; i++) {
-					Skill skill = Skill.getSkill(i);
-					if (skill == Skill.HITPOINTS)
+					Skills skill = Skills.getSkill(i);
+					if (skill == Skills.HITPOINTS)
 						heal(1);
-					else if (skill != Skill.PRAYER) {
+					else if (skill != Skills.PRAYER) {
 						if(boostedLevel[i] > 0)
 							boostedLevel[i]--;
 						else if(boostedLevel[i] < 0)
@@ -2513,11 +2489,13 @@ public class Client extends Player implements Runnable {
 
 			// barTimer = 0;
 		}
+
 		// Save every minute
 		if (current - lastSave >= 60000) {
 			saveStats(false);
 			lastSave = now;
 		}
+
 		// Update progress every hour
 		if (current - lastProgressSave >= (60000) * 60) {
 			saveStats(false, true);
@@ -2539,6 +2517,7 @@ public class Client extends Player implements Runnable {
 		if (actionTimer > 0) {
 			actionTimer -= 1;
 		}
+
 		// Shop
 		if (UpdateShop) {
 			resetItems(3823);
@@ -2551,6 +2530,7 @@ public class Client extends Player implements Runnable {
 				stairs(stairs, getPosition().getX(), getPosition().getY());
 			}
 		}
+
 		// check banking
 		if (WanneBank > 0) {
 			if (GoodDistance(skillX, skillY, getPosition().getX(), getPosition().getY(), WanneBank)) {
@@ -2558,6 +2538,7 @@ public class Client extends Player implements Runnable {
 				WanneBank = 0;
 			}
 		}
+
 		// check shopping
 		if (WanneShop > 0) {
 			if (GoodDistance(skillX, skillY, getPosition().getX(), getPosition().getY(), 1)) {
@@ -2565,11 +2546,12 @@ public class Client extends Player implements Runnable {
 				WanneShop = 0;
 			}
 		}
+
 		// woodcutting check
 		if (woodcuttingIndex >= 0) {
 			if (GoodDistance(skillX, skillY, getPosition().getX(), getPosition().getY(), 3)) {
 				send(new RemoveInterfaces());
-				woodcutting();
+				Woodcutting.woodcutting(this);
 			}
 		}
 
@@ -2609,12 +2591,12 @@ public class Client extends Player implements Runnable {
 			/* Stats check! */
 			for(int i = 0; i < boostedLevel.length; i++) {
 				if(i == 3)
-					heal(Skills.getLevelForExperience(getExperience(Skill.HITPOINTS)));
+					heal(Skills.getLevelForExperience(getExperience(Skills.HITPOINTS)));
 				else if (i == 5)
-					setCurrentPrayer(Skills.getLevelForExperience(getExperience(Skill.PRAYER)));
+					setCurrentPrayer(Skills.getLevelForExperience(getExperience(Skills.PRAYER)));
 				else
 					boostedLevel[i] = 0;
-				refreshSkill(Skill.getSkill(i));
+				refreshSkill(Skills.getSkill(i));
 			}
 			/* Death in other content! */
 			if (inWildy())
@@ -2627,13 +2609,11 @@ public class Client extends Player implements Runnable {
 			getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
 		}
 		if (smithing[4] > 0) {
-			if (GoodDistance(skillX, skillY, getPosition().getX(), getPosition().getY(), 1)) {
-				smithing();
-			}
+			if (GoodDistance(skillX, skillY, getPosition().getX(), getPosition().getY(), 1)) { Smithing.smithing(this); }
 		}
 		if (smelting && now - lastAction >= 1800) {
 			lastAction = now;
-			smelt(smelt_id);
+			Smithing.smelt(smelt_id, this);
 		} else if (goldCrafting && now - lastAction >= 1800) {
 			lastAction = now;
 			goldCraft();
@@ -3218,7 +3198,7 @@ public class Client extends Player implements Runnable {
 	public int neglectDmg() {
 		int bonus = 0;
 		if(getEquipment()[Equipment.Slot.SHIELD.getId()] == 11284)
-			bonus += ((getLevel(Skill.FIREMAKING) + 1) / 5) * 10;
+			bonus += ((getLevel(Skills.FIREMAKING) + 1) / 5) * 10;
 		return Math.min(1000, playerBonus[11] + bonus);
 	}
 
@@ -3254,512 +3234,6 @@ public class Client extends Player implements Runnable {
 			}
 		}
 		return false;
-	}
-
-	private int[] woodcuttingDelays = {1200, 1800, 3000, 4200, 5400, 7200};
-	private int[] woodcuttingLevels = {1, 15, 30, 45, 60, 75};
-	private int[] woodcuttingLogs = {1511, 1521, 1519, 1517, 1515, 1513};
-	private int[] woodcuttingExp = {80, 152, 272, 400, 700, 1000};
-	public int woodcuttingIndex = -1;
-
-	public boolean CheckObjectSkill(int objectID, String name) {
-		boolean GoFalse = false;
-		/* Do we wish to keep? */
-		if (name.contains("oak"))
-			objectID = 1281;
-		else if (name.contains("willow"))
-			objectID = 1308;
-		else if (name.contains("maple tree"))
-			objectID = 1307;
-		else if (name.contains("yew"))
-			objectID = 1309;
-		else if (name.contains("magic tree"))
-			objectID = 1306;
-		else if (name.equalsIgnoreCase("tree"))
-			objectID = 1276;
-
-		switch (objectID) {
-
-			/*
-			 * WOODCUTTING
-			 */
-			case 1276:
-			case 1277:
-			case 1278:
-			case 1279:
-			case 1280:
-			case 1330:
-			case 1332:
-			case 2409:
-			case 3033:
-			case 3034:
-			case 3035:
-			case 3036:
-			case 3879:
-			case 3881:
-			case 3882:
-			case 3883: // Normal Tree
-			case 1315:
-			case 1316:
-			case 1318:
-			case 1319: // Evergreen
-			case 1282:
-			case 1283:
-			case 1284:
-			case 1285:
-			case 1286:
-			case 1287:
-			case 1289:
-			case 1290:
-			case 1291:
-			case 1365:
-			case 1383:
-			case 1384:
-			case 5902:
-			case 5903:
-			case 5904: // Dead Tree
-				woodcuttingIndex = 0;
-				break;
-
-			case 1281:
-			case 3037: // Oak Tree
-				woodcuttingIndex = 1;
-				break;
-
-			case 1308:
-			case 5551:
-			case 5552: // Willow Tree
-				woodcuttingIndex = 2;
-				break;
-
-			case 1307:
-			case 4674: // Maple Tree
-				woodcuttingIndex = 3;
-				break;
-
-			case 1309: // Yew Tree
-			case 1754:
-				woodcuttingIndex = 4;
-				break;
-
-			case 1306: // Magic Tree
-			case 1762:
-				woodcuttingIndex = 5;
-				break;
-
-			default:
-				GoFalse = true;
-				break;
-		}
-		return !GoFalse;
-	}
-
-	public int CheckSmithing(int ItemID) {
-		int Type = -1;
-		if (!IsItemInBag(2347)) {
-			send(new SendMessage("You need a " + GetItemName(2347) + " to hammer bars."));
-			return -1;
-		}
-		switch (ItemID) {
-			case 2349: // Bronze Bar
-				Type = 1;
-				break;
-
-			case 2351: // Iron Bar
-				Type = 2;
-				break;
-
-			case 2353: // Steel Bar
-				Type = 3;
-				break;
-
-			case 2359: // Mithril Bar
-				Type = 4;
-				break;
-
-			case 2361: // Adamantite Bar
-				Type = 5;
-				break;
-
-			case 2363: // Runite Bar
-				Type = 6;
-				break;
-		}
-		if (Type == -1)
-			send(new SendMessage("You cannot smith this item."));
-		else
-			smithing[3] = ItemID;
-		return Type;
-	}
-
-	public void OpenSmithingFrame(int Type) {
-		int Type2 = Type - 1;
-		int Length = 22;
-
-		if (Type == 1 || Type == 2) {
-			Length += 1;
-		} else if (Type == 3) {
-			Length += 2;
-		}
-		// Sending amount of bars + make text green if lvl is highenough
-		send(new SendString("", 1132)); // Wire
-		send(new SendString("", 1096));
-		send(new SendString("", 11459)); // Lantern
-		send(new SendString("", 11461));
-		send(new SendString("", 1135)); // Studs
-		send(new SendString("", 1134));
-		String bar, color, color2, name = "";
-
-		if (Type == 1) {
-			name = "Bronze ";
-		} else if (Type == 2) {
-			name = "Iron ";
-		} else if (Type == 3) {
-			name = "Steel ";
-		} else if (Type == 4) {
-			name = "Mithril ";
-		} else if (Type == 5) {
-			name = "Adamant ";
-		} else if (Type == 6) {
-			name = "Rune ";
-		}
-		for (int i = 0; i < Length; i++) {
-			bar = "bar";
-			color = "@red@";
-			color2 = "@bla@";
-			if (Constants.smithing_frame[Type2][i][3] > 1) {
-				bar = bar + "s";
-			}
-			if (getLevel(Skill.SMITHING) >= Constants.smithing_frame[Type2][i][2]) {
-				color2 = "@whi@";
-			}
-			int Type3 = Type2;
-
-			if (Type2 >= 3) {
-				Type3 = (Type2 + 2);
-			}
-			if (AreXItemsInBag((2349 + (Type3 * 2)), Constants.smithing_frame[Type2][i][3])) {
-				color = "@gre@";
-			}
-			send(new SendString(color + "" + Constants.smithing_frame[Type2][i][3] + "" + bar,
-					Constants.smithing_frame[Type2][i][4]));
-			String linux_hack = GetItemName(Constants.smithing_frame[Type2][i][0]);
-			int index = GetItemName(Constants.smithing_frame[Type2][i][0]).indexOf(name);
-			if (index > 0) {
-				linux_hack = linux_hack.substring(index + 1);
-				send(new SendString(linux_hack, Constants.smithing_frame[Type2][i][5]));
-			}
-			// send(new SendString(
-			// color2 + ""
-			// + GetItemName(Constants.smithing_frame[Type2][i][0]).replace(name,
-			// ""),
-			// Constants.smithing_frame[Type2][i][5]);
-		}
-		Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][0][0]; // Dagger
-		Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][0][1];
-		Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][4][0]; // Sword
-		Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][4][1];
-		Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][8][0]; // Scimitar
-		Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][8][1];
-		Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][9][0]; // Long
-		// Sword
-		Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][9][1];
-		Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][18][0]; // 2
-		// hand
-		// sword
-		Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][18][1];
-		SetSmithing(1119);
-		Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][1][0]; // Axe
-		Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][1][1];
-		Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][2][0]; // Mace
-		Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][2][1];
-		Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][13][0]; // Warhammer
-		Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][13][1];
-		Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][14][0]; // Battle
-		// axe
-		Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][14][1];
-		Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][17][0]; // Claws
-		Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][17][1];
-		SetSmithing(1120);
-		Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][15][0]; // Chain
-		// body
-		Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][15][1];
-		Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][20][0]; // Plate
-		// legs
-		Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][20][1];
-		Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][19][0]; // Plate
-		// skirt
-		Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][19][1];
-		Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][21][0]; // Plate
-		// body
-		Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][21][1];
-		Constants.SmithingItems[4][0] = -1; // Lantern
-		Constants.SmithingItems[4][1] = 0;
-		if (Type == 2 || Type == 3) {
-			color2 = "@bla@";
-			if (getLevel(Skill.SMITHING) >= Constants.smithing_frame[Type2][22][2]) {
-				color2 = "@whi@";
-			}
-			Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][22][0]; // Lantern
-			Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][22][1];
-			send(new SendString(color2 + "" + GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 11461));
-		}
-		SetSmithing(1121);
-		Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][3][0]; // Medium
-		Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][3][1];
-		Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][10][0]; // Full
-		// Helm
-		Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][10][1];
-		Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][12][0]; // Square
-		Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][12][1];
-		Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][16][0]; // Kite
-		Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][16][1];
-		Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][6][0]; // Nails
-		Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][6][1];
-		SetSmithing(1122);
-		Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][5][0]; // Dart
-		// Tips
-		Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][5][1];
-		Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][7][0]; // Arrow
-		// Heads
-		Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][7][1];
-		Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][11][0]; // Knives
-		Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][11][1];
-		Constants.SmithingItems[3][0] = -1; // Wire
-		Constants.SmithingItems[3][1] = 0;
-		if (Type == 1) {
-			color2 = "@bla@";
-			if (getLevel(Skill.SMITHING) >= Constants.smithing_frame[Type2][22][2]) {
-				color2 = "@whi@";
-			}
-			Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][22][0]; // Wire
-			Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][22][1];
-			send(new SendString(color2 + "" + GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 1096));
-		}
-		for (int i = 0; i < 22; i++) {
-			if (getLevel(Skill.SMITHING) >= Constants.smithing_frame[Type2][i][2]) {
-				color2 = "@whi@";
-			} else
-				color2 = "@bla@";
-			send(new SendString(color2 + "" + GetItemName(Constants.smithing_frame[Type2][i][0]).replace(name, ""), Constants.smithing_frame[Type2][i][5]));
-		}
-		Constants.SmithingItems[4][0] = -1; // Studs
-		Constants.SmithingItems[4][1] = 0;
-		if (Type == 3) {
-			color2 = "@bla@";
-			if (getLevel(Skill.SMITHING) >= Constants.smithing_frame[Type2][23][2]) {
-				color2 = "@whi@";
-			}
-			Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][23][0]; // Studs
-			Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][23][1];
-			send(new SendString(color2 + "" + GetItemName(Constants.smithing_frame[Type2][23][0]).replace(name, ""), 1134));
-		}
-		SetSmithing(1123);
-		showInterface(994);
-		smithing[2] = Type;
-	}
-
-	public boolean smithing() {
-		if (IsItemInBag(2347)) {
-			if (!smithCheck(smithing[4])) {
-				IsAnvil = true;
-				resetAction();
-				return false;
-			}
-			int bars = 0;
-			int Length = 22;
-			int barid;
-			int xp = 0;
-			int ItemN = 1;
-
-			if (smithing[2] >= 4) {
-				barid = (2349 + ((smithing[2] + 1) * 2));
-			} else {
-				barid = (2349 + ((smithing[2] - 1) * 2));
-			}
-			if (smithing[2] == 1 || smithing[2] == 2) {
-				Length += 1;
-			} else if (smithing[2] == 3) {
-				Length += 2;
-			}
-			int[] possibleBars = {2349, 2351, 2353, 2359, 2361, 2363};
-			int[] bar_xp = {13, 25, 38, 50, 63, 75};
-			for (int i = 0; i < Constants.smithing_frame.length; i++) {
-				for (int i1 = 0; i1 < Constants.smithing_frame[i].length; i1++) {
-					for (int i2 = 0; i2 < Constants.smithing_frame[i][i1].length; i2++) {
-						if (Constants.smithing_frame[i][i1][0] == smithing[4]) {
-							if (!AreXItemsInBag(possibleBars[i], Constants.smithing_frame[i][i1][3])) {
-								send(new SendMessage("You are missing bars needed to smith this!"));
-								IsAnvil = true;
-								resetAction();
-								return false;
-							}
-							xp = bar_xp[i];
-						}
-					}
-				}
-			}
-			for (int i = 0; i < Length; i++) {
-				if (Constants.smithing_frame[(smithing[2] - 1)][i][0] == smithing[4]) {
-					bars = Constants.smithing_frame[(smithing[2] - 1)][i][3];
-					if (smithing[1] == 0) {
-						smithing[1] = Constants.smithing_frame[(smithing[2] - 1)][i][2];
-					}
-					ItemN = Constants.smithing_frame[(smithing[2] - 1)][i][1];
-				}
-			}
-			if (getLevel(Skill.SMITHING) >= smithing[1]) {
-				if (AreXItemsInBag(barid, bars)) {
-					int[] barLevelRequired = {1, 15, 30, 55, 70, 85};
-					if (System.currentTimeMillis() - lastAction >= 600 && !IsAnvil) {
-						lastAction = System.currentTimeMillis();
-						setFocus(skillX, skillY);
-						send(new SendMessage("You start hammering the bar..."));
-						requestAnim(0x382, 0);
-						IsAnvil = true;
-						int diff = getLevel(Skill.SMITHING) - barLevelRequired[CheckSmithing(smithing[3]) - 1];
-						smithing[0] = 5 - (diff >= 14 ? 2 : diff >= 7 ? 1 : 0);
-					}
-					if (System.currentTimeMillis() - lastAction >= (smithing[0] * 600) && IsAnvil) {
-						lastAction = System.currentTimeMillis();
-						for (int i = 0; i < bars; i++) {
-							deleteItem(barid, GetItemSlot(barid), playerItemsN[GetItemSlot(barid)]);
-						}
-						int experience = xp * bars * 30;
-						giveExperience(experience, Skill.SMITHING);
-						addItem(smithing[4], ItemN);
-						send(new SendMessage("You smith a " + GetItemName(smithing[4]) + ""));
-						requestAnim(0x382, 0);
-						triggerRandom(experience);
-					}
-				} else {
-					send(new SendMessage(
-							"You need " + bars + " " + GetItemName(barid) + " to smith a " + GetItemName(smithing[4])));
-					rerequestAnim();
-					resetAction();
-				}
-			} else {
-				send(new SendMessage("You need " + smithing[1] + " Smithing to smith a " + GetItemName(smithing[4])));
-				IsAnvil = true;
-				resetAction();
-				return false;
-			}
-		} else {
-			send(new SendMessage("You need a " + GetItemName(2347) + " to hammer bars."));
-			IsAnvil = true;
-			resetAction();
-			return false;
-		}
-		return true;
-	}
-
-	public void resetSM() {
-		if(IsAnvil) {
-			smithing[0] = 0;
-			smithing[1] = 0;
-			smithing[2] = 0;
-			smithing[3] = -1;
-			smithing[4] = -1;
-			smithing[5] = 0;
-			IsAnvil = false;
-			skillX = -1;
-			setSkillY(-1);
-			IsAnvil = false;
-			rerequestAnim();
-		}
-	}
-
-	/* WOODCUTTING */
-
-	public boolean woodcutting() {
-		if (randomed || fletchings || isFiremaking || shafting) {
-			return false;
-		}
-		if (woodcuttingIndex < 0) {
-			resetAction();
-			return false;
-		}
-
-		int WCAxe = findAxe();
-		if (WCAxe < 0) {
-			send(new SendMessage("You need a axe in which you got the required woodcutting level for."));
-			resetAction();
-			return false;
-		}
-		if (woodcuttingLevels[woodcuttingIndex] > getLevel(Skill.WOODCUTTING)) {
-			send(new SendMessage(
-					"You need a woodcutting level of " + woodcuttingLevels[woodcuttingIndex] + " to cut this tree."));
-			resetAction();
-			return false;
-		}
-		if (freeSlots() < 1) {
-			send(new SendMessage("You got full inventory!"));
-			resetAction();
-			return false;
-		}
-		if (System.currentTimeMillis() - lastAction >= 600 && !IsCutting) {
-			lastAction = System.currentTimeMillis();
-			send(new SendMessage("You swing your axe at the tree..."));
-			requestAnim(getWoodcuttingEmote(Utils.axes[WCAxe]), 0);
-			IsCutting = true;
-		}
-		if (IsCutting)
-			requestAnim(getWoodcuttingEmote(Utils.axes[WCAxe]), 0);
-		if (System.currentTimeMillis() - lastAction >= getWoodcuttingSpeed() && IsCutting) {
-			lastAction = System.currentTimeMillis();
-			giveExperience(woodcuttingExp[woodcuttingIndex], Skill.WOODCUTTING);
-			send(new SendMessage("You cut some " + GetItemName(woodcuttingLogs[woodcuttingIndex]).toLowerCase() + ""));
-			addItem(woodcuttingLogs[woodcuttingIndex], 1);
-			triggerRandom(woodcuttingExp[woodcuttingIndex]);
-			if (Misc.chance(30) == 1) {
-				send(new SendMessage("You take a rest"));
-				resetAction(true);
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public int getWoodcuttingEmote(int item) {
-		switch (item) {
-			case 1351: //bronze
-				return 879;
-			case 1349: //iron
-				return 877;
-			case 1353: //steel
-				return 875;
-			case 1355: // mithril
-				return 871;
-			case 1357: // addy
-				return 869;
-			case 1359: // rune
-				return 867;
-			case 6739: // dragon
-			case 20011: //3rd age
-				return 2846;
-		}
-		return -1;
-	}
-
-	public long getWoodcuttingSpeed() {
-		double axeBonus = Utils.axeBonus[findAxe()];
-		double level = (double) getLevel(Skill.WOODCUTTING) / 600;
-		double random = (double) Misc.random(150) / 100;
-		double bonus = 1 + axeBonus * random + level;
-		double time = woodcuttingDelays[woodcuttingIndex] / bonus;
-		return (long) time;
-	}
-
-	public void resetWC() {
-			woodcutting[0] = 0;
-			woodcutting[1] = 0;
-			woodcutting[2] = 0;
-			woodcutting[4] = 0;
-			skillX = -1;
-			setSkillY(-1);
-			woodcuttingIndex = -1;
-			IsCutting = false;
-			rerequestAnim();
 	}
 
 	public boolean fromTrade(int itemID, int fromSlot, int amount) {
@@ -4188,7 +3662,7 @@ public class Client extends Player implements Runnable {
       send(new SendString("I'd like a task please", 2461));
       send(new SendString("Can you teleport me to west ardougne?", 2462));
       sendFrame164(2459);*/
-				if (NpcTalkTo == 405 && (determineCombatLevel() < 50 || getLevel(Skill.SLAYER) < 50)) {
+				if (NpcTalkTo == 405 && (determineCombatLevel() < 50 || getLevel(Skills.SLAYER) < 50)) {
 					sendFrame200(4888, npcFace);
 					send(new SendString(GetNpcName(NpcTalkTo), 4889));
 					send(new SendString("You need 50 combat and slayer", 4890));
@@ -4196,7 +3670,7 @@ public class Client extends Player implements Runnable {
 					send(new SendString("Click here to continue", 4892));
 					send(new NpcDialogueHead(NpcTalkTo, 4888));
 					sendFrame164(4887);
-				} else if (NpcTalkTo == 403 && (!checkItem(989) || getLevel(Skill.SLAYER) < 50)) {
+				} else if (NpcTalkTo == 403 && (!checkItem(989) || getLevel(Skills.SLAYER) < 50)) {
 					sendFrame200(4888, npcFace);
 					send(new SendString(GetNpcName(NpcTalkTo), 4889));
 					send(new SendString("You need a crystal key and 50 slayer", 4890));
@@ -4214,7 +3688,7 @@ public class Client extends Player implements Runnable {
 				NpcDialogueSend = true;
 				break;
 			case 13:
-				if (NpcTalkTo == 405 && (determineCombatLevel() < 50 || getLevel(Skill.SLAYER) < 50)) {
+				if (NpcTalkTo == 405 && (determineCombatLevel() < 50 || getLevel(Skills.SLAYER) < 50)) {
 					sendFrame200(4888, npcFace);
 					send(new SendString(GetNpcName(NpcTalkTo), 4889));
 					send(new SendString("You need 50 combat and slayer", 4890));
@@ -4222,7 +3696,7 @@ public class Client extends Player implements Runnable {
 					send(new SendString("Click here to continue", 4892));
 					send(new NpcDialogueHead(NpcTalkTo, 4888));
 					sendFrame164(4887);
-				} else if (NpcTalkTo == 403 && (!checkItem(989) || getLevel(Skill.SLAYER) < 50)) {
+				} else if (NpcTalkTo == 403 && (!checkItem(989) || getLevel(Skills.SLAYER) < 50)) {
 					sendFrame200(4888, npcFace);
 					send(new SendString(GetNpcName(NpcTalkTo), 4889));
 					send(new SendString("You need a crystal key and 50 slayer", 4890));
@@ -4607,10 +4081,10 @@ public class Client extends Player implements Runnable {
 				NpcDialogueSend = true;
 				break;
 			case 10000:
-				if(getLevel(Skill.SMITHING) >= 60 && playerHasItem(2347))
+				if(getLevel(Skills.SMITHING) >= 60 && playerHasItem(2347))
 					showPlayerOption(new String[]{ "What would you like to make?", "Head", "Body", "Legs", "Boots", "Gloves" });
 				else {
-					send(new SendMessage(getLevel(Skill.SMITHING) < 60 ? "You need level 60 smithing to do this." : "You need a hammer to handle this material."));
+					send(new SendMessage(getLevel(Skills.SMITHING) < 60 ? "You need level 60 smithing to do this." : "You need a hammer to handle this material."));
 					NpcDialogueSend = true;
 				}
 				break;
@@ -5264,7 +4738,7 @@ public class Client extends Player implements Runnable {
 		resetAction(true);
 		if (!randomed || !randomed2) {
 			random_skill = Utils.random(20);
-			send(new SendString("Click the @or1@" + Skill.getSkill(random_skill).getName() + " @yel@button", 2810));
+			send(new SendString("Click the @or1@" + Skills.getSkill(random_skill).getName() + " @yel@button", 2810));
 			send(new SendString("", 2811));
 			send(new SendString("", 2831));
 			randomed = true;
@@ -5332,246 +4806,12 @@ public class Client extends Player implements Runnable {
 		return spaces;
 	}
 
-	public void smelt(int id) {
-		requestAnim(0x383, 0);
-		smelt_id = id;
-		smelting = true;
-		int smelt_barId = -1;
-		ArrayList<Integer> removed = new ArrayList<>();
-		if (smeltCount < 1) {
-			resetAction(true);
-			return;
-		}
-		smeltCount--;
-		switch (id) {
-			case 2349: // bronze
-				if (playerHasItem(436) && playerHasItem(438)) {
-					smelt_barId = 2349;
-					removed.add(436);
-					removed.add(438);
-				} else
-					send(new SendMessage("You need a tin and copper to do this!"));
-				break;
-			case 2351: // iron ore
-				if (getLevel(Skill.SMITHING) < 15) {
-					send(new SendMessage("You need level 15 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(440)) {
-					int ran = new Range(1, 100).getValue();
-					int diff = (getLevel(Skill.SMITHING) + 1) / 4;
-					if (ran <= 50 + diff) {
-						smelt_barId = 2351;
-						removed.add(440);
-					} else {
-						smelt_barId = 0;
-						removed.add(440);
-						send(new SendMessage("You fail to refine the iron"));
-					}
-				} else
-					send(new SendMessage("You need a iron ore to do this!"));
-				break;
-			case 2353:
-				if (getLevel(Skill.SMITHING) < 30) {
-					send(new SendMessage("You need level 30 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(440) && playerHasItem(453, 2)) {
-					smelt_barId = 2353;
-					removed.add(440);
-					removed.add(453);
-					removed.add(453);
-				} else
-					send(new SendMessage("You need a iron ore and 2 coal to do this!"));
-				break;
-			case 2357:
-				if (getLevel(Skill.SMITHING) < 40) {
-					send(new SendMessage("You need level 40 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(444, 1)) {
-					smelt_barId = 2357;
-					removed.add(444);
-				} else
-					send(new SendMessage("You need a gold ore to do this!"));
-				break;
-			case 2359:
-				if (getLevel(Skill.SMITHING) < 55) {
-					send(new SendMessage("You need level 55 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(447) && playerHasItem(453, 3)) {
-					smelt_barId = 2359;
-					removed.add(447);
-					removed.add(453);
-					removed.add(453);
-					removed.add(453);
-				} else
-					send(new SendMessage("You need a mithril ore and 3 coal to do this!"));
-				break;
-			case 2361:
-				if (getLevel(Skill.SMITHING) < 70) {
-					send(new SendMessage("You need level 70 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(449) && playerHasItem(453, 4)) {
-					smelt_barId = 2361;
-					removed.add(449);
-					removed.add(453);
-					removed.add(453);
-					removed.add(453);
-					removed.add(453);
-				} else
-					send(new SendMessage("You need a adamantite ore and 4 coal to do this!"));
-				break;
-			case 2363:
-				if (getLevel(Skill.SMITHING) < 85) {
-					send(new SendMessage("You need level 85 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(451) && playerHasItem(453, 6)) {
-					smelt_barId = 2363;
-					removed.add(451);
-					for (int i = 0; i < 6; i++)
-						removed.add(453);
-				} else
-					send(new SendMessage("You need a runite ore and 6 coal to do this!"));
-				break;
-			default:
-				println("Unknown smelt: " + id);
-				break;
-		}
-		if (smelt_barId == -1) {
-			resetAction();
-			return;
-		}
-		for (Integer removeId : removed) {
-			deleteItem(removeId, 1);
-		}
-		if (smelt_barId > 0) {
-			addItem(smelt_barId, 1);
-			giveExperience(smeltExperience, Skill.SMITHING);
-			triggerRandom(smeltExperience);
-		}
-	}
-
-	public void superHeat(int id) {
-		resetAction(false);
-		ArrayList<Integer> removed = new ArrayList<>();
-		int smelt_barId = 0;
-		boolean fail = false;
-		switch (id) {
-
-			case 436: // Tin
-			case 438: // Copper
-				if (playerHasItem(436) && playerHasItem(438)) {
-					smelt_barId = 2349;
-					removed.add(436);
-					removed.add(438);
-				} else
-					send(new SendMessage("You need a tin and copper to do this!"));
-				break;
-			case 440: // iron ore
-				if (playerHasItem(440) && !playerHasItem(453, 2)) {
-					if (getLevel(Skill.SMITHING) < 15) {
-						send(new SendMessage("You need level 15 smithing to do this!"));
-						break;
-					}
-					smelt_barId = 2351;
-					removed.add(440);
-				} else if (playerHasItem(440) && playerHasItem(453, 2)) {
-					if (getLevel(Skill.SMITHING) < 30) {
-						send(new SendMessage("You need level 30 smithing to do this!"));
-						break;
-					}
-					smelt_barId = 2353;
-					removed.add(440);
-					removed.add(453);
-					removed.add(453);
-				}
-				break;
-			case 444:
-				if (getLevel(Skill.SMITHING) < 40) {
-					send(new SendMessage("You need level 40 smithing to do this!"));
-					break;
-				}
-				smelt_barId = 2357;
-				removed.add(444);
-				break;
-			case 447:
-				if (getLevel(Skill.SMITHING) < 55) {
-					send(new SendMessage("You need level 55 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(447) && playerHasItem(453, 3)) {
-					smelt_barId = 2359;
-					removed.add(447);
-					removed.add(453);
-					removed.add(453);
-					removed.add(453);
-				} else
-					send(new SendMessage("You need a mithril ore and 3 coal to do this!"));
-				break;
-			case 449:
-				if (getLevel(Skill.SMITHING) < 70) {
-					send(new SendMessage("You need level 70 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(449) && playerHasItem(453, 4)) {
-					smelt_barId = 2361;
-					removed.add(449);
-					removed.add(453);
-					removed.add(453);
-					removed.add(453);
-					removed.add(453);
-				} else
-					send(new SendMessage("You need a adamantite ore and 4 coal to do this!"));
-				break;
-			case 451:
-				if (getLevel(Skill.SMITHING) < 85) {
-					send(new SendMessage("You need level 85 smithing to do this!"));
-					break;
-				}
-				if (playerHasItem(451) && playerHasItem(453, 6)) {
-					smelt_barId = 2363;
-					removed.add(451);
-					for (int i = 0; i < 6; i++)
-						removed.add(453);
-				} else
-					send(new SendMessage("You need a runite ore and 6 coal to do this!"));
-				break;
-			default:
-				fail = true;
-				break;
-		}
-		int xp = 0;
-		for (int i = 0; i < Utils.smelt_bars.length && xp == 0; i++)
-			if (Utils.smelt_bars[i][0] == smelt_barId)
-				xp = Utils.smelt_bars[i][1] * 4;
-		if (fail) {
-			send(new SendMessage("You can only use this spell on ores."));
-			callGfxMask(85, 100);
-		} else if (smelt_barId > 0 && xp > 0) {
-			lastMagic = System.currentTimeMillis();
-			requestAnim(725, 0);
-			callGfxMask(148, 100);
-			deleteRunes(new int[]{561}, new int[]{1});
-			for (Integer removeId : removed)
-				deleteItem(removeId, 1);
-			addItem(smelt_barId, 1);
-			giveExperience(xp, Skill.SMITHING);
-			giveExperience(500, Skill.MAGIC);
-		} else
-			send(new SendMessage("This give no xp?!"));
-		send(new SendSideTab(6));
-	}
-
 	public void runecraft(int rune, int level, int xp) {
 		if (!contains(1436)) {
 			send(new SendMessage("You do not have any rune essence!"));
 			return;
 		}
-		if (getLevel(Skill.RUNECRAFTING) < level) {
+		if (getLevel(Skills.RUNECRAFTING) < level) {
 			send(new SendMessage("You must have " + level + " runecrafting to craft " + GetItemName(rune).toLowerCase()));
 			return;
 		}
@@ -5581,7 +4821,7 @@ public class Client extends Player implements Runnable {
 			if (playerItems[c] == 1437 && playerItemsN[c] > 0) {
 				count++;
 				deleteItem(1436, 1);
-				int chance = (getLevel(Skill.RUNECRAFTING) + 1) / 2;
+				int chance = (getLevel(Skills.RUNECRAFTING) + 1) / 2;
 				int roll = 1 + Misc.random(99);
 				if (roll <= chance)
 					extra++;
@@ -5589,14 +4829,14 @@ public class Client extends Player implements Runnable {
 		}
 		send(new SendMessage("You craft " + (count + extra) + " " + GetItemName(rune).toLowerCase() + "s"));
 		addItem(rune, count + extra);
-		giveExperience((xp * count), Skill.RUNECRAFTING);
+		giveExperience((xp * count), Skills.RUNECRAFTING);
 		triggerRandom(xp * count);
 	}
 
 	public boolean fillEssencePouch(int pouch) {
 		int slot = pouch == 5509 ? 0 : ((pouch - 5508) / 2);
 		if (slot >= 0 && slot <= 3) {
-			if (getLevel(Skill.RUNECRAFTING) < runePouchesLevel[slot]) {
+			if (getLevel(Skills.RUNECRAFTING) < runePouchesLevel[slot]) {
 				send(new SendMessage("You need level " + runePouchesLevel[slot] + " runecrafting to do this!"));
 				return true;
 			}
@@ -5620,7 +4860,7 @@ public class Client extends Player implements Runnable {
 	public boolean emptyEssencePouch(int pouch) {
 		int slot = pouch == 5509 ? 0 : ((pouch - 5508) / 2);
 		if (slot >= 0 && slot <= 3) {
-			if (getLevel(Skill.RUNECRAFTING) < runePouchesLevel[slot]) {
+			if (getLevel(Skills.RUNECRAFTING) < runePouchesLevel[slot]) {
 				send(new SendMessage("You need level " + runePouchesLevel[slot] + " runecrafting to do this!"));
 				return true;
 			}
@@ -5658,15 +4898,18 @@ public class Client extends Player implements Runnable {
 		cooking = false;
 		filling = false;
 		mixPots = false;
+
 		// woodcutting check
 		if (woodcuttingIndex >= 0) {
-			resetWC();
+			Woodcutting.resetWC(this);
 		}
+
 		// smithing check
 		if (smithing[0] > 0) {
-			resetSM();
+			Smithing.resetSM(this);
 			send(new RemoveInterfaces());
 		}
+
 		if (fletchings || fletchingOther) {
 			getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
 		}
@@ -5689,7 +4932,7 @@ public class Client extends Player implements Runnable {
 			deleteItem(1511, 1);
 			addItem(52, 15);
 			requestAnim(1248, 0);
-			giveExperience(50, Skill.FLETCHING);
+			giveExperience(50, Skills.FLETCHING);
 			triggerRandom(50);
 		} else {
 			resetAction();
@@ -5709,7 +4952,7 @@ public class Client extends Player implements Runnable {
 	}
 
 	public long getSpinSpeed() {
-		int craftingLevel = getLevel(Skill.CRAFTING);
+		int craftingLevel = getLevel(Skills.CRAFTING);
 		return craftingLevel >= 40 && craftingLevel < 70 ? 1200 : craftingLevel >= 70 ? 600 : 1800;
 	}
 
@@ -5717,12 +4960,12 @@ public class Client extends Player implements Runnable {
 		if (playerHasItem(1779)) {
 			deleteItem(1779, 1);
 			addItem(1777, 1);
-			giveExperience(50, Skill.CRAFTING);
+			giveExperience(50, Skills.CRAFTING);
 			triggerRandom(50);
 		} else if (playerHasItem(1737)) {
 			deleteItem(1737, 1);
 			addItem(1759, 1);
-			giveExperience(100, Skill.CRAFTING);
+			giveExperience(100, Skills.CRAFTING);
 			triggerRandom(100);
 		} else {
 			send(new SendMessage("You do not have anything to spin!"));
@@ -5810,7 +5053,7 @@ public class Client extends Player implements Runnable {
 				break;
 			}
 		}
-		if (getLevel(Skill.CRAFTING) >= levels[index]) {
+		if (getLevel(Skills.CRAFTING) >= levels[index]) {
 			cSelected = 1741;
 			crafting = true;
 			cItem = id;
@@ -5824,7 +5067,7 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void craft() {
-		if (getLevel(Skill.CRAFTING) < cLevel) {
+		if (getLevel(Skills.CRAFTING) < cLevel) {
 			send(new SendMessage("You need " + cLevel + " crafting to make a " + GetItemName(cItem).toLowerCase()));
 			resetAction(true);
 			return;
@@ -5840,7 +5083,7 @@ public class Client extends Player implements Runnable {
 			deleteItem(1734, 1);
 			send(new SendMessage("You crafted a " + GetItemName(cItem).toLowerCase()));
 			addItem(cItem, 1);
-			giveExperience(cExp, Skill.CRAFTING);
+			giveExperience(cExp, Skills.CRAFTING);
 			cAmount--;
 			if (cAmount < 1)
 				resetAction(true);
@@ -5886,7 +5129,7 @@ public class Client extends Player implements Runnable {
 			required = Constants.chestLevels[cIndex];
 			cItem = Constants.chests[cIndex];
 		}
-		if (required != -1 && getLevel(Skill.CRAFTING) >= required) {
+		if (required != -1 && getLevel(Skills.CRAFTING) >= required) {
 			cExp = cExp * 8;
 			crafting = true;
 			send(new RemoveInterfaces());
@@ -5933,22 +5176,6 @@ public class Client extends Player implements Runnable {
 		UsingAgility = true;
 	}
 
-	public void startSmelt(int id) {
-		int[] amounts = {1, 5, 10, 28};
-		int index = 0, index2 = 0;
-		for (int i = 0; i < Utils.buttons_smelting.length; i++) {
-			if (id == Utils.buttons_smelting[i]) {
-				index = i % 4;
-				index2 = i / 4;
-			}
-		}
-		smelt_id = Utils.smelt_bars[index2][0];
-		smeltCount = amounts[index];
-		smeltExperience = Utils.smelt_bars[index2][1] * 4;
-		smelting = true;
-		send(new RemoveInterfaces());
-	}
-
 	public void startCooking(int id) {
 		if (inTrade || inDuel) {
 			send(new SendMessage("Cannot cook in duel or trade"));
@@ -5985,7 +5212,7 @@ public class Client extends Player implements Runnable {
 				index = i;
 			}
 		}
-		if (getLevel(Skill.COOKING) < Utils.cookLevel[index]) {
+		if (getLevel(Skills.COOKING) < Utils.cookLevel[index]) {
 			send(new SendMessage("You need " + Utils.cookLevel[index] + " cooking to cook the " + Server.itemManager.getName(id).toLowerCase() + "."));
 			resetAction(true);
 			return;
@@ -5993,37 +5220,37 @@ public class Client extends Player implements Runnable {
 		switch (id) {
 			case 2134:
 			case 317:
-				ran = 30 - getLevel(Skill.COOKING);
+				ran = 30 - getLevel(Skills.COOKING);
 				break;
 			case 2307:
-				ran = 36 - getLevel(Skill.COOKING);
+				ran = 36 - getLevel(Skills.COOKING);
 				break;
 			case 3363:
-				ran = 42 - getLevel(Skill.COOKING);
+				ran = 42 - getLevel(Skills.COOKING);
 				break;
 			case 335:
-				ran = 50 - getLevel(Skill.COOKING);
+				ran = 50 - getLevel(Skills.COOKING);
 				break;
 			case 331:
-				ran = 60 - getLevel(Skill.COOKING);
+				ran = 60 - getLevel(Skills.COOKING);
 				break;
 			case 377:
-				ran = 70 - getLevel(Skill.COOKING);
+				ran = 70 - getLevel(Skills.COOKING);
 				break;
 			case 371:
-				ran = 80 - getLevel(Skill.COOKING);
+				ran = 80 - getLevel(Skills.COOKING);
 				break;
 			case 7944:
-				ran = 90 - getLevel(Skill.COOKING);
+				ran = 90 - getLevel(Skills.COOKING);
 				break;
 			case 383:
-				ran = 100 - getLevel(Skill.COOKING);
+				ran = 100 - getLevel(Skills.COOKING);
 				break;
 			case 395:
-				ran = 110 - getLevel(Skill.COOKING);
+				ran = 110 - getLevel(Skills.COOKING);
 				break;
 			case 389:
-				ran = 120 - getLevel(Skill.COOKING);
+				ran = 120 - getLevel(Skills.COOKING);
 				break;
 		}
 		if (getEquipment()[Equipment.Slot.HANDS.getId()] == 775)
@@ -6042,7 +5269,7 @@ public class Client extends Player implements Runnable {
 			if (!burn) {
 				addItem(Utils.cookedIds[index], 1);
 				send(new SendMessage("You cook the " + GetItemName(id)));
-				giveExperience(Utils.cookExp[index], Skill.COOKING);
+				giveExperience(Utils.cookExp[index], Skills.COOKING);
 			} else {
 				addItem(Utils.burnId[index], 1);
 				send(new SendMessage("You burn the " + GetItemName(id)));
@@ -6397,7 +5624,7 @@ public class Client extends Player implements Runnable {
 		GetBonus(true); //Set bonus due to blessing!
 		for(int i = 0; i < boostedLevel.length; i++) {
 			boostedLevel[i] = 0;
-			refreshSkill(Skill.getSkill(i));
+			refreshSkill(Skills.getSkill(i));
 		}
 		Client other = getClient(duel_with);
 		for (GameItem item : other.offeredItems) {
@@ -6989,42 +6216,6 @@ public class Client extends Player implements Runnable {
 		}
 	}
 
-	public boolean smithCheck(int id) {
-		for (int i = 0; i < Constants.smithing_frame.length; i++) {
-			for (int i1 = 0; i1 < Constants.smithing_frame[i].length; i1++) {
-				if (id == Constants.smithing_frame[i][i1][0]) {
-					return true;
-				}
-			}
-		}
-		send(new SendMessage("Client hack detected!"));
-		return false;
-	}
-
-	public int findAxe() {
-		int Eaxe = -1;
-		int Iaxe = -1;
-		int weapon = getEquipment()[Equipment.Slot.WEAPON.getId()];
-		for (int i = 0; i < Utils.axes.length; i++) {
-			if (Utils.axes[i] == weapon) {
-				if (getLevel(Skill.WOODCUTTING) >= Utils.axeReq[i])
-					Eaxe = i;
-			}
-			for (int ii = 0; ii < playerItems.length; ii++) {
-				if (Utils.axes[i] == playerItems[ii] - 1) {
-					if (getLevel(Skill.WOODCUTTING) >= Utils.axeReq[i]) {
-						Iaxe = i;
-					}
-				}
-			}
-		}
-		if (Eaxe >= Iaxe)
-			return Eaxe;
-		if (Iaxe >= Eaxe)
-			return Iaxe;
-		return -1;
-	}
-
 	public void callGfxMask(int id, int height) {
 		setGraphic(id, height == 0 ? 65536 : 65536 * height);
 		getUpdateFlags().setRequired(UpdateFlag.GRAPHICS, true);
@@ -7402,7 +6593,7 @@ public class Client extends Player implements Runnable {
 			send(new SendMessage("You must hand in at least 10 tickets at once"));
 		} else {
 			int amount = playerItemsN[slot];
-			giveExperience(amount * 700, Skill.AGILITY);
+			giveExperience(amount * 700, Skills.AGILITY);
 			send(new SendMessage("You exchange your " + amount + " agility tickets"));
 			deleteItem(2996, playerItemsN[slot]);
 		}
@@ -7438,7 +6629,7 @@ public class Client extends Player implements Runnable {
 		deleteItem(mixPotId1, 1);
 		deleteItem(mixPotId2, 1);
 		addItem(mixPotId3, 1);
-		giveExperience(mixPotXp, Skill.HERBLORE);
+		giveExperience(mixPotXp, Skills.HERBLORE);
 		triggerRandom(mixPotXp);
 	}
 
@@ -7586,7 +6777,7 @@ public class Client extends Player implements Runnable {
 			resetAction();
 			return;
 		}
-		if (level > getLevel(Skill.CRAFTING)) {
+		if (level > getLevel(Skills.CRAFTING)) {
 			send(new SendMessage("You need a crafting level of " + level + " to make this."));
 			goldCrafting = false;
 			return;
@@ -7611,7 +6802,7 @@ public class Client extends Player implements Runnable {
 			deleteItem(items[goldSlot], 1);
 		send(new SendMessage("You craft a " + GetItemName(item).toLowerCase() + ""));
 		addItem(item, 1);
-		giveExperience(xp * 10, Skill.CRAFTING);
+		giveExperience(xp * 10, Skills.CRAFTING);
 		triggerRandom(xp * 10);
 	}
 
@@ -7622,7 +6813,7 @@ public class Client extends Player implements Runnable {
 			if (inters[i] == interfaceID)
 				index = i;
 		int level = jewelry_levels[index][slot];
-		if (level > getLevel(Skill.CRAFTING)) {
+		if (level > getLevel(Skills.CRAFTING)) {
 			send(new SendMessage("You need a crafting level of " + level + " to make this."));
 			return;
 		}
@@ -7854,14 +7045,14 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void removeExperienceFromPlayer(String user, int id, int xp) {
-		String skillName = Skill.getSkill(id).getName();
+		String skillName = Skills.getSkill(id).getName();
 		if (PlayerHandler.getPlayer(user) != null) { //Online check
 			Client other = (Client) PlayerHandler.getPlayer(user);
-			int currentXp = other.getExperience(Skill.values()[id]);
+			int currentXp = other.getExperience(Skills.values()[id]);
 			xp = currentXp >= xp ? xp : currentXp;
-			other.setExperience(currentXp - xp, Skill.getSkill(id));
-			other.setLevel(Skills.getLevelForExperience(other.getExperience(Skill.values()[id])), Skill.getSkill(id));
-			other.refreshSkill(Skill.getSkill(id));
+			other.setExperience(currentXp - xp, Skills.getSkill(id));
+			other.setLevel(Skills.getLevelForExperience(other.getExperience(Skills.values()[id])), Skills.getSkill(id));
+			other.refreshSkill(Skills.getSkill(id));
 			send(new SendMessage("Removed " + xp + "/" + currentXp + " xp from " + user + "'s " + skillName + "(id:" + id + ")!"));
 		} else {
 			try {

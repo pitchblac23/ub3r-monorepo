@@ -2,7 +2,7 @@ package net.dodian.uber.game.model.player.quests;
 
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.outgoing.SendString;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 
 public enum QuestSend {
     PLAGUE_DOCKS(0, 7332, 28164,5,  "Mysterium of the Docks"), EMPTY_1(1, 7333, -1, 5, ""), EMPTY_2(2, 7334, -1, 10,
@@ -73,9 +73,9 @@ public enum QuestSend {
                  c.send(new SendString("", 8148));
                  c.send(new SendString("", 8149));
                  c.send(new SendString("I need to have the following levels:", 8150));
-                 c.send(new SendString(c.getLevel(Skill.HERBLORE) >= 15 ? "@str@15 herblore@str@" : "15 herblore", 8151)); //@str@ put a red line!
-                 c.send(new SendString(c.getLevel(Skill.SMITHING) >= 20 ? "@str@20 smithing@str@" : "20 smithing", 8152)); //@str@ put a red line!
-                 c.send(new SendString(c.getLevel(Skill.CRAFTING) >= 40 ? "@str@40 crafting@str@" : "40 crafting", 8153)); //@str@ put a red line!
+                 c.send(new SendString(c.getLevel(Skills.HERBLORE) >= 15 ? "@str@15 herblore@str@" : "15 herblore", 8151)); //@str@ put a red line!
+                 c.send(new SendString(c.getLevel(Skills.SMITHING) >= 20 ? "@str@20 smithing@str@" : "20 smithing", 8152)); //@str@ put a red line!
+                 c.send(new SendString(c.getLevel(Skills.CRAFTING) >= 40 ? "@str@40 crafting@str@" : "40 crafting", 8153)); //@str@ put a red line!
              } else if (stage > 0) {
                  c.send(new SendString("@str@I have talked to the monk@str@", 8147));
                  c.send(new SendString("The monk told me to talk to someone on the Brimhaven docks.", 8148));
@@ -88,5 +88,4 @@ public enum QuestSend {
          }
          return false;
     }
-
 }

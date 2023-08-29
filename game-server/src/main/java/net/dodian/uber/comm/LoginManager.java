@@ -9,17 +9,14 @@ import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.item.Ground;
 import net.dodian.uber.game.model.item.GroundItem;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.security.DropLog;
 import net.dodian.utilities.DbTables;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
-
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
 
 public class LoginManager {
@@ -112,7 +109,7 @@ public class LoginManager {
                 ResultSet results2 = getDbConnection().createStatement().executeQuery(query2);
                 if (results2.next()) {
                     for (int i = 0; i < 21; i++) {
-                        Skill skill = Skill.getSkill(i);
+                        Skills skill = Skills.getSkill(i);
                         if (skill != null) {
                             p.setExperience(results2.getInt(skill.getName()), skill);
                             p.setLevel(Skills.getLevelForExperience(p.getExperience(skill)), skill);
@@ -132,11 +129,11 @@ public class LoginManager {
                     statement.executeUpdate(newStatsAccount);
                     statement.close();
                     for (int i = 0; i < 21; i++) { //Default skills!
-                        Skill skill = Skill.getSkill(i);
+                        Skills skill = Skills.getSkill(i);
                         if (skill != null) {
                             p.setExperience(i == 3 ? 1155 : 0, skill);
                             p.setLevel(i == 3 ? 10 : 1, skill);
-                            p.setCurrentHealth(p.getLevel(Skill.HITPOINTS));
+                            p.setCurrentHealth(p.getLevel(Skills.HITPOINTS));
                             p.maxPrayer = 1;
                             p.maxHealth = 10;
                             p.refreshSkill(skill);
@@ -150,7 +147,7 @@ public class LoginManager {
                 if(!boosted.equals("")) {
                     p.lastRecover = Integer.parseInt(boosted_prase[0]);
                     for(int i = 0; i < boosted_prase.length - 1; i++)
-                        p.boost(Integer.parseInt(boosted_prase[i + 1]), Skill.getSkill(i));
+                        p.boost(Integer.parseInt(boosted_prase[i + 1]), Skills.getSkill(i));
                 }
                 results2.close();
                 /* Sets Inventory */
@@ -196,7 +193,7 @@ public class LoginManager {
                                 } else if(p.freeSlots() == 0 || !p.addItem(id, amount)) {
                                     GroundItem item = new GroundItem(p.getPosition().copy(), Integer.parseInt(parse2[1]), Integer.parseInt(parse2[2]), p.getSlot(), -1);
                                     Ground.items.add(item);
-                                    //DropLog.recordDrop(p, item.id, item.amount, "Player", p.getPosition().copy(), "Equipment check drop");
+                                    DropLog.recordDrop(p, item.id, item.amount, "Player", p.getPosition().copy(), "Equipment check drop");
                                     p.send(new SendMessage("<col=FF0000>You dropped the " + Server.itemManager.getName(Integer.parseInt(parse2[1])).toLowerCase() + " on the floor!!!"));
                                 }
                             }
@@ -312,5 +309,4 @@ public class LoginManager {
         }
         return false;
     }
-
 }

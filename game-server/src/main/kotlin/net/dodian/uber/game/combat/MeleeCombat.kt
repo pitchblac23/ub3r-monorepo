@@ -8,7 +8,7 @@ import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
 import net.dodian.uber.game.model.item.SpecialsHandler
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
-import net.dodian.uber.game.model.player.skills.Skill
+import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.utilities.Misc
 import net.dodian.utilities.Range
@@ -46,10 +46,10 @@ fun Client.handleMelee(): Int {
             if (player.prayerManager.isPrayerOn(Prayers.Prayer.PROTECT_MELEE)) maxHit /= 2.0
         }
         var hit = Utils.random(maxHit.toInt())
-        val criticalChance = getLevel(Skill.AGILITY) / 9
+        val criticalChance = getLevel(Skills.AGILITY) / 9
         if(equipment[Equipment.Slot.SHIELD.id]==4224)
             criticalChance * 1.5
-        val extra = getLevel(Skill.STRENGTH) * 0.195
+        val extra = getLevel(Skills.STRENGTH) * 0.195
         val landCrit = Math.random() * 100 <= criticalChance
         val landHit = landHit(this, target)
         if (target is Npc) {
@@ -75,12 +75,12 @@ fun Client.handleMelee(): Int {
         if (target is Npc) {
             if (FightType == 3) {
                 val xp = (15 * hit) * CombatExpRate
-                giveExperience(xp, Skill.ATTACK)
-                giveExperience(xp, Skill.DEFENCE)
-                giveExperience(xp, Skill.STRENGTH)
-            } else giveExperience((40 * hit) * CombatExpRate, Skill.getSkill(FightType))
+                giveExperience(xp, Skills.ATTACK)
+                giveExperience(xp, Skills.DEFENCE)
+                giveExperience(xp, Skills.STRENGTH)
+            } else giveExperience((40 * hit) * CombatExpRate, Skills.getSkill(FightType))
 
-            giveExperience((15 * hit) * CombatExpRate, Skill.HITPOINTS)
+            giveExperience((15 * hit) * CombatExpRate, Skills.HITPOINTS)
         }
         if (debug) send(SendMessage("hit = $hit, elapsed = ${time - lastAttack}"))
     lastAttack = System.currentTimeMillis()
@@ -114,9 +114,9 @@ fun landHit(p: Client, t: Entity): Boolean {
     else if(p.prayerManager.isPrayerOn(Prayers.Prayer.PIETY)) 1.22
     else 1.0
     if(t is Client) { //Pvp
-        val atkLevel = p.getLevel(Skill.ATTACK)
+        val atkLevel = p.getLevel(Skills.ATTACK)
         val atkBonus = highestAttackBonus(p)
-        val defLevel = t.getLevel(Skill.DEFENCE)
+        val defLevel = t.getLevel(Skills.DEFENCE)
         val defBonus = highestDefensiveBonus(t)
         val prayerDefBonus = if(t.prayerManager.isPrayerOn(Prayers.Prayer.THICK_SKIN)) 1.05
         else if(p.prayerManager.isPrayerOn(Prayers.Prayer.ROCK_SKIN)) 1.1
@@ -134,7 +134,7 @@ fun landHit(p: Client, t: Entity): Boolean {
         return chance < (hitChance*100)
     } else if(t is Npc) { //Pve
         val atkBonus = highestAttackBonus(p)
-        val atkLevel = p.getLevel(Skill.ATTACK)
+        val atkLevel = p.getLevel(Skills.ATTACK)
         val defLevel = t.defence
         val defBonus = 0.0
         val npcDef = defLevel * (defBonus + 64.0)

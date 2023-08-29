@@ -4,9 +4,9 @@ import net.dodian.uber.game.model.Position;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
+import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.utilities.Utils;
 
 public class ItemOnObject implements Packet {
@@ -60,12 +60,12 @@ public class ItemOnObject implements Packet {
             if(!client.playerHasItem(2347)) client.send(new SendMessage("You need a hammer!"));
             else if (ItemID == 1540 && !client.playerHasItem(11286)) client.send(new SendMessage("You need a draconic visage!"));
             else if (ItemID == 11286 && !client.playerHasItem(1540)) client.send(new SendMessage("You need a anti-dragon shield!"));
-            else if(Skills.getLevelForExperience(client.getExperience(Skill.SMITHING)) < 90) client.send(new SendMessage("You need level 90 smithing to do this!"));
+            else if(Skills.getLevelForExperience(client.getExperience(Skills.SMITHING)) < 90) client.send(new SendMessage("You need level 90 smithing to do this!"));
             else { //Preforming action!
                 client.deleteItem(ItemID, ItemSlot, 1);
                 client.deleteItem(ItemID == 1540 ? 11286 : 1540, 1);
                 client.addItemSlot(11284, 1, ItemSlot);
-                client.giveExperience(15000, Skill.SMITHING);
+                client.giveExperience(15000, Skills.SMITHING);
                 client.send(new SendMessage("Your smithing craft made a Dragonfire shield out of the visage."));
             }
         }
@@ -75,17 +75,16 @@ public class ItemOnObject implements Packet {
             client.startCooking(ItemID);
             client.setFocus(UsedOnX, UsedOnY);
         } else if (UsedOnObjectID == 2783) { // anvil
-            int Type = client.CheckSmithing(ItemID);
+            int Type = Smithing.CheckSmithing(ItemID, client);
 
             if (Type != -1) {
                 client.skillX = UsedOnX;
                 client.setSkillY(UsedOnY);
-                client.OpenSmithingFrame(Type);
+                Smithing.OpenSmithingFrame(Type, client);
             }
         } else {
             client.println_debug(
                     "Item: " + ItemID + " - Used On Object: " + UsedOnObjectID + " -  X: " + UsedOnX + " - Y: " + UsedOnY);
         }
     }
-
 }

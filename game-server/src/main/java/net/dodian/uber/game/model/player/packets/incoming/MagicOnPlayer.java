@@ -1,17 +1,14 @@
 package net.dodian.uber.game.model.player.packets.incoming;
 
 import net.dodian.uber.game.Server;
-import net.dodian.uber.game.model.UpdateFlag;
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.utilities.Utils;
-
 import static net.dodian.uber.game.combat.ClientExtensionsKt.magicBonusDamage;
 
 public class MagicOnPlayer implements Packet {
@@ -64,11 +61,11 @@ public class MagicOnPlayer implements Packet {
             if (System.currentTimeMillis() - client.lastAttack < client.coolDown[type]) {
                 return;
             }
-            if (client.getLevel(Skill.MAGIC) >= client.requiredLevel[slot]) {
+            if (client.getLevel(Skills.MAGIC) >= client.requiredLevel[slot]) {
                 if (client.runeCheck()) {
                     int hitDiff = 0;
-                    double extra = client.getLevel(Skill.MAGIC) * 0.195;
-                    double critChance = client.getLevel(Skill.AGILITY) / 9;
+                    double extra = client.getLevel(Skills.MAGIC) * 0.195;
+                    double critChance = client.getLevel(Skills.AGILITY) / 9;
                     boolean hitCrit = Math.random() * 100 <= critChance * (client.getEquipment()[Equipment.Slot.SHIELD.getId()] == 4224 ? 1.5 : 1);
                     client.deleteItem(565, 1);
                     double dmg = client.baseDamage[slot] * magicBonusDamage(client);
@@ -96,5 +93,4 @@ public class MagicOnPlayer implements Packet {
         } else
             client.send(new SendMessage("You can't attack here!"));
     }
-
 }

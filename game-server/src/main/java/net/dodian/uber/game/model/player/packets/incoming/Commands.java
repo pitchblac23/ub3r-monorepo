@@ -22,7 +22,6 @@ import net.dodian.uber.game.model.item.GroundItem;
 import net.dodian.uber.game.model.object.RS2Object;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.*;
-import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
 import net.dodian.uber.game.party.Balloons;
@@ -214,17 +213,17 @@ public class Commands implements Packet {
                     client.send(new SendMessage("You found gem.." + client.GetItemName(gem) + "(" + gem + ")"));
                 }
                 if (cmd[0].equals("boost_on")) {
-                    client.boost(1337, Skill.STRENGTH);
-                    client.boost(1337, Skill.DEFENCE);
-                    client.boost(1337, Skill.ATTACK);
-                    client.boost(1337, Skill.RANGED);
-                    client.boost(1337, Skill.MAGIC);
+                    client.boost(1337, Skills.STRENGTH);
+                    client.boost(1337, Skills.DEFENCE);
+                    client.boost(1337, Skills.ATTACK);
+                    client.boost(1337, Skills.RANGED);
+                    client.boost(1337, Skills.MAGIC);
                 }
                 if (cmd[0].equals("boost_off")) {
                     for(int i = 0; i < 7; i++)
                         if(i != 3 && i != 5) {
                             client.boostedLevel[i] = 0;
-                            client.refreshSkill(Skill.getSkill(i));
+                            client.refreshSkill(Skills.getSkill(i));
                         }
                 }
                 if (command.startsWith("bosspawn")) {
@@ -803,31 +802,31 @@ public class Commands implements Packet {
                     if (level > 99 || level < 1) {
                         return;
                     }
-                    client.setExperience(Skills.getXPForLevel(level), Skill.getSkill(skill));
-                    client.setLevel(level, Skill.getSkill(skill));
-                    client.refreshSkill(Skill.getSkill(skill));
+                    client.setExperience(Skills.getXPForLevel(level), Skills.getSkill(skill));
+                    client.setLevel(level, Skills.getSkill(skill));
+                    client.refreshSkill(Skills.getSkill(skill));
                 }
                 if (cmd[0].equalsIgnoreCase("setxp")) {
                     int skill = Integer.parseInt(cmd[1]);
                     int xp = Integer.parseInt(cmd[2]);
-                    if (xp + client.getExperience(Skill.getSkill(skill)) > 200000000 || xp < 1) {
+                    if (xp + client.getExperience(Skills.getSkill(skill)) > 200000000 || xp < 1) {
                         return;
                     }
-                    client.giveExperience(xp, Skill.getSkill(skill));
-                    client.refreshSkill(Skill.getSkill(skill));
+                    client.giveExperience(xp, Skills.getSkill(skill));
+                    client.refreshSkill(Skills.getSkill(skill));
                 }
                 if (command.equalsIgnoreCase("reset") && client.playerRights > 1/*&& client.getPlayerName().equalsIgnoreCase("Logan")*/) {
                     for (int i = 0; i < 21; i++) {
-                        client.setExperience(0, Skill.getSkill(i));
+                        client.setExperience(0, Skills.getSkill(i));
                         if (i == 3)
-                            client.setExperience(1155, Skill.HITPOINTS);
-                        client.setLevel(Skills.getLevelForExperience(i), Skill.getSkill(i));
-                        client.refreshSkill(Skill.getSkill(i));
+                            client.setExperience(1155, Skills.HITPOINTS);
+                        client.setLevel(Skills.getLevelForExperience(i), Skills.getSkill(i));
+                        client.refreshSkill(Skills.getSkill(i));
                     }
                 }
                 if (command.startsWith("master") && client.playerRights > 1) {
                     for (int i = 0; i < 21; i++) {
-                        client.giveExperience(14000000, Skill.getSkill(i));
+                        client.giveExperience(14000000, Skills.getSkill(i));
                     }
                 }
             } //End of Special rank commands
@@ -1474,10 +1473,10 @@ public class Commands implements Packet {
                     client.send(new SendMessage("You set debug as " + client.debug));
                 }
                 if (cmd[0].equals("boost")) {
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.STRENGTH)) * 0.15), Skill.STRENGTH);
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.DEFENCE)) * 0.15), Skill.DEFENCE);
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.ATTACK)) * 0.15), Skill.ATTACK);
-                    client.boost(4 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.RANGED)) * 0.12), Skill.RANGED);
+                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.STRENGTH)) * 0.15), Skills.STRENGTH);
+                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.DEFENCE)) * 0.15), Skills.DEFENCE);
+                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.ATTACK)) * 0.15), Skills.ATTACK);
+                    client.boost(4 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.RANGED)) * 0.12), Skills.RANGED);
                 }
                 if ((cmd[0].equalsIgnoreCase("tool") || cmd[0].equalsIgnoreCase("potato")) && client.playerRights > 0) {
                     client.addItem(5733, 1);
@@ -1584,9 +1583,9 @@ public class Commands implements Packet {
                 if(cmd[0].equalsIgnoreCase("setup")) {
                     for(int i = 0; i < 7; i++) {
                         int level = i == 3 ? 78 : 75;
-                        client.setExperience(Skills.getXPForLevel(level), Skill.getSkill(i));
-                        client.setLevel(level, Skill.getSkill(i));
-                        client.refreshSkill(Skill.getSkill(i));
+                        client.setExperience(Skills.getXPForLevel(level), Skills.getSkill(i));
+                        client.setLevel(level, Skills.getSkill(i));
+                        client.refreshSkill(Skills.getSkill(i));
                         if(i == 3) {
                             client.maxHealth = level;
                             client.heal(client.maxHealth);

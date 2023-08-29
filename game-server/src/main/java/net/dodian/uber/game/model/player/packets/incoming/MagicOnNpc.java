@@ -5,11 +5,10 @@ import net.dodian.uber.game.model.entity.npc.Npc;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.player.packets.Packet;
-
 import static net.dodian.uber.game.combat.ClientExtensionsKt.magicBonusDamage;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.*;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Utils;
 
 public class MagicOnNpc implements Packet {
@@ -44,11 +43,11 @@ public class MagicOnNpc implements Packet {
             if (System.currentTimeMillis() - client.lastAttack < client.coolDown[type]) {
                 return;
             }
-            if (client.getLevel(Skill.MAGIC) >= client.requiredLevel[slot]) {
+            if (client.getLevel(Skills.MAGIC) >= client.requiredLevel[slot]) {
                 if (client.runeCheck()) {
                     int hitDiff = 0;
-                    double extra = client.getLevel(Skill.MAGIC) * 0.195;
-                    double critChance = client.getLevel(Skill.AGILITY) / 9;
+                    double extra = client.getLevel(Skills.MAGIC) * 0.195;
+                    double critChance = client.getLevel(Skills.AGILITY) / 9;
                     boolean hitCrit = Math.random() * 100 <= critChance * (client.getEquipment()[Equipment.Slot.SHIELD.getId()] == 4224 ? 1.5 : 1);
                     client.deleteItem(565, 1);
                     double dmg = client.baseDamage[slot] * magicBonusDamage(client);
@@ -68,15 +67,13 @@ public class MagicOnNpc implements Packet {
                         client.stillgfx(78, EnemyY2, EnemyX2);
                     client.target = tempNpc;
                     client.setFocus(EnemyX2, EnemyY2);
-                    client.giveExperience(40 * hitDiff, Skill.MAGIC);
-                    client.giveExperience(hitDiff * 15, Skill.HITPOINTS);
+                    client.giveExperience(40 * hitDiff, Skills.MAGIC);
+                    client.giveExperience(hitDiff * 15, Skills.HITPOINTS);
                     tempNpc.dealDamage(client, hitDiff, hitCrit);
                     client.lastAttack = System.currentTimeMillis();
                 }
             } else
                 client.send(new SendMessage("You need a magic level of " + client.requiredLevel[slot]));
         }
-
     }
-
 }

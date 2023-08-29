@@ -1,9 +1,8 @@
 package net.dodian.uber.game.model.player.skills.slayer;
 
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.player.skills.Skill;
+import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Range;
-
 import java.util.ArrayList;
 
 public class SlayerTask {
@@ -124,7 +123,7 @@ public class SlayerTask {
     public static ArrayList<slayerTasks> mazchnaTasks(Client c) {
         ArrayList<slayerTasks> slayer = new ArrayList<>();
         for (int i = 0; i < mazchna.length; i++) {
-            int slayerLevel = c.getLevel(Skill.SLAYER);
+            int slayerLevel = c.getLevel(Skills.SLAYER);
             if (c.getSlayerData().get(1) != -1 && c.getSlayerData().get(1) == mazchna[i].ordinal()) {
                 i++; //Skip task we already have got before!
             } else if (mazchna[i].getAssignedLevelRange().getFloor() <= slayerLevel
@@ -148,7 +147,7 @@ public class SlayerTask {
     public static ArrayList<slayerTasks> vannakaTasks(Client c) {
         ArrayList<slayerTasks> slayer = new ArrayList<>();
         for (int i = 0; i < vannaka.length; i++) {
-            int slayerLevel = c.getLevel(Skill.SLAYER);
+            int slayerLevel = c.getLevel(Skills.SLAYER);
             if (c.getSlayerData().get(1) != -1 && c.getSlayerData().get(1) == vannaka[i].ordinal()) {
                 i++; //Skip task we already have got before!
             } else if (vannaka[i].getAssignedLevelRange().getFloor() <= slayerLevel
@@ -166,7 +165,7 @@ public class SlayerTask {
     public static ArrayList<slayerTasks> duradelTasks(Client c) {
         ArrayList<slayerTasks> slayer = new ArrayList<>();
         for (int i = 0; i < duradel.length; i++) {
-            int slayerLevel = c.getLevel(Skill.SLAYER);
+            int slayerLevel = c.getLevel(Skills.SLAYER);
             if (c.getSlayerData().get(1) != -1 && c.getSlayerData().get(1) == duradel[i].ordinal()) {
                 i++; //Skip task we already have got before!
             } else if (duradel[i].getAssignedLevelRange().getFloor() <= slayerLevel
@@ -189,5 +188,4 @@ public class SlayerTask {
         }
         return slayer;
     }
-
 }

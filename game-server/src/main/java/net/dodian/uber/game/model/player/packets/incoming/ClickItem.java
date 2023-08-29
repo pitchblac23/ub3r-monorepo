@@ -5,7 +5,6 @@ import net.dodian.uber.game.model.Position;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.utilities.DbTables;
@@ -108,10 +107,10 @@ public class ClickItem implements Packet {
                     for (int i = 0; i < Utils.grimy_herbs.length && used; i++) {
                         if(Utils.grimy_herbs[i] == item) {
                             used = false;
-                            if (Skills.getLevelForExperience(client.getExperience(Skill.HERBLORE)) < Utils.grimy_herbs_lvl[i]) {
+                            if (Skills.getLevelForExperience(client.getExperience(Skills.HERBLORE)) < Utils.grimy_herbs_lvl[i]) {
                                 client.send(new SendMessage("You need level " + Utils.grimy_herbs_lvl[i] + " herblore to clean this herb."));
                             } else {
-                                client.giveExperience(Utils.grimy_herbs_xp[i], Skill.HERBLORE);
+                                client.giveExperience(Utils.grimy_herbs_xp[i], Skills.HERBLORE);
                                 client.deleteItem(item, slot, 1);
                                 client.addItemSlot(item == 3051 || item == 3049 ? item - 51 : item + 50, 1, slot);
                                 client.send(new SendMessage("You clean the "+client.GetItemName(item)+"."));
@@ -178,7 +177,7 @@ public class ClickItem implements Packet {
                         return;
                     }
                     client.requestAnim(1327, 0);
-                    client.boost(3 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.ATTACK)) * 0.1), Skill.ATTACK);
+                    client.boost(3 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.ATTACK)) * 0.1), Skills.ATTACK);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -194,7 +193,7 @@ public class ClickItem implements Packet {
                         return;
                     }
                     client.requestAnim(1327, 0);
-                    client.boost(3 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.STRENGTH)) * 0.1), Skill.STRENGTH);
+                    client.boost(3 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.STRENGTH)) * 0.1), Skills.STRENGTH);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -210,7 +209,7 @@ public class ClickItem implements Packet {
                         return;
                     }
                     client.requestAnim(1327, 0);
-                    client.boost(3 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.DEFENCE)) * 0.1), Skill.DEFENCE);
+                    client.boost(3 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.DEFENCE)) * 0.1), Skills.DEFENCE);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -226,7 +225,7 @@ public class ClickItem implements Packet {
                         return;
                     }
                     client.requestAnim(1327, 0);
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.ATTACK)) * 0.15), Skill.ATTACK);
+                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.ATTACK)) * 0.15), Skills.ATTACK);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -242,7 +241,7 @@ public class ClickItem implements Packet {
                         return;
                     }
                     client.requestAnim(1327, 0);
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.STRENGTH)) * 0.15), Skill.STRENGTH);
+                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.STRENGTH)) * 0.15), Skills.STRENGTH);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -259,8 +258,8 @@ public class ClickItem implements Packet {
                     }
                     client.requestAnim(1327, 0);
                     client.send(new SendMessage("You drink the super defense potion"));
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.DEFENCE)) * 0.15), Skill.DEFENCE);
-                    client.refreshSkill(Skill.DEFENCE);
+                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.DEFENCE)) * 0.15), Skills.DEFENCE);
+                    client.refreshSkill(Skills.DEFENCE);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -277,7 +276,7 @@ public class ClickItem implements Packet {
                     }
                     client.requestAnim(1327, 0);
                     client.send(new SendMessage("You drink the ranging potion"));
-                    client.boost(4 + (int)(Skills.getLevelForExperience(client.getExperience(Skill.RANGED)) * 0.12), Skill.RANGED);
+                    client.boost(4 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.RANGED)) * 0.12), Skills.RANGED);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -294,7 +293,7 @@ public class ClickItem implements Packet {
                     }
                     client.requestAnim(1327, 0);
                     client.pray(8 + (int)(client.getMaxPrayer() * 0.25));
-                    client.refreshSkill(Skill.PRAYER);
+                    client.refreshSkill(Skills.PRAYER);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :
@@ -311,7 +310,7 @@ public class ClickItem implements Packet {
                     }
                     client.requestAnim(1327, 0);
                     client.pray(10 + (int)(client.getMaxPrayer() * 0.28));
-                    client.refreshSkill(Skill.PRAYER);
+                    client.refreshSkill(Skills.PRAYER);
                     for(int i = 0; i < Utils.pot_4_dose.length && nextId == -1; i++)
                         nextId = Utils.pot_4_dose[i] == item ? Utils.pot_3_dose[i] :
                                 Utils.pot_3_dose[i] == item ? Utils.pot_2_dose[i] :

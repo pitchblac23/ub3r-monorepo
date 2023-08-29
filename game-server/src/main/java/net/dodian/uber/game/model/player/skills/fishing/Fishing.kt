@@ -2,7 +2,7 @@ package net.dodian.uber.game.model.player.skills.fishing;
 
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
-import net.dodian.uber.game.model.player.skills.Skill
+import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.utilities.Misc
 import net.dodian.utilities.Utils
 
@@ -41,7 +41,7 @@ class Fishing {
                 p.resetAction(true);
                 return;
             }
-            if (p.getLevel(Skill.FISHING) < Utils.fishReq[p.fishIndex]) {
+            if (p.getLevel(Skills.FISHING) < Utils.fishReq[p.fishIndex]) {
                 p.send(SendMessage("You need " + Utils.fishReq[p.fishIndex] + " fishing to fish here"));
                 p.resetAction(true);
                 return;
@@ -74,17 +74,17 @@ class Fishing {
             if (p.fishIndex == 1) {
                 p.deleteItem(314, 1);
                 val random: Int = 6
-                if (p.getLevel(Skill.FISHING) >= 30 && random < 3) {
+                if (p.getLevel(Skills.FISHING) >= 30 && random < 3) {
                     p.addItem(331, 1);
-                    p.giveExperience(Utils.fishExp[p.fishIndex] + 100, Skill.FISHING);
+                    p.giveExperience(Utils.fishExp[p.fishIndex] + 100, Skills.FISHING);
                     p.send(SendMessage("You catch some salmon."));
                 } else {
-                    p.giveExperience(Utils.fishExp[p.fishIndex], Skill.FISHING);
+                    p.giveExperience(Utils.fishExp[p.fishIndex], Skills.FISHING);
                     p.addItem(Utils.fishId[p.fishIndex], 1);
                     p.send(SendMessage("You catch some trout."));
                 }
             } else {
-                p.giveExperience(Utils.fishExp[p.fishIndex], Skill.FISHING);
+                p.giveExperience(Utils.fishExp[p.fishIndex], Skills.FISHING);
                 p.addItem(Utils.fishId[p.fishIndex], 1);
                 p.send(SendMessage("You catch some " + p.GetItemName(Utils.fishId[p.fishIndex]).toLowerCase() + "."));
             }
