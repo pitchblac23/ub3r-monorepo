@@ -49,6 +49,7 @@ public class PacketHandler {
         packets[185] = new ClickingButtons();
         packets[188] = new AddFriend();
         packets[192] = new ItemOnObject();
+        packets[202] = new IdleLogout();
         packets[208] = new BankX2();
         packets[210] = new ChangeRegion();
         packets[214] = new MoveItems();
