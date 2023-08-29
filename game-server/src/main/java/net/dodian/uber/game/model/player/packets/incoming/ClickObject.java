@@ -20,6 +20,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Agility;
 import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Thieving;
+import net.dodian.uber.game.model.player.skills.mining.Mining;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
@@ -502,7 +503,7 @@ public class ClickObject implements Packet {
                     client.send(new SendMessage("You need a mining level of " + Utils.rockLevels[r] + " to mine this rock"));
                     return;
                 }
-                int pickaxe = client.findPick();
+                int pickaxe = Mining.findPick(client);
                 if (pickaxe < 0) {
                     client.minePick = -1;
                     client.resetAction();
@@ -512,9 +513,9 @@ public class ClickObject implements Packet {
                     client.minePick = pickaxe;
                     client.mineIndex = r;
                     client.mining = true;
-                    client.lastAction = System.currentTimeMillis() + client.getMiningSpeed();
+                    client.lastAction = System.currentTimeMillis() + Mining.getMiningSpeed(client);
                     client.lastPickAction = System.currentTimeMillis() + 1200;
-                    client.requestAnim(client.getMiningEmote(Utils.picks[pickaxe]), 0);
+                    client.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
                     client.send(new SendMessage("You swing your pick at the rock..."));
                 return;
             }

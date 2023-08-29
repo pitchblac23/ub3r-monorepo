@@ -30,6 +30,7 @@ import net.dodian.uber.game.model.player.skills.Skill;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.fishing.Fishing;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
+import net.dodian.uber.game.model.player.skills.mining.Mining;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
@@ -689,39 +690,23 @@ public class Client extends Player implements Runnable {
 			int loadgame = Server.loginManager.loadgame(this, getPlayerName(), playerPass);
 			switch (playerGroup) {
 				case 6: // root admin
-				case 18: // root admin
 				case 10: // content dev
+				case 18: // root admin
 					playerRights = 2;
 					premium = true;
 					break;
-				case 9: // player moderator
+				case 3:
 				case 5: // global mod
+				case 9: // player moderator
+				case 19:
 					playerRights = 1;
 					premium = true;
 					break;
 				default:
-					if(playerGroup == 2)
+					if(playerGroup == 2 || playerGroup == 14)
 						Server.loginManager.updatePlayerForumRegistration(this);
 					premium = true;
 					playerRights = 0;
-			}
-			for (String otherGroup : otherGroups) {
-				if (otherGroup == null) {
-					continue;
-				}
-				String temp = otherGroup.trim();
-				if (temp.length() > 0) {
-					int group = Integer.parseInt(temp);
-					switch (group) {
-						case 14:
-							premium = true;
-							break;
-						case 3:
-						case 19:
-							playerRights = 1;
-							break;
-					}
-				}
 			}
 			for (int i = 0; i < getEquipment().length; i++) {
 				if (getEquipment()[i] == 0) {
@@ -2680,12 +2665,12 @@ public class Client extends Player implements Runnable {
 		} else if (fishing && now - lastAction >= Utils.fishTime[fishIndex]) {
 			lastAction = now;
 			Fishing.Fish(this);
-		} else if (mining && now - lastAction >= getMiningSpeed()) {
+		} else if (mining && now - lastAction >= Mining.getMiningSpeed(this)) {
 			lastAction = now;
-			mining(mineIndex);
+			Mining.mining(mineIndex, this);
 		} else if (mining && now - lastPickAction >= 600) {
 			lastPickAction = now;
-			requestAnim(getMiningEmote(Utils.picks[minePick]), 0);
+			requestAnim(Mining.getMiningEmote(Utils.picks[minePick]), 0);
 		} else if (cooking && now - lastAction >= 1800) {
 			lastAction = now;
 			cook();
@@ -2831,6 +2816,7 @@ public class Client extends Player implements Runnable {
 	 */
 	private long stairBlock = 0;
 
+	/**Stairs*/
 	public boolean stairs(int stairs, int teleX, int teleY) {
 		if (stairBlock > System.currentTimeMillis()) {
 			resetStairs();
@@ -2986,6 +2972,7 @@ public class Client extends Player implements Runnable {
 		});
 		return true;
 	}
+	/**End Stairs*/
 
 	public boolean usingBow = false;
 
@@ -3294,9 +3281,7 @@ public class Client extends Player implements Runnable {
 		switch (objectID) {
 
 			/*
-			 *
 			 * WOODCUTTING
-			 *
 			 */
 			case 1276:
 			case 1277:
@@ -3754,36 +3739,6 @@ public class Client extends Player implements Runnable {
 				return 2846;
 		}
 		return -1;
-	}
-
-	public int getMiningEmote(int item) {
-		switch (item) {
-			case 1275: //bronze
-				return 624;
-			case 1271: //iron
-				return 628;
-			case 1273: //steel
-				return 629;
-			case 1269: // mithril
-				return 627;
-			case 1267: // addy
-				return 626;
-			case 1265: // rune
-				return 625;
-			case 11920: //dragon
-			case 20014: //3rd age
-				return 7139;
-		}
-		return -1;
-	}
-
-	public long getMiningSpeed() {
-		double pickBonus = Utils.pickBonus[minePick];
-		double level = (double) getLevel(Skill.MINING) / 600;
-		double random = (double) Misc.random(150) / 100;
-		double bonus = 1 + pickBonus * random + level;
-		double time = Utils.mineTimes[mineIndex] / bonus;
-		return (long) time;
 	}
 
 	public long getWoodcuttingSpeed() {
@@ -5967,10 +5922,6 @@ public class Client extends Player implements Runnable {
 			send(new SendMessage("You can't teleport out of the wilderness!"));
 			return;
 		}
-		if (prem && !premium) {
-			send(new SendMessage("This spell is only available to premium members, visit Dodian.net for info"));
-			return;
-		}
 		lastTeleport = System.currentTimeMillis();
 		resetAction();
 		resetWalkingQueue();
@@ -5997,92 +5948,6 @@ public class Client extends Player implements Runnable {
 		smelting = true;
 		send(new RemoveInterfaces());
 	}
-
-	/**public void startFishing(int object, int click) {
-		boolean valid = false;
-		for (int i = 0; i < Utils.fishSpots.length; i++) {
-			if (Utils.fishSpots[i] == object) {
-				if (click == 1 && (i == 0 || i == 2 || i == 4 || i == 6)) {
-					valid = true;
-					fishIndex = i;
-					break;
-				} else if (click == 2 && (i == 1 || i == 3 || i == 5 || i == 7)) {
-					valid = true;
-					fishIndex = i;
-					break;
-				}
-			}
-		}
-		if (!valid) {
-			resetAction(true);
-			return;
-		}
-		if (!playerHasItem(-1)) {
-			send(new SendMessage("Not enough inventory space!"));
-			resetAction(true);
-			return;
-		}
-		if ((fishIndex == 4 || fishIndex >= 6) && !premium) {
-			send(new SendMessage("You need to be premium to fish from this spot!"));
-			resetAction(true);
-			return;
-		}
-		if (!playerHasItem(314) && fishIndex == 1) {
-			send(new SendMessage("You do not have any feathers!"));
-			resetAction(true);
-			return;
-		}
-		if (getLevel(Skill.FISHING) < Utils.fishReq[fishIndex]) {
-			send(new SendMessage("You need " + Utils.fishReq[fishIndex] + " fishing to fish here"));
-			resetAction(true);
-			return;
-		}
-		if (!playerHasItem(Utils.fishTool[fishIndex])) {
-			send(new SendMessage("You need a " + GetItemName(Utils.fishTool[fishIndex]) + " to fish here"));
-			resetAction(true);
-			return;
-		}
-		lastAction = System.currentTimeMillis() + Utils.fishTime[fishIndex];
-		requestAnim(Utils.fishAnim[fishIndex], 0);
-		fishing = true;
-	}*/
-
-	/*public void fish() {
-		lastAction = System.currentTimeMillis();
-		if (!playerHasItem(-1)) {
-			send(new SendMessage("Not enough inventory space!"));
-			resetAction(true);
-			return;
-		}
-		if (!playerHasItem(314) && fishIndex == 1) {
-			send(new SendMessage("You do not have any feathers!"));
-			resetAction(true);
-			return;
-		}
-		if (fishIndex == 1) {
-			deleteItem(314, 1);
-			int random = Misc.random(6);
-			if (getLevel(Skill.FISHING) >= 30 && random < 3) {
-				addItem(331, 1);
-				giveExperience(Utils.fishExp[fishIndex] + 100, Skill.FISHING);
-				send(new SendMessage("You fish some salmon."));
-			} else {
-				giveExperience(Utils.fishExp[fishIndex], Skill.FISHING);
-				addItem(Utils.fishId[fishIndex], 1);
-				send(new SendMessage("You fish some trout."));
-			}
-		} else {
-			giveExperience(Utils.fishExp[fishIndex], Skill.FISHING);
-			addItem(Utils.fishId[fishIndex], 1);
-			send(new SendMessage("You fish some " + GetItemName(Utils.fishId[fishIndex]).toLowerCase() + ""));
-		}
-		requestAnim(Utils.fishAnim[fishIndex], 0);
-		triggerRandom(Utils.fishExp[fishIndex]);
-		if (Misc.chance(30) == 1) {
-			send(new SendMessage("You take a rest"));
-			resetAction(true);
-		}
-	}*/
 
 	public void startCooking(int id) {
 		if (inTrade || inDuel) {
@@ -7136,25 +7001,6 @@ public class Client extends Player implements Runnable {
 		return false;
 	}
 
-	public int findPick() {
-		int Eaxe = -1, Iaxe = -1;
-		int weapon = getEquipment()[Equipment.Slot.WEAPON.getId()];
-		for (int i = 0; i < Utils.picks.length; i++) {
-			if (Utils.picks[i] == weapon) {
-				if (getLevel(Skill.MINING) >= Utils.pickReq[i])
-					Eaxe = i;
-			}
-			for (int ii = 0; ii < playerItems.length; ii++) {
-				if (Utils.picks[i] == playerItems[ii] - 1) {
-					if (getLevel(Skill.MINING) >= Utils.pickReq[i]) {
-						Iaxe = i;
-					}
-				}
-			}
-		}
-		return Eaxe > Iaxe ? Eaxe : Iaxe > Eaxe ? Iaxe : -1;
-	}
-
 	public int findAxe() {
 		int Eaxe = -1;
 		int Iaxe = -1;
@@ -7177,40 +7023,6 @@ public class Client extends Player implements Runnable {
 		if (Iaxe >= Eaxe)
 			return Iaxe;
 		return -1;
-	}
-
-	public void mining(int index) {
-		int pickaxe = -1;
-		pickaxe = findPick();
-		if (pickaxe < 0) {
-			minePick = -1;
-			resetAction();
-			send(new SendMessage("You do not have an pickaxe that you can use."));
-			return;
-		} else
-			minePick = pickaxe;
-		if (minePick >= 0) {
-			requestAnim(getMiningEmote(Utils.picks[pickaxe]), 0);
-		} else {
-			resetAction();
-			send(new SendMessage("You need a pickaxe to mine this rock"));
-		}
-		if (!playerHasItem(-1)) {
-			send(new SendMessage("Your inventory is full!"));
-			resetAction(true);
-			return;
-		}
-		if (index != 6) {
-			send(new SendMessage("You mine some " + GetItemName(Utils.ore[index]).toLowerCase() + ""));
-		}
-		addItem(Utils.ore[index], 1);
-		giveExperience(Utils.oreExp[index], Skill.MINING);
-		requestAnim(getMiningEmote(Utils.picks[pickaxe]), 0);
-		triggerRandom(Utils.oreExp[index]);
-		if (Misc.chance(30) == 1) {
-			send(new SendMessage("You take a rest"));
-			resetAction(true);
-		}
 	}
 
 	public void callGfxMask(int id, int height) {
@@ -7274,7 +7086,6 @@ public class Client extends Player implements Runnable {
 	}
 
 	private void requestAnims(int wearID) {
-
 		setStandAnim(Server.itemManager.getStandAnim(getEquipment()[Equipment.Slot.WEAPON.getId()]));
 		setWalkAnim(Server.itemManager.getWalkAnim(getEquipment()[Equipment.Slot.WEAPON.getId()]));
 		setRunAnim(Server.itemManager.getRunAnim(getEquipment()[Equipment.Slot.WEAPON.getId()]));

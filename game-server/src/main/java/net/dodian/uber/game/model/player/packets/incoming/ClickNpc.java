@@ -11,7 +11,6 @@ import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.fishing.Fishing;
 
 import static net.dodian.uber.game.model.player.skills.fishing.Fishing.startFishing;
 

@@ -29,7 +29,6 @@ import net.dodian.uber.game.party.Balloons;
 import net.dodian.uber.game.security.CommandLog;
 import net.dodian.utilities.DbTables;
 import net.dodian.utilities.Misc;
-
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -38,7 +37,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import static net.dodian.uber.game.combat.ClientExtensionsKt.*;
 import static net.dodian.utilities.DotEnvKt.getGameWorldId;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
@@ -476,7 +474,7 @@ public class Commands implements Packet {
                     } catch (Exception e) {
                         client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " id amount playername"));
                     }
-                    /*try {
+                    try {
                         String query = "SELECT * FROM uber3_refunds WHERE receiver='"+client.dbId+"' AND message='0' AND claimed IS NULL ORDER BY date ASC";
                         Statement stm = getDbConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
                         boolean gotResult = stm.executeQuery(query).next();
@@ -488,7 +486,7 @@ public class Commands implements Packet {
                     } catch (Exception e) {
                         System.out.println("Error in checking sql!!" + e.getMessage() + ", " + e);
                         e.printStackTrace();
-                    }*/
+                    }
                 }
                 if (cmd[0].equalsIgnoreCase("config36")) {
                     //173 = run config!
@@ -710,9 +708,6 @@ public class Commands implements Packet {
                         client.send(new SendMessage("Something bad happend with sql!"));
                     }
                 }
-                if (specialRights && (cmd[0].equalsIgnoreCase("bank") || cmd[0].equalsIgnoreCase("b"))) {
-                    client.openUpBank();
-                }
                 if (cmd[0].equalsIgnoreCase("droptable")) {
                     if (client.getPlayerNpc() < 1) {
                         client.send(new SendMessage("please try to do ::pnpc id"));
@@ -836,6 +831,7 @@ public class Commands implements Packet {
                     }
                 }
             } //End of Special rank commands
+
             if (client.playerRights > 0) {
                 if (cmd[0].equalsIgnoreCase("pnpc") && client.playerRights > 1 && getGameWorldId() < 2) {
                     try {
@@ -1125,6 +1121,7 @@ public class Commands implements Packet {
                     }
                 }
             }
+
             if (cmd[0].equalsIgnoreCase("request")) {
                 Player.openPage(client, "https://dodian.net/forumdisplay.php?f=83");
             }
@@ -1231,15 +1228,7 @@ public class Commands implements Packet {
                     client.send(new SendMessage("Yell chat is disabled!"));
                     return;
                 }
-			/*if (System.currentTimeMillis() - client.lastYell < 10000 && client.playerRights < 1) {
-				client.send(new SendMessage("You must wait " + (((lastYell + 10000) - System.currentTimeMillis()) / 1000)
-						+ " more seconds before yelling again"));
-				client.send(new SendMessage("Use the yell channel to congratulate members, buy and sell items,"));
-				client.send(new SendMessage("ask questions about the server or to announce an event you are holding."));
-				client.send(new SendMessage("Misuse of the yell channel is grounds for a 24 hour mute."));
-				return;
-			}
-			client.lastYell = System.currentTimeMillis();*/ //TODO: Add timer if needed!
+
                 String text = command.substring(5);
                 text = text.replace("<col", "<moo");
                 text = text.replace("<shad", "<moo");
@@ -1384,6 +1373,9 @@ public class Commands implements Packet {
                 }
                 client.send(new SendMessage("You teleported all online to you!"));
             }
+            if (command.equalsIgnoreCase("bank") && client.playerRights == 0) {
+                client.requestForceChat("Hey, everyone, I just tried to do something very silly!");
+            }
             if (command.equalsIgnoreCase("players")) {
                 client.send(new SendMessage("There are currently <col=006600>" + PlayerHandler.getPlayerCount() + "<col=0> players online!"));
                 client.send(new SendString("@dre@                    Uber 3.0", 8144));
@@ -1470,6 +1462,7 @@ public class Commands implements Packet {
                 client.showInterface(8134);
                 //client.flushOutStream();
             }
+
             /* Beta commands*/
             if (getGameWorldId() > 1) {
                 if (cmd[0].equalsIgnoreCase("rehp") && !specialRights) {
@@ -1587,9 +1580,6 @@ public class Commands implements Packet {
                         else
                             client.send(new SendMessage("Not enough space in your inventory."));
                     }
-                }
-                if (!specialRights && (cmd[0].equalsIgnoreCase("bank") || cmd[0].equalsIgnoreCase("b"))) {
-                    client.openUpBank();
                 }
                 if(cmd[0].equalsIgnoreCase("setup")) {
                     for(int i = 0; i < 7; i++) {

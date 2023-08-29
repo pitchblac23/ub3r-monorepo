@@ -803,127 +803,127 @@ public class ClickingButtons implements Packet {
             case 33206:
                 try {
                     SkillGuides.showSkillMenu(0, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33207:
                 try {
                     SkillGuides.showSkillMenu(3, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33208:
                 try {
                     SkillGuides.showSkillMenu(Skill.MINING.getId(), 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33209:
                 try {
                     SkillGuides.showSkillMenu(2, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33210:
                 try {
                     SkillGuides.showSkillMenu(16, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33212:
                 try {
                     SkillGuides.showSkillMenu(1, 0, client);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33215:
                 try {
                     SkillGuides.showSkillMenu(4, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33216:
                 try {
                     SkillGuides.showSkillMenu(17, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33213:
                 try {
                     SkillGuides.showSkillMenu(Skill.HERBLORE.getId(), 0, client);
-                } catch (IOException e5) {
-                    e5.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33219: //Crafting
                 try {
                     SkillGuides.showSkillMenu(Skill.CRAFTING.getId(), 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33211: //Smithing
                 try {
                     SkillGuides.showSkillMenu(Skill.SMITHING.getId(), 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33220:
                 try {
                     SkillGuides.showSkillMenu(8, 0, client);
-                } catch (IOException e4) {
-                    e4.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33221:
                 try {
                     SkillGuides.showSkillMenu(6, 0, client);
-                } catch (IOException e3) {
-                    e3.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33222:
                 try {
                     SkillGuides.showSkillMenu(11, 0, client);
-                } catch (IOException e2) {
-                    e2.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33223:
                 try {
                     SkillGuides.showSkillMenu(7, 0, client);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33224:
                 try {
                     SkillGuides.showSkillMenu(22, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33214:
                 try {
                     SkillGuides.showSkillMenu(9, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 33217:
                 try {
                     SkillGuides.showSkillMenu(10, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 34142:
@@ -932,8 +932,8 @@ public class ClickingButtons implements Packet {
                         SkillGuides.showSkillMenu(0, 0, client);
                     else
                         SkillGuides.showSkillMenu(client.currentSkill, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 34119:
@@ -942,22 +942,22 @@ public class ClickingButtons implements Packet {
                         SkillGuides.showSkillMenu(1, 0, client);
                     else
                         SkillGuides.showSkillMenu(client.currentSkill, 1, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 34120:
                 if (client.currentSkill < 2)
                     try {
                         SkillGuides.showSkillMenu(4, 0, client);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 else
                     try {
                         SkillGuides.showSkillMenu(client.currentSkill, 2, client);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 break;
             case 34123:
@@ -966,43 +966,43 @@ public class ClickingButtons implements Packet {
                 else
                     try {
                         SkillGuides.showSkillMenu(client.currentSkill, 3, client);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 break;
             case 34133:
                 try {
                     SkillGuides.showSkillMenu(client.currentSkill, 4, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 34136:
                 try {
                     SkillGuides.showSkillMenu(client.currentSkill, 5, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 34139:
                 try {
                     SkillGuides.showSkillMenu(client.currentSkill, 6, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 34155:
                 try {
                     SkillGuides.showSkillMenu(client.currentSkill, 7, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 47130:
                 try {
                     SkillGuides.showSkillMenu(18, 0, client);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
                 break;
             case 88060: //Idea
