@@ -11,10 +11,8 @@ import net.dodian.uber.game.model.WalkToTask;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
-import net.dodian.uber.game.model.object.DoorHandler;
-import net.dodian.uber.game.model.object.GlobalObject;
+import net.dodian.uber.game.model.object.*;
 import net.dodian.uber.game.model.object.Object;
-import net.dodian.uber.game.model.object.RS2Object;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
@@ -1023,13 +1021,13 @@ public class ClickObject implements Packet {
                 client.skillX = objectPosition.getX();
                 client.setSkillY(objectPosition.getY());
                 client.stairDistance = 3;
-                client.stairDistanceAdd = 1;
+                Stairs.stairDistanceAdd = 1;
             } else if (objectID == 55) {
                 client.stairs = 15;
                 client.skillX = objectPosition.getX();
                 client.setSkillY(objectPosition.getY());
                 client.stairDistance = 3;
-                client.stairDistanceAdd = 1;
+                Stairs.stairDistanceAdd = 1;
             } else if (objectID == 57) {
                 client.stairs = 15;
                 client.skillX = objectPosition.getX();
@@ -1100,7 +1098,7 @@ public class ClickObject implements Packet {
                 client.skillX = objectPosition.getX();
                 client.setSkillY(objectPosition.getY());
                 client.stairDistance = 2;
-                client.stairDistanceAdd = 2;
+                Stairs.stairDistanceAdd = 2;
             } else if (objectID == 16664) {
                 if (objectPosition.getX() == 2603 && objectPosition.getY() == 3078) {
                     if (!client.checkItem(1543)) {
@@ -1135,7 +1133,7 @@ public class ClickObject implements Packet {
                 client.skillX = objectPosition.getX();
                 client.setSkillY(objectPosition.getY());
                 client.stairDistance = 3;
-                client.stairDistanceAdd = 1;
+                Stairs.stairDistanceAdd = 1;
             } else if (objectID == 56) {
                 client.stairs = 14;
                 client.skillX = objectPosition.getX();

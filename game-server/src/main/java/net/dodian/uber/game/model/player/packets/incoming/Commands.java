@@ -777,7 +777,7 @@ public class Commands implements Packet {
                     int newItemID = Integer.parseInt(cmd[1]);
                     int newItemAmount = Integer.parseInt(cmd[2]);
                     if (newItemID < 1 || newItemID > 22376) {
-                        client.send(new SendMessage("Stop pulling a River! Maximum itemid = 22376!"));
+                        client.send(new SendMessage("Maximum itemid = 22376!"));
                         return;
                     }
                     if (Server.itemManager.isStackable(newItemID))
@@ -1563,7 +1563,7 @@ public class Commands implements Packet {
                     int newItemID = Integer.parseInt(cmd[1]);
                     int newItemAmount = Integer.parseInt(cmd[2]);
                     if (newItemID < 1 || newItemID > 22376) {
-                        client.send(new SendMessage("Stop pulling a River! Maximum itemid = 22376!"));
+                        client.send(new SendMessage("Maximum itemid = 22376!"));
                         return;
                     }
                     if (Server.itemManager.isStackable(newItemID))

@@ -235,6 +235,10 @@ public class LoginManager {
                 for (int i = 0; i < pouches.length; i++)
                     p.runePouchesAmount[i] = Integer.parseInt(pouches[i]);
 
+                String[] coalBag = results.getString("coal_bag").split(":");
+                for (int i = 0; i < coalBag.length; i++)
+                    p.coalBagAmount[i] = Integer.parseInt(coalBag[i]);
+
                 String[] songUnlocked = results.getString("songUnlocked").split(" ");
                 for (int i = 0; i < songUnlocked.length; i++) {
                     if (songUnlocked[i].equals(""))

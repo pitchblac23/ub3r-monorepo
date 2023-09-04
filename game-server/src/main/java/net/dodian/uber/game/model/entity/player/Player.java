@@ -149,6 +149,10 @@ public abstract class Player extends Entity {
     public int[] runePouchesAmount = {0, 0, 0, 0};
     public int[] runePouchesLevel = {1, 20, 40, 60};
     public int[] runePouchesMaxAmount = {4, 7, 10, 13};
+
+    //CoalBags
+    public int[] coalBagAmount = {0};
+    public int coalBagMaxAmount = 27;
     //Agility
     public boolean UsingAgility = false;
     public int agilityCourseStage = 0;
@@ -750,7 +754,7 @@ public abstract class Player extends Entity {
     }
 
     private int hitDiff = 0;
-    protected boolean IsStair = false;
+    public boolean IsStair = false;
     public int deathStage = 0;
     public long deathTimer = 0;
 

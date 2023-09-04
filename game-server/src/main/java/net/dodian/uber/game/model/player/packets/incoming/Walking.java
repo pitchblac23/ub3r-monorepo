@@ -3,6 +3,7 @@ package net.dodian.uber.game.model.player.packets.incoming;
 import net.dodian.uber.game.model.UpdateFlag;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.entity.player.Player;
+import net.dodian.uber.game.model.object.Stairs;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
@@ -94,7 +95,7 @@ public class Walking implements Packet {
             }
             // stairs check
             if (client.stairs > 0) {
-                client.resetStairs();
+                Stairs.resetStairs(client);
             }
             // Npc Talking
             if (client.NpcDialogue > 0) {

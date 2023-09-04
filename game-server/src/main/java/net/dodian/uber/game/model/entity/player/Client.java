@@ -20,6 +20,7 @@ import net.dodian.uber.game.model.entity.npc.NpcUpdating;
 import net.dodian.uber.game.model.item.*;
 import net.dodian.uber.game.model.object.DoorHandler;
 import net.dodian.uber.game.model.object.RS2Object;
+import net.dodian.uber.game.model.object.Stairs;
 import net.dodian.uber.game.model.player.content.Skillcape;
 import net.dodian.uber.game.model.player.packets.OutgoingPacket;
 import net.dodian.uber.game.model.player.packets.PacketHandler;
@@ -426,14 +427,10 @@ public class Client extends Player implements Runnable {
 	public int XremoveSlot = 0;
 	public int XinterfaceID = 0;
 	public int XremoveID = 0;
-
 	public int stairs = 0;
 	public int stairDistance = 1;
-	public int stairDistanceAdd = 0;
-
 	public int[] woodcutting = {0, 0, 0, 1, -1, 3};
 	public int[] smithing = {0, 0, 0, -1, -1, 0};
-
 	public int skillX = -1;
 	public int skillY = -1;
 	public int CombatExpRate = 1;
@@ -1012,12 +1009,10 @@ public class Client extends Player implements Runnable {
 				}
 				statement.executeUpdate("UPDATE " + DbTables.GAME_CHARACTERS + " SET uuid= '" + LoginManager.UUID + "', lastvote=" + lastVoted + ", pkrating=" + 1500 + ", health="
 						+ getCurrentHealth() + ", equipment='" + equipment + "', inventory='" + inventory + "', bank='" + bank
-						+ "', friends='" + list + "', fightStyle = " + FightType + ", slayerData='" + saveTaskAsString() + "', essence_pouch='" + getPouches() + "'"
-						+ ", autocast=" + autocast_spellIndex + ", news=" + latestNews + ", agility = '" + agilityCourseStage + "', height = " + getPosition().getZ() + ", x = " + getPosition().getX()
+						+ "', friends='" + list + "', fightStyle = " + FightType + ", slayerData='" + saveTaskAsString() + "', essence_pouch='" + getPouches() + "'" + ", coal_bag=" + getcoalBag() + ", autocast=" + autocast_spellIndex + ", news=" + latestNews + ", agility = '" + agilityCourseStage + "', height = " + getPosition().getZ() + ", x = " + getPosition().getX()
 						+ ", y = " + getPosition().getY() + ", lastlogin = '" + System.currentTimeMillis() + "', Boss_Log='"
-						+ boss_log + "', songUnlocked='" + getSongUnlockedSaveText() + "', travel='" + saveTravelAsString() + "', look='" + getLook() + "', unlocks='" + saveUnlocksAsString() + "'" +
-						", prayer='"+prayer+"', boosted='"+boosted+"'" + last
-						+ " WHERE id = " + dbId);
+						+ boss_log + "', songUnlocked='" + getSongUnlockedSaveText() + "', travel='" + saveTravelAsString() + "', look='" + getLook() + "', unlocks='" + saveUnlocksAsString() + "'"
+						+ ", prayer='"+prayer+"', boosted='"+boosted+"'" + last + " WHERE id = " + dbId);
 				statement.close();
 				//println_debug("Save:  " + getPlayerName() + " (" + (System.currentTimeMillis() - start) + "ms)");
 			} catch (Exception e) {
@@ -1895,7 +1890,7 @@ public class Client extends Player implements Runnable {
 		deleteItem(id, slot, amount);
 		GroundItem drop = new GroundItem(getPosition().copy(), id, amount, getSlot(), -1);
 		Ground.items.add(drop);
-		DropLog.recordDrop(this, drop.id, drop.amount, "Player", getPosition().copy(), "Inventory Drop");
+		//DropLog.recordDrop(this, drop.id, drop.amount, "Player", getPosition().copy(), "Inventory Drop");
 	}
 
 	public void deleteItem(int id, int amount) {
@@ -2527,7 +2522,7 @@ public class Client extends Player implements Runnable {
 		// check stairs
 		if (stairs > 0) {
 			if (GoodDistance(skillX, skillY, getPosition().getX(), getPosition().getY(), stairDistance)) {
-				stairs(stairs, getPosition().getX(), getPosition().getY());
+				Stairs.stairs(stairs, getPosition().getX(), getPosition().getY(), this);
 			}
 		}
 
@@ -2781,178 +2776,6 @@ public class Client extends Player implements Runnable {
 			temp.send(new SendMessage(message + ":yell:"));
 		}
 	}
-
-	public int[] EssenceMineX = {2893, 2921, 2911, 2926, 2899};
-	public int[] EssenceMineY = {4846, 4846, 4832, 4817, 4817};
-
-	/*
-	 * [0] North West [1] North East [2] Center [3] South East [4] South West
-	 */
-	public int[] EssenceMineRX = {3253, 3105, 2681, 2591};
-	public int[] EssenceMineRY = {3401, 9571, 3325, 3086};
-
-	/*
-	 * [0] Varrock [1] Wizard Tower [2] Ardougne [3] Magic Guild
-	 */
-	private long stairBlock = 0;
-
-	/**Stairs*/
-	public boolean stairs(int stairs, int teleX, int teleY) {
-		if (stairBlock > System.currentTimeMillis()) {
-			resetStairs();
-			System.out.println(getPlayerName() + " stair blocked!");
-			return false;
-		}
-		stairBlock = System.currentTimeMillis() + 1000;
-		if (!IsStair) {
-			IsStair = true;
-			if (stairs == 1) {
-				if (skillX == 2715 && skillY == 3470) {
-					if (getPosition().getY() < 3470 || getPosition().getX() < 2715) {
-						// resetStairs();
-						return false;
-					} else {
-						getPosition().setZ(1);
-						teleportToX = teleX;
-						teleportToY = teleY;
-						resetStairs();
-						return true;
-					}
-				}
-			}
-			if (stairs == "legendsUp".hashCode()) {
-				if (skillX == 2732 && skillY == 3377) {
-					getPosition().setZ(1);
-					teleportToX = 2732;
-					teleportToY = 3380;
-					resetStairs();
-					return true;
-				}
-			}
-			if (stairs == "legendsDown".hashCode()) {
-				if (skillX == 2732 && skillY == 3378) {
-					getPosition().setZ(0);
-					teleportToX = 2732;
-					teleportToY = 3376;
-					resetStairs();
-					return true;
-				}
-			}
-			if (stairs == 1) {
-				getPosition().setZ(getPosition().getZ() + 1);
-			} else if (stairs == 2) {
-				getPosition().setZ(getPosition().getZ() - 1);
-			} else if (stairs == 21) {
-				getPosition().setZ(getPosition().getZ() + 1);
-			} else if (stairs == 22) {
-				getPosition().setZ(getPosition().getZ() - 1);
-			} else if (stairs == 69)
-				getPosition().setZ(getPosition().getZ() + 1);
-			teleportToX = teleX;
-			teleportToY = teleY;
-			if (stairs == 3 || stairs == 5 || stairs == 9) {
-				teleportToY += 6400;
-			} else if (stairs == 4 || stairs == 6 || stairs == 10) {
-				teleportToY -= 6400;
-			} else if (stairs == 7) {
-				teleportToX = 3104;
-				teleportToY = 9576;
-			} else if (stairs == 8) {
-				teleportToX = 3105;
-				teleportToY = 3162;
-			} else if (stairs == 11) {
-				teleportToX = 2856;
-				teleportToY = 9570;
-			} else if (stairs == 12) {
-				teleportToX = 2857;
-				teleportToY = 3167;
-			} else if (stairs == 13) {
-				getPosition().setZ(getPosition().getZ() + 3);
-				teleportToX = skillX;
-				teleportToY = skillY;
-			} else if (stairs == 15) {
-				teleportToY += (6400 - (stairDistance + stairDistanceAdd));
-			} else if (stairs == 14) {
-				teleportToY -= (6400 - (stairDistance + stairDistanceAdd));
-			} else if (stairs == 16) {
-				teleportToX = 2828;
-				teleportToY = 9772;
-			} else if (stairs == 17) {
-				teleportToX = 3494;
-				teleportToY = 3465;
-			} else if (stairs == 18) {
-				teleportToX = 3477;
-				teleportToY = 9845;
-			} else if (stairs == 19) {
-				teleportToX = 3543;
-				teleportToY = 3463;
-			} else if (stairs == 20) {
-				teleportToX = 3549;
-				teleportToY = 9865;
-			} else if (stairs == 21) {
-				teleportToY += (stairDistance + stairDistanceAdd);
-			} else if (stairs == 69) {
-				teleportToY = stairDistanceAdd;
-				teleportToX = stairDistance;
-			} else if (stairs == 22) {
-				teleportToY -= (stairDistance + stairDistanceAdd);
-			} else if (stairs == 23) {
-				teleportToX = 2480;
-				teleportToY = 5175;
-			} else if (stairs == 24) {
-				teleportToX = 2862;
-				teleportToY = 9572;
-			} else if (stairs == 25) {
-				Essence = (getPosition().getZ() / 4);
-				getPosition().setZ(0);
-				teleportToX = EssenceMineRX[Essence];
-				teleportToY = EssenceMineRY[Essence];
-			} else if (stairs == 26) {
-				int EssenceRnd = Utils.random3(EssenceMineX.length);
-
-				teleportToX = EssenceMineX[EssenceRnd];
-				teleportToY = EssenceMineY[EssenceRnd];
-				getPosition().setZ((Essence * 4));
-			} else if (stairs == 27) {
-				teleportToX = 2453;
-				teleportToY = 4468;
-			} else if (stairs == 28) {
-				teleportToX = 3201;
-				teleportToY = 3169;
-			}
-			if (stairs == 5 || stairs == 10) {
-				teleportToX += (stairDistance + stairDistanceAdd);
-				teleportToY = getPosition().getY();
-				getPosition().setZ(0);
-			}
-			if (stairs == 6 || stairs == 9) {
-				teleportToX -= (stairDistance - stairDistanceAdd);
-			}
-		}
-		resetStairs();
-		return true;
-	}
-
-	public boolean resetStairs() {
-		stairs = 0;
-		skillX = -1;
-		setSkillY(-1);
-		stairDistance = 1;
-		stairDistanceAdd = 0;
-		resetWalkingQueue();
-		final Client p = this;
-		EventManager.getInstance().registerEvent(new Event(500) {
-
-			@Override
-			public void execute() {
-				p.resetWalkingQueue();
-				stop();
-			}
-
-		});
-		return true;
-	}
-	/**End Stairs*/
 
 	public boolean usingBow = false;
 
@@ -4685,6 +4508,14 @@ public class Client extends Player implements Runnable {
 		return out;
 	}
 
+	public String getcoalBag() {
+		String out = "";
+		for (int i = 0; i < coalBagAmount.length; i++) {
+			out += coalBagAmount[i] + (i == coalBagAmount.length - 1 ? "" : ":");
+		}
+		return out;
+	}
+
 	public void setLook(int[] parts) {
 		/*
 		 * if (parts.length != 13) { println("setLook:  Invalid array length!"); return;
@@ -4804,6 +4635,39 @@ public class Client extends Player implements Runnable {
 			}
 		}
 		return spaces;
+	}
+
+	public boolean fillCoalBag() {
+		if (coalBagAmount[i] >= coalBagMaxAmount) {
+			send(new SendMessage("Your coal bag is already full."));
+			return true;
+		}
+		int max = coalBagMaxAmount - coalBagAmount[i];
+		int amount = Math.min(getInvAmt(453), max);
+		if (amount > 0) {
+			for (int i = 0; i < amount; i++)
+				deleteItem(453, 1);
+			coalBagAmount[i] += amount;
+			send(new SendMessage("You add the coal to your bag."));
+			//send(new SendMessage("The coal bag contains " + Client.coalBagAmount + " pieces of coal."));
+		} else
+			send(new SendMessage("The coal bag can be filled only with coal. You haven't got any."));
+		return true;
+	}
+	public boolean emptyCoalBag() {
+		int amount = freeSlots();
+		if (amount <= 0) {
+			send(new SendMessage("Not enough inventory slots to empty the bag."));
+			return true;
+		}
+		amount = Math.min(amount, coalBagAmount[i]);
+		if (amount > 0) {
+			for (int i = 0; i < amount; i++)
+				addItem(453, 1);
+			coalBagAmount[i] -= amount;
+		} else
+			send(new SendMessage("The coal bag is empty."));
+		return true;
 	}
 
 	public void runecraft(int rune, int level, int xp) {

@@ -1,9 +1,12 @@
 package net.dodian.uber.game.model.player.packets.incoming;
 
 import net.dodian.uber.game.model.entity.player.Client;
+import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.utilities.Misc;
+
+import java.util.Arrays;
 
 public class ClickItem2 implements Packet {
 
@@ -14,9 +17,12 @@ public class ClickItem2 implements Packet {
         if (client.playerItems[itemSlot] - 1 != itemId) {
             return;
         }
-        int slot = itemId == 5509 ? 0 : ((itemId - 5508) / 2);
-        if (slot >= 0 && slot <= 3) {
-            client.send(new SendMessage("There is " + client.runePouchesAmount[slot] + " rune essence in this pouch!"));
+        int pouches = itemId == 5509 ? 0 : ((itemId - 5508) / 2);
+        if (pouches >= 0 && pouches <= 3) {
+            client.send(new SendMessage("There is " + client.runePouchesAmount[pouches] + " rune essence in this pouch!"));
+        }
+        if (itemId == 12019) {
+            client.send(new SendMessage("Your coal bag has " + client.coalBagAmount[0] + " pieces of coal in it."));
         }
         if (itemId == 13203) {
             String[] quotes = {

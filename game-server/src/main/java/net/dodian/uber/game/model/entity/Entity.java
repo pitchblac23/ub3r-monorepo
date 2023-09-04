@@ -70,12 +70,16 @@ public abstract class Entity {
         return text;
     }
 
-    public boolean GoodDistance(int entityX, int entityY, int otherX, int otherY, int distance) {
+    //TO-DO: might delete later testing fixes
+    /*public boolean GoodDistance(int entityX, int entityY, int otherX, int otherY, int distance) {
         int dist = (int) Math.sqrt(Math.pow(entityX - otherX, 2) + Math.pow(entityY - otherY, 2));
         if (dist <= distance) {
             return true;
         }
         return false;
+    }*/
+    public boolean GoodDistance(int objectX, int objectY, int playerX, int playerY, int distance) {
+        return ((objectX-playerX <= distance && objectX-playerX >= -distance) && (objectY-playerY <= distance && objectY-playerY >= -distance));
     }
 
     public int getSlot() {

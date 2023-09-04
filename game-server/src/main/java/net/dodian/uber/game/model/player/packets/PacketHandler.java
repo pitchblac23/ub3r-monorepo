@@ -24,6 +24,7 @@ public class PacketHandler {
         packets[72] = new AttackNpc();
         packets[73] = new AttackPlayer();
         packets[74] = new RemoveIgnore();
+        packets[75] = new ClickItem3();
         packets[87] = new DropItem();
         packets[95] = new UpdateChat();
         packets[248] = new Walking();
