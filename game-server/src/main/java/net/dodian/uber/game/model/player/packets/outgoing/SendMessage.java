@@ -17,5 +17,4 @@ public class SendMessage implements OutgoingPacket {
         client.getOutputStream().writeString(message);
         client.getOutputStream().endFrameVarSize();
     }
-
 }

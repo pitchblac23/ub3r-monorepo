@@ -51,7 +51,7 @@ class SkillGuides {
                 player.setMenuItems(items)
 
             } else if (skillID == Skills.DEFENCE.id) {
-                player.send(SendString("Defence", 8823))
+                player.send(SendString("Defence", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
                 slot = 8760

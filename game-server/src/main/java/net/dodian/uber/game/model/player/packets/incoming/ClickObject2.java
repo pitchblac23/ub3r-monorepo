@@ -13,6 +13,7 @@ import net.dodian.uber.game.model.object.Object;
 import net.dodian.uber.game.model.object.RS2Object;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
+import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
 import net.dodian.uber.game.model.player.skills.thieving.Thieving;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
@@ -134,7 +135,7 @@ public class ClickObject2 implements Packet {
             client.WanneThieve = 4877;
         }
         if (objectID == 3994 || objectID == 11666) { //Gold craft
-            client.showItemsGold();
+            GoldCrafting.showItemsGold(client);
             client.showInterface(4161);
         }
         if (objectID == 16469) { //For now smelt! Later adding gold craft!

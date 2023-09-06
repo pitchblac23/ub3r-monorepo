@@ -7,6 +7,8 @@ import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.crafting.Crafting;
+import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
 import net.dodian.utilities.Utils;
 
 public class ItemOnItem implements Packet {
@@ -341,8 +343,8 @@ public class ItemOnItem implements Packet {
         for (int h = 0; h < Constants.leathers.length; h++) {
             if ((itemUsed == 1733 || otherItem == 1733)
                     && (itemUsed == Constants.leathers[h] || otherItem == Constants.leathers[h])) {
-                client.craftMenu(h);
-                client.cIndex = h;
+                Crafting.craftMenu(h, client);
+                Crafting.cIndex = h;
             }
         }
 
@@ -375,7 +377,7 @@ public class ItemOnItem implements Packet {
                 amulet = otherItem;
             else
                 amulet = itemUsed;
-            int strung = client.findStrungAmulet(amulet);
+            int strung = GoldCrafting.findStrungAmulet(amulet, client);
             if (strung < 0) {
                 client.send(new SendMessage("You cannot string this item with wool!"));
                 return;

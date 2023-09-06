@@ -82,7 +82,6 @@ public class ShopHandler {
             line = characterfile.readLine();
         } catch (IOException ioexception) {
             Utils.println(FileName + ": error loading file.");
-            return false;
         }
         while (EndOfFile == false && line != null) {
             line = line.trim();

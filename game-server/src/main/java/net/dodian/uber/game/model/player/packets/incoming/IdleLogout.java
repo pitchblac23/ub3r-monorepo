@@ -7,7 +7,7 @@ public class IdleLogout implements Packet {
 
     @Override
     public void ProcessPacket(Client c, int packetType, int packetSize) {
-        if (!c.getPlayerName().equals("null"))
-            c.logout();
+        if (!c.getPlayerName().equals("null"));
+            //c.logout();
     }
 }

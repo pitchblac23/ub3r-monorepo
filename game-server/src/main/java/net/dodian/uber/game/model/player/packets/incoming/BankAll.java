@@ -46,7 +46,5 @@ public class BankAll implements Packet {
             client.XremoveID = removeID;
             client.XremoveSlot = removeSlot;
         }
-
     }
-
 }

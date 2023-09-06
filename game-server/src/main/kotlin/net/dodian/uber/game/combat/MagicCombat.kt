@@ -95,8 +95,12 @@ fun Client.handleMagic(): Int {
     else //Other ancient effect!
         stillgfx(78, target.position.y, target.position.x)
 
-    if(target is Npc) {
-        giveExperience(40 * hit, Skills.MAGIC)
+    if (target is Npc) {
+        if (FightType == 1) {
+            giveExperience(40 * hit, Skills.DEFENCE)
+            giveExperience(40 * hit, Skills.MAGIC)
+        } else giveExperience(40 * hit, Skills.MAGIC)
+
         giveExperience(15 * hit, Skills.HITPOINTS)
     }
 

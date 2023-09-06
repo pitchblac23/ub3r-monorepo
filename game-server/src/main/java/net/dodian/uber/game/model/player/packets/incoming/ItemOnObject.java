@@ -5,6 +5,7 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.utilities.Utils;
@@ -39,7 +40,7 @@ public class ItemOnObject implements Packet {
         }
         if (UsedOnObjectID == 3994 || UsedOnObjectID == 11666 || UsedOnObjectID == 16469) {
             if (ItemID == 2357) { // 2357 = gold
-                client.showItemsGold();
+                GoldCrafting.showItemsGold(client);
                 client.showInterface(4161);
             } else {
                 for (int fi = 0; fi < Utils.smelt_frame.length; fi++) {

@@ -9,5 +9,4 @@ public class CameraReset implements OutgoingPacket {
     public void send(Client client) {
         client.getOutputStream().createFrame(107);
     }
-
 }

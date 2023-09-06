@@ -12,6 +12,7 @@ public class PacketHandler {
         packets[14] = new UseItemOnPlayer();
         packets[16] = new ClickItem2();
         packets[17] = new ClickNpc2();
+        packets[18] = new ClickNpc4();
         packets[21] = new ClickNpc3();
         packets[25] = new ItemOnGroundItem();
         packets[39] = new FollowPlayer();
@@ -27,8 +28,6 @@ public class PacketHandler {
         packets[75] = new ClickItem3();
         packets[87] = new DropItem();
         packets[95] = new UpdateChat();
-        packets[248] = new Walking();
-        packets[164] = new Walking();
         packets[98] = new Walking();
         packets[101] = new ChangeAppearance();
         packets[103] = new Commands();
@@ -47,6 +46,7 @@ public class PacketHandler {
         packets[145] = new RemoveItem();
         packets[153] = new DuelRequest();
         packets[155] = new ClickNpc();
+        packets[164] = new Walking();
         packets[185] = new ClickingButtons();
         packets[188] = new AddFriend();
         packets[192] = new ItemOnObject();
@@ -58,6 +58,7 @@ public class PacketHandler {
         packets[236] = new PickUpGroundItem();
         packets[237] = new MagicOnItems();
         packets[241] = new MouseClicks();
+        packets[248] = new Walking();
         packets[249] = new MagicOnPlayer();
         packets[252] = new ClickObject2();
         /* Unused packets! */
@@ -75,5 +76,4 @@ public class PacketHandler {
             return;
         packet.ProcessPacket(client, packetType, packetSize);
     }
-
 }

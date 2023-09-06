@@ -16,6 +16,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.party.Balloons;
@@ -31,7 +32,7 @@ public class ClickingButtons implements Packet {
     public void ProcessPacket(Client client, int packetType, int packetSize) {
         int actionButton = Utils.HexToInt(client.getInputStream().buffer, 0, packetSize);
         if (getServerDebugMode()) {
-            client.println("button=" + actionButton);
+            client.println("button= " + actionButton);
         }
         if (System.currentTimeMillis() - client.lastButton < 600 || !client.validClient) { //To prevent some shiez!
             client.lastButton = System.currentTimeMillis();
@@ -267,7 +268,7 @@ public class ClickingButtons implements Packet {
             case 34192:
             case 34191:
             case 34190:
-                client.startHideCraft(client.actionButtonId);
+                Crafting.startHideCraft(client.actionButtonId, client);
                 break;
             case 33187: // armor
             case 33186:
@@ -290,7 +291,7 @@ public class ClickingButtons implements Packet {
             case 33205:// cowl
             case 33204:
             case 33203:
-                client.startCraft(client.actionButtonId);
+                Crafting.startCraft(client.actionButtonId, client);
             break;
             case 57225:
                 client.startTan(1, 0);
@@ -442,7 +443,16 @@ public class ClickingButtons implements Packet {
             case 1097:
             case 1094:
             case 1093:
+                client.FightType = 0;
                 client.setSidebarInterface(0, 1689);
+                break;
+
+            case 94047:
+                client.FightType = 1;
+                client.setSidebarInterface(0, 1689);
+                break;
+            case 94051:
+                client.send(new SendMessage("TODO"));
                 break;
             case 51133:
             case 51185:
