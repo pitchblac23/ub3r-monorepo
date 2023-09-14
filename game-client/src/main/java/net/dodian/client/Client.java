@@ -10291,7 +10291,7 @@ public class Client extends RSApplet {
             int i = c1 / 2 + 80;
             smallText.method382(0x75a9a9, c / 2, onDemandFetcher.statusString, i, true);
             i = c1 / 2 - 20;
-            chatTextDrawingArea.method382(0xffff00, c / 2, "Welcome to RuneScape", i, true);
+            chatTextDrawingArea.method382(0xffff00, c / 2, "Welcome to Dodian", i, true);
             i += 30;
             int l = c / 2 - 80;
             int k1 = c1 / 2 + 20;
@@ -10314,7 +10314,8 @@ public class Client extends RSApplet {
             chatTextDrawingArea.method389(true, c / 2 + 10, 0xffffff, myUsername + ((loginScreenCursorPos == 0) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 142);
             j += 15;
             chatTextDrawingArea.method389(true, c / 2 + 40, 0xffffff, TextClass.passwordAsterisks(myPassword) + ((loginScreenCursorPos == 1) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 175);
-            chatTextDrawingArea.method389(true, c / 2 + 70, 0xffffff, server + ((loginScreenCursorPos == 2) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 208);
+            j += 15;
+            chatTextDrawingArea.method389(true, c / 2 + 70, 0xffffff, "Dodian Server" + ((loginScreenCursorPos == 2) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 208);
 
             // Disable RS Login + Cancel buttons
 //            if (!flag) {
@@ -10768,7 +10769,7 @@ public class Client extends RSApplet {
                     } else if (loginScreenCursorPos == 1) {
                         if (l1 == 8 && myPassword.length() > 0)
                             myPassword = myPassword.substring(0, myPassword.length() - 1);
-                        if (l1 == 9) {
+                        if (l1 == 9 || l1 == 10 || l1 == 13) {
                             // Tab key will always alternate cursor position
                             loginScreenCursorPos = 0;
                         }
@@ -12235,7 +12236,7 @@ public class Client extends RSApplet {
         clanChatMode = 0;
         cButtonHPos = -1;
         cButtonCPos = 0;
-        server = SERVER_HOSTNAME; //127.0.0.1 : dodian.net
+        server = SERVER_HOSTNAME;
         anIntArrayArray825 = new int[104][104];
         friendsNodeIDs = new int[200];
         groundArray = new NodeList[4][104][104];

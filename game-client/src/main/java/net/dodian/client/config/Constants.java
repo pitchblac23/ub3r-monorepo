@@ -9,7 +9,7 @@ public class Constants {
 	/*
 	 * Client Configurations
 	 */
-	public static String WINDOW_TITLE     		= "Dodian.net Client";
+	public static String WINDOW_TITLE     		= "Dodian";
 
 	/*
 	 * Server Connection Details

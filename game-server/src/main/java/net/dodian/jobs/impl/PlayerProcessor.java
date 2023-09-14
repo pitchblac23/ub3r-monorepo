@@ -90,5 +90,4 @@ public class PlayerProcessor implements Job {
             PlayerHandler.players[i].clearUpdateFlags();
         }
     }
-
 }

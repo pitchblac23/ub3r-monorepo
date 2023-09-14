@@ -99,5 +99,4 @@ public class NpcProcessor implements Job {
             }
         }
     }
-
 }

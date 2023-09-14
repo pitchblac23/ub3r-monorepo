@@ -519,21 +519,26 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
         }
 		/*if(j == 96) {
 			net.dodian.client.Client.consoleOpen = !net.dodian.client.Client.consoleOpen;
-		}
-		if(i ==  KeyEvent.VK_ESCAPE){
-			net.dodian.client.Client.getClient().toggleSize(0);
-		}
-		if(i == KeyEvent.VK_F1) {
-			net.dodian.client.Client.setTab(4);
-		} else if(i == KeyEvent.VK_F2) {
-			net.dodian.client.Client.setTab(5);
-		} else if(i == KeyEvent.VK_F3) {
-			net.dodian.client.Client.setTab(6);
-		} else if(i == KeyEvent.VK_F4) {
-			net.dodian.client.Client.setTab(7);
-		} else if(i == KeyEvent.VK_F5) {
-			net.dodian.client.Client.setTab(0);
 		}*/
+        if(i ==  KeyEvent.VK_ESCAPE){
+            net.dodian.client.Client.setTab(3);
+        } else if(i == KeyEvent.VK_F1){
+            net.dodian.client.Client.setTab(0);
+        } else if(i == KeyEvent.VK_F2){
+            net.dodian.client.Client.setTab(1);
+        } else if(i == KeyEvent.VK_F3){
+            net.dodian.client.Client.setTab(2);
+        } else if(i == KeyEvent.VK_F4){
+            net.dodian.client.Client.setTab(4);
+        } else if(i == KeyEvent.VK_F5){
+            net.dodian.client.Client.setTab(5);
+        } else if(i == KeyEvent.VK_F6){
+            net.dodian.client.Client.setTab(6);
+        } else if(i == KeyEvent.VK_F7){
+            net.dodian.client.Client.setTab(10);
+        } else if(i ==  KeyEvent.VK_F8){
+            net.dodian.client.Client.setTab(11);
+        }
         if (j < 30)
             j = 0;
         if (i == 37)

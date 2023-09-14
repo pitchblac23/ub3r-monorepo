@@ -84,6 +84,7 @@ create table if not exists characters
     look            varchar(55)          default '0 2 13 18 26 33 36 42 3 5 6 3 7 0 1 2 0 0 ' not null,
     slayerData      varchar(55)          default '-1,-1,0,0,0,0,-1'                           not null,
     essence_pouch   varchar(55)          default '0:0:0:0'                                    not null,
+    coal_bag        varchar(55)          default '0'                                    not null,
     agility         int(2)               default 0                                            not null,
     autocast        int(3)               default -1                                           not null,
     equipment       text                                                                      not null,
