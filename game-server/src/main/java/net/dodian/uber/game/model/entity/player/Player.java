@@ -31,7 +31,6 @@ public abstract class Player extends Entity {
     public int wildyLevel = 0;
     public long lastAction = 0;
     public long lastMagic = 0;
-    public long lastPickAction = 0;
     public long lastTeleport = 0;
     private int playerNpc = -1;
     public int dbId = -1;

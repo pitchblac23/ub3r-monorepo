@@ -7,6 +7,7 @@ import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendSideTab;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 
 public class MagicOnItems implements Packet {
@@ -35,7 +36,7 @@ public class MagicOnItems implements Packet {
                 client.send(new SendMessage("You need 1 nature runes to cast this spell!"));
                 return;
             }
-            Smithing.superHeat(castOnItem, client);
+            Smelting.superHeat(castOnItem, client);
         }
         if (castSpell == 1155) {// Sapphire
             if (client.getLevel(Skills.MAGIC) < 7) {

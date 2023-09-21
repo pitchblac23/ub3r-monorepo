@@ -146,7 +146,7 @@ public class ClickObject implements Packet {
                 client.setSkillY(objectPosition.getY());
                 Smithing.OpenSmithingFrame(Smithing.CheckSmithing(type, client), client);
             } else if (type == -1)
-                client.send(new SendMessage("You do not have any bars to smith!"));
+                client.send(new SendMessage("You do not have any bars to smith."));
         }
         if (objectID == 1294) {
             client.teleportToX = 2485;
@@ -493,36 +493,41 @@ public class ClickObject implements Packet {
         if (objectID == 2102) {
             objectID = 2103;
         }
+
+        /**Mining Rocks*/
         for (int r = 0; r < Utils.rocks.length; r++) {
             if (objectID == Utils.rocks[r]) {
                 if(client.getPositionName(client.getPosition()) == Client.positions.TZHAAR) {
                     client.send(new SendMessage("You can not mine here or the Tzhaar's will be angry!"));
                     return;
                 }
-                if (client.getLevel(Skills.MINING) < Utils.rockLevels[r]) {
-                    client.send(new SendMessage("You need a mining level of " + Utils.rockLevels[r] + " to mine this rock"));
-                    return;
-                }
                 int pickaxe = Mining.findPick(client);
                 if (pickaxe < 0) {
                     client.minePick = -1;
                     client.resetAction();
-                    client.send(new SendMessage("You do not have an pickaxe that you can use."));
+                    client.send(new SendMessage("You need a pickaxe to mine this rock."));
+                    return;
+                } else if (client.getLevel(Skills.MINING) < Utils.rockLevels[r]) {
+                    client.send(new SendMessage("You need a Mining level of " + Utils.rockLevels[r] + " to mine this rock."));
+                    return;
+                } else if (!client.playerHasItem(-1)) {
+                    client.send(new SendMessage("There is not enough space in your inventory."));
+                    client.resetAction(true);
                     return;
                 }
                     client.minePick = pickaxe;
                     client.mineIndex = r;
                     client.mining = true;
                     client.lastAction = System.currentTimeMillis() + Mining.getMiningSpeed(client);
-                    client.lastPickAction = System.currentTimeMillis() + 1200;
                     client.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
-                    client.send(new SendMessage("You swing your pick at the rock..."));
+                    client.send(new SendMessage("You swing your pick at the rock."));
                 return;
             }
         }
         if (client.mining) {
             return;
         }
+
         if (objectID == 2634 && objectPosition.getX() == 2838 && objectPosition.getY() == 3517) { //2838, 3517
             client.teleportToX = 2840;
             client.teleportToY = 3517;

@@ -29,6 +29,7 @@ public class Utils {
 
     public static int[] shortExp = {80, 120, 160, 200, 250, 320};
     public static int[] longExp = {90, 135, 180, 230, 290, 360};
+
     // cooper tin iron coal mith addy
     public static int[] rocks = {7471, 7451, 7484, 7452, 7485, 7455, 7488, 7456, 7489, 7458, 7491, 7459, 7492, 7460, 7493, 7461, 7494, /*7464, 7463*/};
     public static int[] rockLevels = {1, 1, 1, 1, 1, 15, 15, 30, 30, 40, 40, 55, 55, 70, 70, 85, 85, 50, 50};

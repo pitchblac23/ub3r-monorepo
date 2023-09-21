@@ -18,6 +18,7 @@ import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
+import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Utils;
@@ -254,7 +255,7 @@ public class ClickingButtons implements Packet {
             case 29025:
             case 29024:
             case 29023:
-                Smithing.startSmelt(client.actionButtonId, client);
+                Smelting.startSmelt(client.actionButtonId, client);
                 break;
             case 34185:
             case 34184: // vamps
@@ -582,8 +583,7 @@ public class ClickingButtons implements Packet {
             case 21011:
                 if(client.IsBanking) {
                     client.takeAsNote = !client.takeAsNote;
-                    client.send(new SendString(client.takeAsNote ? "No Note" : "Note", 5389));
-                    client.send(new SendMessage(client.takeAsNote ? "You can now note items." : "You can no longer note items."));
+                    client.send(new SendString(client.takeAsNote ? "Note" : "Item", 5389));
                 }
                 break;
             case 21010:

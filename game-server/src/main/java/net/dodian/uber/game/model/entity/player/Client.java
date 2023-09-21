@@ -37,6 +37,7 @@ import net.dodian.uber.game.model.player.skills.mining.Mining;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
+import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.RewardItem;
@@ -1752,9 +1753,9 @@ public class Client extends Player implements Runnable {
 		resetAction(true);
 		resetBank();
 		resetItems(5064);
-		send(new SendString(takeAsNote ? "No Note" : "Note", 5389));
-		send(new SendString("Bank All", 5391));
-		send(new SendString("Bank of " + getPlayerName(), 5383));
+		send(new SendString(takeAsNote ? "Note" : "Item", 5389));
+		send(new SendString("Deposit All", 5391));
+		send(new SendString("The Bank of Dodian", 5383));
 		IsBanking = true;
 		checkBankInterface = false;
 		send(new InventoryInterface(5292, 5063));
@@ -2632,7 +2633,7 @@ public class Client extends Player implements Runnable {
 		}
 		if (smelting && now - lastAction >= 1800) {
 			lastAction = now;
-			Smithing.smelt(smelt_id, this);
+			Smelting.smelt(smelt_id, this);
 		} else if (goldCrafting && now - lastAction >= 1800) {
 			lastAction = now;
 			GoldCrafting.goldCraft(this);
@@ -2666,10 +2667,8 @@ public class Client extends Player implements Runnable {
 			Fishing.Fish(this);
 		} else if (mining && now - lastAction >= Mining.getMiningSpeed(this)) {
 			lastAction = now;
-			Mining.mining(mineIndex, this);
-		} else if (mining && now - lastPickAction >= 600) {
-			lastPickAction = now;
 			requestAnim(Mining.getMiningEmote(Utils.picks[minePick]), 0);
+			Mining.mining(mineIndex, this);
 		} else if (cooking && now - lastAction >= 1800) {
 			lastAction = now;
 			cook();

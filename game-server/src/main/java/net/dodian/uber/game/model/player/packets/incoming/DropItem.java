@@ -27,7 +27,7 @@ public class DropItem implements Packet {
         }
         if (client.wearing == false) {
             client.dropItem(droppedItem, slot);
+            client.resetAction();
         }
     }
-
 }

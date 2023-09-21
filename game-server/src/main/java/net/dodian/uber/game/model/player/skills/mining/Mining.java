@@ -30,15 +30,6 @@ public class Mining {
         return -1;
     }
 
-    public static long getMiningSpeed(Client player) {
-        double pickBonus = Utils.pickBonus[player.minePick];
-        double level = (double) player.getLevel(Skills.MINING) / 600;
-        double random = (double) Misc.random(150) / 100;
-        double bonus = 1 + pickBonus * random + level;
-        double time = Utils.mineTimes[player.mineIndex] / bonus;
-        return (long) time;
-    }
-
     public static int findPick(Client player) {
         int Eaxe = -1, Iaxe = -1;
         int weapon = player.getEquipment()[Equipment.Slot.WEAPON.getId()];
@@ -58,36 +49,29 @@ public class Mining {
         return Eaxe > Iaxe ? Eaxe : Iaxe > Eaxe ? Iaxe : -1;
     }
 
+    public static long getMiningSpeed(Client player) {
+        double pickBonus = Utils.pickBonus[player.minePick];
+        double level = (double) player.getLevel(Skills.MINING) / 600;
+        double random = (double) Misc.random(150) / 100;
+        double bonus = 1 + pickBonus * random + level;
+        double time = Utils.mineTimes[player.mineIndex] / bonus;
+        return (long) time;
+    }
+
     public static void mining(int index, Client player) {
-        int pickaxe = -1;
-        pickaxe = Mining.findPick(player);
-        if (pickaxe < 0) {
-            player.minePick = -1;
-            player.resetAction();
-            player.send(new SendMessage("You do not have an pickaxe that you can use."));
-            return;
-        } else
-            player.minePick = pickaxe;
-        if (player.minePick >= 0) {
-            player.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
-        } else {
-            player.resetAction();
-            player.send(new SendMessage("You need a pickaxe to mine this rock"));
-        }
         if (!player.playerHasItem(-1)) {
-            player.send(new SendMessage("Your inventory is full!"));
+            player.send(new SendMessage("There is not enough space in your inventory."));
             player.resetAction(true);
             return;
-        }
+        } else
         if (index != 6) {
-            player.send(new SendMessage("You mine some " + player.GetItemName(Utils.ore[index]).toLowerCase() + ""));
+            player.send(new SendMessage("You mine some " + player.GetItemName(Utils.ore[index]).toLowerCase() + "."));
         }
         player.addItem(Utils.ore[index], 1);
         player.giveExperience(Utils.oreExp[index], Skills.MINING);
-        player.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
         player.triggerRandom(Utils.oreExp[index]);
         if (Misc.chance(30) == 1) {
-            player.send(new SendMessage("You take a rest"));
+            player.send(new SendMessage("You take a rest."));
             player.resetAction(true);
         }
     }
