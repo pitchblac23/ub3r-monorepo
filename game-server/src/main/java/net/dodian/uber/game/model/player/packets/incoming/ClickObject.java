@@ -129,10 +129,8 @@ public class ClickObject implements Packet {
             Thieving.attemptSteal(client, objectID, objectPosition);
         }
         if (objectID == 2391 || objectID == 2392) {
-            if (client.premium) {
-                client.ReplaceObject(2728, 3349, 2391, 0, 0);
-                client.ReplaceObject(2729, 3349, 2392, -2, 0);
-            }
+            client.ReplaceObject(2728, 3349, 2391, 0, 0);
+            client.ReplaceObject(2729, 3349, 2392, -2, 0);
             return;
         }
         if (objectID == 2097) {
@@ -389,22 +387,18 @@ public class ClickObject implements Packet {
                     objectPosition.getY()) > 2) {
                 return;
             }
-            if (client.premium) {
-                client.teleportToX = 2732;
-                client.teleportToY = 3380;
-                client.getPosition().setZ(1);
-            }
+            client.teleportToX = 2732;
+            client.teleportToY = 3380;
+            client.getPosition().setZ(1);
         }
         if (objectID == 1726 && objectPosition.getX() == 2732 && objectPosition.getY() == 3378) {
             if (Utils.getDistance(client.getPosition().getX(), client.getPosition().getY(), objectPosition.getX(),
                     objectPosition.getY()) > 2) {
                 return;
             }
-            if (client.premium) {
-                client.teleportToX = 2732;
-                client.teleportToY = 3376;
-                client.getPosition().setZ(0);
-            }
+            client.teleportToX = 2732;
+            client.teleportToY = 3376;
+            client.getPosition().setZ(0);
         }
         if (objectID == 1726) {
             client.stairs = "legendsDown".hashCode();
@@ -614,9 +608,6 @@ public class ClickObject implements Packet {
             return;
         }
         if (objectID == 16664 && objectPosition.getX() == 2724 && objectPosition.getY() == 3374) {
-            if (!client.premium) {
-                client.resetPos();
-            }
             client.teleportToX = 2727;
             client.teleportToY = 9774;
             client.getPosition().setZ(0);
@@ -687,9 +678,6 @@ public class ClickObject implements Packet {
         }
         if (objectID == 16665) {
             if (objectPosition.getX() == 2724 && objectPosition.getY() == 9774) {
-                if (!client.premium) {
-                    client.resetPos();
-                }
                 client.teleportToX = 2723;
                 client.teleportToY = 3375;
                 client.getPosition().setZ(0);
@@ -779,10 +767,6 @@ public class ClickObject implements Packet {
         }
         if (objectID == 6420 && objectPosition.getX() == 2733 && objectPosition.getY() == 3374) {
             if(client.chestEventOccur) {
-                return;
-            }
-            if (!client.premium) {
-                client.resetPos();
                 return;
             }
             if (client.getLevel(Skills.THIEVING) < 85) {

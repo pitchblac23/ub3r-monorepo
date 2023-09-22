@@ -51,26 +51,17 @@ public class ItemOnItem implements Packet {
         }
         for (int h = 0; h < Utils.herbs.length; h++) {
             if ((itemUsed == Utils.herbs[h] && otherItem == 227) || (itemUsed == 227 && otherItem == Utils.herbs[h])) {
-                if (!client.premium && h > 2) {
-                    client.send(new SendMessage("Need premium to mix these pots!"));
-                    return;
-                }
                 if (client.getSkillLevel(Skills.HERBLORE) < Utils.req[h]) {
                     client.send(new SendMessage("Requires herblore level " + Utils.req[h]));
                     return;
                 }
                 int xp = 0;
-                if (client.premium)
                     xp = Utils.grimy_herbs_xp[h];
                 client.setPots(600, itemUsed, otherItem, Utils.unfinished[h], xp);
                 return;
             }
             if ((itemUsed == Utils.secondary[h] && otherItem == Utils.unfinished[h])
                     || (itemUsed == Utils.unfinished[h] && otherItem == Utils.secondary[h])) {
-                if (!client.premium && h > 2) {
-                    client.send(new SendMessage("Need premium to mix these pots!"));
-                    return;
-                }
                 if (client.getLevel(Skills.HERBLORE) < Utils.req[h]) {
                     client.send(new SendMessage("Requires herblore level " + Utils.req[h]));
                     return;

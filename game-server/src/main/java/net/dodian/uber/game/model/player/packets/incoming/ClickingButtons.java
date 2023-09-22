@@ -19,12 +19,9 @@ import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.smithing.Smelting;
-import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Utils;
-
-import java.io.IOException;
-
+import static net.dodian.uber.game.model.player.skills.Skills.*;
 import static net.dodian.utilities.DotEnvKt.getServerDebugMode;
 
 public class ClickingButtons implements Packet {
@@ -811,127 +808,145 @@ public class ClickingButtons implements Packet {
              */
 
             case 33206:
+            case 94167:
                 try {
-                    SkillGuides.showSkillMenu(0, 0, client);
+                    SkillGuides.showSkillMenu(ATTACK.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33207:
+            case 94168:
                 try {
-                    SkillGuides.showSkillMenu(3, 0, client);
+                    SkillGuides.showSkillMenu(HITPOINTS.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33208:
+            case 94169:
                 try {
-                    SkillGuides.showSkillMenu(Skills.MINING.getId(), 0, client);
+                    SkillGuides.showSkillMenu(MINING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33209:
+            case 94170:
                 try {
-                    SkillGuides.showSkillMenu(2, 0, client);
+                    SkillGuides.showSkillMenu(STRENGTH.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33210:
+            case 94171:
                 try {
-                    SkillGuides.showSkillMenu(16, 0, client);
+                    SkillGuides.showSkillMenu(AGILITY.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33212:
+            case 94173:
                 try {
-                    SkillGuides.showSkillMenu(1, 0, client);
+                    SkillGuides.showSkillMenu(DEFENCE.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33215:
+            case 94176:
                 try {
-                    SkillGuides.showSkillMenu(4, 0, client);
+                    SkillGuides.showSkillMenu(RANGED.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33216:
+            case 94177:
                 try {
-                    SkillGuides.showSkillMenu(17, 0, client);
+                    SkillGuides.showSkillMenu(THIEVING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33213:
+            case 94174:
                 try {
-                    SkillGuides.showSkillMenu(Skills.HERBLORE.getId(), 0, client);
+                    SkillGuides.showSkillMenu(HERBLORE.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33219: //Crafting
+            case 33219:
+            case 94180:
                 try {
-                    SkillGuides.showSkillMenu(Skills.CRAFTING.getId(), 0, client);
+                    SkillGuides.showSkillMenu(CRAFTING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33211: //Smithing
+            case 33211:
+            case 94172:
                 try {
-                    SkillGuides.showSkillMenu(Skills.SMITHING.getId(), 0, client);
+                    SkillGuides.showSkillMenu(SMITHING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33220:
+            case 94184:
                 try {
-                    SkillGuides.showSkillMenu(8, 0, client);
+                    SkillGuides.showSkillMenu(WOODCUTTING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33221:
+            case 94182:
                 try {
-                    SkillGuides.showSkillMenu(6, 0, client);
+                    SkillGuides.showSkillMenu(MAGIC.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33222:
+            case 94181:
                 try {
-                    SkillGuides.showSkillMenu(11, 0, client);
+                    SkillGuides.showSkillMenu(FIREMAKING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33223:
+            case 94178:
                 try {
-                    SkillGuides.showSkillMenu(7, 0, client);
+                    SkillGuides.showSkillMenu(COOKING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33224:
+            case 95053:
                 try {
-                    SkillGuides.showSkillMenu(22, 0, client);
+                    SkillGuides.showSkillMenu(RUNECRAFTING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33214:
+            case 94183:
                 try {
-                    SkillGuides.showSkillMenu(9, 0, client);
+                    SkillGuides.showSkillMenu(FLETCHING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 33217:
+            case 94175:
                 try {
-                    SkillGuides.showSkillMenu(10, 0, client);
+                    SkillGuides.showSkillMenu(FISHING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -939,7 +954,7 @@ public class ClickingButtons implements Packet {
             case 34142:
                 try {
                     if (client.currentSkill < 2)
-                        SkillGuides.showSkillMenu(0, 0, client);
+                        SkillGuides.showSkillMenu(ATTACK.getId(), 0, client);
                     else
                         SkillGuides.showSkillMenu(client.currentSkill, 0, client);
                 } catch (Exception e) {
@@ -949,7 +964,7 @@ public class ClickingButtons implements Packet {
             case 34119:
                 try {
                     if (client.currentSkill < 2)
-                        SkillGuides.showSkillMenu(1, 0, client);
+                        SkillGuides.showSkillMenu(DEFENCE.getId(), 0, client);
                     else
                         SkillGuides.showSkillMenu(client.currentSkill, 1, client);
                 } catch (Exception e) {
@@ -959,7 +974,7 @@ public class ClickingButtons implements Packet {
             case 34120:
                 if (client.currentSkill < 2)
                     try {
-                        SkillGuides.showSkillMenu(4, 0, client);
+                        SkillGuides.showSkillMenu(RANGED.getId(), 0, client);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -1010,7 +1025,7 @@ public class ClickingButtons implements Packet {
                 break;
             case 47130:
                 try {
-                    SkillGuides.showSkillMenu(18, 0, client);
+                    SkillGuides.showSkillMenu(SLAYER.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

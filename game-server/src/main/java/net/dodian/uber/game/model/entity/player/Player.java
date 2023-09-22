@@ -34,7 +34,7 @@ public abstract class Player extends Entity {
     public long lastTeleport = 0;
     private int playerNpc = -1;
     public int dbId = -1;
-    public boolean premium = false, randomed = false;
+    public boolean randomed = false;
     public int latestNews = 0;
     public int playerGroup = 3;
     public long lastPacket;
@@ -150,7 +150,7 @@ public abstract class Player extends Entity {
     public int[] runePouchesMaxAmount = {4, 7, 10, 13};
 
     //CoalBags
-    public int[] coalBagAmount = {0};
+    public static int[] coalBagAmount = {0};
     public int coalBagMaxAmount = 27;
     //Agility
     public boolean UsingAgility = false;
@@ -1149,9 +1149,12 @@ public abstract class Player extends Entity {
     }
 
     public void boost(int boosted, Skills skill) {
-        if(skill.getId() == 3 || skill.getId() == 5) { //Cant do health or prayer with this method!
+        if (skill == null)
             return;
-        }
+
+        if(skill == Skills.HITPOINTS || skill == Skills.PRAYER) //Cant do health or prayer with this method!
+            return;
+
         Client c = (Client) this;
         int lvl = Skills.getLevelForExperience(getExperience(skill));
         int currentLevel = c.getLevel(skill);

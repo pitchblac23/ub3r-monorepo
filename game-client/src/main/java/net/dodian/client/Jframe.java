@@ -1,19 +1,23 @@
 package net.dodian.client;
 
+import javax.imageio.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
+import java.awt.*;
 
+import static net.dodian.client.config.Constants.SERVER_HOSTNAME;
+import static net.dodian.client.config.Constants.WINDOW_TITLE;
 
 public class Jframe extends Client implements ActionListener {
 
-    private static final long serialVersionUID = 1L;
-
+    private static JMenuItem menuItem;
     private JFrame frame;
+    private static final long serialVersionUID = 1L;
 
     public Jframe(String args[]) {
         super();
@@ -24,14 +28,13 @@ public class Jframe extends Client implements ActionListener {
             ex.printStackTrace();
         }
     }
-
     public void initUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            JFrame.setDefaultLookAndFeelDecorated(true);
             JPopupMenu.setDefaultLightWeightPopupEnabled(false);
-            frame = new JFrame("Dodian Version 1.1");
+            frame = new JFrame(WINDOW_TITLE);
             frame.setLayout(new BorderLayout());
-            setFocusTraversalKeysEnabled(false);
             frame.setResizable(false);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             JPanel gamePanel = new JPanel();
@@ -40,28 +43,9 @@ public class Jframe extends Client implements ActionListener {
             gamePanel.add(this);
             gamePanel.setPreferredSize(new Dimension(765, 503));
 
-            JMenu fileMenu = new JMenu("File");
-
-            String[] mainButtons = new String[]{"Rune-Server", "-", "Exit"};
-
-            for (String name : mainButtons) {
-                JMenuItem menuItem = new JMenuItem(name);
-                if (name.equalsIgnoreCase("-")) {
-                    fileMenu.addSeparator();
-                } else {
-                    menuItem.addActionListener(this);
-                    fileMenu.add(menuItem);
-                }
-            }
-
-            JMenuBar menuBar = new JMenuBar();
-            JMenuBar jmenubar = new JMenuBar();
-
-            frame.add(jmenubar);
-            menuBar.add(fileMenu);
+            initMenubar();
             frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
             frame.pack();
-
             frame.setVisible(true); // can see the client
             frame.setResizable(false); // resizeable frame
 
@@ -71,9 +55,75 @@ public class Jframe extends Client implements ActionListener {
         }
     }
 
+    public void initMenubar() {
+        JButton screenshot = new JButton("Screenshot");
+        JMenu fileMenu = new JMenu("File");
+        String[] mainButtons = new String[] { "Website", "-", "Exit" };
+        for (String name : mainButtons) {
+            JMenuItem menuItem = new JMenuItem(name);
+            if (name.equalsIgnoreCase("-")) {
+                fileMenu.addSeparator();
+            } else if(name.equalsIgnoreCase("Website")) {
+                JMenu forumsMenu = new JMenu("Website");
+                fileMenu.add(forumsMenu);
+                JMenuItem DodianServer = new JMenuItem("Dodian.net");
+                DodianServer.addActionListener(this);
+                forumsMenu.add(DodianServer);
+            } else {
+                menuItem.addActionListener(this);
+                fileMenu.add(menuItem);
+            }
+        }
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenuBar jmenubar = new JMenuBar();
+
+        frame.add(jmenubar);
+        menuBar.add(fileMenu);
+        menuBar.add(screenshot);
+        screenshot.setActionCommand("Screenshot");
+        screenshot.addActionListener(this);
+        frame.getContentPane().add(menuBar, BorderLayout.NORTH);
+    }
+
+    private int screenshot;
+    private boolean takeScreenshot = true;
+
+    public void screeny() {
+        try {
+            Window window = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+            Point point = window.getLocationOnScreen();
+            int x = (int)point.getX()+2;
+            int y = (int)point.getY();
+            int w = window.getWidth()-7;
+            int h = window.getHeight()-6;
+            Robot robot = new Robot(window.getGraphicsConfiguration().getDevice());
+            Rectangle captureSize = new Rectangle(x, y, w, h);
+            java.awt.image.BufferedImage bufferedimage = robot.createScreenCapture(captureSize);
+            String fileExtension = myUsername;
+            for (int i = 1; i <= 1000; i++) {
+                File file = new File("Screenshots/"+ fileExtension +" "+ i +".png");
+                if (!file.exists()) {
+                    screenshot = i;
+                    takeScreenshot = true;
+                    break;
+                }
+            }
+            File file = new File((new StringBuilder()).append("Screenshots/" + fileExtension + " ").append(screenshot).append(".png").toString());
+            if (takeScreenshot == true) {
+                pushMessage("<col=6E0085>" + fileExtension + " "+ screenshot +" was saved in your screenshot folder!", 0, "");
+                ImageIO.write(bufferedimage, "png", file);
+            } else {
+                pushMessage("<col=FF0000>Your screenshots folder is full!", 0, "");
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public URL getCodeBase() {
         try {
-            return new URL("http://" + server + "/cache");
+            return new URL("http://" + SERVER_HOSTNAME + "/cache");
         } catch (Exception e) {
             return super.getCodeBase();
         }
@@ -91,7 +141,7 @@ public class Jframe extends Client implements ActionListener {
         return "";
     }
 
-    private static void openUpWebSite(String url) {
+    static void openURL(String url) {
         Desktop d = Desktop.getDesktop();
         try {
             d.browse(new URI(url));
@@ -106,8 +156,11 @@ public class Jframe extends Client implements ActionListener {
                 if (cmd.equalsIgnoreCase("exit")) {
                     System.exit(0);
                 }
-                if (cmd.equalsIgnoreCase("Rune-Server")) {
-                    openUpWebSite("http://www.rune-server.org/");
+                else if (cmd.equalsIgnoreCase("Screenshot")) {
+                    screeny();
+                }
+                else if (cmd.equalsIgnoreCase("Dodian.net")) {
+                    openURL("https://dodian.net/");
                 }
             }
         } catch (Exception e) {

@@ -100,15 +100,6 @@ public class ItemManager {
         return i.getAttackAnim();
     }
 
-    public boolean isPremium(int id) {
-        if (id < 0)
-            return false;
-        Item i = items.get(id);
-        if (i == null)
-            return false;
-        return i.getPremium();
-    }
-
     public boolean isTradable(int id) {
         if (id < 0)
             return false;
@@ -202,5 +193,4 @@ public class ItemManager {
         items.clear();
         loadItems();
     }
-
 }

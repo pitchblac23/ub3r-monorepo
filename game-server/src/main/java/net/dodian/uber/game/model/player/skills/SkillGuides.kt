@@ -5,6 +5,7 @@ import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces
 import net.dodian.uber.game.model.player.packets.outgoing.SendString
 import net.dodian.utilities.Utils
+import java.util.*
 
 var slot = 8720;
 
@@ -20,6 +21,11 @@ class SkillGuides {
                 player.send(SendString("", slot))
                 slot++
             }
+
+            var skillName: String = Skills.getSkill(skillID).getName()
+            skillName = skillName.substring(0, 1).uppercase(Locale.getDefault()) + skillName.substring(1)
+
+            player.send(SendString(skillName, 8716))
 
             if (skillID < 23) {
                 player.changeInterfaceStatus(15307, false)
@@ -412,7 +418,7 @@ class SkillGuides {
                 if (child == 0) player.setMenuItems(intArrayOf(4155, 4155, 4155))
                 else if (child == 1) player.setMenuItems(intArrayOf(4133, 4138, -1, -1, 4142, -1, -1, -1, -1, 4141, -1, -1, 4147, 8900, -1, 4144, -1, -1, 4149, -1))
                 else if (child == 2) player.setMenuItems(intArrayOf(9786))
-            } else if (skillID == 22) {
+            } else if (skillID == Skills.RUNECRAFTING.id) {
                 player.send(SendString("Runecrafting", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)

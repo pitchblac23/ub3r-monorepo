@@ -25,7 +25,7 @@ public class ClickItem implements Packet {
         int itemSlot = client.getInputStream().readUnsignedWordA();
         int itemId = client.getInputStream().readUnsignedWordBigEndian();
 
-        if (client.fillEssencePouch(itemId) || client.fillCoalBag()) {
+        if (client.fillEssencePouch(itemId)) {
             return;
         }
         if (itemId == 5733) {
@@ -61,6 +61,10 @@ public class ClickItem implements Packet {
         }
         if (itemId == 2528) {
             client.openGenie();
+            return;
+        }
+        if (itemId == 12019) {
+            client.fillCoalBag();
             return;
         }
         if((itemId >= 199 && itemId <= 219) || itemId == 3049 || itemId == 3051)

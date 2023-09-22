@@ -249,7 +249,7 @@ public class Smithing {
     public static boolean smithing(Client c) {
         if (c.IsItemInBag(2347)) {
             if (!smithCheck(c.smithing[4], c)) {
-                c.IsAnvil = true;
+                Player.IsAnvil = true;
                 c.resetAction();
                 return false;
             }

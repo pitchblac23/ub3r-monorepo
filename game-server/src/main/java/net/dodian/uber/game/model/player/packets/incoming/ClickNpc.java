@@ -111,13 +111,9 @@ public class ClickNpc implements Packet {
         } else if (npcId == 683) { // Range stuff
             client.WanneShop = 11;
         } else if (npcId == 3951) {
-            if (client.premium) {
-                client.ReplaceObject(2728, 3349, 2391, 0, 0);
-                client.ReplaceObject(2729, 3349, 2392, -2, 0);
-                client.showNPCChat(npcId, 590, new String[]{"Welcome to the Guild of Legends", "Enjoy your stay."});
-            } else {
-                client.showNPCChat(npcId, 595, new String[]{"You must be a premium member to enter", "Visit Dodian.net to subscribe"});
-            }
+            client.ReplaceObject(2728, 3349, 2391, 0, 0);
+            client.ReplaceObject(2729, 3349, 2392, -2, 0);
+            client.showNPCChat(npcId, 590, new String[]{"Welcome to the Guild of Legends", "Enjoy your stay."});
         } else if (npcId == 376 && client.playerRights == 2) {
             client.triggerTele(2772, 3234, 0, false);
         } else if (npcId == 6080) {

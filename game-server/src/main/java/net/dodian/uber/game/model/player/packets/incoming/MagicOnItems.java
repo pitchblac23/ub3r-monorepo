@@ -224,7 +224,7 @@ public class MagicOnItems implements Packet {
                 client.send(new SendMessage("Requires nature rune!"));
                 return;
             }
-            if (castOnItem == 995 || client.premiumItem(castOnItem) || (castOnItem >= 2415 && castOnItem <= 2417) || value < 1) {
+            if (castOnItem == 995 || (castOnItem >= 2415 && castOnItem <= 2417) || value < 1) {
                 client.send(new SendMessage("This item can't be alched"));
                 return;
             }

@@ -816,18 +816,14 @@ public class Commands implements Packet {
                     client.refreshSkill(Skills.getSkill(skill));
                 }
                 if (command.equalsIgnoreCase("reset") && client.playerRights > 1/*&& client.getPlayerName().equalsIgnoreCase("Logan")*/) {
-                    for (int i = 0; i < 21; i++) {
-                        client.setExperience(0, Skills.getSkill(i));
-                        if (i == 3)
-                            client.setExperience(1155, Skills.HITPOINTS);
-                        client.setLevel(Skills.getLevelForExperience(i), Skills.getSkill(i));
-                        client.refreshSkill(Skills.getSkill(i));
-                    }
+                    Skills.enabledSkills().forEach(skill -> {
+                        client.setExperience(skill == Skills.HITPOINTS ? 1155 : 0, skill);
+                        client.setLevel(skill == Skills.HITPOINTS ? 10 : 1, skill);
+                        client.refreshSkill(skill);
+                    });
                 }
                 if (command.startsWith("master") && client.playerRights > 1) {
-                    for (int i = 0; i < 21; i++) {
-                        client.giveExperience(14000000, Skills.getSkill(i));
-                    }
+                    Skills.enabledSkills().forEach(skill -> client.giveExperience(14_000_000, skill));
                 }
             } //End of Special rank commands
 
@@ -1186,7 +1182,7 @@ public class Commands implements Packet {
                 client.send(new SendMessage("Total amount of times: " + totalTimes + " out of 1000!"));
             }
             if (cmd[0].equalsIgnoreCase("boss")) {
-                client.send(new SendString("@dre@Uber Server 3.0 - Boss Log", 8144));
+                client.send(new SendString("@dre@Dodian - Boss Log", 8144));
                 client.clearQuestInterface();
                 int line = 8145;
                 for (int i = 0; i < client.boss_name.length; i++) {
@@ -1218,11 +1214,6 @@ public class Commands implements Packet {
                             + "): " + (int)(client.baseDamage[client.autocast_spellIndex] * magicBonusDamage(client)) + " (Magic damage increase: " + String.format("%3.1f", (magicBonusDamage(client) - 1.0) * 100D) + "%)"));
             }
             if (cmd[0].equalsIgnoreCase("yell") && command.length() > 5) {
-                if (!client.premium) {
-                    client.send(new SendMessage("You must be a Premium Member to yell."));
-                    client.send(new SendMessage("Use the Dodian.net Market Forums to post new threads to buy/sell."));
-                    return;
-                }
                 if (!Server.chatOn && client.playerRights < 1) {
                     client.send(new SendMessage("Yell chat is disabled!"));
                     return;

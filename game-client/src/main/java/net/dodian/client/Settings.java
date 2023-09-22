@@ -80,5 +80,4 @@ public class Settings extends HashMap<String, String> {
             e.printStackTrace();
         }
     }
-
 }

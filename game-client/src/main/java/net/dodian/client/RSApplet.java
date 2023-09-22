@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import javax.imageio.*;
 
 public class RSApplet extends Applet implements Runnable, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, FocusListener, WindowListener {
 
@@ -91,6 +93,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
         getGameComponent().addKeyListener(this);
         getGameComponent().addFocusListener(this);
         getGameComponent().addMouseWheelListener(this);
+        oldClick = System.currentTimeMillis();
         if (gameFrame != null) {
             gameFrame.addWindowListener(this);
         }
@@ -189,7 +192,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
     }
 
     public boolean badZoomPosition() {
-        if((mouseX > 0 && mouseY > 340 && mouseX < 510 && mouseY < 500) ||
+        if ((mouseX > 0 && mouseY > 340 && mouseX < 510 && mouseY < 500) ||
                 (mouseY > 210 && mouseY < 473 && mouseX > 514 && mouseX < 762)) {
             return true;
         }
@@ -197,7 +200,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
     }
 
     public boolean tabOpen() {
-        if((Client.tabInterfaceIDs[Client.tabID] == 638) || (Client.tabInterfaceIDs[Client.tabID] == 147) || (Client.tabInterfaceIDs[Client.tabID] == 638) || (Client.tabInterfaceIDs[Client.tabID] == 18128)
+        if ((Client.tabInterfaceIDs[Client.tabID] == 638) || (Client.tabInterfaceIDs[Client.tabID] == 147) || (Client.tabInterfaceIDs[Client.tabID] == 638) || (Client.tabInterfaceIDs[Client.tabID] == 18128)
                 || (Client.tabInterfaceIDs[Client.tabID] == 5715) || (Client.tabInterfaceIDs[Client.tabID] == 5065) || (Client.openInterfaceID == 5292)) {
             return true;
         }
@@ -293,7 +296,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
                     continue;
                 }
                 if (child.scrollMax > child.height) { // has a scrollbar!
-                    if (/*true || */mouseX > 549 + inter.childX[i] &&
+                    if (/*true || */ mouseX > 549 + inter.childX[i] &&
                             mouseX < 549 + inter.childX[i] + child.width &&
                             mouseY > 205 + inter.childY[i] &&
                             mouseY < 205 + inter.childY[i] + child.height) {
@@ -404,34 +407,38 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
     public int releasedX;
     public int releasedY;
     public boolean mouseWheelDown;
+    public long oldClick;
 
     public final void mousePressed(MouseEvent e) {
-        int type = e.getButton();
-        int x = e.getX();
-        int y = e.getY();
-        if (gameFrame != null) {
-            Insets insets = gameFrame.getInsets();
-            x -= insets.left;//4
-            y -= insets.top;//22
-        }
-        idleTime = 0;
-        clickX = x;
-        clickY = y;
-        clickTime = System.currentTimeMillis();
-        if (SwingUtilities.isMiddleMouseButton(e)) {
-            mouseWheelDown = true;
-            mouseWheelX = x;
-            mouseWheelY = y;
-            return;
-        }
-        if (SwingUtilities.isRightMouseButton(e)) {
-            clickType = RIGHT;
-            clickMode1 = 2;
-            clickMode2 = 2;
-        } else if (SwingUtilities.isLeftMouseButton(e)) {
-            clickType = LEFT;
-            clickMode1 = 1;
-            clickMode2 = 1;
+        if(System.currentTimeMillis() - oldClick >= 700) {
+            oldClick = System.currentTimeMillis();
+            int type = e.getButton();
+            int x = e.getX();
+            int y = e.getY();
+            if (gameFrame != null) {
+                Insets insets = gameFrame.getInsets();
+                x -= insets.left;//4
+                y -= insets.top;//22
+            }
+            idleTime = 0;
+            clickX = x;
+            clickY = y;
+            clickTime = System.currentTimeMillis();
+            if (SwingUtilities.isMiddleMouseButton(e)) {
+                mouseWheelDown = true;
+                mouseWheelX = x;
+                mouseWheelY = y;
+                return;
+            }
+            if (SwingUtilities.isRightMouseButton(e)) {
+                clickType = RIGHT;
+                clickMode1 = 2;
+                clickMode2 = 2;
+            } else if (SwingUtilities.isLeftMouseButton(e)) {
+                clickType = LEFT;
+                clickMode1 = 1;
+                clickMode2 = 1;
+            }
         }
     }
 
@@ -520,24 +527,26 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
 		/*if(j == 96) {
 			net.dodian.client.Client.consoleOpen = !net.dodian.client.Client.consoleOpen;
 		}*/
-        if(i ==  KeyEvent.VK_ESCAPE){
+        if (i == KeyEvent.VK_ESCAPE) {
             net.dodian.client.Client.setTab(3);
-        } else if(i == KeyEvent.VK_F1){
+        } else if (i == KeyEvent.VK_F1) {
             net.dodian.client.Client.setTab(0);
-        } else if(i == KeyEvent.VK_F2){
+        } else if (i == KeyEvent.VK_F2) {
             net.dodian.client.Client.setTab(1);
-        } else if(i == KeyEvent.VK_F3){
+        } else if (i == KeyEvent.VK_F3) {
             net.dodian.client.Client.setTab(2);
-        } else if(i == KeyEvent.VK_F4){
+        } else if (i == KeyEvent.VK_F4) {
             net.dodian.client.Client.setTab(4);
-        } else if(i == KeyEvent.VK_F5){
+        } else if (i == KeyEvent.VK_F5) {
             net.dodian.client.Client.setTab(5);
-        } else if(i == KeyEvent.VK_F6){
+        } else if (i == KeyEvent.VK_F6) {
             net.dodian.client.Client.setTab(6);
-        } else if(i == KeyEvent.VK_F7){
+        } else if (i == KeyEvent.VK_F7) {
             net.dodian.client.Client.setTab(10);
-        } else if(i ==  KeyEvent.VK_F8){
+        } else if (i == KeyEvent.VK_F8) {
             net.dodian.client.Client.setTab(11);
+        } else if (i == KeyEvent.VK_F12) {
+            takeScreenshot();
         }
         if (j < 30)
             j = 0;
@@ -698,6 +707,31 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
             return gameFrame;
         } else {
             return this;
+        }
+    }
+
+    public static int random(int i) {
+        return (int) (Math.random() * (double) (i + 1));
+    }
+
+    public void takeScreenshot() {
+        try {
+            Window window = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusedWindow();
+            Point point = window.getLocationOnScreen();
+            int x = (int)point.getX();
+            int y = (int)point.getY();
+            int w = window.getWidth();
+            int h = window.getHeight();
+            Robot robot = new Robot(window.getGraphicsConfiguration().getDevice());
+            Rectangle captureSize = new Rectangle(x, y, w, h);
+            java.awt.image.BufferedImage bufferedimage = robot.createScreenCapture(captureSize);
+            long picNumber = random(9999);
+            System.out.println(picNumber);
+            String fileExtension = Client.myUsername;
+            File file = new File((new StringBuilder()).append(Signlink.findCacheDir() + "Screenshots/" + fileExtension + " ").append(picNumber).append(".png").toString());
+            ImageIO.write(bufferedimage, "png", file);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
