@@ -319,13 +319,14 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
             }
         } else
             handleInterfaceScrolling(event);
-        if (rotation == -1 && !tabOpen() && !badZoomPosition()) {
-            if (Client.zoom > -1)
-                Client.zoom--;
-        } else {
-            if (Client.zoom < 2 && !tabOpen() && !badZoomPosition())
-                Client.zoom++;
-
+        if (event.isControlDown()) {
+            if (rotation == -1 && !tabOpen() && !badZoomPosition()) {
+                if (Client.zoom > -1)
+                    Client.zoom--;
+            } else {
+                if (Client.zoom < 2 && !tabOpen() && !badZoomPosition())
+                    Client.zoom++;
+            }
         }
     }
 

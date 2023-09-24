@@ -3877,13 +3877,12 @@ public class Client extends RSApplet {
         }
     }
 
-    public void setNorth() {
-        anInt1278 = 0;
-        anInt1131 = 0;
-        anInt896 = 0;
-        minimapInt1 = 0;
-        minimapInt2 = 0;
-        minimapInt3 = 0;
+    public void processExtraMenus(){
+        if(super.mouseX >= 541 && super.mouseX <= 578 && super.mouseY >= 5 && super.mouseY < 42){
+            menuActionName[menuActionRow] = "Face North";
+            menuActionID[menuActionRow] = 1150;
+            menuActionRow++;
+        }
     }
 
     private void doAction(int i) {
@@ -3899,8 +3898,13 @@ public class Client extends RSApplet {
         int i1 = menuActionCmd1[i];
         if (l >= 2000)
             l -= 2000;
-        if (l == 696) {
-            setNorth();
+        if(l == 1150) { //face north
+            anInt1278 = 0;
+            anInt1131 = 0;
+            anInt896 = 0;
+            minimapInt1 = 0;
+            minimapInt2 = 0;
+            minimapInt3 = 0;
         }
         if (l == 104) {
             RSInterface class9_1 = RSInterface.interfaceCache[k];
@@ -6756,6 +6760,7 @@ public class Client extends RSApplet {
             inputTaken = true;
             anInt1039 = anInt886;
         }
+        processExtraMenus();
         if (backDialogID != -1 && anInt1315 != anInt1500) {
             inputTaken = true;
             anInt1500 = anInt1315;
@@ -6898,7 +6903,7 @@ public class Client extends RSApplet {
                 spellSelected = 0;
                 loadingStage = 0;
                 anInt1062 = 0;
-                setNorth();
+                //setNorth();/*Might not need*/
                 anInt1021 = 0;
                 anInt985 = -1;
                 destX = 0;
