@@ -35,14 +35,13 @@ public class AttackNpc implements Packet {
                         this.stop();
                         return;
                     }
+
                     client.resetWalkingQueue();
                     client.startAttack(tempNpc);
                     client.setWalkToTask(null);
                     this.stop();
                 }
-
             });
         }
     }
-
 }

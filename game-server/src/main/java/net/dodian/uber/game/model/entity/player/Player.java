@@ -116,8 +116,8 @@ public abstract class Player extends Entity {
     private final int[] playerEquipmentN = new int[14];
     private final int[] playerLevel = new int[21];
     private final int[] playerXP = new int[21];
-    public int maxHealth = 10, currentHealth = getLevel(Skills.HITPOINTS);
-    public int maxPrayer = 1, currentPrayer = getLevel(Skills.PRAYER);
+    public int currentHealth = getLevel(Skills.HITPOINTS), maxHealth = 10;
+    public int currentPrayer = getLevel(Skills.PRAYER), maxPrayer = 1;
     public final static int maxPlayerListSize = Constants.maxPlayers;
     public Player[] playerList = new Player[maxPlayerListSize]; // To remove -Dashboard
     public int playerListSize = 0;
@@ -1346,5 +1346,4 @@ public abstract class Player extends Entity {
         String npcName = Server.npcManager.getName(id);
         c.send(new SendMessage(status == -1 ? "Could not found the npc with the name of '" + npcName + "'." : status == 0 ? "You respawn " + npcName + "!" : npcName + " is already alive!"));
     }
-
 }

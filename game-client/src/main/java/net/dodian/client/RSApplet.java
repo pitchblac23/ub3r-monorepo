@@ -410,7 +410,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
     public long oldClick;
 
     public final void mousePressed(MouseEvent e) {
-        if(System.currentTimeMillis() - oldClick >= 700) {
+        if(System.currentTimeMillis() - oldClick >= 200) {
             oldClick = System.currentTimeMillis();
             int type = e.getButton();
             int x = e.getX();
@@ -524,9 +524,6 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
         if (i == KeyEvent.VK_SHIFT) {
             c.shiftIsDown = true;
         }
-		/*if(j == 96) {
-			net.dodian.client.Client.consoleOpen = !net.dodian.client.Client.consoleOpen;
-		}*/
         if (i == KeyEvent.VK_ESCAPE) {
             net.dodian.client.Client.setTab(3);
         } else if (i == KeyEvent.VK_F1) {
@@ -784,5 +781,4 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
         shouldClearScreen = true;
         awtFocus = true;
     }
-
 }

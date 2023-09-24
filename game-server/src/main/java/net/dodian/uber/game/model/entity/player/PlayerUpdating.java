@@ -336,5 +336,4 @@ public class PlayerUpdating extends EntityUpdating<Player> {
             e.printStackTrace();
         }
     }
-
 }

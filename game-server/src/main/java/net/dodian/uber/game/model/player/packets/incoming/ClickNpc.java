@@ -133,6 +133,8 @@ public class ClickNpc implements Packet {
         } else if (npcId == 1174) {
             client.NpcWanneTalk = 16;
             client.convoId = 2;
+        } else if (npcId == 6481) {
+            client.NpcWanneTalk = npcId;
         } else if (npcId == 520) {
             client.NpcWanneTalk = 19;
             client.convoId = 4;
@@ -147,5 +149,4 @@ public class ClickNpc implements Packet {
             client.println_debug("atNPC 1: " + npcId);
         }
     }
-
 }

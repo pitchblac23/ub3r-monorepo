@@ -204,7 +204,10 @@ public final class ItemDef {
                 def.name = "Hardleather gloves";
                 break;
             case 11862:
-                def.name = "Nozemi";
+                def.name = "Black partyhat";
+                break;
+            case 11863:
+                def.name = "Rainbow partyhat";
                 break;
             case 7454:
                 def.name = "Bronze gloves";

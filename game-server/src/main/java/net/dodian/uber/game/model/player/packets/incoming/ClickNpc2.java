@@ -200,5 +200,4 @@ public class ClickNpc2 implements Packet {
             client.println_debug("atNPC 2: " + npcId);
         }
     }
-
 }

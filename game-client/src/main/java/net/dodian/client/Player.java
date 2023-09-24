@@ -332,5 +332,4 @@ public final class Player extends Entity {
     int anInt1721;
     int anInt1722;
     int skill;
-
 }

@@ -37,5 +37,4 @@ public class ClickingStuff implements Packet {
             client.isPartyInterface = false;
         }
     }
-
 }

@@ -1904,6 +1904,7 @@ public class Client extends RSApplet {
                             int i1 = (((Entity) (obj)).currentHealth * 30) / ((Entity) (obj)).maxHealth;
                             if (i1 > 30)
                                 i1 = 30;
+
                             DrawingArea.drawPixels(5, spriteDrawY - 3, spriteDrawX - 15, 65280, i1);
                             DrawingArea.drawPixels(5, spriteDrawY - 3, (spriteDrawX - 15) + i1, 0xff0000, 30 - i1);
                         }
@@ -9837,9 +9838,9 @@ public class Client extends RSApplet {
 
     public void drawHPOrb() {
         int health;
-        String cHP = RSInterface.interfaceCache[24140].message;
+        String cHP = RSInterface.interfaceCache[24140].message;//24140//4016
         int currentHP = Integer.parseInt(cHP);
-        String mHP = RSInterface.interfaceCache[24139].message;
+        String mHP = RSInterface.interfaceCache[24139].message;//24139//4017
         int maxHP2 = Integer.parseInt(mHP);
         health = (int) (((double) currentHP / (double) maxHP2) * 100D);
         /* Draws empty orb */
@@ -9868,9 +9869,9 @@ public class Client extends RSApplet {
 
     public void drawPrayerOrb() {
         int prayer;
-        String cP = RSInterface.interfaceCache[24201].message;//24201
+        String cP = RSInterface.interfaceCache[24201].message;//24201//4012
         int currentPrayer = Integer.parseInt(cP);
-        String mP = RSInterface.interfaceCache[24202].message;//24202
+        String mP = RSInterface.interfaceCache[24202].message;//24202//4013
         int maxPrayer = Integer.parseInt(mP);
         prayer = (int) (((double) currentPrayer / (double) maxPrayer) * 100D);
         /* Draws empty orb */

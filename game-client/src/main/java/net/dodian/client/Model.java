@@ -2385,5 +2385,4 @@ public class Model extends Animable {
         modelIntArray3 = Texture.anIntArray1482;
         modelIntArray4 = Texture.anIntArray1469;
     }
-    
 }
