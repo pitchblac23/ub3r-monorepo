@@ -19,5 +19,4 @@ public class ItemContainer {
     protected void setSlot(int slot, GameItem item) {
         items.set(slot, item);
     }
-
 }

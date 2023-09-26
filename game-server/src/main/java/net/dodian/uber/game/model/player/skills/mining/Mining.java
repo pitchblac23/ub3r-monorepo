@@ -58,6 +58,17 @@ public class Mining {
         return (long) time;
     }
 
+    public static void Gemchance() {
+        double[] chance = new double[]{23.4, 11.7, 7.03, 3.91, 3.91, 3.12};
+        int[] gemId = new int[]{1625, 1627, 1629, 1623, 1621, 1619, 1617};
+        int rolledChance = 0, gem = -1, roll = Misc.chance(10000);
+        for (int i = 0; i < chance.length && gem == -1; i++) {
+            rolledChance += (int) (chance[i] * 100);
+            if (roll <= rolledChance) gem = gemId[i + 1];
+            else if (i + 1 == chance.length) gem = gemId[0];
+        }
+    }
+
     public static void mining(int index, Client player) {
         if (!player.playerHasItem(-1)) {
             player.send(new SendMessage("There is not enough space in your inventory."));

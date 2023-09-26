@@ -63,7 +63,6 @@ public class Utils {
     public static int[] cutGems = {1607, 1605, 1603, 1601, 1615, 6573};
     public static int[] gemReq = {20, 27, 34, 43, 55, 67};
     public static int[] gemExp = {50, 68, 85, 108, 137, 168};
-
     public static final char playerNameXlateTable[] = {'_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8',
             '9'};

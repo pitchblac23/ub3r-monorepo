@@ -57,117 +57,54 @@ public class Commands implements Packet {
 
     public void customCommand(Client client, String command) {
         String[] cmd = command.split(" ");
-        boolean specialRights = client.playerGroup == 6 || client.playerGroup == 10 || client.playerGroup == 35;
+        boolean Admin = client.playerGroup == 6;
+        boolean Dev = client.playerGroup >= 3;
+        boolean Mod = client.playerGroup >= 1;
         try {
-            if (specialRights) { //Special Rank Command
-                if (cmd[0].equalsIgnoreCase("npca")) {
-                    int id = Integer.parseInt(cmd[1]);
-                    Server.npcManager.getData(id).setAttackEmote(Integer.parseInt(cmd[2]));
-                }
-                if (cmd[0].equalsIgnoreCase("tobj")) {
-                    int id = Integer.parseInt(cmd[1]);
-                    Position pos = client.getPosition().copy();
-                    client.ReplaceObject(pos.getX(), pos.getY(), id, 0, 10);
-                    client.send(new SendMessage("Object temporary spawned = " + id + ", at x = " + pos.getX()
-                            + " y = " + pos.getY() + " with height " + pos.getZ() + ""));
-                }
-                if (cmd[0].equalsIgnoreCase("gfx")) {
-                    int id = Integer.parseInt(cmd[1]);
-                    client.callGfxMask(id, 100);
-                }
-                if (cmd[0].equalsIgnoreCase("cowitem")) {
-                    client.addItem(1039, 100);
-                    client.addItem(1041, 100);
-                    client.addItem(1043, 100);
-                    client.addItem(1045, 100);
-                    client.addItem(1047, 100);
-                    client.addItem(1049, 100);
-                    client.addItem(4152, 100);
-                    client.addItem(4154, 100);
-                    client.addItem(1292, 100);
-                    client.addItem(1294, 100);
-                    client.addItem(1296, 100);
-                    client.addItem(1298, 100);
-                    client.addItem(1300, 100);
-                    client.addItem(1302, 100);
-                    client.addItem(1304, 100);
-                    client.addItem(1306, 100);
-                    client.addItem(844, 100);
-                    client.addItem(850, 100);
-                    client.addItem(854, 100);
-                    client.addItem(858, 100);
-                    client.addItem(862, 100);
-                }
-                if (cmd[0].equalsIgnoreCase("goup")) {
-                    client.getPosition().setZ(client.getPosition().getZ() + 1);
-                    client.send(new SendMessage("You set your height to " + client.getPosition().getZ()));
-                    client.teleportToX = client.getPosition().getX();
-                    client.teleportToY = client.getPosition().getY();
-                }
-                if (cmd[0].equalsIgnoreCase("godown")) {
-                    client.getPosition().setZ(client.getPosition().getZ() - 1 < 0 ? 0 : client.getPosition().getZ() - 1);
-                    client.send(new SendMessage("You set your height to " + client.getPosition().getZ()));
-                    client.teleportToX = client.getPosition().getX();
-                    client.teleportToY = client.getPosition().getY();
-                }
-                if (cmd[0].equalsIgnoreCase("tnpc") && getGameWorldId() > 1) {
-                    try {
-                        int id = Integer.parseInt(cmd[1]);
-                        Position pos = client.getPosition().copy();
-                        Server.npcManager.createNpc(id, pos, 0);
-                        client.send(new SendMessage("Npc temporary spawned = " + id + ", at x = " + pos.getX()
-                                + " y = " + pos.getY() + " with height " + pos.getZ() + ""));
-                    } catch (Exception e) {
-                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " npcid"));
+            if (Admin) { //Admin Commands
+                if (command.equalsIgnoreCase("meeting")) {
+                    for (int i = 0; i < PlayerHandler.players.length; i++) {
+                        if (client.validClient(i)) {
+                            Client t = client.getClient(i);
+                            if (t.playerRights > 0) {
+                                t.send(new SendMessage(client.getPlayerName() + " is requesting a meeting"));
+                                t.triggerTele(2936, 4688, 0, false);
+                            }
+                        }
                     }
+                }
+                if (command.equalsIgnoreCase("alltome") && client.playerRights > 1) {
+                    for (int i = 0; i < PlayerHandler.players.length; i++) {
+                        if (client.validClient(i)) {
+                            Client t = client.getClient(i);
+                            if (t == client) continue;
+                            t.send(new SendMessage("<col=cc0000>A force moved you towards a location!"));
+                            t.triggerTele(client.getPosition().getX(), client.getPosition().getY(), client.getPosition().getZ(), false);
+                        }
+                    }
+                    client.send(new SendMessage("You teleported all online to you!"));
                 }
                 if (cmd[0].equalsIgnoreCase("immune")) {
                     client.immune = !client.immune;
                     client.send(new SendMessage("You set immune as " + client.immune));
                 }
-                if (cmd[0].equalsIgnoreCase("face")) {
-                    int x = client.getPosition().getX(), y = client.getPosition().getY(), z = client.getPosition().getZ();
-                    int face = 0; //Default face = 0
-                    Npc n = null;
-                    try {
-                        String query = "SELECT * FROM uber3_spawn where x="+x+" && y="+y+" && height="+z+"";
-                        ResultSet results = getDbConnection().createStatement().executeQuery(query);
-                        if (results.next()) {
-                            face = results.getInt("face");
-                            for (Npc npc : Server.npcManager.getNpcs()) {
-                                if(client.getPosition().equals(npc.getPosition()))
-                                    n = npc;
-                            }
-                        }
-                        results.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(n == null)
-                        client.send(new SendMessage("Could not find a npc on this spot!"));
-                    else {
-                        client.send(new SendMessage(face == n.getFace() ? "This npc is already facing the way you want it" : "You set the face of the npc from " + n.getFace() + " to " + face + "!"));
-                        n.setFace(face);
-                    }
-                }
-                if (cmd[0].equalsIgnoreCase("dumpdrop")) {
-                    try {
-                        int id = Integer.parseInt(cmd[1]);
-                        System.out.println("------Starting drop dump of '"+client.GetItemName(id)+"'------");
-                        for (NpcData data : Server.npcManager.getNpcData()) {
-                            for (NpcDrop drop : data.getDrops()) {
-                                if(!data.getDrops().isEmpty() && drop.getId() == id) {
-                                    System.out.println(drop.getChance() + "% chance to get "+drop.getMinAmount()+"-"+drop.getMaxAmount()+" of " + client.GetItemName(id) + ", from " + data.getName());
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " id"));
-                    }
-                }
-                if (cmd[0].equalsIgnoreCase("rehp")) {
+                if (cmd[0].equalsIgnoreCase("infhp")) {
                     client.reloadHp = !client.reloadHp;
-                    client.send(new SendMessage("You set reload hp as " + client.reloadHp));
+                    client.send(new SendMessage("Infinite hitpoints is now " + client.reloadHp));
+                }
+                if (cmd[0].equals("boost_on")) {
+                    client.boost(1337, Skills.STRENGTH);
+                    client.boost(1337, Skills.DEFENCE);
+                    client.boost(1337, Skills.ATTACK);
+                    client.boost(1337, Skills.RANGED);
+                    client.boost(1337, Skills.MAGIC);
+                }
+                if (cmd[0].equals("boost_off")) {
+                    for(int i = 0; i < 7; i++)
+                        if(i != 3 && i != 5) {
+                            client.boostedLevel[i] = 0;
+                            client.refreshSkill(Skills.getSkill(i));
+                        }
                 }
                 if (cmd[0].equalsIgnoreCase("herbs")) {
                     boolean found = false;
@@ -186,47 +123,10 @@ public class Commands implements Packet {
                     for(int i = 0; i < array.length; i++)
                         client.send(new SendMessage(chance+ " is started and of that " + parts[i] + " should be " + (int)(chance * array[i]) + " stats!"));
                 }
-                if (cmd[0].equals("tomato")) {
-                    client.RottenTomato(client);
-                }
                 if ((cmd[0].equalsIgnoreCase("bank") || cmd[0].equalsIgnoreCase("b")) && client.playerRights > 1 && getGameWorldId() < 2) {
                     client.openUpBank();
                 }
-                if (cmd[0].equals("mooo")) {
-                    client.showInterface(4958);
-                    client.send(new SendString("test1", 4960));
-                    client.send(new SendString("test2", 4961));
-                }
-                if (cmd[0].equals("party")) {
-                    Balloons.triggerPartyEvent(client);
-                }
-                if (cmd[0].equals("gem")) {
-                    /* Shilo village gem rock? */
-                    double[] chance = new double[] {23.4, 11.7, 7.03, 3.91, 3.91, 3.12};
-                    int[] gemId = new int[] {1625, 1627, 1629, 1623, 1621, 1619, 1617};
-                        int rolledChance = 0, gem = -1, roll = Misc.chance(10000);
-                        for (int i = 0; i < chance.length && gem == -1; i++) {
-                            rolledChance += (int)(chance[i] * 100);
-                            if (roll <= rolledChance) gem = gemId[i + 1];
-                            else if (i + 1 == chance.length) gem = gemId[0];
-                        }
-                    client.send(new SendMessage("You found gem.." + client.GetItemName(gem) + "(" + gem + ")"));
-                }
-                if (cmd[0].equals("boost_on")) {
-                    client.boost(1337, Skills.STRENGTH);
-                    client.boost(1337, Skills.DEFENCE);
-                    client.boost(1337, Skills.ATTACK);
-                    client.boost(1337, Skills.RANGED);
-                    client.boost(1337, Skills.MAGIC);
-                }
-                if (cmd[0].equals("boost_off")) {
-                    for(int i = 0; i < 7; i++)
-                        if(i != 3 && i != 5) {
-                            client.boostedLevel[i] = 0;
-                            client.refreshSkill(Skills.getSkill(i));
-                        }
-                }
-                if (command.startsWith("bosspawn")) {
+                if (cmd[0].equalsIgnoreCase("bosspawn")) {
                     String npcName = command.substring(cmd[0].length() + 1).replaceAll(" ", "_");
                     if(npcName.equalsIgnoreCase(client.boss_name[0])) //Dad
                         client.respawnBoss(4130);
@@ -288,53 +188,34 @@ public class Commands implements Packet {
                     else if(npcName.equalsIgnoreCase(client.boss_name[13]) || npcName.equalsIgnoreCase("jad")) //TzTok-Jad
                         client.triggerTele(2395, 5098, 0,false);
                 }
-                if (command.startsWith("telemob")) {
-                    int mobId = Integer.parseInt(cmd[1]);
-                    for (Npc npc : Server.npcManager.getNpcs()) {
-                        if(npc.getId() == mobId) {
-                            client.triggerTele(npc.getPosition().getX(), npc.getPosition().getY(), npc.getPosition().getZ(),false);
-                            return;
-                        }
-                    }
-                }
-                if (command.startsWith("findmob")) {
-                    String npcName = command.substring(cmd[0].length() + 1).replaceAll("_", " ");
-                    for (Npc npc : Server.npcManager.getNpcs()) {
-                        String npcCheckName = npc.npcName().replaceAll("_", " ");
-                        if(npcName.equalsIgnoreCase(npcCheckName)) {
-                            client.send(new SendMessage("Found "+ npcCheckName +" ("+ npc.getId() +") at " + npc.getPosition().toString()));
-                            return;
-                        }
-                    }
-                }
                 if (cmd[0].equals("rank")) {
                     try {
                         String rank = cmd[1];
-                        int rankId = -1;
+                        int groupId = -1;
                         String name = command.substring(cmd[0].length() + cmd[1].length() + 2);
                         Client other = (Client) PlayerHandler.getPlayer(name);
                         switch (rank) {
                             case "normal":
-                                rankId = 40;
-                                break;
-                            case "premium":
-                                rankId = 11;
+                                groupId = 0;
                                 break;
                             case "mod":
-                                rankId = 5;
+                                groupId = 1;
                                 break;
                             case "dev":
-                                rankId = 6;
+                                groupId = 3;
+                                break;
+                            case "admin":
+                                groupId = 6;
                                 break;
                         }
-                        if (rankId == -1) {
-                            client.send(new SendMessage("Only available ranks: 'normal', 'premium', 'trial', 'mod'"));
+                        if (groupId == -1) {
+                            client.send(new SendMessage("Ranks: 'normal', 'mod', 'dev', 'admin'"));
                             return;
                         }
                         try {
                             Connection conn = getDbConnection();
                             Statement statement = conn.createStatement();
-                            statement.executeUpdate("UPDATE " + DbTables.WEB_USERS_TABLE + " SET usergroupid='" + rankId + "' WHERE username ='" + name + "'");
+                            statement.executeUpdate("UPDATE " + DbTables.WEB_USERS_TABLE + " SET usergroupid='" + groupId + "' WHERE username ='" + name + "'");
                             statement.close();
                             if (other != null)
                                 other.disconnected = true;
@@ -344,32 +225,6 @@ public class Commands implements Packet {
                         }
                     } catch (Exception e) {
                         client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " rank playername"));
-                    }
-                }
-                if (cmd[0].equalsIgnoreCase("if")) {
-                    int id = Integer.parseInt(cmd[1]);
-                    client.showInterface(id);
-                    client.send(new SendMessage("You open interface " + id));
-                }
-                if (cmd[0].equalsIgnoreCase("ifc")) {
-                    int id = Integer.parseInt(cmd[1]);
-                    client.frame36(153, id);
-                    client.send(new SendMessage("You open interface config " + id));
-                }
-                if (cmd[0].equalsIgnoreCase("travel")) {
-                    client.setTravelMenu();
-                }
-                if (cmd[0].equals("combat")) {
-                    try {
-                        int level = Integer.parseInt(cmd[1]);
-                        client.customCombat = level > 256 || level < 1 ? -1 : level;
-                        if(client.customCombat == -1)
-                            client.send(new SendMessage(level == 0 ? "You reset back to normal combat!" : "Need to set a interval between 0-256! (256 = 0 combat, 0 = reset combat)"));
-                        else
-                            client.send(new SendMessage("You set your own combat to level: " + (level == 256 ? "0" : level)));
-                        client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
-                    } catch (Exception e) {
-                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " combat"));
                     }
                 }
                 if (cmd[0].equals("remitem")) {
@@ -394,97 +249,6 @@ public class Commands implements Packet {
                         client.removeExperienceFromPlayer(user, id, xp);
                     } catch (Exception e) {
                         client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " id xp(0 - " + Integer.MAX_VALUE + " playername"));
-                    }
-                }
-                if (cmd[0].equals("pouch")) {
-                    if (client.freeSlots() >= 4) {
-                        client.addItem(5509, 1);
-                        for (int i = 0; i < 3; i++)
-                            client.addItem(5510 + (i * 2), 1);
-                    } else
-                        client.send(new SendMessage("Need 4 free slots!"));
-                }
-                if (cmd[0].equals("delete")) {
-                    try {
-                        String query = "DELETE FROM uber3_refunds WHERE receiver='"+client.dbId+"'";
-                        Statement stm = getDbConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_UPDATABLE);
-                        stm.executeUpdate(query);
-                        stm.close();
-                    } catch (Exception e) {
-                        System.out.println("Error in checking sql!!" + e.getMessage() + ", " + e);
-                        e.printStackTrace();
-                    }
-                }
-                if (cmd[0].equals("refund_ticket")) {
-                    try {
-                        if (client.wildyLevel > 0 && !specialRights) {
-                            client.send(new SendMessage("Command can't be used in the wilderness!"));
-                            return;
-                        }
-                        String otherPName = command.substring(cmd[0].length() + 1);
-                        int otherPIndex = PlayerHandler.getPlayerID(otherPName);
-                        if (otherPIndex != -1) {
-                            Client p = (Client) PlayerHandler.players[otherPIndex];
-                            if(p.checkUnlock(0)) {
-                                try {
-                                    Statement stm = getDbConnection().createStatement();
-                                    String query = "SELECT * FROM " + DbTables.WEB_USERS_TABLE + " WHERE username = '" + otherPName + "'";
-                                    ResultSet results = stm.executeQuery(query);
-                                    int userid = -1;
-                                    if (results.next())
-                                        userid = results.getInt("userid");
-                                    if(userid >= 0) {
-                                        stm.executeUpdate("INSERT INTO uber3_refunds(date, receiver, item, amount) VALUES('"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"', '"+userid+"', '621', '20')");
-                                        p.addUnlocks(0, "0", "0");
-                                    }
-                                    stm.close();
-                                } catch (Exception e) {
-                                    System.out.println("issue: " + e.getMessage());
-                                }
-                            } else client.send(new SendMessage(otherPName + " have nothing to refund!"));
-                        } else {
-                            client.send(new SendMessage("Player " + otherPName + " is not online!"));
-                        }
-                    } catch (Exception e) {
-                        client.send(new SendMessage("Try entering a name you want to refund ticket to!"));
-                    }
-                }
-                if (cmd[0].equals("refund")) {
-                    //TODO: Fix refund items!
-                    try {
-                        int id = Integer.parseInt(cmd[1]);
-                        int amt = Integer.parseInt(cmd[2]);
-                        String user = command.substring(cmd[0].length() + cmd[1].length() + cmd[2].length() + 3);
-                        try {
-                            Statement stm = getDbConnection().createStatement();
-                            String query = "SELECT * FROM " + DbTables.WEB_USERS_TABLE + " WHERE username = '" + user + "'";
-                            ResultSet results = stm.executeQuery(query);
-                            int userid = -1;
-                            if (results.next())
-                                userid = results.getInt("userid");
-                            if(userid >= 0) {
-                                stm.executeUpdate("INSERT INTO uber3_refunds(date, receiver, item, amount) VALUES('"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"', '"+userid+"', '"+id+"', '"+amt+"')");
-                                client.send(new SendMessage("Account '"+user+"'("+userid+") have receieved "+amt+" of "+client.GetItemName(id).toLowerCase()+"."));
-                            } else client.send(new SendMessage("Account '"+user+"' do not exist!"));
-                            stm.close();
-                        } catch (Exception e) {
-                            System.out.println("issue: " + e.getMessage());
-                        }
-                    } catch (Exception e) {
-                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " id amount playername"));
-                    }
-                    try {
-                        String query = "SELECT * FROM uber3_refunds WHERE receiver='"+client.dbId+"' AND message='0' AND claimed IS NULL ORDER BY date ASC";
-                        Statement stm = getDbConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
-                        boolean gotResult = stm.executeQuery(query).next();
-                        if(gotResult) {
-                            client.send(new SendMessage("<col=4C4B73>You have some unclaimed items to claim!"));
-                            stm.executeUpdate("UPDATE uber3_refunds SET message='1' where message='0'");
-                        }
-                        stm.close();
-                    } catch (Exception e) {
-                        System.out.println("Error in checking sql!!" + e.getMessage() + ", " + e);
-                        e.printStackTrace();
                     }
                 }
                 if (cmd[0].equalsIgnoreCase("config36")) {
@@ -516,50 +280,6 @@ public class Commands implements Packet {
                         client.send(new SendMessage("Wrong usage.. ::config87 id value"));
                     }
                 }
-                if (cmd[0].equalsIgnoreCase("emote")) {
-                    int id = Integer.parseInt(cmd[1]);
-                    client.requestAnim(id, 0);
-                    client.send(new SendMessage("You set animation to: " + id));
-                }
-                if (cmd[0].equalsIgnoreCase("gfx")) {
-                    int id = Integer.parseInt(cmd[1]);
-                    client.animation(id, client.getPosition());
-                    client.send(new SendMessage("You set gfx to: " + id));
-                }
-                if (command.startsWith("random")) {
-                    String otherPName = command.substring(7);
-                    int otherPIndex = PlayerHandler.getPlayerID(otherPName);
-                    if (otherPIndex != -1) {
-                        Client temp = (Client) PlayerHandler.players[otherPIndex];
-                        temp.showRandomEvent();
-                        client.send(new SendMessage("Random for " + temp.getPlayerName() + " triggered!"));
-                    }
-                }
-                if (cmd[0].equalsIgnoreCase("uselessbutstillfunny")) {
-                    EventManager.getInstance().registerEvent(new Event(1200) {
-                        int test = 3300;
-                        GroundItem item = null;
-
-                        @Override
-                        public void execute() {
-
-                            if (client.disconnected) {
-                                this.stop();
-                                return;
-                            }
-                            if (item == null) {
-                                item = new GroundItem(client.getPosition().copy(), test, 1, client.clientPid, -1);
-                                client.send(new CreateGroundItem(new GameItem(item.id, item.amount), new Position(item.x, item.y, item.z)));
-                            } else {
-                                Ground.deleteItem(item);
-                                item = new GroundItem(new Position(client.getPosition().getX() + 1, client.getPosition().getY(), client.getPosition().getZ()), test, 1, client.clientPid, -1);
-                                client.send(new CreateGroundItem(new GameItem(item.id, item.amount), new Position(item.x, item.y, item.z)));
-                            }
-                            client.send(new SendMessage("Setting item..." + test));
-                            test++;
-                        }
-                    });
-                }
                 if (command.startsWith("update") && command.length() > 7) {
                     Server.updateSeconds = (Integer.parseInt(command.substring(7)) + 1);
                     Server.updateRunning = true;
@@ -567,24 +287,8 @@ public class Commands implements Packet {
                     Server.trading = false;
                     Server.dueling = false;
                 }
-                if (cmd[0].equalsIgnoreCase("head")) {
-                    int icon = Integer.parseInt(cmd[1]);
-                    client.setHeadIcon(icon);
-                    client.send(new SendMessage("Head : " + icon));
-                    client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
-                }
-                if (cmd[0].equalsIgnoreCase("skull") && client.playerRights > 1) {
-                    int icon = Integer.parseInt(cmd[1]);
-                    client.setSkullIcon(icon);
-                    client.send(new SendMessage("Skull : " + icon));
-                    client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
-                }
-                if (cmd[0].equalsIgnoreCase("sound") && client.playerRights > 1) {
-                    int icon = Integer.parseInt(cmd[1]);
-                    client.send(new Sound(icon));
-                }
-                if (cmd[0].equalsIgnoreCase("event")) {
-                    Balloons.triggerBalloonEvent(client);
+                if (cmd[0].equals("party")) {
+                    Balloons.triggerPartyEvent(client);
                 }
                 if (cmd[0].equalsIgnoreCase("resetTask")) {
                     try {
@@ -728,21 +432,6 @@ public class Commands implements Packet {
                     } else
                         client.send(new SendMessage("Npc " + npcData.getName() + " (" + npcId + ") has no assigned drops!"));
                 }
-                if (cmd[0].equalsIgnoreCase("addxmastree")) {
-                    try {
-                        Connection conn = getDbConnection();
-                        Statement statement = conn.createStatement();
-                        statement
-                                .executeUpdate("INSERT INTO " + DbTables.GAME_OBJECT_DEFINITIONS + " SET id = 1318, x = " + client.getPosition().getX()
-                                        + ", y = " + client.getPosition().getY() + ", type = 2");
-                        statement.close();
-                        Server.objects.add(new RS2Object(1318, client.getPosition().getX(), client.getPosition().getY(), 10));
-                        client.send(new SendMessage("Object added, at x = " + client.getPosition().getX()
-                                + " y = " + client.getPosition().getY() + ""));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
                 if (cmd[0].equalsIgnoreCase("addnpc")) {
                     try {
                         if (client.getPlayerNpc() < 1) {
@@ -796,6 +485,9 @@ public class Commands implements Packet {
                     CommandLog.recordCommand(client, command);
                     return;
                 }
+                if (command.startsWith("master") && client.playerRights > 1) {
+                    Skills.enabledSkills().forEach(skill -> client.giveExperience(14_000_000, skill));
+                }
                 if (cmd[0].equalsIgnoreCase("setlevel")) {
                     int skill = Integer.parseInt(cmd[1]);
                     int level = Integer.parseInt(cmd[2]);
@@ -822,13 +514,148 @@ public class Commands implements Packet {
                         client.refreshSkill(skill);
                     });
                 }
-                if (command.startsWith("master") && client.playerRights > 1) {
-                    Skills.enabledSkills().forEach(skill -> client.giveExperience(14_000_000, skill));
-                }
             } //End of Special rank commands
 
-            if (client.playerRights > 0) {
-                if (cmd[0].equalsIgnoreCase("pnpc") && client.playerRights > 1 && getGameWorldId() < 2) {
+            if (Dev) {
+                if (cmd[0].equalsIgnoreCase("npca")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    Server.npcManager.getData(id).setAttackEmote(Integer.parseInt(cmd[2]));
+                }
+                if (cmd[0].equalsIgnoreCase("tobj")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    Position pos = client.getPosition().copy();
+                    client.ReplaceObject(pos.getX(), pos.getY(), id, 0, 10);
+                    client.send(new SendMessage("Object temporary spawned = " + id + ", at x = " + pos.getX()
+                            + " y = " + pos.getY() + " with height " + pos.getZ() + ""));
+                }
+                if (cmd[0].equalsIgnoreCase("gfx")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    client.callGfxMask(id, 100);
+                }
+                if (cmd[0].equalsIgnoreCase("goup")) {
+                    client.getPosition().setZ(client.getPosition().getZ() + 1);
+                    client.send(new SendMessage("You set your height to " + client.getPosition().getZ()));
+                    client.teleportToX = client.getPosition().getX();
+                    client.teleportToY = client.getPosition().getY();
+                }
+                if (cmd[0].equalsIgnoreCase("godown")) {
+                    client.getPosition().setZ(client.getPosition().getZ() - 1 < 0 ? 0 : client.getPosition().getZ() - 1);
+                    client.send(new SendMessage("You set your height to " + client.getPosition().getZ()));
+                    client.teleportToX = client.getPosition().getX();
+                    client.teleportToY = client.getPosition().getY();
+                }
+                if (cmd[0].equalsIgnoreCase("tnpc")) {
+                    try {
+                        int id = Integer.parseInt(cmd[1]);
+                        Position pos = client.getPosition().copy();
+                        Server.npcManager.createNpc(id, pos, 0);
+                        client.send(new SendMessage("Npc temporary spawned = " + id + ", at x = " + pos.getX()
+                                + " y = " + pos.getY() + " with height " + pos.getZ() + ""));
+                    } catch (Exception e) {
+                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " npcid"));
+                    }
+                }
+                if (cmd[0].equalsIgnoreCase("face")) {
+                    int x = client.getPosition().getX(), y = client.getPosition().getY(), z = client.getPosition().getZ();
+                    int face = 0; //Default face = 0
+                    Npc n = null;
+                    try {
+                        String query = "SELECT * FROM uber3_spawn where x="+x+" && y="+y+" && height="+z+"";
+                        ResultSet results = getDbConnection().createStatement().executeQuery(query);
+                        if (results.next()) {
+                            face = results.getInt("face");
+                            for (Npc npc : Server.npcManager.getNpcs()) {
+                                if(client.getPosition().equals(npc.getPosition()))
+                                    n = npc;
+                            }
+                        }
+                        results.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(n == null)
+                        client.send(new SendMessage("Could not find a npc on this spot!"));
+                    else {
+                        client.send(new SendMessage(face == n.getFace() ? "This npc is already facing the way you want it" : "You set the face of the npc from " + n.getFace() + " to " + face + "!"));
+                        n.setFace(face);
+                    }
+                }
+                if (cmd[0].equalsIgnoreCase("dumpdrop")) {
+                    try {
+                        int id = Integer.parseInt(cmd[1]);
+                        System.out.println("------Starting drop dump of '"+client.GetItemName(id)+"'------");
+                        for (NpcData data : Server.npcManager.getNpcData()) {
+                            for (NpcDrop drop : data.getDrops()) {
+                                if(!data.getDrops().isEmpty() && drop.getId() == id) {
+                                    System.out.println(drop.getChance() + "% chance to get "+drop.getMinAmount()+"-"+drop.getMaxAmount()+" of " + client.GetItemName(id) + ", from " + data.getName());
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " id"));
+                    }
+                }
+                if (cmd[0].equals("facetest")) {
+                    client.showInterface(4958);
+                    client.send(new SendString("test1", 4960));
+                    client.send(new SendString("test2", 4961));
+                }
+                if (cmd[0].equalsIgnoreCase("if")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    client.showInterface(id);
+                    client.send(new SendMessage("You open interface " + id));
+                }
+                if (cmd[0].equalsIgnoreCase("ifc")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    client.frame36(153, id);
+                    client.send(new SendMessage("You open interface config " + id));
+                }
+                if (cmd[0].equalsIgnoreCase("telemob")) {
+                    int mobId = Integer.parseInt(cmd[1]);
+                    for (Npc npc : Server.npcManager.getNpcs()) {
+                        if(npc.getId() == mobId) {
+                            client.triggerTele(npc.getPosition().getX(), npc.getPosition().getY(), npc.getPosition().getZ(),false);
+                            return;
+                        }
+                    }
+                }
+                if (cmd[0].equalsIgnoreCase("findmob")) {
+                    String npcName = command.substring(cmd[0].length() + 1).replaceAll("_", " ");
+                    for (Npc npc : Server.npcManager.getNpcs()) {
+                        String npcCheckName = npc.npcName().replaceAll("_", " ");
+                        if(npcName.equalsIgnoreCase(npcCheckName)) {
+                            client.send(new SendMessage("Found "+ npcCheckName +" ("+ npc.getId() +") at " + npc.getPosition().toString()));
+                            return;
+                        }
+                    }
+                }
+                if (cmd[0].equalsIgnoreCase("emote")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    client.requestAnim(id, 0);
+                    client.send(new SendMessage("animation: " + id));
+                }
+                if (cmd[0].equalsIgnoreCase("gfx")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    client.animation(id, client.getPosition());
+                    client.send(new SendMessage("displaying gfx: " + id));
+                }
+                if (cmd[0].equalsIgnoreCase("head")) {
+                    int icon = Integer.parseInt(cmd[1]);
+                    client.setHeadIcon(icon);
+                    client.send(new SendMessage("Head : " + icon));
+                    client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
+                }
+                if (cmd[0].equalsIgnoreCase("skull")) {
+                    int icon = Integer.parseInt(cmd[1]);
+                    client.setSkullIcon(icon);
+                    client.send(new SendMessage("Skull : " + icon));
+                    client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
+                }
+                if (cmd[0].equalsIgnoreCase("sound") && client.playerRights > 1) {
+                    int icon = Integer.parseInt(cmd[1]);
+                    client.send(new Sound(icon));
+                }
+                if (cmd[0].equalsIgnoreCase("pnpc")) {
                     try {
                         int npcId = Integer.parseInt(cmd[1]);
                         if (npcId <= 8195) {
@@ -841,6 +668,60 @@ public class Commands implements Packet {
                         client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " npcid"));
                     }
                 }
+                if (cmd[0].equalsIgnoreCase("tool") || cmd[0].equalsIgnoreCase("potato")) {
+                    client.addItem(5733, 1);
+                }
+                if (cmd[0].equalsIgnoreCase("forcetask")) {
+                    try {
+                        int taskId = Integer.parseInt(cmd[1]);
+                        int length = SlayerTask.slayerTasks.values().length - 1;
+                        if (taskId < 0 || taskId > length) {
+                            client.send(new SendMessage("Task id out of bound! Can only be 0 - " + length));
+                            return;
+                        }
+                        client.getSlayerData().set(0, client.getSlayerData().get(0) == -1 ? 402 : client.getSlayerData().get(0));
+                        client.getSlayerData().set(1, taskId);
+                        client.getSlayerData().set(2, 1337); //Current amt
+                        client.getSlayerData().set(3, 1337); //Start amt
+                        client.send(new SendMessage("[DEBUG]: You force the task to be 1337 of  " + SlayerTask.slayerTasks.getTask(taskId).getTextRepresentation() + " (" + SlayerTask.slayerTasks.getTask(taskId) + ")"));
+                    } catch (Exception e) {
+                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " taskId"));
+                    }
+                }
+                if (cmd[0].equalsIgnoreCase("tele")) {
+                    try {
+                        int newPosX = Integer.parseInt(cmd[1]);
+                        int newPosY = Integer.parseInt(cmd[2]);
+                        int newHeight = cmd.length != 4 ? 0 : Integer.parseInt(cmd[3]);
+                        client.teleportTo(newPosX, newPosY, newHeight);
+                        client.send(new SendMessage("teleported to " + newPosX + ", " + newPosY + " at height " + newHeight));
+                    } catch (Exception e) {
+                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " x y or ::" + cmd[0] + " x y height"));
+                    }
+                }
+            }
+
+            if (Mod) {
+                if (command.startsWith("tradelock") && client.playerRights > 0) {
+                    try {
+                        if (client.wildyLevel > 0) {
+                            client.send(new SendMessage("Command can't be used in the wilderness"));
+                            return;
+                        }
+                        String otherPName = command.substring(cmd[0].length() + 1);
+                        int otherPIndex = PlayerHandler.getPlayerID(otherPName);
+                        if (otherPIndex != -1) {
+                            Client p = (Client) PlayerHandler.players[otherPIndex];
+                            p.tradeLocked = true;
+                            client.send(new SendMessage("You have just tradelocked " + otherPName));
+                            CommandLog.recordCommand(client, command);
+                        } else {
+                            client.send(new SendMessage("The name doesnt exist."));
+                        }
+                    } catch (Exception e) {
+                        client.send(new SendMessage("Try entering a name you want to tradelock.."));
+                    }
+                }
                 if (cmd[0].equalsIgnoreCase("invis")) {
                     client.invis = !client.invis;
                     client.send(new SendMessage("You turn invis to " + client.invis));
@@ -850,7 +731,7 @@ public class Commands implements Packet {
                 }
                 if (cmd[0].equalsIgnoreCase("teleto")) {
                     try {
-                        if (client.wildyLevel > 0 && !specialRights) {
+                        if (client.wildyLevel > 0 && !Admin) {
                             client.send(new SendMessage("Command can't be used in the wilderness!"));
                             return;
                         }
@@ -859,7 +740,7 @@ public class Commands implements Packet {
 
                         if (otherPIndex != -1) {
                             Client p = (Client) PlayerHandler.players[otherPIndex];
-                            if (p.wildyLevel > 0 && !specialRights) {
+                            if (p.wildyLevel > 0 && !Admin) {
                                 client.send(new SendMessage("That player is in the wilderness!"));
                                 return;
                             }
@@ -893,7 +774,7 @@ public class Commands implements Packet {
                 }
                 if (cmd[0].equalsIgnoreCase("teletome") && client.playerRights > 0) {
                     try {
-                        if (client.wildyLevel > 0 && !specialRights) {
+                        if (client.wildyLevel > 0 && !Admin) {
                             client.send(new SendMessage("Command can't be used in the wilderness"));
                             return;
                         }
@@ -901,7 +782,7 @@ public class Commands implements Packet {
                         int otherPIndex = PlayerHandler.getPlayerID(otherPName);
                         if (otherPIndex != -1) {
                             Client p = (Client) PlayerHandler.players[otherPIndex];
-                            if (p.wildyLevel > 0 && !specialRights) {
+                            if (p.wildyLevel > 0 && !Admin) {
                                 client.send(new SendMessage("Can not teleport someone out of the wilderness! Contact a admin!"));
                                 return;
                             }
@@ -1117,6 +998,7 @@ public class Commands implements Packet {
                 }
             }
 
+            //Player Commands
             if (cmd[0].equalsIgnoreCase("request")) {
                 Player.openPage(client, "https://dodian.net/forumdisplay.php?f=83");
             }
@@ -1160,26 +1042,11 @@ public class Commands implements Packet {
                     client.send(new SendMessage("::" + cmd[0] + " First_name second_name"));
                 }
             }
-            if ((command.equalsIgnoreCase("mypos") || command.equalsIgnoreCase("pos")) && (client.playerRights > 1 || getGameWorldId() > 1)) {
-                client.send(new SendMessage(
-                        "Your position is (" + client.getPosition().getX() + " , " + client.getPosition().getY() + ")"));
+            if (cmd[0].equalsIgnoreCase("mypos") || command.equalsIgnoreCase("pos")) {
+                client.send(new SendMessage("Your position is (" + client.getPosition().getX() + " , " + client.getPosition().getY() + ")"));
             }
-            if (command.startsWith("noclip") && client.playerRights < 2 && getGameWorldId() == 1) {
+            if (cmd[0].equalsIgnoreCase("noclip") && client.playerRights < 2) {
                 client.kick();
-            }
-            if (command.startsWith("slay_sim") && getGameWorldId() > 1) {
-                int[] taskStreak = {1000, 500, 250, 100, 50, 10};
-                int[] experience = {50, 30, 20, 11, 6, 2};
-                int totalTimes = 0;
-                for(int task = 1; task <= 1000; task++) {
-                    int bonusXp = -1;
-                    for(int i = 0; i < taskStreak.length && bonusXp == -1; i++)
-                        if(task%taskStreak[i] == 0) {
-                            totalTimes+= experience[i];
-                            bonusXp = 0;
-                        }
-                }
-                client.send(new SendMessage("Total amount of times: " + totalTimes + " out of 1000!"));
             }
             if (cmd[0].equalsIgnoreCase("boss")) {
                 client.send(new SendString("@dre@Dodian - Boss Log", 8144));
@@ -1235,16 +1102,15 @@ public class Commands implements Packet {
                         if (text.contains(s)) {
                             return;
                         }
-                    }
+                    }//9323bb
                         String yell = Character.toUpperCase(text.charAt(0)) + text.substring(1);
-                        Server.chat.add(new ChatLine(client.getPlayerName(), client.dbId, 1, yell, client.getPosition().getX(),
-                                client.getPosition().getY()));
+                        Server.chat.add(new ChatLine(client.getPlayerName(), client.dbId, 1, yell, client.getPosition().getX(), client.getPosition().getY()));
                         if (client.playerRights == 0) {
-                            client.yell("[Y]<col=000000>" + client.getPlayerName() + "<col=000000>: " + yell);
+                            client.yell("<col=000000>[<col=0000ff>Yell<col=000000>] " + client.getPlayerName() + ": <col=BB2323>" + yell);
                         } else if (client.playerRights == 1) {
-                            client.yell("<col=0B610B>" + client.getPlayerName() + "<col=000000>: <col=0B610B>" + yell + "@cr1@");
+                            client.yell("<col=000000>[<col=ffffff>Mod<col=000000>] " + client.getPlayerName() + ": <col=BB2323>" + yell + "@cr1@");
                         } else if (client.playerRights >= 2) {
-                            client.yell("<col=FFFF00>" + client.getPlayerName() + "<col=000000>: <col=0B610B>" + yell + "@cr2@");
+                            client.yell("<col=000000>[<col=FFFF00>Admin<col=000000>] " + client.getPlayerName() + ": <col=BB2323>" + yell + "@cr2@");
                         }
                         //TODO: Add yell text chat log!
                 } else {
@@ -1313,57 +1179,7 @@ public class Commands implements Packet {
                     client.send(new SendMessage("wrong usage! ::loot " + (client.getPlayerNpc() > 0 ? "amount" : "npcid amount") + ""));
                 }
             }
-            if (cmd[0].equalsIgnoreCase("tele") && (client.playerRights > 1 || getGameWorldId() > 1)) {
-                try {
-                    int newPosX = Integer.parseInt(cmd[1]);
-                    int newPosY = Integer.parseInt(cmd[2]);
-                    int newHeight = cmd.length != 4 ? 0 : Integer.parseInt(cmd[3]);
-                    client.teleportTo(newPosX, newPosY, newHeight);
-                    client.send(new SendMessage("Welcome to " + newPosX + ", " + newPosY + " at height " + newHeight));
-                } catch (Exception e) {
-                    client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " x y or ::" + cmd[0] + " x y height"));
-                }
-            }
-            if (cmd[0].equalsIgnoreCase("forcetask") && (client.playerRights > 1 || getGameWorldId() > 1)) {
-                try {
-                    int taskId = Integer.parseInt(cmd[1]);
-                    int length = SlayerTask.slayerTasks.values().length - 1;
-                    if (taskId < 0 || taskId > length) {
-                        client.send(new SendMessage("Task id out of bound! Can only be 0 - " + length));
-                        return;
-                    }
-                    client.getSlayerData().set(0, client.getSlayerData().get(0) == -1 ? 402 : client.getSlayerData().get(0));
-                    client.getSlayerData().set(1, taskId);
-                    client.getSlayerData().set(2, 1337); //Current amt
-                    client.getSlayerData().set(3, 1337); //Start amt
-                    client.send(new SendMessage("[DEBUG]: You force the task to be 1337 of  " + SlayerTask.slayerTasks.getTask(taskId).getTextRepresentation() + " (" + SlayerTask.slayerTasks.getTask(taskId) + ")"));
-                } catch (Exception e) {
-                    client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " taskId"));
-                }
-            }
-            if (command.equalsIgnoreCase("meeting") && client.playerRights > 1) {
-                for (int i = 0; i < PlayerHandler.players.length; i++) {
-                    if (client.validClient(i)) {
-                        Client t = client.getClient(i);
-                        if (t.playerRights > 0) {
-                            t.send(new SendMessage("All of you belong to " + client.getPlayerName() + ""));
-                            t.triggerTele(2936, 4688, 0, false);
-                        }
-                    }
-                }
-            }
-            if (command.equalsIgnoreCase("alltome") && client.playerRights > 1) {
-                for (int i = 0; i < PlayerHandler.players.length; i++) {
-                    if (client.validClient(i)) {
-                        Client t = client.getClient(i);
-                        if (t == client) continue;
-                        t.send(new SendMessage("<col=cc0000>A force moved you towards a location!"));
-                        t.triggerTele(client.getPosition().getX(), client.getPosition().getY(), client.getPosition().getZ(), false);
-                    }
-                }
-                client.send(new SendMessage("You teleported all online to you!"));
-            }
-            if (command.equalsIgnoreCase("bank") && client.playerRights == 0) {
+            if ((command.equalsIgnoreCase("bank") || command.equalsIgnoreCase("b")) && client.playerRights <= 1) {
                 client.requestForceChat("Hey, everyone, I just tried to do something very silly!");
             }
             if (command.equalsIgnoreCase("players")) {
@@ -1376,14 +1192,12 @@ public class Commands implements Packet {
                 for (Player p : PlayerHandler.players) {
                     if (p != null) {
                         String title = "";
-                        if (p.playerRights == 1 && p.playerGroup == 5)
-                            title = "@blu@Mod ";
-                        else if (p.playerRights == 1 && p.playerGroup == 9)
-                            title = "@blu@Trial Mod ";
-                        else if (p.playerRights == 2 && p.playerGroup == 10)
-                            title = "@yel@Developer ";
+                        if (p.playerRights == 1 && p.playerGroup == 1)
+                            title = "@whi@Mod: ";
+                        else if (p.playerRights == 1 && p.playerGroup == 3)
+                            title = "@blu@Developer: ";
                         else if (p.playerRights == 2)
-                            title = "@yel@Admin ";
+                            title = "@yel@Admin: ";
                         client.send(new SendString("@bla@" + title + "@dbl@" + p.getPlayerName() + " @bla@(Level-" + p.determineCombatLevel() + ") @bla@is " + p.getPositionName(), line));
                         line++;
                         count++;
@@ -1393,37 +1207,17 @@ public class Commands implements Packet {
                             break;
                     }
                 }
-                if (PlayerHandler.getPlayerCount() > 100) {
-                    client.send(new SendMessage("Note: there are too many players online to list, 100 are shown"));
-                }
                 client.sendQuestSomething(8143);
                 client.showInterface(8134);
-                //client.flushOutStream();
+                client.flushOutStream();
             }
-            if (command.startsWith("mod") && client.playerRights > 0) {
-                String text = command.substring(4);
-                client.modYell(
-                        "[STAFF] " + client.getPlayerName() + ":  " + Character.toUpperCase(text.charAt(0)) + text.substring(1));
-                CommandLog.recordCommand(client, command);
+            if (command.startsWith("wild")) {
+                client.triggerTele(3086, 3538, 0,false);
             }
-            if (command.startsWith("tradelock") && client.playerRights > 0) {
-                try {
-                    if (client.wildyLevel > 0) {
-                        client.send(new SendMessage("Command can't be used in the wilderness"));
-                        return;
-                    }
-                    String otherPName = command.substring(cmd[0].length() + 1);
-                    int otherPIndex = PlayerHandler.getPlayerID(otherPName);
-                    if (otherPIndex != -1) {
-                        Client p = (Client) PlayerHandler.players[otherPIndex];
-                        p.tradeLocked = true;
-                        client.send(new SendMessage("You have just tradelocked " + otherPName));
-                        CommandLog.recordCommand(client, command);
-                    } else {
-                        client.send(new SendMessage("The name doesnt exist."));
-                    }
-                } catch (Exception e) {
-                    client.send(new SendMessage("Try entering a name you want to tradelock.."));
+            if (command.startsWith("empty")) {
+                for (int i = 0; i < client.playerItems.length; i++) {
+                    if (client.playerItems[i] - 1 != 5733)
+                        client.deleteItem(client.playerItems[i] - 1, i, client.playerItemsN[i]);
                 }
             }
             if (command.startsWith("commands")) {
@@ -1450,166 +1244,9 @@ public class Commands implements Packet {
                 }
                 client.sendQuestSomething(8143);
                 client.showInterface(8134);
-                //client.flushOutStream();
-            }
-
-            /* Beta commands*/
-            if (getGameWorldId() > 1) {
-                if (cmd[0].equalsIgnoreCase("rehp") && !specialRights) {
-                    client.reloadHp = !client.reloadHp;
-                    client.send(new SendMessage("You set reload hp as " + client.reloadHp));
-                }
-                if (cmd[0].equalsIgnoreCase("debug")) {
-                    client.debug = !client.debug;
-                    client.send(new SendMessage("You set debug as " + client.debug));
-                }
-                if (cmd[0].equals("boost")) {
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.STRENGTH)) * 0.15), Skills.STRENGTH);
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.DEFENCE)) * 0.15), Skills.DEFENCE);
-                    client.boost(5 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.ATTACK)) * 0.15), Skills.ATTACK);
-                    client.boost(4 + (int)(Skills.getLevelForExperience(client.getExperience(Skills.RANGED)) * 0.12), Skills.RANGED);
-                }
-                if ((cmd[0].equalsIgnoreCase("tool") || cmd[0].equalsIgnoreCase("potato")) && client.playerRights > 0) {
-                    client.addItem(5733, 1);
-                }
-                if (cmd[0].equalsIgnoreCase("pnpc") && client.playerRights > 0) {
-                    try {
-                        int npcId = Integer.parseInt(cmd[1]);
-                        if (npcId <= 8195) {
-                            client.setNpcMode(npcId >= 0);
-                            client.setPlayerNpc(npcId >= 0 ? npcId : -1);
-                            client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
-                        }
-                        client.send(new SendMessage(npcId > 8195 ? "Maximum 8195 in npc id!" : npcId >= 0 ? "Setting npc to " + client.getPlayerNpc() : "Setting you normal!"));
-                    } catch (Exception e) {
-                        client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " npcid"));
-                    }
-                }
-                if (command.startsWith("bosspawn") && !specialRights) {
-                    String npcName = command.substring(cmd[0].length() + 1).replaceAll(" ", "_");
-                    if(npcName.equalsIgnoreCase(client.boss_name[0])) //Dad
-                        client.respawnBoss(4130);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[1]) || npcName.equalsIgnoreCase("bkt")) //Black knight titan
-                        client.respawnBoss(4067);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[2]) || npcName.equalsIgnoreCase("san")) //San Tajalon
-                        client.respawnBoss(3964);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[3]) || npcName.equalsIgnoreCase("nech")) //Nechrayel
-                        client.respawnBoss(8);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[4]) || npcName.equalsIgnoreCase("queen")) //Ice queen
-                        client.respawnBoss(4922);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[5])) //Ungadulu
-                        client.respawnBoss(3957);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[6]) || npcName.equalsIgnoreCase("abyssal")) //Abyssal guardian
-                        client.respawnBoss(2585);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[7]) || npcName.equalsIgnoreCase("mourner") || npcName.equalsIgnoreCase("head")) //Head mourner
-                        client.respawnBoss(5311);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[8]) || npcName.equalsIgnoreCase("kbd")) //King black dragon
-                        client.respawnBoss(239);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[9]) || npcName.equalsIgnoreCase("jungle")) //Jungle demon
-                        client.respawnBoss(1443);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[10]) || npcName.equalsIgnoreCase("black")) //Black demon
-                        client.respawnBoss(1432);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[11])) //Dwayne
-                        client.respawnBoss(2261);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[12]) || npcName.equalsIgnoreCase("prime")) //Dagannoth prime
-                        client.respawnBoss(2266);
-                    else if(npcName.equalsIgnoreCase(client.boss_name[13]) || npcName.equalsIgnoreCase("jad")) //TzTok-Jad
-                        client.respawnBoss(3127);
-                }
-                if (command.startsWith("bosstele") && !specialRights) {
-                    String npcName = command.substring(cmd[0].length() + 1).replaceAll(" ", "_");
-                        if(npcName.equalsIgnoreCase(client.boss_name[0])) //Dad
-                            client.triggerTele(2543, 3091, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[1]) || npcName.equalsIgnoreCase("bkt")) //Black knight titan
-                            client.triggerTele(2566, 9507, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[2]) || npcName.equalsIgnoreCase("san")) //San Tajalon
-                            client.triggerTele(2613, 9521, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[3]) || npcName.equalsIgnoreCase("nech")) //Nechrayel
-                            client.triggerTele(2698, 9771, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[4]) || npcName.equalsIgnoreCase("queen")) //Nechrayel
-                            client.triggerTele(2866, 9951, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[5])) //Ungadulu
-                            client.triggerTele(2889, 3426, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[6]) || npcName.equalsIgnoreCase("abyssal")) //Abyssal guardian
-                            client.triggerTele(2626, 3084, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[7]) || npcName.equalsIgnoreCase("mourner") || npcName.equalsIgnoreCase("head")) //Head mourner
-                            client.triggerTele(2554, 3278, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[8]) || npcName.equalsIgnoreCase("kbd")) //King black dragon
-                            client.triggerTele(3315, 9374, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[9]) || npcName.equalsIgnoreCase("jungle")) //Jungle demon
-                            client.triggerTele(2572, 9529, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[10]) || npcName.equalsIgnoreCase("black")) //Black demon
-                            client.triggerTele(2907, 9805, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[11])) //Dwayne
-                            client.triggerTele(2776, 3206, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[12]) || npcName.equalsIgnoreCase("prime")) //Dagannoth prime
-                            client.triggerTele(2905, 9727, 0,false);
-                        else if(npcName.equalsIgnoreCase(client.boss_name[13]) || npcName.equalsIgnoreCase("jad")) //TzTok-Jad
-                            client.triggerTele(2393, 5090, 0,false);
-                }
-                if (command.startsWith("wild")) {
-                    client.triggerTele(3086, 3538, 0,false);
-                }
-                if (cmd[0].equalsIgnoreCase("item") && !specialRights) {
-                    int newItemID = Integer.parseInt(cmd[1]);
-                    int newItemAmount = Integer.parseInt(cmd[2]);
-                    if (newItemID < 1 || newItemID > 22376) {
-                        client.send(new SendMessage("Maximum itemid = 22376!"));
-                        return;
-                    }
-                    if (Server.itemManager.isStackable(newItemID))
-                        if (client.freeSlots() <= 0 && !client.playerHasItem(newItemID))
-                            client.send(new SendMessage("Not enough space in your inventory."));
-                        else
-                            client.addItem(newItemID, newItemAmount);
-                    else {
-                        newItemAmount = Math.min(newItemAmount, client.freeSlots());
-                        if (newItemAmount > 0)
-                            for (int i = 0; i < newItemAmount; i++)
-                                client.addItem(newItemID, 1);
-                        else
-                            client.send(new SendMessage("Not enough space in your inventory."));
-                    }
-                }
-                if(cmd[0].equalsIgnoreCase("setup")) {
-                    for(int i = 0; i < 7; i++) {
-                        int level = i == 3 ? 78 : 75;
-                        client.setExperience(Skills.getXPForLevel(level), Skills.getSkill(i));
-                        client.setLevel(level, Skills.getSkill(i));
-                        client.refreshSkill(Skills.getSkill(i));
-                        if(i == 3) {
-                            client.maxHealth = level;
-                            client.heal(client.maxHealth);
-                        }
-                    }
-                    client.getEquipment()[0] = 3751;
-                    client.getEquipmentN()[0] = 1;
-                    client.getEquipment()[1] = 1007;
-                    client.getEquipmentN()[1] = 1;
-                    client.getEquipment()[2] = 1725;
-                    client.getEquipmentN()[2] = 1;
-                    client.getEquipment()[3] = 4587;
-                    client.getEquipmentN()[3] = 1;
-                    client.getEquipment()[4] = 3140;
-                    client.getEquipmentN()[4] = 1;
-                    client.getEquipment()[5] = 1540;
-                    client.getEquipmentN()[5] = 1;
-                    client.getEquipment()[7] = 4087;
-                    client.getEquipmentN()[7] = 1;
-                    client.getEquipment()[9] = 7459;
-                    client.getEquipmentN()[9] = 1;
-                    client.getEquipment()[10] = 4129;
-                    client.getEquipmentN()[10] = 1;
-                    for(int i = 0; i < 14; i++)
-                        client.setEquipment(client.getEquipment()[i], client.getEquipmentN()[i], i);
-                    client.addItem(5733, 1);
-                    for(int i = 0; i < 27; i++)
-                        client.addItem(385, 1);
-                }
+                client.flushOutStream();
             }
         } catch (Exception e) { //end of commands!
-            // client.send(new SendMessage("sends this!")); //Invalid command!
         }
     }
-
 }

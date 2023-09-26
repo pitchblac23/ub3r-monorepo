@@ -196,7 +196,7 @@ public final class ItemDef {
             case 5733:
                 def.name = "Admin Tool";
                 def.itemActions[0] = "Add Npc Spawn";
-                def.itemActions[1] = "Wipe inventory";
+                def.itemActions[1] = "Option 2";
                 def.itemActions[2] = "Option 3";
                 def.itemActions[3] = "Option 4";
                 break;

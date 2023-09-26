@@ -36,7 +36,7 @@ public abstract class Player extends Entity {
     public int dbId = -1;
     public boolean randomed = false;
     public int latestNews = 0;
-    public int playerGroup = 3;
+    public int playerGroup = 0;
     public long lastPacket;
     public int[] playerLooks = new int[13];
     public boolean saveNeeded = true, lookNeeded = false;

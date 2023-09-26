@@ -129,5 +129,4 @@ public class Item {
         return name + " (" + id + "); slot " + slot + "; standAnim" + standAnim + "; walkAnim " + walkAnim + "; runAnim "
                 + runAnim + "; attackAnim " + attackAnim;
     }
-
 }

@@ -38,7 +38,7 @@ public class LoginManager {
                     String playerSalt = results.getString("salt");
                     String md5pass = Client.passHash(playerPass, playerSalt);
                     if (!md5pass.equals(results.getString("password"))
-                    && (!net.dodian.utilities.DotEnvKt.getServerEnv().equals("dev") || (!p.connectedFrom.equals("127.0.0.1") && !(net.dodian.utilities.DotEnvKt.getServerDebugMode() && (p.playerGroup == 40 || p.playerGroup == 34 || p.playerGroup == 11))))) {
+                    && (!net.dodian.utilities.DotEnvKt.getServerEnv().equals("dev") || (!p.connectedFrom.equals("127.0.0.1") && !(net.dodian.utilities.DotEnvKt.getServerDebugMode() && (p.playerGroup == 3 || p.playerGroup == 6))))) {
                         return 3;
                     }
                     p.otherGroups = results.getString("membergroupids").split(",");
@@ -295,13 +295,13 @@ public class LoginManager {
     public void updatePlayerForumRegistration(Client p) {
         try {
         Statement statement = getDbConnection().createStatement();
-        String newStatsAccount = "UPDATE " + DbTables.WEB_USERS_TABLE + " SET usergroupid='40' WHERE userid = '" + p.dbId + "'";
+        String newStatsAccount = "UPDATE " + DbTables.WEB_USERS_TABLE + " SET usergroupid='0' WHERE userid = '" + p.dbId + "'";
         statement.executeUpdate(newStatsAccount);
         statement.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        p.send(new SendMessage("You have now been registered to the forum! Enjoy your stay :D"));
+        //p.send(new SendMessage("You have now been registered to the forum! Enjoy your stay :D"));
     }
 
     public boolean isBanned(int id) throws SQLException {

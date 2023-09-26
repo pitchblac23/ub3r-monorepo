@@ -9849,11 +9849,8 @@ public class Client extends RSApplet {
         int maxHP2 = Integer.parseInt(mHP);
         health = (int) (((double) currentHP / (double) maxHP2) * 100D);
         /* Draws empty orb */
-		/*drawInterface(0, clientSize == 0 ? 0 : (clientWidth / 2) - 765 / 2, rsInterface_1,
-				clientSize == 0 ? 8 : (clientHeight / 2) - 503 / 2);*/
-        //(clientSize == 0 ? 4 : 4 + 3), (clientSize == 0 ? 34 - 5 : clientWidth + 34 - 5 - 238)
-        hitPointsBg.drawSprite(clientSize == 0 ? 190 : clientWidth - 55, clientSize == 0 ? 22 : 10);
         //emptyOrb.drawSprite(160, 13);
+        hitPointsBg.drawSprite(clientSize == 0 ? 190 : clientWidth - 55, clientSize == 0 ? 22 : 10);
         hitPointsFill.drawSprite(clientSize == 0 ? 217 : clientWidth - 28, clientSize == 0 ? 26 : 14);
         heartIcon.drawSprite(clientSize == 0 ? 222 : clientWidth - 23, clientSize == 0 ? 31 : 19);
         /* Draws current HP text */
@@ -9880,8 +9877,8 @@ public class Client extends RSApplet {
         int maxPrayer = Integer.parseInt(mP);
         prayer = (int) (((double) currentPrayer / (double) maxPrayer) * 100D);
         /* Draws empty orb */
-        prayerBg.drawSprite(195, 52);
         //emptyOrb.drawSprite(220, 78);
+        prayerBg.drawSprite(195, 52);
         prayerFill.drawSprite(222, 56);
         prayerIcon.drawSprite(225, 58);
         /* Draws current HP text */

@@ -713,18 +713,14 @@ public class Client extends Player implements Runnable {
 			int loadgame = Server.loginManager.loadgame(this, getPlayerName(), playerPass);
 			switch (playerGroup) {
 				case 6: // root admin
-				case 10: // content dev
-				case 18: // root admin
 					playerRights = 2;
 					break;
+				case 1:
 				case 3:
-				case 5: // global mod
-				case 9: // player moderator
-				case 19:
 					playerRights = 1;
 					break;
 				default:
-					if(playerGroup == 2 || playerGroup == 14)
+					if(playerGroup == 0)
 						Server.loginManager.updatePlayerForumRegistration(this);
 					playerRights = 0;
 			}
@@ -1892,7 +1888,6 @@ public class Client extends Player implements Runnable {
 			return false;
 		}
 		if (wearID == 5733) { //Potato
-			wipeInv();
 			return false;
 		}
 		if (wearID == 4155) { //Enchanted gem
@@ -2108,7 +2103,7 @@ public class Client extends Player implements Runnable {
 		 */
 		getOutputStream().createFrame(107); // resets something in the client
 		setSidebarInterface(0, 2423); // attack tab
-		setSidebarInterface(1, 24126); // skills tab //3917
+		setSidebarInterface(1, 24126); // skills tab //3917//24126
 		setSidebarInterface(2, 638); // quest tab
 		setSidebarInterface(3, 3213); // backpack tab
 		setSidebarInterface(4, 1644); // items wearing tab
@@ -2702,6 +2697,17 @@ public class Client extends Player implements Runnable {
 		}
 	}
 
+	public boolean inZone(int southWestX, int southWestY, int NorthEastX, int NorthEastY) { // South West, North East
+		if (getPosition().getX() >= southWestX && getPosition().getX() <= NorthEastX && getPosition().getY() >= southWestY
+				&& getPosition().getY() <= NorthEastY) {
+			return true;
+		} else if (getPosition().getX()!= southWestX && getPosition().getX() != NorthEastX
+				&& getPosition().getY() != southWestY && getPosition().getY() != NorthEastY) {
+			return false;
+		}
+		return false;
+	}
+
 	public boolean IsItemInBag(int ItemID) {
 		for (int playerItem : playerItems) {
 			if ((playerItem - 1) == ItemID) {
@@ -2757,14 +2763,6 @@ public class Client extends Player implements Runnable {
 			}
 		}
 		return false;
-	}
-
-	public void wipeInv() {
-		for (int i = 0; i < playerItems.length; i++) {
-			if (playerItems[i] - 1 != 5733)
-				deleteItem(playerItems[i] - 1, i, playerItemsN[i]);
-		}
-		send(new SendMessage("Your inventory has been wiped!"));
 	}
 
 	public boolean checkItem(int itemID) {
@@ -4192,16 +4190,6 @@ public class Client extends Player implements Runnable {
 			addItem(leather[type], 1);
 		}
 	}
-
-	public void modYell(String msg) {
-		for (int i = 0; i < PlayerHandler.players.length; i++) {
-			Client p = (Client) PlayerHandler.players[i];
-			if (p != null && !p.disconnected && p.getPosition().getX() > 0 && p.dbId > 0 && p.playerRights > 0) {
-				p.send(new SendMessage(msg));
-			}
-		}
-	}
-
 	public void triggerTele(int x, int y, int height, boolean prem) {
 		triggerTele(x, y, height, prem, 1816);
 	}
@@ -4833,7 +4821,7 @@ public class Client extends Player implements Runnable {
 		}
 		if (PlayerHandler.playersOnline.containsKey(friend)) {
 			Client to = PlayerHandler.playersOnline.get(friend);
-			boolean specialRights = to.playerGroup == 6 || to.playerGroup == 10 || to.playerGroup == 35;
+			boolean specialRights = to.playerGroup == 6;
 			if (specialRights && to.busy && playerRights < 1) {
 				send(new SendMessage("<col=FF0000>This player is busy and did not receive your message."));
 				//send(new SendMessage("Please only report glitch/bugs to him/her on the forums"));
@@ -5751,37 +5739,6 @@ public class Client extends Player implements Runnable {
 		return bow;
 	}
 
-	public void RottenTomato(final Client c) {
-		for (int i = 0; i < PlayerHandler.players.length; i++) {
-			Client o = (Client) PlayerHandler.players[i];
-			final int oX = c.getPosition().getX();
-			final int oY = c.getPosition().getY();
-			final int pX = o.getPosition().getX();
-			final int pY = o.getPosition().getY();
-			final int offX = (oY - pY) * -1;
-			final int offY = (oX - pX) * -1;
-			//createProjectile(oX, oY, offX, offY, 50, 90, 1281, 21, 21, 2518 - 1);
-			sendAnimation(2968);
-			//c.turnPlayerTo(pX, pY);
-			EventManager.getInstance().registerEvent(new Event(600) {
-
-				@Override
-				public void execute() {
-					//if (c == null || c.disconnected) {
-					o.gfx0(1282);
-					this.stop();
-					// }
-				}
-			});
-			if (playerHasItem(2518, 1)) {
-				deleteItem(2518, 1);
-			} else {
-				deleteItem(2518, Equipment.Slot.WEAPON.getId());
-				deleteItem(2518, 1);
-			}
-		}
-	}
-
 	public void openUpOtherInventory(String player) {
 		if (IsBanking || IsShopping || duelFight) {
 			send(new SendMessage("Please finish with what you are doing!"));
@@ -6134,7 +6091,7 @@ public class Client extends Player implements Runnable {
           }
         }*/
 		resetPos();
-		modYell(getPlayerName() + " is currently bug abusing on a item!");
+		yell(getPlayerName() + " is currently bug abusing on a item!");
 	}
 
 	public boolean checkObsidianWeapons() {

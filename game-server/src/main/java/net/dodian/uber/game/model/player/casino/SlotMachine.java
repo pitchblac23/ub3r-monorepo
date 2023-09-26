@@ -104,18 +104,18 @@ public class SlotMachine {
         if (total > 7 && total < 12) {
             c.send(new SendString("Roll: " + total + ".  You win!", 8426));
             c.addItem(995, amt * 2);
-            if (c.playerGroup != 6 || c.playerRights < 2)
+            if (c.playerGroup != 6 || c.playerRights < 1)
                 trackDice(1, amt);
         } else if (total == 12) {
             c.send(new SendString("Roll: " + total + ".  You win a Jackpot!", 8426));
             c.addItem(995, amt + amt + amt / 2);
             if ((amt + amt / 2) > 50000000)
                 Client.publicyell(c.getPlayerName() + " has won " + Utils.format((amt + amt / 2)) + " gp jackpot at the Dice!");
-            if (c.playerGroup != 6 || c.playerRights < 2)
+            if (c.playerGroup != 6 || c.playerRights < 1)
                 trackDice(1, (amt + amt / 2));
         } else {
             c.send(new SendString("Roll: " + total + ".  You lose", 8426));
-            if (c.playerGroup != 6 || c.playerRights < 2)
+            if (c.playerGroup != 6 || c.playerRights < 1)
                 trackDice(2, amt);
         }
         // c.showInterface(6675);

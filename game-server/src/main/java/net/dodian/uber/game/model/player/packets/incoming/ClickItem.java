@@ -73,6 +73,41 @@ public class ClickItem implements Packet {
             clickItem(client, itemSlot, itemId);
             client.lastAction = System.currentTimeMillis();
         }
+        if (itemId == 952) {
+            client.requestAnim(830, 0);
+            if (client.inZone(3562, 3285, 3569, 3292)) { // ahrims
+                /*client.teleportToX = 3557;
+                client.teleportToY = 9703;
+                client.getPosition().setZ(3);*/
+                client.teleportTo(3557, 9703, 3);
+
+            }
+            if (client.inZone(3562, 3272, 3569, 3279)) { // karil
+                client.teleportToX = 3546;
+                client.teleportToY = 9684;
+                client.getPosition().setZ(3);
+            }
+            if (client.inZone(3572, 3294, 3577, 3301)) { // dh
+                client.teleportToX = 3556;
+                client.teleportToY = 9718;
+                client.getPosition().setZ(3);
+            }
+            if (client.inZone(3573, 3279, 3581, 3285)) { // guthan
+                client.teleportToX = 3534;
+                client.teleportToY = 9704;
+                client.getPosition().setZ(3);
+            }
+            if (client.inZone(3550, 3279, 3556, 3286)) { // torag
+                client.teleportToX = 3568;
+                client.teleportToY = 9683;
+                client.getPosition().setZ(3);
+            }
+            if (client.inZone(3553, 3294, 3560, 3301)) { // verac
+                client.teleportToX = 3578;
+                client.teleportToY = 9706;
+                client.getPosition().setZ(3);
+            }
+        }
     }
 
     public void clickItem(Client client, int slot, int id) {

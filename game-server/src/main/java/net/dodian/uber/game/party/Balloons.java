@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 public class Balloons {
 
+    //TODO: add balloon despawn
+
     private static ArrayList<Object> balloons = new ArrayList<Object>();
     private static ArrayList<Position> partyEventPos = new ArrayList<Position>();
     private static ArrayList<RewardItem> partyItems = new ArrayList<RewardItem>();
@@ -331,36 +333,18 @@ public class Balloons {
         displayOfferItems(c);
     }
 
-	/*public static void displayItems(Client c) {
-		c.getOutputStream().createFrameVarSizeWord(34);
-		c.getOutputStream().writeWord(2273);
-		//c.getOutputStream().writeWord(partyItems.size());
-		for (int i = 0; i < partyItems.size(); i++) {
-			c.getOutputStream().writeByte(i);
-			c.getOutputStream().writeWord(partyItems.get(i).getId() + 1);
-			if (partyItems.get(i).getId() > 254) {
-				c.getOutputStream().writeByte(255);
-				c.getOutputStream().writeDWord(partyItems.get(i).getAmount());
-			} else
-				c.getOutputStream().writeByte(partyItems.get(i).getAmount());
-		}
-		c.getOutputStream().endFrameVarSizeWord();
-	}
-	public static void displayOfferItems(Client c) {
-		c.getOutputStream().createFrameVarSizeWord(34);
-		c.getOutputStream().writeWord(2274);
-		//c.getOutputStream().writeWord(partyItems.size());
-		for (int i = 0; i < offeredItems.size(); i++) {
-			c.getOutputStream().writeByte(i);
-			c.getOutputStream().writeWord(offeredItems.get(i).getId() + 1);
-			if (offeredItems.get(i).getId() > 254) {
-				c.getOutputStream().writeByte(255);
-				c.getOutputStream().writeDWord(offeredItems.get(i).getAmount());
-			} else
-				c.getOutputStream().writeByte(offeredItems.get(i).getAmount());
-		}
-		c.getOutputStream().endFrameVarSizeWord();
-	}*/
+    public static boolean despawnBalloon(Position pos) {
+        for (Object balloon : balloons) {
+            if (pos.getX() == balloon.x && pos.getY() == balloon.y) {
+                return false;
+            }
+        }
+        int id = 115 + Utils.random(7);
+        Object obj = new Object(id, pos.getX(), pos.getY(), pos.getZ(), 10, 0);
+        balloons.remove(obj);
+        return true;
+    }
+
 
     public static boolean eventActive() {
         return eventActive;
@@ -376,5 +360,4 @@ public class Balloons {
                 c.ReplaceObject2(new Position(balloon.x, balloon.y, balloon.z), balloon.id, 0, 10);
         }
     }
-
 }

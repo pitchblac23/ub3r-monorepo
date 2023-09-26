@@ -9,6 +9,7 @@ import net.dodian.uber.game.event.EventManager;
 import net.dodian.uber.game.model.Position;
 import net.dodian.uber.game.model.WalkToTask;
 import net.dodian.uber.game.model.entity.player.Client;
+import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.object.*;
@@ -24,7 +25,6 @@ import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
-
 import static net.dodian.utilities.DotEnvKt.getGameWorldId;
 
 public class ClickObject implements Packet {
@@ -109,7 +109,7 @@ public class ClickObject implements Packet {
             Balloons.openInterface(client);
             return;
         }
-        if (objectID == 26194 && client.playerRights > 1) {
+        if (objectID == 26194) {
             Balloons.triggerPartyEvent(client);
             return;
         }
@@ -357,9 +357,10 @@ public class ClickObject implements Packet {
             client.getPosition().setZ(1);
         }
         if (objectID == 16683 && objectPosition.getX() == 2597 && objectPosition.getY() == 3107) {
-            client.teleportToX = 2597;
+            /*client.teleportToX = 2597;
             client.teleportToY = 3106;
-            client.getPosition().setZ(1);
+            client.getPosition().setZ(1);*/
+            client.teleportTo(2597, 3108, 1);
         }
         if (objectID == 16681 && objectPosition.getX() == 2597 && objectPosition.getY() == 3107) {
             client.teleportToX = 2597;
@@ -993,7 +994,6 @@ public class ClickObject implements Packet {
             client.teleportToX = 2444;
             client.teleportToY = 3413;
         }
-        // }
         // go upstairs
             if (objectID == 1747) {
                 client.stairs = 1;
@@ -1070,6 +1070,36 @@ public class ClickObject implements Packet {
                     client.setSkillY(objectPosition.getY());
                     client.stairDistance = 1;
                 }
+            } else if (objectID ==  20667) {
+                client.teleportToX = 3565;
+                client.teleportToY = 3289;
+                client.getPosition().setZ(0);
+                //20667 ahrim's
+            } else if (objectID ==  20668) {
+                client.teleportToX = 3576;
+                client.teleportToY = 3299;
+                client.getPosition().setZ(0);
+                //20668 dharok's
+            } else if (objectID ==  20669) {
+                client.teleportToX = 3577;
+                client.teleportToY = 3283;
+                client.getPosition().setZ(0);
+                //20669 guthan's
+            } else if (objectID ==  20670) {
+                client.teleportToX = 3566;
+                client.teleportToY = 3276;
+                client.getPosition().setZ(0);
+                //20670 karil's
+            } else if (objectID ==  20671) {//TODO: have to walk around stairs to tele
+                client.teleportToX = 3554;
+                client.teleportToY = 3283;
+                client.getPosition().setZ(0);
+                //20671 torag's
+            } else if (objectID ==  20672) {
+                client.teleportToX = 3557;
+                client.teleportToY = 3298;
+                client.getPosition().setZ(0);
+                //20672 verac's
             }
             // go downstairs
             if (objectID == 1746 || objectID == 1749) {

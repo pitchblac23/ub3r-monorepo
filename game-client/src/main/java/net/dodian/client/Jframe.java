@@ -9,7 +9,6 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.awt.*;
-
 import static net.dodian.client.config.Constants.SERVER_HOSTNAME;
 import static net.dodian.client.config.Constants.WINDOW_TITLE;
 
@@ -56,14 +55,18 @@ public class Jframe extends Client implements ActionListener {
     }
 
     public void initMenubar() {
-        JButton screenshot = new JButton("Screenshot");
+        JButton screenshot = new JButton("");
+        screenshot.setActionCommand("screenshot");
+        screenshot.addActionListener(this);
+        Icon screenicon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("Sprites/PrintScreenIcon.png"));
+        screenshot.setIcon(screenicon);
         JMenu fileMenu = new JMenu("File");
-        String[] mainButtons = new String[] { "Website", "-", "Exit" };
+        String[] mainButtons = new String[]{"Website", "-", "Exit"};
         for (String name : mainButtons) {
             JMenuItem menuItem = new JMenuItem(name);
             if (name.equalsIgnoreCase("-")) {
                 fileMenu.addSeparator();
-            } else if(name.equalsIgnoreCase("Website")) {
+            } else if (name.equalsIgnoreCase("Website")) {
                 JMenu forumsMenu = new JMenu("Website");
                 fileMenu.add(forumsMenu);
                 JMenuItem DodianServer = new JMenuItem("Dodian.net");
@@ -81,8 +84,6 @@ public class Jframe extends Client implements ActionListener {
         frame.add(jmenubar);
         menuBar.add(fileMenu);
         menuBar.add(screenshot);
-        screenshot.setActionCommand("Screenshot");
-        screenshot.addActionListener(this);
         frame.getContentPane().add(menuBar, BorderLayout.NORTH);
     }
 
@@ -102,7 +103,7 @@ public class Jframe extends Client implements ActionListener {
             java.awt.image.BufferedImage bufferedimage = robot.createScreenCapture(captureSize);
             String fileExtension = myUsername;
             for (int i = 1; i <= 1000; i++) {
-                File file = new File("Screenshots/"+ fileExtension +" "+ i +".png");
+                File file = new File(Signlink.findCacheDir() + "Screenshots/"+ fileExtension +" "+ i +".png");
                 if (!file.exists()) {
                     screenshot = i;
                     takeScreenshot = true;

@@ -19,10 +19,9 @@ fun Client.canAttackNpc(npcId: Int): Boolean {
     if (!requireKey(1543, 3964, 2075))
         return false
 
-    if (npcId == 4130) {
-        if (determineCombatLevel() <= 60)
-            send(SendMessage("You need a combat level of 60 to harm this monster."))
-            return false
+    if (npcId == 4130 && (determineCombatLevel() <= 59)) {
+        send(SendMessage("You need a combat level of 60 to harm this monster."))
+        return false
     }
 
     return true
