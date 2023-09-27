@@ -41,7 +41,7 @@ public class ItemOnObject implements Packet {
         if (UsedOnObjectID == 3994 || UsedOnObjectID == 11666 || UsedOnObjectID == 16469) {
             if (ItemID == 2357) { // 2357 = gold
                 GoldCrafting.showItemsGold(client);
-                client.showInterface(4161);
+                client.showInterface(24801);
             } else {
                 for (int fi = 0; fi < Utils.smelt_frame.length; fi++) {
                     client.sendFrame246(Utils.smelt_frame[fi], 150, Utils.smelt_bars[fi][0]);

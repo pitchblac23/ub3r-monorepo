@@ -22,14 +22,29 @@ class Crafting {
         fun startCraft(actionbutton: Int, c: Client) {
             c.send(RemoveInterfaces())
             val buttons = intArrayOf(
-                33187, 33186, 33185, 33190, 33189, 33188, 33193, 33192, 33191, 33196, 33195, 33194, 33199, 33198,
-                33197, 33202, 33201, 33200, 33205, 33204, 33203
-            )
-            val amounts = intArrayOf(1, 5, 10, 1, 5, 10, 1, 5, 10, 1, 5, 10, 1, 5, 10, 1, 5, 10, 1, 5, 10)
+                96102, 96101, 96100,/*Armour*/
+                96105, 96104, 96103,/*Gloves*/
+                96108, 96107, 96106,/*Boots*/
+                96111, 96110, 96109,/*Vambraces*/
+                96114, 96113, 96112,/*Chaps*/
+                96117, 96116, 96115,/*Coif*/
+                96120, 96119, 96118)/*Cowl*/
+            val amounts = intArrayOf(
+                1, 5, 10,
+                1, 5, 10,
+                1, 5, 10,
+                1, 5, 10,
+                1, 5, 10,
+                1, 5, 10,
+                1, 5, 10)
             val ids = intArrayOf(
-                1129, 1129, 1129, 1059, 1059, 1059, 1061, 1061, 1061, 1063, 1063, 1063, 1095, 1095, 1095, 1169, 1169,
-                1169, 1167, 1167, 1167
-            )
+                1129, 1129, 1129,
+                1059, 1059, 1059,
+                1061, 1061, 1061,
+                1063, 1063, 1063,
+                1095, 1095, 1095,
+                1169, 1169, 1169,
+                1167, 1167, 1167)
             val levels = intArrayOf(14, 1, 7, 11, 18, 38, 9)
             val exp = intArrayOf(33, 18, 21, 29, 38, 52, 20)
             var amount = 0
@@ -51,13 +66,7 @@ class Crafting {
                 cLevel = levels[index]
                 cExp = Math.round((exp[index] * 8).toFloat())
             } else if (id != -1) {
-                c.send(
-                    SendMessage(
-                        "You need level " + levels[index] + " crafting to craft a " + c.GetItemName(id).lowercase(
-                            Locale.getDefault()
-                        )
-                    )
-                )
+                c.send(SendMessage("You need level " + levels[index] + " crafting to craft a " + c.GetItemName(id).lowercase(Locale.getDefault())))
                 c.send(RemoveInterfaces())
             }
         }

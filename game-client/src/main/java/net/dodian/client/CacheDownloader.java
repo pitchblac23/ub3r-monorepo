@@ -18,7 +18,7 @@ public class CacheDownloader {
      * Only things you need to change
      *
      */
-    private final int VERSION = 7; // Version of net.dodian.client.cache
+    private final int VERSION = 8; // Version of net.dodian.client.cache
 
     // Link to the cache
     private String cacheLink = CACHE_DOWNLOAD_URL;
@@ -189,5 +189,4 @@ public class CacheDownloader {
         if (!success)
             throw new IllegalArgumentException("Delete: deletion failed");
     }
-
 }

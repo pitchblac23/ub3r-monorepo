@@ -2,6 +2,7 @@ package net.dodian.uber.game.model.player.skills.mining;
 
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.item.Equipment;
+import net.dodian.uber.game.model.player.packets.incoming.ClickObject;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Misc;
@@ -58,14 +59,18 @@ public class Mining {
         return (long) time;
     }
 
-    public static void Gemchance() {
-        double[] chance = new double[]{23.4, 11.7, 7.03, 3.91, 3.91, 3.12};
-        int[] gemId = new int[]{1625, 1627, 1629, 1623, 1621, 1619, 1617};
+    public static void Gemchance(Client player) {
+        double[] chance = new double[]{7.03, 3.91, 3.91, 3.12};
+        int[] gemId = new int[]{1623, 1621, 1619, 1617};
         int rolledChance = 0, gem = -1, roll = Misc.chance(10000);
         for (int i = 0; i < chance.length && gem == -1; i++) {
             rolledChance += (int) (chance[i] * 100);
             if (roll <= rolledChance) gem = gemId[i + 1];
             else if (i + 1 == chance.length) gem = gemId[0];
+        }
+        if (player.freeSlots() > 0) {
+            player.addItem(gem, 1);
+            player.send(new SendMessage("You managed to find a " + player.GetItemName(gem).toLowerCase() + " while mining."));
         }
     }
 
@@ -84,6 +89,8 @@ public class Mining {
         if (Misc.chance(30) == 1) {
             player.send(new SendMessage("You take a rest."));
             player.resetAction(true);
+        } else if (Misc.chance(86) == 1) {//256 without glory
+            Gemchance(player);
         }
     }
 }

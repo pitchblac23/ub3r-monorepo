@@ -95,8 +95,9 @@ public class ClickingButtons implements Packet {
                 client.sendFrame248(21172, 3213);
                 break;
             case 83051:
-            case 9118:
+            case 9118://Might not need?
             case 19022:
+            case 96078:
                 client.send(new RemoveInterfaces());
                 break;
             case 24136:
@@ -220,40 +221,48 @@ public class ClickingButtons implements Packet {
                     dw.send(new SendString("Other player has accepted", 6571));
                 }
                 break;
-            case 15147: // bronze
-            case 15146:
-            case 10247:
-            case 9110:
-            case 15151: // iron
-            case 15150:
-            case 15149:
-            case 15148:
-            case 15155: // silver
-            case 15154:
-            case 15153:
-            case 15152:
-            case 15159: // steel
-            case 15158:
-            case 15157:
-            case 15156:
-            case 15163: // gold
-            case 15162:
-            case 15161:
-            case 15160:
-            case 29017: // mithril
-            case 29016:
-            case 24253:
-            case 16062:
-            case 29022: // addy
-            case 29020:
-            case 29019:
-            case 29018:
-            case 29026: // rune
-            case 29025:
-            case 29024:
-            case 29023:
+            case 95123://Bronze
+            case 95122:
+            case 95121:
+            case 95120:
+
+            case 95127://Iron
+            case 95126:
+            case 95125:
+            case 95124:
+
+            case 95131://Silver
+            case 95130:
+            case 95129:
+            case 95128:
+
+            case 95135://Steel
+            case 95134:
+            case 95133:
+            case 95132:
+
+            case 95139://Gold
+            case 95138:
+            case 95137:
+            case 95136:
+
+            case 95143://Mithril
+            case 95142:
+            case 95141:
+            case 95140:
+
+            case 95147://Adamant
+            case 95146:
+            case 95145:
+            case 95144:
+
+            case 95151://Rune
+            case 95150:
+            case 95149:
+            case 95148:
                 Smelting.startSmelt(client.actionButtonId, client);
                 break;
+
             case 34185:
             case 34184: // vamps
             case 34183:
@@ -268,27 +277,33 @@ public class ClickingButtons implements Packet {
             case 34190:
                 Crafting.startHideCraft(client.actionButtonId, client);
                 break;
-            case 33187: // armor
-            case 33186:
-            case 33185:
-            case 33190: // gloves
-            case 33189:
-            case 33188:
-            case 33193: // boots
-            case 33192:
-            case 33191:
-            case 33196: // vamps
-            case 33195:
-            case 33194:
-            case 33199: // chaps
-            case 33198:
-            case 33197:
-            case 33202: // coif
-            case 33201:
-            case 33200:
-            case 33205:// cowl
-            case 33204:
-            case 33203:
+            case 96102: // armor
+            case 96101:
+            case 96100:
+
+            case 96105: // gloves
+            case 96104:
+            case 96103:
+
+            case 96108: // boots
+            case 96107:
+            case 96106:
+
+            case 96111: // vamps
+            case 96110:
+            case 96109:
+
+            case 96114: // chaps
+            case 96113:
+            case 96112:
+
+            case 96117: // coif
+            case 96116:
+            case 96115:
+
+            case 96120:// cowl
+            case 96119:
+            case 96118:
                 Crafting.startCraft(client.actionButtonId, client);
             break;
             case 57225:
@@ -577,13 +592,13 @@ public class ClickingButtons implements Packet {
                 client.logout();
                 break;
 
-            case 21011:
-                if(client.IsBanking) {
-                    client.takeAsNote = !client.takeAsNote;
-                    client.send(new SendString(client.takeAsNote ? "Note" : "Item", 5389));
-                }
-                break;
             case 21010:
+                if(client.IsBanking) { client.takeAsNote = true; }
+                break;
+            case 21011:
+                if (client.IsBanking) { client.takeAsNote = false; }
+                break;
+            case 97072:
                 if(client.IsBanking) {
                     if (client.freeSlots() < 28) {
                         for (int i = 0; i < 28; i++)

@@ -23,5 +23,5 @@ public class Constants {
 	 */
 	public static String CLIENT_DOWNLOAD_URL	= "https://dodian.net/client/DodianClient.jar";
 	public static String CACHE_DOWNLOAD_URL		= "https://dodian.net/client/cacheosrs.zip";
-	public static String CACHE_LOCAL_DIRECTORY	= System.getProperty("user.home") + "/.dodian-osrs/";
+	public static String CACHE_LOCAL_DIRECTORY	= System.getProperty("user.home") + "/.dodian-temp/";
 }

@@ -180,13 +180,14 @@ public class Client extends Player implements Runnable {
 	public int goldIndex = -1, goldSlot = -1;
 	public int goldCraftingCount = 0;
 	public boolean goldCrafting = false;
-	public int[][] blanks = {{-1, 1649, 1650, 1651, 1652, 1653, 6564},
-			{-1, 1668, 1669, 1670, 1671, 1672, 6565},
-			{-1, 1687, 1688, 1689, 1690, 1691, 6566},};
-	public int[] startSlots = {4233, 4239, 4245, 79};
+	public int[][] blanks = {
+			{-1, 1647, 1647, 1647, 1647, 1647, 1647},
+			{-1, -1, -1, -1, -1, -1, -1},
+			{-1, -1, -1, -1, -1, -1, -1}};
+	public int[] startSlots = {24873, 24885, 24897, 79};
 	public int[] items = {-1, 1607, 1605, 1603, 1601, 1615, 6573};
-	public int[] black = {1647, 1666, 1685, 11067};
-	public int[] sizes = {120, 100, 75, 11067};
+	public int[] black = {1666, 1685, 1647};
+	public int[] sizes = {100, 75, 120, 11067};
 	public int[] moulds = {1592, 1597, 1595, 11065};
 	public int[] strungAmulets = {1692, 1694, 1696, 1698, 1700, 1702, 6581};
 	/**End*/
@@ -1657,8 +1658,7 @@ public class Client extends Player implements Runnable {
 		resetAction(true);
 		resetBank();
 		resetItems(5064);
-		send(new SendString(takeAsNote ? "Note" : "Item", 5389));
-		send(new SendString("Deposit All", 5391));
+		send(new SendString("Note", 5391));
 		send(new SendString("The Bank of Dodian", 5383));
 		IsBanking = true;
 		checkBankInterface = false;

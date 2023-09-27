@@ -67,6 +67,17 @@ public class Smelting {
                 } else
                     c.send(new SendMessage("You need a iron ore to do this."));
                 break;
+            case 2355:
+                if (c.getLevel(Skills.SMITHING) < 20) {
+                    c.send(new SendMessage("You need level 20 smithing to do this."));
+                    break;
+                }
+                if (c.playerHasItem(442, 1)) {
+                    smelt_barId = 2355;
+                    removed.add(442);
+                } else
+                    c.send(new SendMessage("You need a silver ore to do this."));
+                break;
             case 2353:
                 if (c.getLevel(Skills.SMITHING) < 30) {
                     c.send(new SendMessage("You need level 30 smithing to do this."));

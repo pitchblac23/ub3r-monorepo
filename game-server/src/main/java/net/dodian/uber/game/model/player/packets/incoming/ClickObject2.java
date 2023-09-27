@@ -136,7 +136,7 @@ public class ClickObject2 implements Packet {
         }
         if (objectID == 3994 || objectID == 11666) { //Gold craft
             GoldCrafting.showItemsGold(client);
-            client.showInterface(4161);
+            client.showInterface(24801);
         }
         if (objectID == 16469) { //For now smelt! Later adding gold craft!
             for (int fi = 0; fi < Utils.smelt_frame.length; fi++) {
