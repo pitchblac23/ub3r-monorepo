@@ -184,7 +184,7 @@ public class Client extends Player implements Runnable {
 			{-1, 1647, 1647, 1647, 1647, 1647, 1647},
 			{-1, -1, -1, -1, -1, -1, -1},
 			{-1, -1, -1, -1, -1, -1, -1}};
-	public int[] startSlots = {24873, 24885, 24897, 79};
+	public int[] startSlots = {24469, 24481, 24493, 79};
 	public int[] items = {-1, 1607, 1605, 1603, 1601, 1615, 6573};
 	public int[] black = {1666, 1685, 1647};
 	public int[] sizes = {100, 75, 120, 11067};

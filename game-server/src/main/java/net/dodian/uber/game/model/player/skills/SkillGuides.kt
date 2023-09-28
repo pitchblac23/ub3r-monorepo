@@ -143,7 +143,7 @@ class SkillGuides {
                 else if (child == 1) player.setMenuItems(intArrayOf(4089, 4109, 3385, 4099, 3840, 20220, 6918))
                 else if (child == 2) player.setMenuItems(intArrayOf(2417, 2415, 2416, 4675, 6526, 6914, 9762))
 
-            } else if (skillID == 7) {
+            } else if (skillID == Skills.WOODCUTTING.id) {
                 player.send(SendString("Axes", 8846))
                 player.send(SendString("Logs", 8823))
                 player.send(SendString("Misc", 8824))
@@ -168,7 +168,7 @@ class SkillGuides {
                 else if (child == 1) player.setMenuItems(intArrayOf(1511, 1521, 1519, 1517, 1515, 1513))
                 else if (child == 2) player.setMenuItems(intArrayOf(9807))
 
-            } else if (skillID == 8) {
+            } else if (skillID == Skills.FIREMAKING.id) {
                 player.send(SendString("Firemaking", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -182,7 +182,7 @@ class SkillGuides {
                 slot = 8720
                 for (i in s1.indices) { player.send(SendString(s1[i], slot++)) }
                 player.setMenuItems(intArrayOf(1511, 1521, 1519, 1517, 1515, 1513, 9804))
-            } else if (skillID == 9) {
+            } else if (skillID == Skills.FISHING.id) {
                 player.send(SendString("Fishing", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -195,7 +195,7 @@ class SkillGuides {
                 val items = intArrayOf(317, 335, 331, 377, 371, 7944, 383, 395, 389)
                 player.setMenuItems(items)
 
-            } else if (skillID == 10) {
+            } else if (skillID == Skills.COOKING.id) {
                 player.send(SendString("Cooking", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -208,7 +208,7 @@ class SkillGuides {
                 val items = intArrayOf(315, 2142, 2309, 3369, 333, 329, 379, 373, 7946, 385, 397, 391)
                 player.setMenuItems(items)
 
-            } else if (skillID == 11) {
+            } else if (skillID == Skills.FLETCHING.id) {
                 player.send(SendString("Fletching", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -356,7 +356,7 @@ class SkillGuides {
                 else if (child == 1) player.setMenuItems(Utils.grimy_herbs)
                 else if (child == 2) player.setMenuItems(intArrayOf(9774))
 
-            } else if (skillID == 16) {
+            } else if (skillID == Skills.AGILITY.id) {
                 player.send(SendString("Agility", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -373,7 +373,7 @@ class SkillGuides {
                 val items = intArrayOf(751, 1365, -1, 4224, 4155, 964, 4155, 9771)
                 player.setMenuItems(items)
 
-            } else if (skillID == 17) {
+            } else if (skillID == Skills.THIEVING.id) {
                 player.send(SendString("Thieving", 8846))
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
@@ -390,7 +390,23 @@ class SkillGuides {
                 val items = intArrayOf(4443, 3243, 2309, 1739, 2349, 5068, 6759, 199, 6759, 1623)
                 player.setMenuItems(items)
 
-            } else if (skillID == 18) {
+            } else if (skillID == Skills.RUNECRAFTING.id) {
+                player.send(SendString("Runecrafting", 8846))
+                player.changeInterfaceStatus(8825, false)
+                player.changeInterfaceStatus(8813, false)
+                slot = 8760
+                val s = arrayOf("Small pouch", "Nature rune", "Medium pouch", "Large pouch", "Blood rune", "Giant pouch", "Cosmic rune", "Skillcape")
+                val s1 = arrayOf("1", "1", "20", "40", "50", "60", "75", "99")
+                for (i in s.indices) {
+                    player.send(SendString(s[i], slot + i))
+                }
+                slot = 8720
+                for (i in s1.indices) {
+                    player.send(SendString(s1[i], slot + i))
+                }
+                val items = intArrayOf(5509, 561, 5510, 5512, 565, 5514, 564, 9765)
+                player.setMenuItems(items)
+            } else if (skillID == Skills.SLAYER.id) {
                 player.send(SendString("Master", 8846))
                 player.send(SendString("Monsters", 8823))
                 player.send(SendString("Misc", 8824))
@@ -418,22 +434,6 @@ class SkillGuides {
                 if (child == 0) player.setMenuItems(intArrayOf(4155, 4155, 4155))
                 else if (child == 1) player.setMenuItems(intArrayOf(4133, 4138, -1, -1, 4142, -1, -1, -1, -1, 4141, -1, -1, 4147, 8900, -1, 4144, -1, -1, 4149, -1))
                 else if (child == 2) player.setMenuItems(intArrayOf(9786))
-            } else if (skillID == Skills.RUNECRAFTING.id) {
-                player.send(SendString("Runecrafting", 8846))
-                player.changeInterfaceStatus(8825, false)
-                player.changeInterfaceStatus(8813, false)
-                slot = 8760
-                val s = arrayOf("Small pouch", "Nature rune", "Medium pouch", "Large pouch", "Blood rune", "Giant pouch", "Cosmic rune", "Skillcape")
-                val s1 = arrayOf("1", "1", "20", "40", "50", "60", "75", "99")
-                for (i in s.indices) {
-                    player.send(SendString(s[i], slot + i))
-                }
-                slot = 8720
-                for (i in s1.indices) {
-                    player.send(SendString(s1[i], slot + i))
-                }
-                val items = intArrayOf(5509, 561, 5510, 5512, 565, 5514, 564, 9765)
-                player.setMenuItems(items)
             }
 
             player.sendQuestSomething(8717)

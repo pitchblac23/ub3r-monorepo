@@ -221,45 +221,45 @@ public class ClickingButtons implements Packet {
                     dw.send(new SendString("Other player has accepted", 6571));
                 }
                 break;
-            case 95123://Bronze
-            case 95122:
-            case 95121:
-            case 95120:
+            case 95197://Bronze
+            case 95196:
+            case 95195:
+            case 95194:
 
-            case 95127://Iron
-            case 95126:
-            case 95125:
-            case 95124:
+            case 95201://Iron
+            case 95200:
+            case 95199:
+            case 95198:
 
-            case 95131://Silver
-            case 95130:
-            case 95129:
-            case 95128:
+            case 95205://Silver
+            case 95204:
+            case 95203:
+            case 95202:
 
-            case 95135://Steel
-            case 95134:
-            case 95133:
-            case 95132:
+            case 95209://Steel
+            case 95208:
+            case 95207:
+            case 95206:
 
-            case 95139://Gold
-            case 95138:
-            case 95137:
-            case 95136:
+            case 95213://Gold
+            case 95212:
+            case 95211:
+            case 95210:
 
-            case 95143://Mithril
-            case 95142:
-            case 95141:
-            case 95140:
+            case 95217://Mithril
+            case 95216:
+            case 95215:
+            case 95214:
 
-            case 95147://Adamant
-            case 95146:
-            case 95145:
-            case 95144:
+            case 95221://Adamant
+            case 95220:
+            case 95219:
+            case 95218:
 
-            case 95151://Rune
-            case 95150:
-            case 95149:
-            case 95148:
+            case 95225://Rune
+            case 95224:
+            case 95223:
+            case 95222:
                 Smelting.startSmelt(client.actionButtonId, client);
                 break;
 
@@ -277,33 +277,33 @@ public class ClickingButtons implements Packet {
             case 34190:
                 Crafting.startHideCraft(client.actionButtonId, client);
                 break;
-            case 96102: // armor
-            case 96101:
-            case 96100:
+            case 33187: // armor
+            case 33186:
+            case 33185:
 
-            case 96105: // gloves
-            case 96104:
-            case 96103:
+            case 33190: // gloves
+            case 33189:
+            case 33188:
 
-            case 96108: // boots
-            case 96107:
-            case 96106:
+            case 33193: // boots
+            case 33192:
+            case 33191:
 
-            case 96111: // vamps
-            case 96110:
-            case 96109:
+            case 33196: // vamps
+            case 33195:
+            case 33194:
 
-            case 96114: // chaps
-            case 96113:
-            case 96112:
+            case 33199: // chaps
+            case 33198:
+            case 33197:
 
-            case 96117: // coif
-            case 96116:
-            case 96115:
+            case 33202: // coif
+            case 33201:
+            case 33200:
 
-            case 96120:// cowl
-            case 96119:
-            case 96118:
+            case 33205:// cowl
+            case 33204:
+            case 33203:
                 Crafting.startCraft(client.actionButtonId, client);
             break;
             case 57225:
@@ -598,15 +598,15 @@ public class ClickingButtons implements Packet {
             case 21011:
                 if (client.IsBanking) { client.takeAsNote = false; }
                 break;
-            case 97072:
+            case 95075:
                 if(client.IsBanking) {
                     if (client.freeSlots() < 28) {
                         for (int i = 0; i < 28; i++)
                             if (client.playerItems[i] > 0)
                                 client.bankItem(client.playerItems[i] - 1, i, client.playerItemsN[i]);
-                        client.send(new SendMessage("You bank all your items!"));
+                        client.send(new SendMessage("You banked all your items."));
                     } else
-                        client.send(new SendMessage("You do not have anything that can be banked!"));
+                        client.send(new SendMessage("You do not have anything that can be banked."));
                 }
                 break;
 
@@ -1010,6 +1010,10 @@ public class ClickingButtons implements Packet {
                         throw new RuntimeException(e);
                     }
                 break;
+            case 95068:
+            case 94179:
+                client.send(new SendMessage("Coming soon!"));
+                break;
             case 34133:
                 try {
                     SkillGuides.showSkillMenu(client.currentSkill, 4, client);
@@ -1039,6 +1043,7 @@ public class ClickingButtons implements Packet {
                 }
                 break;
             case 47130:
+            case 95061:
                 try {
                     SkillGuides.showSkillMenu(SLAYER.getId(), 0, client);
                 } catch (Exception e) {

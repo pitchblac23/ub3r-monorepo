@@ -36,7 +36,7 @@ class GoldCrafting {
         @JvmStatic
         fun startGoldCrafting(interfaceID: Int, slot: Int, amount: Int, c: Client) {
             var index = 0
-            val inters = intArrayOf(24873, 24885, 24897)
+            val inters = intArrayOf(24469, 24481, 24493)
             for (i in 0..2) if (inters[i] == interfaceID) index = i
             val level: Int = jewelry_levels.get(index).get(slot)
             if (level > c.getLevel(Skills.CRAFTING)) {

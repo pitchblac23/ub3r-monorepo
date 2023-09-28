@@ -7433,7 +7433,7 @@ public class Client extends RSApplet {
                 for (int i1 = 4; i1 >= 0; i1--)
                     if (entityDef.actions[i1] != null && entityDef.actions[i1].equalsIgnoreCase("attack")) {
                         char c = '\0';
-                        if (entityDef.combatLevel >= myPlayer.combatLevel)
+                        if (myPlayer.combatLevel < entityDef.combatLevel)
                             c = '\u07D0';
                         menuActionName[menuActionRow] = entityDef.actions[i1] + " @yel@" + s;
                         if (i1 == 0)
@@ -9843,9 +9843,9 @@ public class Client extends RSApplet {
 
     public void drawHPOrb() {
         int health;
-        String cHP = RSInterface.interfaceCache[24140].message;//24140//4016
+        String cHP = RSInterface.interfaceCache[24139].message;//24140//4016
         int currentHP = Integer.parseInt(cHP);
-        String mHP = RSInterface.interfaceCache[24139].message;//24139//4017
+        String mHP = RSInterface.interfaceCache[24140].message;//24139//4017
         int maxHP2 = Integer.parseInt(mHP);
         health = (int) (((double) currentHP / (double) maxHP2) * 100D);
         /* Draws empty orb */

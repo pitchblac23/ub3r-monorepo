@@ -41,15 +41,22 @@ public class ItemOnObject implements Packet {
         if (UsedOnObjectID == 3994 || UsedOnObjectID == 11666 || UsedOnObjectID == 16469) {
             if (ItemID == 2357) { // 2357 = gold
                 GoldCrafting.showItemsGold(client);
-                client.showInterface(24801);
+                client.showInterface(24397);
             } else {
                 for (int fi = 0; fi < Utils.smelt_frame.length; fi++) {
                     client.sendFrame246(Utils.smelt_frame[fi], 150, Utils.smelt_bars[fi][0]);
                 }
-                client.sendFrame164(2400);
+                client.sendFrame164(24501);
             }
         }
-        if (UsedOnObjectID == 409 && Prayer.altarBones(client, ItemID)) {
+        if (UsedOnObjectID == 409 && (Prayer.altarBones(client, ItemID))) {
+            client.lastAction = System.currentTimeMillis();
+            client.skillX = UsedOnX;
+            client.setSkillY(UsedOnY);
+            client.stillgfx(624, new Position(client.skillY, client.skillX, client.getPosition().getZ()), 0);
+            client.boneItem = ItemID;
+        }
+        if (UsedOnObjectID == 412 && Prayer.chaosAltarBones(client, ItemID)) {
             client.lastAction = System.currentTimeMillis();
             client.skillX = UsedOnX;
             client.setSkillY(UsedOnY);
@@ -84,8 +91,7 @@ public class ItemOnObject implements Packet {
                 Smithing.OpenSmithingFrame(Type, client);
             }
         } else {
-            client.println_debug(
-                    "Item: " + ItemID + " - Used On Object: " + UsedOnObjectID + " -  X: " + UsedOnX + " - Y: " + UsedOnY);
+            client.println_debug("Item: " + ItemID + " - Used On Object: " + UsedOnObjectID + " -  X: " + UsedOnX + " - Y: " + UsedOnY);
         }
     }
 }

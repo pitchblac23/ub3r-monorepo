@@ -22,13 +22,13 @@ class Crafting {
         fun startCraft(actionbutton: Int, c: Client) {
             c.send(RemoveInterfaces())
             val buttons = intArrayOf(
-                96102, 96101, 96100,/*Armour*/
-                96105, 96104, 96103,/*Gloves*/
-                96108, 96107, 96106,/*Boots*/
-                96111, 96110, 96109,/*Vambraces*/
-                96114, 96113, 96112,/*Chaps*/
-                96117, 96116, 96115,/*Coif*/
-                96120, 96119, 96118)/*Cowl*/
+                33187, 33186, 33185,/*Armour*/
+                33190, 33189, 33188,/*Gloves*/
+                33193, 33192, 33191,/*Boots*/
+                33196, 33195, 33194,/*Vambraces*/
+                33199, 33198, 33197,/*Chaps*/
+                33202, 33201, 33200,/*Coif*/
+                33205, 33204, 33203)/*Cowl*/
             val amounts = intArrayOf(
                 1, 5, 10,
                 1, 5, 10,

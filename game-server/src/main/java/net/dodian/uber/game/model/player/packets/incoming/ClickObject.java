@@ -279,7 +279,7 @@ public class ClickObject implements Packet {
             for (int fi = 0; fi < Utils.smelt_frame.length; fi++) {
                 client.sendFrame246(Utils.smelt_frame[fi], 150, Utils.smelt_bars[fi][0]);
             }
-            client.sendFrame164(2400);
+            client.sendFrame164(24501);
         }
         if (objectID == 2309 && objectPosition.getX() == 2998 && objectPosition.getY() == 3917) {
             if (client.getLevel(Skills.AGILITY) < 75) {
@@ -857,7 +857,7 @@ public class ClickObject implements Packet {
             client.teleportToX = 2614;
             client.teleportToY = 9505;
         }
-        if(objectID == 409) {
+        if(objectID == 409 || objectID == 412) {
             if(client.getCurrentPrayer() != client.getMaxPrayer()) {
                 client.pray(client.getMaxPrayer());
                 client.send(new SendMessage("You restore your prayer points!"));

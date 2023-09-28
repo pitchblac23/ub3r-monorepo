@@ -46,7 +46,7 @@ public class RemoveItem implements Packet {
             client.tradeItem(removeID, removeSlot, 1);
         } else if (interfaceID == 3415 && client.inTrade) { // remove from trade window
             client.fromTrade(removeID, removeSlot, 1);
-        } else if (interfaceID >= 24873 && interfaceID <= 24897) {
+        } else if (interfaceID >= 24469 && interfaceID <= 24493) {
             GoldCrafting.startGoldCrafting(interfaceID, removeSlot, 1, client);
         } else if (interfaceID == 3823) { // Show value to sell items
             if (!Server.shopping || client.tradeLocked) {
