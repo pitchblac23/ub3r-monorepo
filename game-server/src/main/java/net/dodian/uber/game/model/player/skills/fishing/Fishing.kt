@@ -3,7 +3,9 @@ package net.dodian.uber.game.model.player.skills.fishing;
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
+import net.dodian.utilities.Misc
 import net.dodian.utilities.Utils
+
 
 class Fishing {
 
@@ -60,17 +62,28 @@ class Fishing {
                 p.resetAction(true);
                 return;
             }
-            if (p.fishIndex == 1) {
-                p.deleteItem(314, 1);
-                val random: Int = 6
-                if (p.getLevel(Skills.FISHING) >= 30 && random < 3) {
-                    p.addItem(331, 1);
+            if (p.fishIndex == 0) {
+                val random = Misc.random(6)
+                if (p.getLevel(Skills.FISHING) >= 15 && random < 3) {
+                    p.addItem(321, 1);
                     p.giveExperience(Utils.fishExp[p.fishIndex] + 100, Skills.FISHING);
-                    p.send(SendMessage("You catch some salmon."));
+                    p.send(SendMessage("You catch some raw anchovies."));
                 } else {
                     p.giveExperience(Utils.fishExp[p.fishIndex], Skills.FISHING);
                     p.addItem(Utils.fishId[p.fishIndex], 1);
-                    p.send(SendMessage("You catch some trout."));
+                    p.send(SendMessage("You catch some raw shrimp."));
+                }
+            } else if (p.fishIndex == 1) {
+                p.deleteItem(314, 1);
+                val random = Misc.random(6)
+                if (p.getLevel(Skills.FISHING) >= 30 && random < 3) {
+                    p.addItem(331, 1);
+                    p.giveExperience(Utils.fishExp[p.fishIndex] + 100, Skills.FISHING);
+                    p.send(SendMessage("You catch some raw salmon."));
+                } else {
+                    p.giveExperience(Utils.fishExp[p.fishIndex], Skills.FISHING);
+                    p.addItem(Utils.fishId[p.fishIndex], 1);
+                    p.send(SendMessage("You catch some raw trout."));
                 }
             } else {
                 p.giveExperience(Utils.fishExp[p.fishIndex], Skills.FISHING);

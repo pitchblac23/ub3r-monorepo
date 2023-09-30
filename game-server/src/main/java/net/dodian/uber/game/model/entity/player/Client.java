@@ -27,6 +27,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.*;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.agility.Agility;
+import net.dodian.uber.game.model.player.skills.cooking.Cooking;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
 import net.dodian.uber.game.model.player.skills.crafting.Spinning;
@@ -45,14 +46,12 @@ import net.dodian.utilities.*;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import static net.dodian.uber.game.combat.ClientExtensionsKt.getRangedStr;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.attackTarget;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
@@ -2580,7 +2579,7 @@ public class Client extends Player implements Runnable {
 			Mining.miningEss(this);
 		} else if (cooking && now - lastAction >= 1800) {
 			lastAction = now;
-			cook();
+			Cooking.cook(this);
 		}
 		// Snowing
 		// Npc Talking
@@ -4227,108 +4226,6 @@ public class Client extends Player implements Runnable {
 		tStage = 1;
 		tEmote = emote;
 		UsingAgility = true;
-	}
-
-	public void startCooking(int id) {
-		if (inTrade || inDuel) {
-			send(new SendMessage("Cannot cook in duel or trade"));
-			return;
-		}
-		boolean valid = false;
-		for (int i = 0; i < Utils.cookIds.length; i++) {
-			if (id == Utils.cookIds[i]) {
-				cookIndex = i;
-				valid = true;
-			}
-		}
-		if (valid) {
-			cookAmount = getInvAmt(id);
-			cooking = true;
-		}
-
-	}
-
-	public void cook() {
-		if (inTrade || inDuel || cookAmount < 1) {
-			resetAction(true);
-			return;
-		}
-		if (!playerHasItem(Utils.cookIds[cookIndex])) {
-			send(new SendMessage("You are out of fish"));
-			resetAction(true);
-			return;
-		}
-		int id = Utils.cookIds[cookIndex];
-		int ran = 0, index = 0;
-		for (int i = 0; i < Utils.cookIds.length; i++) {
-			if (id == Utils.cookIds[i]) {
-				index = i;
-			}
-		}
-		if (getLevel(Skills.COOKING) < Utils.cookLevel[index]) {
-			send(new SendMessage("You need " + Utils.cookLevel[index] + " cooking to cook the " + Server.itemManager.getName(id).toLowerCase() + "."));
-			resetAction(true);
-			return;
-		}
-		switch (id) {
-			case 2134:
-			case 317:
-				ran = 30 - getLevel(Skills.COOKING);
-				break;
-			case 2307:
-				ran = 36 - getLevel(Skills.COOKING);
-				break;
-			case 3363:
-				ran = 42 - getLevel(Skills.COOKING);
-				break;
-			case 335:
-				ran = 50 - getLevel(Skills.COOKING);
-				break;
-			case 331:
-				ran = 60 - getLevel(Skills.COOKING);
-				break;
-			case 377:
-				ran = 70 - getLevel(Skills.COOKING);
-				break;
-			case 371:
-				ran = 80 - getLevel(Skills.COOKING);
-				break;
-			case 7944:
-				ran = 90 - getLevel(Skills.COOKING);
-				break;
-			case 383:
-				ran = 100 - getLevel(Skills.COOKING);
-				break;
-			case 395:
-				ran = 110 - getLevel(Skills.COOKING);
-				break;
-			case 389:
-				ran = 120 - getLevel(Skills.COOKING);
-				break;
-		}
-		if (getEquipment()[Equipment.Slot.HANDS.getId()] == 775)
-			ran -= 4;
-		if (getEquipment()[Equipment.Slot.HEAD.getId()] == 1949)
-			ran -= 4;
-		if (getEquipment()[Equipment.Slot.HEAD.getId()] == 1949 && getEquipment()[Equipment.Slot.HANDS.getId()] == 775)
-			ran -= 2;
-		ran = ran < 0 ? 0 : ran > 100 ? 100 : ran;
-		boolean burn = 1 + Utils.random(99) <= ran;
-		if (Utils.cookExp[index] > 0) {
-			cookAmount--;
-			deleteItem(id, 1);
-			setFocus(skillX, skillY);
-			requestAnim(883, 0);
-			if (!burn) {
-				addItem(Utils.cookedIds[index], 1);
-				send(new SendMessage("You cook the " + GetItemName(id)));
-				giveExperience(Utils.cookExp[index], Skills.COOKING);
-			} else {
-				addItem(Utils.burnId[index], 1);
-				send(new SendMessage("You burn the " + GetItemName(id)));
-			}
-			triggerRandom(Utils.cookExp[index]);
-		}
 	}
 
 	public void openTrade() {

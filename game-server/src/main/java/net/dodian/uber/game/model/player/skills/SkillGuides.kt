@@ -187,12 +187,12 @@ class SkillGuides {
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
                 slot = 8760
-                val s = arrayOf("Shrimps", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish", "Shark", "Sea Turtle", "Manta Ray", "")
+                val s = arrayOf("Shrimps", "Anchovies", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish", "Shark", "Sea Turtle", "Manta Ray", "")
                 val s1 = arrayOf("1", "20", "30", "40", "50", "60", "70", "85", "95")
                 for (i in s.indices) { player.send(SendString(s[i], slot + i)) }
                 slot = 8720
                 for (i in s1.indices) { player.send(SendString(s1[i], slot + i)) }
-                val items = intArrayOf(317, 335, 331, 377, 371, 7944, 383, 395, 389)
+                val items = intArrayOf(317, 319, 335, 331, 377, 371, 7944, 383, 395, 389)
                 player.setMenuItems(items)
 
             } else if (skillID == Skills.COOKING.id) {
