@@ -83,6 +83,8 @@ public class ChangeRegion implements Packet {
             /* Gnome mining cavern */
             client.ReplaceObject2(new Position(2492, 9916, 0), 7491, 0, 10);
             client.ReplaceObject2(new Position(2493, 9915, 0), 7491, 0, 10);
+            /*Cooking oven fishing guild*/
+            client.ReplaceObject2(new Position(2593, 3423, 0), 21302, 0, 10);
 
         if (client.inWildy() || client.duelFight) {
             client.getOutputStream().createFrameVarSize(104);

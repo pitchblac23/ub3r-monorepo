@@ -2,7 +2,6 @@ package net.dodian.uber.game.model.player.skills.mining;
 
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.item.Equipment;
-import net.dodian.uber.game.model.player.packets.incoming.ClickObject;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Misc;
@@ -75,22 +74,28 @@ public class Mining {
     }
 
     public static void mining(int index, Client player) {
-        if (!player.playerHasItem(-1)) {
-            player.send(new SendMessage("There is not enough space in your inventory."));
-            player.resetAction(true);
-            return;
-        } else
         if (index != 6) {
             player.send(new SendMessage("You mine some " + player.GetItemName(Utils.ore[index]).toLowerCase() + "."));
         }
-        player.addItem(Utils.ore[index], 1);
-        player.giveExperience(Utils.oreExp[index], Skills.MINING);
-        player.triggerRandom(Utils.oreExp[index]);
-        if (Misc.chance(30) == 1) {
-            player.send(new SendMessage("You take a rest."));
-            player.resetAction(true);
-        } else if (Misc.chance(86) == 1) {//256 without glory
+        DoAction(player, Utils.ore[index], Utils.oreExp[index]);
+        if (Misc.chance(86) == 1) {//256 without glory
             Gemchance(player);
         }
+    }
+
+    public static void miningEss(Client p) {
+        p.send(new SendMessage("You mine some " + p.GetItemName(1436).toLowerCase() + "."));
+        DoAction(p, 1436, 50);
+    }
+
+    static void DoAction(Client p, int i, int xp) {
+        if (!p.playerHasItem(-1)) {
+            p.send(new SendMessage("There is not enough space in your inventory."));
+            p.resetAction(true);
+            return;
+        }
+        p.addItem(i, 1);
+        p.giveExperience(xp, Skills.MINING);
+        p.triggerRandom(xp);
     }
 }

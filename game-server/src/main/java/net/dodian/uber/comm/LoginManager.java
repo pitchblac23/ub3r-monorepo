@@ -16,7 +16,6 @@ import net.dodian.utilities.DbTables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.Date;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
 

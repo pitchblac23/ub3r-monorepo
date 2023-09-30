@@ -3,7 +3,6 @@ package net.dodian.uber.game.model.player.skills.fishing;
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
-import net.dodian.utilities.Misc
 import net.dodian.utilities.Utils
 
 class Fishing {
@@ -31,16 +30,6 @@ class Fishing {
                 p.resetAction(true);
                 return;
             }
-            if (!p.playerHasItem(-1)) {
-                p.send(SendMessage("Not enough inventory space!"));
-                p.resetAction(true);
-                return;
-            }
-            if (!p.playerHasItem(314) && p.fishIndex == 1) {
-                p.send(SendMessage("You do not have any feathers!"));
-                p.resetAction(true);
-                return;
-            }
             if (p.getLevel(Skills.FISHING) < Utils.fishReq[p.fishIndex]) {
                 p.send(SendMessage("You need " + Utils.fishReq[p.fishIndex] + " fishing to fish here"));
                 p.resetAction(true);
@@ -61,13 +50,13 @@ class Fishing {
             val p = player;
 
             p.lastAction = System.currentTimeMillis();
-            if (p.playerItems.size >= 28) {
+            if (!p.playerHasItem(-1)) {
                 p.send(SendMessage("Not enough inventory space!"));
                 p.resetAction(true);
                 return;
             }
             if (!p.playerHasItem(314) && p.fishIndex == 1) {
-                p.send(SendMessage("You do not have any feathers!"));
+                p.send(SendMessage("You do not have any feathers."));
                 p.resetAction(true);
                 return;
             }
@@ -90,10 +79,6 @@ class Fishing {
             }
             p.requestAnim(Utils.fishAnim[p.fishIndex], 0);
             p.triggerRandom(Utils.fishExp[p.fishIndex]);
-            if (Misc.chance(30) == 1) {
-                p.send(SendMessage("You take a rest"));
-                p.resetAction(true);
-            }
         }
     }
 }

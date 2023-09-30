@@ -49,19 +49,19 @@ public class ItemOnObject implements Packet {
                 client.sendFrame164(24501);
             }
         }
-        if (UsedOnObjectID == 409 && (Prayer.altarBones(client, ItemID))) {
+        if (UsedOnObjectID == 409 && Prayer.AltarBones(client, ItemID)) {
             client.lastAction = System.currentTimeMillis();
             client.skillX = UsedOnX;
             client.setSkillY(UsedOnY);
             client.stillgfx(624, new Position(client.skillY, client.skillX, client.getPosition().getZ()), 0);
-            client.boneItem = ItemID;
+            client.boneAltar = ItemID;
         }
-        if (UsedOnObjectID == 412 && Prayer.chaosAltarBones(client, ItemID)) {
+        if (UsedOnObjectID == 412 && Prayer.ChaosAltarBones(client, ItemID)) {
             client.lastAction = System.currentTimeMillis();
             client.skillX = UsedOnX;
             client.setSkillY(UsedOnY);
             client.stillgfx(624, new Position(client.skillY, client.skillX, client.getPosition().getZ()), 0);
-            client.boneItem = ItemID;
+            client.boneChaos = ItemID;
         }
         if(UsedOnObjectID == 2097 && (ItemID == 1540 || ItemID == 11286)) {
             client.setFocus(UsedOnX, UsedOnY);
@@ -77,7 +77,8 @@ public class ItemOnObject implements Packet {
                 client.send(new SendMessage("Your smithing craft made a Dragonfire shield out of the visage."));
             }
         }
-        if (UsedOnObjectID == 2781 || UsedOnObjectID == 2728 || UsedOnObjectID == 26181) { // Cooking range!
+        if (UsedOnObjectID == 2781 || UsedOnObjectID == 2728
+         || UsedOnObjectID == 26181 || UsedOnObjectID == 21302) { // Cooking range!
             client.skillX = UsedOnX;
             client.setSkillY(UsedOnY);
             client.startCooking(ItemID);

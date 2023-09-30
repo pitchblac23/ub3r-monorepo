@@ -14,7 +14,7 @@ public class Constants {
 	/*
 	 * Server Connection Details
 	 */
-	public static String SERVER_HOSTNAME  		= "70.178.224.234"; // play.dodian.net for live server 127.0.0.1
+	public static String SERVER_HOSTNAME  		= "70.178.224.234"; // play.dodian.net for live server
 	public static int    SERVER_GAME_PORT 		= 43594; //43594 main game, 6565 is beta testing
 	public static int	 SERVER_JAGGRAB_PORT	= SERVER_GAME_PORT;
 
@@ -22,6 +22,6 @@ public class Constants {
 	 * Updating, Web & Cache
 	 */
 	public static String CLIENT_DOWNLOAD_URL	= "https://dodian.net/client/DodianClient.jar";
-	public static String CACHE_DOWNLOAD_URL		= "https://dodian.net/client/cacheosrs.zip";
+	public static String CACHE_DOWNLOAD_URL		= "https://www.dropbox.com/scl/fi/zr45rk3q42ixoymhoufj0/dodian-temp.zip?rlkey=psr75oobob0zwiwpm7cnpckj2&dl=1";//"https://dodian.net/client/cacheosrs.zip";
 	public static String CACHE_LOCAL_DIRECTORY	= System.getProperty("user.home") + "/.dodian-temp/";
 }

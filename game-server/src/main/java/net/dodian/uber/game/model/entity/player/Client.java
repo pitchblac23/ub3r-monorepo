@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import static net.dodian.uber.game.combat.ClientExtensionsKt.getRangedStr;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.attackTarget;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
@@ -74,7 +75,8 @@ public class Client extends Player implements Runnable {
 	public long mutedTill;
 	public long rightNow = now.getTime();
 	public boolean filling = false;
-	public int boneItem = -1;
+	public int boneAltar = -1;
+	public int boneChaos = -1;
 	public long lastDoor = 0;
 	public int clientPid = -1;
 	public long session_start = 0;
@@ -217,6 +219,7 @@ public class Client extends Player implements Runnable {
 	public boolean stringing = false;
 	//mining
 	public boolean mining = false;
+	public boolean miningEss = false;
 	public int mineIndex = 0, minePick = 0;
 	//smithing
 	public boolean smelting = false;
@@ -636,8 +639,7 @@ public class Client extends Player implements Runnable {
 			loginEncryptPacketSize--; // don't count length byte
 			int tmp = getInputStream().readUnsignedByte();
 			if (loginEncryptPacketSize != tmp) {
-				shutdownError("Encrypted packet data length (" + loginEncryptPacketSize
-						+ ") different from length byte thereof (" + tmp + ")");
+				shutdownError("Encrypted packet data length (" + loginEncryptPacketSize + ") different from length byte thereof (" + tmp + ")");
 				return;
 			}
 			tmp = getInputStream().readUnsignedByte();
@@ -2551,10 +2553,14 @@ public class Client extends Player implements Runnable {
 		} else if (spinning && now - lastAction >= Spinning.getSpinSpeed(this)) {
 			lastAction = now;
 			Spinning.spin(this);
-		} else if (boneItem > 0 && now - lastAction >= 1800) {
+		} else if (boneAltar > 0 && now - lastAction >= 1800) {
 			lastAction = now;
 			stillgfx(624, new Position(skillY, skillX, getPosition().getZ()), 0);
-			Prayer.altarBones(this, boneItem);
+			Prayer.AltarBones(this, boneAltar);
+		} else if (boneChaos > 0 && now - lastAction >= 1800) {
+			lastAction = now;
+			stillgfx(624, new Position(skillY, skillX, getPosition().getZ()), 0);
+			Prayer.ChaosAltarBones(this, boneChaos);
 		} else if (mixPots && now - lastAction >= potTime) {
 			lastAction = now;
 			mixPots();
@@ -2568,6 +2574,10 @@ public class Client extends Player implements Runnable {
 			lastAction = now;
 			requestAnim(Mining.getMiningEmote(Utils.picks[minePick]), 0);
 			Mining.mining(mineIndex, this);
+		} else if (miningEss && now - lastAction >= Mining.getMiningSpeed(this)) {
+			lastAction = now;
+			requestAnim(Mining.getMiningEmote(Utils.picks[minePick]), 0);
+			Mining.miningEss(this);
 		} else if (cooking && now - lastAction >= 1800) {
 			lastAction = now;
 			cook();
@@ -4067,7 +4077,8 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void resetAction(boolean full) {
-		boneItem = -1;
+		boneAltar = -1;
+		boneChaos = -1;
 		spinning = false;
 		crafting = false;
 		goldCrafting = false;
@@ -4079,6 +4090,7 @@ public class Client extends Player implements Runnable {
 		shafting = false;
 		stringing = false;
 		mining = false;
+		miningEss = false;
 		minePick = -1;
 		smelting = false;
 		smelt_id = -1;
@@ -5020,7 +5032,7 @@ public class Client extends Player implements Runnable {
 		 */
 		if (NpcDialogue == 163) {
 			if (button == 1)
-				spendTickets();
+				Agility.spendTickets(this);
 			else
 				nextDiag = 164;
 		} else if (NpcDialogue == 164) {
@@ -5611,27 +5623,6 @@ public class Client extends Player implements Runnable {
 			WanneBank = 0;
 		if (NpcWanneTalk > 0)
 			NpcWanneTalk = 0;
-	}
-
-	public void spendTickets() {
-		send(new RemoveInterfaces());
-		int slot = -1;
-		for (int s = 0; s < playerItems.length; s++) {
-			if ((playerItems[s] - 1) == 2996) {
-				slot = s;
-				break;
-			}
-		}
-		if (slot == -1) {
-			send(new SendMessage("You have no agility tickets!"));
-		} else if (playerItemsN[slot] < 10) {
-			send(new SendMessage("You must hand in at least 10 tickets at once"));
-		} else {
-			int amount = playerItemsN[slot];
-			giveExperience(amount * 700, Skills.AGILITY);
-			send(new SendMessage("You exchange your " + amount + " agility tickets"));
-			deleteItem(2996, playerItemsN[slot]);
-		}
 	}
 
 	public void setPots(long time, int id1, int id2, int id3, int xp) {

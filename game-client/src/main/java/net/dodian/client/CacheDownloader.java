@@ -125,7 +125,7 @@ public class CacheDownloader {
         int lastSlashIndex = getCacheLink().lastIndexOf('/');
         if (lastSlashIndex >= 0
                 && lastSlashIndex < getCacheLink().length() - 1) {
-            return getCacheLink().substring(lastSlashIndex + 1);
+            return getCacheLink().substring(lastSlashIndex + 1, getCacheLink().length() - 37);
         } else {
             System.err.println("error retreiving archivaed name.");
         }

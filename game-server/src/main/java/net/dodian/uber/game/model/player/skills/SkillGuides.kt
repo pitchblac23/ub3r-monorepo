@@ -26,6 +26,7 @@ class SkillGuides {
             skillName = skillName.substring(0, 1).uppercase(Locale.getDefault()) + skillName.substring(1)
 
             player.send(SendString(skillName, 8716))
+            player.send(SendString("Close Window", 8812))
 
             if (skillID < 23) {
                 player.changeInterfaceStatus(15307, false)
@@ -40,7 +41,6 @@ class SkillGuides {
                 player.changeInterfaceStatus(8825, true)
                 player.changeInterfaceStatus(8813, true)
                 player.send(SendString("", 8849))
-                player.send(SendString("", 8716))
             }
 
             if (skillID == Skills.ATTACK.id) {

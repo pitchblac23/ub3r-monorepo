@@ -492,7 +492,7 @@ public class ClickObject implements Packet {
         /**Mining Rocks*/
         for (int r = 0; r < Utils.rocks.length; r++) {
             if (objectID == Utils.rocks[r]) {
-                if(client.getPositionName(client.getPosition()) == Client.positions.TZHAAR) {
+                if (client.getPositionName(client.getPosition()) == Client.positions.TZHAAR) {
                     client.send(new SendMessage("You can not mine here or the Tzhaar's will be angry!"));
                     return;
                 }
@@ -510,12 +510,31 @@ public class ClickObject implements Packet {
                     client.resetAction(true);
                     return;
                 }
-                    client.minePick = pickaxe;
-                    client.mineIndex = r;
-                    client.mining = true;
-                    client.lastAction = System.currentTimeMillis() + Mining.getMiningSpeed(client);
-                    client.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
-                    client.send(new SendMessage("You swing your pick at the rock."));
+                client.minePick = pickaxe;
+                client.mineIndex = r;
+                client.mining = true;
+                client.lastAction = System.currentTimeMillis() + Mining.getMiningSpeed(client);
+                client.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
+                client.send(new SendMessage("You swing your pick at the rock."));
+                return;
+            } else if (objectID == 7471) {
+                int pickaxe = Mining.findPick(client);
+                if (pickaxe < 0) {
+                    client.minePick = -1;
+                    client.resetAction();
+                    client.send(new SendMessage("You need a pickaxe to mine this rock."));
+                    return;
+                } else if (!client.playerHasItem(-1)) {
+                    client.send(new SendMessage("There is not enough space in your inventory."));
+                    client.resetAction(true);
+                    return;
+                }
+                client.minePick = pickaxe;
+                client.mineIndex = r;
+                client.miningEss = true;
+                client.lastAction = System.currentTimeMillis() + Mining.getMiningSpeed(client);
+                client.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
+                client.send(new SendMessage("You swing your pick at the rock."));
                 return;
             }
         }
@@ -789,7 +808,7 @@ public class ClickObject implements Packet {
             client.lastAction = System.currentTimeMillis();
             double roll = Math.random() * 100;
             if (roll <= 0.3) {
-                int[] items = {1050, 2581, 2631};
+                int[] items = {1038, 1040, 1042, 1044, 1046, 1048, 1050, 2581, 2631};
                 int r = (int) (Math.random() * items.length);
                 client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "!"));
                 client.addItem(items[r], 1);
