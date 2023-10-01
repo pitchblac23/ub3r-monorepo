@@ -78,4 +78,18 @@ public class Fletching {
         }
     }
 
+    public static void shaft(Client c) {
+        if (c.IsCutting || c.isFiremaking)
+            c.resetAction();
+        c.send(new RemoveInterfaces());
+        if (c.playerHasItem(1511)) {
+            c.deleteItem(1511, 1);
+            c.addItem(52, 15);
+            c.requestAnim(1248, 0);
+            c.giveExperience(50, Skills.FLETCHING);
+            c.triggerRandom(50);
+        } else {
+            c.resetAction();
+        }
+    }
 }

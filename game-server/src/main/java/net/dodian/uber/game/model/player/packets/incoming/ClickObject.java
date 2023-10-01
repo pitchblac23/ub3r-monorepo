@@ -19,6 +19,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.mining.Mining;
+import net.dodian.uber.game.model.player.skills.runecrafting.Runecrafting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.model.player.skills.thieving.Thieving;
 import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
@@ -579,15 +580,15 @@ public class ClickObject implements Packet {
             return;
         }
         if (objectID == 14905) {
-            client.runecraft(561, 1, 60);
+            Runecrafting.runecraft(client,561, 1, 60);
             return;
         }
         if (objectID == 27978) {
-            client.runecraft(565, 50, 85);
+            Runecrafting.runecraft(client,565, 50, 85);
             return;
         }
         if (objectID == 14903) {
-            client.runecraft(564, 75, 120);
+            Runecrafting.runecraft(client,564, 75, 120);
             return;
         }
         if (objectID == 2158 || objectID == 2156) {

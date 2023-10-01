@@ -22,7 +22,7 @@ public class ClickItem2 implements Packet {
             client.send(new SendMessage("There is " + client.runePouchesAmount[pouches] + " rune essence in this pouch!"));
         }
         if (itemId == 12019) {
-            client.send(new SendMessage("Your coal bag has " + client.coalBagAmount[0] + " pieces of coal in it."));
+            client.send(new SendMessage("Your coal bag has " + client.coalBagAmount + " pieces of coal in it."));
         }
         if (itemId == 13203) {
             String[] quotes = {

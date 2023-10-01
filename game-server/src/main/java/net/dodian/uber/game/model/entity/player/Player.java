@@ -150,7 +150,7 @@ public abstract class Player extends Entity {
     public int[] runePouchesMaxAmount = {4, 7, 10, 13};
 
     //CoalBags
-    public static int[] coalBagAmount = {0};
+    public int coalBagAmount = 0;
     public int coalBagMaxAmount = 27;
     //Agility
     public boolean UsingAgility = false;

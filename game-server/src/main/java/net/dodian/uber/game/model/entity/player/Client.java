@@ -36,6 +36,7 @@ import net.dodian.uber.game.model.player.skills.fletching.Fletching;
 import net.dodian.uber.game.model.player.skills.mining.Mining;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
+import net.dodian.uber.game.model.player.skills.runecrafting.EssBags;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
 import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
@@ -944,7 +945,7 @@ public class Client extends Player implements Runnable {
 				}
 				statement.executeUpdate("UPDATE " + DbTables.GAME_CHARACTERS + " SET uuid= '" + LoginManager.UUID + "', lastvote=" + lastVoted + ", pkrating=" + 1500 + ", health="
 						+ getCurrentHealth() + ", equipment='" + equipment + "', inventory='" + inventory + "', bank='" + bank
-						+ "', friends='" + list + "', fightStyle = " + FightType +", slayerData='" + saveTaskAsString() + "', essence_pouch='" + getPouches() + "'" + ", coal_bag=" + getcoalBag() + ", autocast=" + autocast_spellIndex + ", news=" + latestNews + ", agility = '" + agilityCourseStage + "', height = " + getPosition().getZ() + ", x = " + getPosition().getX()
+						+ "', friends='" + list + "', fightStyle = " + FightType +", slayerData='" + saveTaskAsString() + "', essence_pouch='" + EssBags.getPouches(this) + "'" + ", coal_bag=" + coalBagAmount + ", autocast=" + autocast_spellIndex + ", news=" + latestNews + ", agility = '" + agilityCourseStage + "', height = " + getPosition().getZ() + ", x = " + getPosition().getX()
 						+ ", y = " + getPosition().getY() + ", lastlogin = '" + System.currentTimeMillis() + "', Boss_Log='"
 						+ boss_log + "', songUnlocked='" + getSongUnlockedSaveText() + "', travel='" + saveTravelAsString() + "', look='" + getLook() + "', unlocks='" + saveUnlocksAsString() + "'"
 						+ ", prayer='"+prayer+"', boosted='"+boosted+"'" + last + " WHERE id = " + dbId);
@@ -1885,7 +1886,7 @@ public class Client extends Player implements Runnable {
 		if (inTrade) {
 			return false;
 		}
-		if (emptyEssencePouch(wearID)) { //Runecrafting Pouches
+		if (EssBags.emptyEssencePouch(wearID, this)) { //Runecrafting Pouches
 			return false;
 		}
 		if (wearID == 5733) { //Potato
@@ -2539,7 +2540,7 @@ public class Client extends Player implements Runnable {
 			GoldCrafting.goldCraft(this);
 		} else if (shafting && now - lastAction >= 1800) {
 			lastAction = now;
-			shaft();
+			Fletching.shaft(this);
 		} else if (fletchings && now - lastAction >= 1800) {
 			lastAction = now;
 			fletching.fletchBow(this);
@@ -3953,128 +3954,6 @@ public class Client extends Player implements Runnable {
 		return spaces;
 	}
 
-	public String getcoalBag() {
-		String out = "";
-		for (int i = 0; i < coalBagAmount.length; i++) {
-			out += coalBagAmount[i] + (i == coalBagAmount.length - 1 ? "" : ":");
-		}
-		return out;
-	}
-
-	public void fillCoalBag() {
-		if (coalBagAmount[i] >= coalBagMaxAmount) {
-			send(new SendMessage("Your coal bag is already full."));
-		}
-		int max = coalBagMaxAmount - coalBagAmount[i];
-		int amount = Math.min(getInvAmt(453), max);
-		if (amount > 0) {
-			for (int i = 0; i < amount; i++)
-				deleteItem(453, 1);
-			coalBagAmount[i] += amount;
-			send(new SendMessage("You add the coal to your bag."));
-			send(new SendMessage("The coal bag contains " + Arrays.toString(Client.coalBagAmount) + " pieces of coal."));
-		} else {
-			send(new SendMessage("The coal bag can be filled only with coal. You haven't got any."));
-		}
-	}
-	public void emptyCoalBag() {
-		int amount = freeSlots();
-		if (amount <= 0) {
-			send(new SendMessage("Not enough inventory slots to empty the bag."));
-		}
-		amount = Math.min(amount, coalBagAmount[i]);
-		if (amount > 0) {
-			for (int i = 0; i < amount; i++)
-				addItem(453, 1);
-			coalBagAmount[i] -= amount;
-		} else {
-			send(new SendMessage("The coal bag is empty."));
-		}
-	}
-
-	public void runecraft(int rune, int level, int xp) {
-		if (!contains(1436)) {
-			send(new SendMessage("You do not have any rune essence!"));
-			return;
-		}
-		if (getLevel(Skills.RUNECRAFTING) < level) {
-			send(new SendMessage("You must have " + level + " runecrafting to craft " + GetItemName(rune).toLowerCase()));
-			return;
-		}
-		int count = 0;
-		int extra = 0;
-		for (int c = 0; c < playerItems.length; c++) {
-			if (playerItems[c] == 1437 && playerItemsN[c] > 0) {
-				count++;
-				deleteItem(1436, 1);
-				int chance = (getLevel(Skills.RUNECRAFTING) + 1) / 2;
-				int roll = 1 + Misc.random(99);
-				if (roll <= chance)
-					extra++;
-			}
-		}
-		send(new SendMessage("You craft " + (count + extra) + " " + GetItemName(rune).toLowerCase() + "s"));
-		addItem(rune, count + extra);
-		giveExperience((xp * count), Skills.RUNECRAFTING);
-		triggerRandom(xp * count);
-	}
-
-	public String getPouches() {
-		String out = "";
-		for (int i = 0; i < runePouchesAmount.length; i++) {
-			out += runePouchesAmount[i] + (i == runePouchesAmount.length - 1 ? "" : ":");
-		}
-		return out;
-	}
-
-	public boolean fillEssencePouch(int pouch) {
-		int slot = pouch == 5509 ? 0 : ((pouch - 5508) / 2);
-		if (slot >= 0 && slot <= 3) {
-			if (getLevel(Skills.RUNECRAFTING) < runePouchesLevel[slot]) {
-				send(new SendMessage("You need level " + runePouchesLevel[slot] + " runecrafting to do this!"));
-				return true;
-			}
-			if (runePouchesAmount[slot] >= runePouchesMaxAmount[slot]) {
-				send(new SendMessage("This pouch is currently full of essence!"));
-				return true;
-			}
-			int max = runePouchesMaxAmount[slot] - runePouchesAmount[slot];
-			int amount = Math.min(getInvAmt(1436), max);
-			if (amount > 0) {
-				for (int i = 0; i < amount; i++)
-					deleteItem(1436, 1);
-				runePouchesAmount[slot] += amount;
-			} else
-				send(new SendMessage("No essence in your inventory!"));
-			return true;
-		}
-		return false;
-	}
-
-	public boolean emptyEssencePouch(int pouch) {
-		int slot = pouch == 5509 ? 0 : ((pouch - 5508) / 2);
-		if (slot >= 0 && slot <= 3) {
-			if (getLevel(Skills.RUNECRAFTING) < runePouchesLevel[slot]) {
-				send(new SendMessage("You need level " + runePouchesLevel[slot] + " runecrafting to do this!"));
-				return true;
-			}
-			int amount = freeSlots();
-			if (amount <= 0) {
-				send(new SendMessage("Not enough inventory slot to empty the pouch!"));
-				return true;
-			}
-			amount = Math.min(amount, runePouchesAmount[slot]);
-			if (amount > 0) {
-				for (int i = 0; i < amount; i++)
-					addItem(1436, 1);
-				runePouchesAmount[slot] -= amount;
-			} else
-				send(new SendMessage("No essence in your pouch!"));
-			return true;
-		}
-		return false;
-	}
-
 	public void resetAction(boolean full) {
 		boneAltar = -1;
 		boneChaos = -1;
@@ -4113,21 +3992,6 @@ public class Client extends Player implements Runnable {
 
 	public void resetAction() {
 		resetAction(true);
-	}
-
-	public void shaft() {
-		if (IsCutting || isFiremaking)
-			resetAction();
-		send(new RemoveInterfaces());
-		if (playerHasItem(1511)) {
-			deleteItem(1511, 1);
-			addItem(52, 15);
-			requestAnim(1248, 0);
-			giveExperience(50, Skills.FLETCHING);
-			triggerRandom(50);
-		} else {
-			resetAction();
-		}
 	}
 
 	public void fill() {

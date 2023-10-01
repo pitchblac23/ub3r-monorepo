@@ -14,7 +14,7 @@ public class Constants {
 	/*
 	 * Server Connection Details
 	 */
-	public static String SERVER_HOSTNAME  		= "70.178.224.234"; // play.dodian.net for live server
+	public static String SERVER_HOSTNAME  		= "70.178.224.234"; //"play.dodian.net"; for live server
 	public static int    SERVER_GAME_PORT 		= 43594; //43594 main game, 6565 is beta testing
 	public static int	 SERVER_JAGGRAB_PORT	= SERVER_GAME_PORT;
 

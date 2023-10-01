@@ -3,6 +3,8 @@ package net.dodian.uber.game.model.player.packets.incoming;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
+import net.dodian.uber.game.model.player.skills.mining.CoalBag;
+import net.dodian.uber.game.model.player.skills.mining.Mining;
 
 public class ClickItem3 implements Packet {
 
@@ -14,7 +16,7 @@ public class ClickItem3 implements Packet {
 
         switch (itemId1) {
             case 12019:
-                c.emptyCoalBag();
+                CoalBag.emptyCoalBag(c);
                 break;
 
             case 1712:

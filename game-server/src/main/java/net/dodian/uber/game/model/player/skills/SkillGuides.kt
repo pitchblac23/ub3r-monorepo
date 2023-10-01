@@ -188,11 +188,11 @@ class SkillGuides {
                 player.changeInterfaceStatus(8813, false)
                 slot = 8760
                 val s = arrayOf("Shrimps", "Anchovies", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish", "Shark", "Sea Turtle", "Manta Ray", "")
-                val s1 = arrayOf("1", "20", "30", "40", "50", "60", "70", "85", "95")
+                val s1 = arrayOf("1", "15", "20", "30", "40", "50", "60", "70", "85", "95")
                 for (i in s.indices) { player.send(SendString(s[i], slot + i)) }
                 slot = 8720
                 for (i in s1.indices) { player.send(SendString(s1[i], slot + i)) }
-                val items = intArrayOf(317, 319, 335, 331, 377, 371, 7944, 383, 395, 389)
+                val items = intArrayOf(317, 321, 335, 331, 377, 371, 7944, 383, 395, 389)
                 player.setMenuItems(items)
 
             } else if (skillID == Skills.COOKING.id) {
@@ -200,12 +200,12 @@ class SkillGuides {
                 player.changeInterfaceStatus(8825, false)
                 player.changeInterfaceStatus(8813, false)
                 slot = 8760
-                val s = arrayOf("Shrimps", "Meat", "Bread", "Thin snail", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish", "Shark", "Sea Turtle", "Manta Ray")
-                val s1 = arrayOf("1", "1", "10", "15", "20", "30", "40", "50", "60", "70", "85", "95")
+                val s = arrayOf("Shrimps", "Meat", "Bread", "Anchovies", "Thin snail", "Trout", "Salmon", "Lobster", "Swordfish", "Monkfish", "Shark", "Sea Turtle", "Manta Ray")
+                val s1 = arrayOf("1", "1", "10", "15", "15", "20", "30", "40", "50", "60", "70", "85", "95")
                 for (i in s.indices) { player.send(SendString(s[i], slot + i)) }
                 slot = 8720
                 for (i in s1.indices) { player.send(SendString(s1[i], slot + i)) }
-                val items = intArrayOf(315, 2142, 2309, 3369, 333, 329, 379, 373, 7946, 385, 397, 391)
+                val items = intArrayOf(315, 2142, 2309, 319, 3369, 333, 329, 379, 373, 7946, 385, 397, 391)
                 player.setMenuItems(items)
 
             } else if (skillID == Skills.FLETCHING.id) {

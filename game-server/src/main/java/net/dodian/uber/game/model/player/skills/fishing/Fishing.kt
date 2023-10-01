@@ -11,8 +11,7 @@ class Fishing {
 
     companion object {
         @JvmStatic
-        fun startFishing(player: Client, clickObject: Int, clickOption: Int) {
-            val p = player;
+        fun startFishing(p: Client, clickObject: Int, clickOption: Int) {
             var valid = false;
 
             for (i in 0 until Utils.fishSpots.size) {
@@ -42,14 +41,13 @@ class Fishing {
                 p.resetAction(true);
                 return;
             }
-            p.lastAction = System.currentTimeMillis() + Utils.fishTime[player.fishIndex];
-            p.requestAnim(Utils.fishAnim[player.fishIndex], 0);
+            p.lastAction = System.currentTimeMillis() + Utils.fishTime[p.fishIndex];
+            p.requestAnim(Utils.fishAnim[p.fishIndex], 0);
             p.fishing = true;
         }
 
         @JvmStatic
-        fun Fish(player: Client) {
-            val p = player;
+        fun Fish(p: Client) {
 
             p.lastAction = System.currentTimeMillis();
             if (!p.playerHasItem(-1)) {

@@ -1391,6 +1391,29 @@ public class Client extends RSApplet {
                                             menuActionCmd3[menuActionRow] = class9_1.id;
                                             menuActionRow++;
                                         }
+                                        if(!class9_1.isInventoryInterface && shiftIsDown && (itemDef.id == 5509 || itemDef.id == 5510 || itemDef.id == 5512 || itemDef.id == 5514)) {
+                                            menuActionName[menuActionRow] = "Fill @lre@" + itemDef.name;
+                                            menuActionID[menuActionRow] = 74;
+                                            menuActionCmd1[menuActionRow] = itemDef.id;
+                                            menuActionCmd2[menuActionRow] = k2;
+                                            menuActionCmd3[menuActionRow] = class9_1.id;
+                                            menuActionRow++;
+                                        } else if(shiftIsDown && (itemDef.id == 5509 || itemDef.id == 5510 || itemDef.id == 5512 || itemDef.id == 5514)) {
+                                            menuActionName[menuActionRow] = "Empty @lre@" + itemDef.name;
+                                            menuActionID[menuActionRow] = 454;
+                                            menuActionCmd1[menuActionRow] = itemDef.id;
+                                            menuActionCmd2[menuActionRow] = k2;
+                                            menuActionCmd3[menuActionRow] = class9_1.id;
+                                            menuActionRow++;
+                                        }
+                                        if(!class9_1.isInventoryInterface && shiftIsDown && (itemDef.id == 12019)) {
+                                            menuActionName[menuActionRow] = "Empty @lre@" + itemDef.name;
+                                            menuActionID[menuActionRow] = 493;
+                                            menuActionCmd1[menuActionRow] = itemDef.id;
+                                            menuActionCmd2[menuActionRow] = k2;
+                                            menuActionCmd3[menuActionRow] = class9_1.id;
+                                            menuActionRow++;
+                                        }
                                         if (class9_1.actions != null) {
                                             for (int j4 = 4; j4 >= 0; j4--)
                                                 if (class9_1.actions[j4] != null) {
@@ -1410,7 +1433,6 @@ public class Client extends RSApplet {
                                                     menuActionCmd3[menuActionRow] = class9_1.id;
                                                     menuActionRow++;
                                                 }
-
                                         }
                                         // menuActionName[menuActionRow] =
                                         // "Examine @lre@" + itemDef.name +
@@ -3879,8 +3901,11 @@ public class Client extends RSApplet {
 
     public void processExtraMenus(){
         if(super.mouseX >= 541 && super.mouseX <= 578 && super.mouseY >= 5 && super.mouseY < 42){
-            menuActionName[menuActionRow] = "Face North";
+            menuActionName[menuActionRow] = "Face South";
             menuActionID[menuActionRow] = 1150;
+            menuActionRow++;
+            menuActionName[menuActionRow] = "Face North";
+            menuActionID[menuActionRow] = 1151;
             menuActionRow++;
         }
     }
@@ -3898,7 +3923,15 @@ public class Client extends RSApplet {
         int i1 = menuActionCmd1[i];
         if (l >= 2000)
             l -= 2000;
-        if(l == 1150) { //face north
+        if(l == 1150) { //face south
+            anInt1278 = 0;//side to side
+            anInt1131 = 0;//scroll in or out
+            anInt896 = 0;//rotation camera
+            minimapInt1 = 1024;//rotation map
+            minimapInt2 = 0;//rotates map not camera
+            minimapInt3 = 0;//minimap zoom out
+        }
+        if(l == 1151) { //face north
             anInt1278 = 0;
             anInt1131 = 0;
             anInt896 = 0;

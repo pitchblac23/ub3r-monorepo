@@ -6,7 +6,10 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.mining.CoalBag;
+import net.dodian.uber.game.model.player.skills.mining.Mining;
 import net.dodian.uber.game.model.player.skills.prayer.Prayer;
+import net.dodian.uber.game.model.player.skills.runecrafting.EssBags;
 import net.dodian.utilities.DbTables;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
@@ -25,7 +28,7 @@ public class ClickItem implements Packet {
         int itemSlot = client.getInputStream().readUnsignedWordA();
         int itemId = client.getInputStream().readUnsignedWordBigEndian();
 
-        if (client.fillEssencePouch(itemId)) {
+        if (EssBags.fillEssencePouch(itemId, client)) {
             return;
         }
         if (itemId == 5733) {
@@ -64,7 +67,7 @@ public class ClickItem implements Packet {
             return;
         }
         if (itemId == 12019) {
-            client.fillCoalBag();
+            CoalBag.fillCoalBag(client);
             return;
         }
         if((itemId >= 199 && itemId <= 219) || itemId == 3049 || itemId == 3051)
