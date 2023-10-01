@@ -31,6 +31,7 @@ import net.dodian.uber.game.model.player.skills.cooking.Cooking;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
 import net.dodian.uber.game.model.player.skills.crafting.Spinning;
+import net.dodian.uber.game.model.player.skills.crafting.Tanning;
 import net.dodian.uber.game.model.player.skills.fishing.Fishing;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
 import net.dodian.uber.game.model.player.skills.mining.Mining;
@@ -2593,7 +2594,7 @@ public class Client extends Player implements Runnable {
 		} else if (NpcWanneTalk > 0) {
 			if (GoodDistance2(getPosition().getX(), getPosition().getY(), skillX, skillY, 2))
 				if (NpcWanneTalk == 804) {
-					openTan();
+					Tanning.openTan(this);
 					NpcWanneTalk = 0;
 				} else {
 					NpcDialogue = NpcWanneTalk;
@@ -4015,54 +4016,6 @@ public class Client extends Player implements Runnable {
 					ReplaceObject(DoorHandler.doorX[d], DoorHandler.doorY[d], DoorHandler.doorId[d], DoorHandler.doorFace[d], 0);
 				}
 			}
-		}
-	}
-
-	public void openTan() {
-		send(new SendString("Regular Leather", 14777));
-		send(new SendString("50gp", 14785));
-		send(new SendString("", 14781));
-		send(new SendString("", 14789));
-		send(new SendString("", 14778));
-		send(new SendString("", 14786));
-		send(new SendString("", 14782));
-		send(new SendString("", 14790));
-		int[] soon = {14779, 14787, 14783, 14791, 14780, 14788, 14784, 14792};
-		String[] dhide = {"Green", "Red", "Blue", "Black"};
-		String[] cost = {"1,000gp", "5,000gp", "2,000gp", "10,000gp"};
-		int type = 0;
-		for (int i = 0; i < soon.length; i++) {
-			if (type == 0) {
-				send(new SendString(dhide[i / 2], soon[i]));
-				type = 1;
-			} else {
-				send(new SendString(cost[i / 2], soon[i]));
-				type = 0;
-			}
-		}
-		sendFrame246(14769, 250, 1741);
-		sendFrame246(14773, 250, -1);
-		sendFrame246(14771, 250, 1753);
-		sendFrame246(14772, 250, 1751);
-		sendFrame246(14775, 250, 1749);
-		sendFrame246(14776, 250, 1747);
-		showInterface(14670);
-	}
-
-	public void startTan(int amount, int type) {
-		int[] hide = {1739, -1, 1753, 1751, 1749, 1747};
-		int[] leather = {1741, -1, 1745, 2505, 2507, 2509};
-		int[] charge = {50, 0, 1000, 2000, 5000, 10000};
-		if (!playerHasItem(995, charge[type])) {
-			send(new SendMessage("You need atleast " + charge[type] + " coins to do this!"));
-			return;
-		}
-		amount = getInvAmt(995) > amount * charge[type] ? getInvAmt(995) / charge[type] : amount;
-		amount = Math.min(amount, getInvAmt(hide[type]));
-		for (int i = 0; i < amount; i++) {
-			deleteItem(hide[type], 1);
-			deleteItem(995, charge[type]);
-			addItem(leather[type], 1);
 		}
 	}
 	public void triggerTele(int x, int y, int height, boolean prem) {

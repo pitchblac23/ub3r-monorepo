@@ -17,6 +17,7 @@ import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
+import net.dodian.uber.game.model.player.skills.crafting.Tanning;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.party.Balloons;
@@ -307,64 +308,64 @@ public class ClickingButtons implements Packet {
                 Crafting.startCraft(client.actionButtonId, client);
             break;
             case 57225:
-                client.startTan(1, 0);
+                Tanning.startTan(1, 0, client);
             break;
             case 57217:
-                client.startTan(5, 0);
+                Tanning.startTan(5, 0, client);
                 break;
             case 57201:
             case 57209:
-                client.startTan(27, 0);
+                Tanning.startTan(27, 0, client);
             break;
             case 57229: //Hard leather!
-                client.startTan(1, 1);
+                Tanning.startTan(1, 1, client);
             break;
             case 57221:
-                client.startTan(5, 1);
+                Tanning.startTan(5, 1, client);
             break;
             case 57205:
             case 57213:
-                client.startTan(27, 1);
+                Tanning.startTan(27, 1, client);
             break;
             case 57227:
-                client.startTan(1, 2);
+                Tanning.startTan(1, 2, client);
                 break;
             case 57219:
-                client.startTan(5, 2);
+                Tanning.startTan(5, 2, client);
                 break;
             case 57211:
             case 57203:
-                client.startTan(27, 2);
+                Tanning.startTan(27, 2, client);
                 break;
             case 57228:
-                client.startTan(1, 3);
+                Tanning.startTan(1, 3, client);
                 break;
             case 57220:
-                client.startTan(5, 3);
+                Tanning.startTan(5, 3, client);
                 break;
             case 57212:
             case 57204:
-                client.startTan(27, 3);
+                Tanning.startTan(27, 3, client);
                 break;
             case 57231:
-                client.startTan(1, 4);
+                Tanning.startTan(1, 4, client);
                 break;
             case 57223:
-                client.startTan(5, 4);
+                Tanning.startTan(5, 4, client);
                 break;
             case 57215:
             case 57207:
-                client.startTan(27, 4);
+                Tanning.startTan(27, 4, client);
                 break;
             case 57232:
-                client.startTan(1, 5);
+                Tanning.startTan(1, 5, client);
                 break;
             case 57224:
-                client.startTan(5, 5);
+                Tanning.startTan(5, 5, client);
                 break;
             case 57216:
             case 57208:
-                client.startTan(27, 5);
+                Tanning.startTan(27, 5, client);
                 break;
             case 10239: //make stuff 1
                 client.fletching.fletchOther(client, 1);

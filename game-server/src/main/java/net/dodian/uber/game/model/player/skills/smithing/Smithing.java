@@ -86,12 +86,10 @@ public class Smithing {
 
     public static void OpenSmithingFrame(int Type, Client c) {
         int Type2 = Type - 1;
-        int Length = 22;
+        int Length = 23;
 
-        if (Type == 1 || Type == 2) {
+        if (Type == 3) {
             Length += 1;
-        } else if (Type == 3) {
-            Length += 2;
         }
         // Sending amount of bars + make text green if lvl is highenough
         c.send(new SendString("", 1132)); // Wire
@@ -144,74 +142,86 @@ public class Smithing {
         }
         Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][0][0]; // Dagger
         Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][0][1];
+
         Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][4][0]; // Sword
         Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][4][1];
+
         Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][8][0]; // Scimitar
         Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][8][1];
-        Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][9][0]; // Long
-        // Sword
+
+        Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][9][0]; // Long Sword
         Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][9][1];
-        Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][18][0]; // 2
-        // hand
-        // sword
+
+        Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][18][0]; // 2 hand sword
         Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][18][1];
         Smithing.SetSmithing(1119, c);
+
         Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][1][0]; // Axe
         Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][1][1];
+
         Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][2][0]; // Mace
         Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][2][1];
+
         Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][13][0]; // Warhammer
         Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][13][1];
-        Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][14][0]; // Battle
-        // axe
+
+        Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][14][0]; // Battle axe
         Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][14][1];
+
         Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][17][0]; // Claws
         Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][17][1];
         Smithing.SetSmithing(1120, c);
-        Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][15][0]; // Chain
-        // body
+
+        Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][15][0]; // Chain body
         Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][15][1];
-        Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][20][0]; // Plate
-        // legs
+
+        Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][20][0]; // Plate legs
         Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][20][1];
-        Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][19][0]; // Plate
-        // skirt
+
+        Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][19][0]; // Plate skirt
         Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][19][1];
-        Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][21][0]; // Plate
-        // body
+
+        Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][21][0]; // Plate body
         Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][21][1];
+
         Constants.SmithingItems[4][0] = -1; // Lantern
         Constants.SmithingItems[4][1] = 0;
-        if (Type == 2 || Type == 3) {
+        if (Type >= 2) {
             color2 = "@bla@";
             if (c.getLevel(Skills.SMITHING) >= Constants.smithing_frame[Type2][22][2]) {
                 color2 = "@whi@";
             }
-            Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][22][0]; // Lantern
+            Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][22][0];
             Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][22][1];
             c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 11461));
         }
         Smithing.SetSmithing(1121, c);
+
         Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][3][0]; // Medium
         Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][3][1];
-        Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][10][0]; // Full
-        // Helm
+
+        Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][10][0]; // Full Helm
         Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][10][1];
+
         Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][12][0]; // Square
         Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][12][1];
+
         Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][16][0]; // Kite
         Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][16][1];
+
         Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][6][0]; // Nails
         Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][6][1];
         Smithing.SetSmithing(1122, c);
-        Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][5][0]; // Dart
-        // Tips
+
+        Constants.SmithingItems[0][0] = Constants.smithing_frame[Type2][5][0]; // Dart Tips
         Constants.SmithingItems[0][1] = Constants.smithing_frame[Type2][5][1];
-        Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][7][0]; // Arrow
-        // Heads
+
+        Constants.SmithingItems[1][0] = Constants.smithing_frame[Type2][7][0]; // Arrow Heads
         Constants.SmithingItems[1][1] = Constants.smithing_frame[Type2][7][1];
+
         Constants.SmithingItems[2][0] = Constants.smithing_frame[Type2][11][0]; // Knives
         Constants.SmithingItems[2][1] = Constants.smithing_frame[Type2][11][1];
+
         Constants.SmithingItems[3][0] = -1; // Wire
         Constants.SmithingItems[3][1] = 0;
         if (Type == 1) {
@@ -219,17 +229,18 @@ public class Smithing {
             if (c.getLevel(Skills.SMITHING) >= Constants.smithing_frame[Type2][22][2]) {
                 color2 = "@whi@";
             }
-            Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][22][0]; // Wire
+            Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][22][0];
             Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][22][1];
             c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 1096));
         }
-        for (int i = 0; i < 22; i++) {
+        for (int i = 0; i < 23; i++) {
             if (c.getLevel(Skills.SMITHING) >= Constants.smithing_frame[Type2][i][2]) {
                 color2 = "@whi@";
             } else
                 color2 = "@bla@";
             c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][i][0]).replace(name, ""), Constants.smithing_frame[Type2][i][5]));
         }
+
         Constants.SmithingItems[4][0] = -1; // Studs
         Constants.SmithingItems[4][1] = 0;
         if (Type == 3) {
@@ -237,11 +248,12 @@ public class Smithing {
             if (c.getLevel(Skills.SMITHING) >= Constants.smithing_frame[Type2][23][2]) {
                 color2 = "@whi@";
             }
-            Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][23][0]; // Studs
+            Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][23][0];
             Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][23][1];
             c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][23][0]).replace(name, ""), 1134));
         }
         Smithing.SetSmithing(1123, c);
+
         c.showInterface(994);
         c.smithing[2] = Type;
     }
@@ -254,7 +266,7 @@ public class Smithing {
                 return false;
             }
             int bars = 0;
-            int Length = 22;
+            int Length = 23;
             int barid;
             int xp = 0;
             int ItemN = 1;
@@ -264,10 +276,8 @@ public class Smithing {
             } else {
                 barid = (2349 + ((c.smithing[2] - 1) * 2));
             }
-            if (c.smithing[2] == 1 || c.smithing[2] == 2) {
+            if (c.smithing[2] == 3) {
                 Length += 1;
-            } else if (c.smithing[2] == 3) {
-                Length += 2;
             }
             int[] possibleBars = {2349, 2351, 2353, 2359, 2361, 2363};
             int[] bar_xp = {13, 25, 38, 50, 63, 75};
