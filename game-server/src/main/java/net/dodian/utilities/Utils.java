@@ -161,6 +161,23 @@ public class Utils {
         return l;
     }
 
+    public static long playerNameToLong(String s) {
+        long l = 0L;
+        for (int i = 0; i < s.length() && i < 12; i++) {
+            char c = s.charAt(i);
+            l *= 37L;
+            if (c >= 'A' && c <= 'Z') {
+                l += (1 + c) - 65;
+            } else if (c >= 'a' && c <= 'z') {
+                l += (1 + c) - 97;
+            } else if (c >= '0' && c <= '9') {
+                l += (27 + c) - 48;
+            }
+        }
+        for (; l % 37L == 0L && l != 0L; l /= 37L);
+        return l;
+    }
+
     private static char decodeBuf[] = new char[4096];
 
     public static String textUnpack(byte packedData[], int size) {
@@ -186,14 +203,11 @@ public class Utils {
             '?', '.', ',', ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '\243', '$', '%', '"', '[',
             ']'};
 
-    // gets the direction between the two given points
-    // valid directions are N:0, NE:2, E:4, SE:6, S:8, SW:10, W:12, NW:14
-    // the invalid (inbetween) direction are 1,3,5,7,9,11,13,15 i.e. odd integers
-    // returns -1, if src and dest are the same
+    // gets the direction between the two given points valid directions are N:0, NE:2, E:4, SE:6, S:8, SW:10, W:12, NW:14
+    // the invalid (inbetween) direction are 1,3,5,7,9,11,13,15 i.e. odd integers returns -1, if src and dest are the same
     public static int direction(int srcX, int srcY, int destX, int destY) {
         int dx = destX - srcX, dy = destY - srcY;
-        // a lot of cases that have to be considered here ... is there a more
-        // sophisticated (and quick!) way?
+        // a lot of cases that have to be considered here ... is there a more sophisticated (and quick!) way?
         if (dx < 0) {
             if (dy < 0) {
                 if (dx < dy)

@@ -760,6 +760,7 @@ public class Agility {
 
     public static void spendTickets(Client c) {
         c.send(new RemoveInterfaces());
+        c.showInterface(8292);
         int slot = -1;
         for (int s = 0; s < c.playerItems.length; s++) {
             if ((c.playerItems[s] - 1) == 2996) {

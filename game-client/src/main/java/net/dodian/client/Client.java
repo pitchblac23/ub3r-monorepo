@@ -1413,6 +1413,13 @@ public class Client extends RSApplet {
                                             menuActionCmd2[menuActionRow] = k2;
                                             menuActionCmd3[menuActionRow] = class9_1.id;
                                             menuActionRow++;
+                                        } else if(class9_1.isInventoryInterface && shiftIsDown && (itemDef.id == 12019)) {
+                                            menuActionName[menuActionRow] = "Empty @lre@" + itemDef.name;
+                                            menuActionID[menuActionRow] = 493;
+                                            menuActionCmd1[menuActionRow] = itemDef.id;
+                                            menuActionCmd2[menuActionRow] = k2;
+                                            menuActionCmd3[menuActionRow] = class9_1.id;
+                                            menuActionRow++;
                                         }
                                         if (class9_1.actions != null) {
                                             for (int j4 = 4; j4 >= 0; j4--)

@@ -111,6 +111,9 @@ public class ClickItem implements Packet {
                 client.getPosition().setZ(3);
             }
         }
+        if (itemId == 11738) {
+            client.send(new SendMessage("coming soon!"));
+        }
     }
 
     public void clickItem(Client client, int slot, int id) {

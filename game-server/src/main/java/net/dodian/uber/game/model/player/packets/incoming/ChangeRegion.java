@@ -101,5 +101,4 @@ public class ChangeRegion implements Packet {
         }
         client.updatePlayerDisplay();
     }
-
 }

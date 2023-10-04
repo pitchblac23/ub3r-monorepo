@@ -9,7 +9,6 @@ import net.dodian.uber.game.event.EventManager;
 import net.dodian.uber.game.model.Position;
 import net.dodian.uber.game.model.WalkToTask;
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.object.*;
@@ -26,7 +25,6 @@ import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
-import static net.dodian.utilities.DotEnvKt.getGameWorldId;
 
 public class ClickObject implements Packet {
 
@@ -568,7 +566,7 @@ public class ClickObject implements Packet {
             }
         }
         if (objectID == 2107) {
-            if (System.currentTimeMillis() - Server.lastRunite < 60000) {
+            if (System.currentTimeMillis() - Server.TICK < 60000) {
                 client.println("invalid timer");
                 return;
             }
@@ -580,15 +578,15 @@ public class ClickObject implements Packet {
             return;
         }
         if (objectID == 14905) {
-            Runecrafting.runecraft(client,561, 1, 60);
+            Runecrafting.runecraft(client, 561, 1, 60);
             return;
         }
         if (objectID == 27978) {
-            Runecrafting.runecraft(client,565, 50, 85);
+            Runecrafting.runecraft(client, 565, 50, 85);
             return;
         }
         if (objectID == 14903) {
-            Runecrafting.runecraft(client,564, 75, 120);
+            Runecrafting.runecraft(client, 564, 75, 120);
             return;
         }
         if (objectID == 2158 || objectID == 2156) {
@@ -762,22 +760,25 @@ public class ClickObject implements Packet {
                 client.lastAction = System.currentTimeMillis();
                 return;
             }
-            final Object emptyObj = new Object(378, objectPosition.getX(), objectPosition.getY(), client.getPosition().getZ(), 10, 2, objectID);
-            if (!GlobalObject.addGlobalObject(emptyObj, 12000)) {
-                return;
-            }
+            //final Object emptyObj = new Object(378, objectPosition.getX(), objectPosition.getY(), client.getPosition().getZ(), 10, 2, objectID);
             client.lastAction = System.currentTimeMillis();
             double roll = Math.random() * 100;
             if (roll <= 0.3) {
-                int[] items = {2577, 2579, 2631};
+                int[] items = {2577, 2579, 2631, 10400, 10402, 10404, 10406, 10408,
+                               10410, 10412, 10414, 10416, 10418, 12315, 13217, 10420,
+                               10422, 10424, 10426, 10428, 10430, 10432, 10434, 10436,
+                               10438, 12339, 12341};
                 int r = (int) (Math.random() * items.length);
                 client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "!"));
                 client.addItem(items[r], 1);
-                client.yell("[Server] - " + client.getPlayerName() + " has just received from the chest a  "
-                        + client.GetItemName(items[r]));
+                client.yell("[Server] - " + client.getPlayerName() + " has received" + client.GetItemName(items[r]) +  "from the chest a.");
+            } else if (roll <= 3.0) {
+                int natures = 50 + Utils.random(100);
+                client.send(new SendMessage("You find " + natures + " natures inside the chest."));
+                client.addItem(561, natures);
             } else {
                 int coins = 300 + Utils.random(1200);
-                client.send(new SendMessage("You find " + coins + " coins inside the chest"));
+                client.send(new SendMessage("You find " + coins + " coins inside the chest."));
                 client.addItem(995, coins);
             }
             if (client.getEquipment()[Equipment.Slot.HEAD.getId()] == 2631)
@@ -785,6 +786,9 @@ public class ClickObject implements Packet {
             client.chestEvent++;
             client.stillgfx(444, objectPosition.getY(), objectPosition.getX());
             client.triggerRandom(900);
+            /*if (!GlobalObject.addGlobalObject(emptyObj, 12000)) {
+                return;
+            }*/
         }
         if (objectID == 6420 && objectPosition.getX() == 2733 && objectPosition.getY() == 3374) {
             if(client.chestEventOccur) {
@@ -802,19 +806,23 @@ public class ClickObject implements Packet {
                 client.lastAction = System.currentTimeMillis();
                 return;
             }
-            final Object o = new Object(6421, objectPosition.getX(), objectPosition.getY(), objectPosition.getZ(), 11, -1, objectID);
-            if (!GlobalObject.addGlobalObject(o, 15000)) {
+            //final Object o = new Object(6421, objectPosition.getX(), objectPosition.getY(), objectPosition.getZ(), 11, -1, objectID);
+            /*if (!GlobalObject.addGlobalObject(o, 15000)) {
                 return;
-            }
+            }*/
             client.lastAction = System.currentTimeMillis();
             double roll = Math.random() * 100;
             if (roll <= 0.3) {
-                int[] items = {1038, 1040, 1042, 1044, 1046, 1048, 1050, 2581, 2631};
+                int[] items = {1038, 1040, 1042, 1044, 1046, 1048, 1050,
+                               2581, 2631, 12343, 12345, 12347, 12349, 4565};
                 int r = (int) (Math.random() * items.length);
-                client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "!"));
+                client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "."));
                 client.addItem(items[r], 1);
-                client.yell("[Server] - " + client.getPlayerName() + " has just received from the premium chest a  "
-                        + client.GetItemName(items[r]));
+                client.yell("[Server] - " + client.getPlayerName() + " has just received from the premium chest a  " + client.GetItemName(items[r]) + ".");
+            } else if (roll <= 3.0) {
+                int bloods = 100 + Utils.random(150);
+                client.send(new SendMessage("You find " + bloods + " bloods inside the chest."));
+                client.addItem(565, bloods);
             } else {
                 int coins = 500 + Utils.random(2000);
                 client.send(new SendMessage("You find " + coins + " coins inside the chest"));
@@ -825,6 +833,9 @@ public class ClickObject implements Packet {
             client.chestEvent++;
             client.stillgfx(444, objectPosition.getY(), objectPosition.getX());
             client.triggerRandom(1500);
+            /*if (!GlobalObject.addGlobalObject(o, 15000)) {
+                return;
+            }*/
         }
         if (System.currentTimeMillis() - client.lastDoor > 1000) {
             client.lastDoor = System.currentTimeMillis();
@@ -906,7 +917,6 @@ public class ClickObject implements Packet {
         }
 
         // Wo0t Tzhaar Objects
-
         if (objectID == 9369 && (objectPosition.getX() == 2399) && (objectPosition.getY() == 5176)) {
             if (client.getPosition().getY() == 5177) {
                 client.teleportToX = 2399;

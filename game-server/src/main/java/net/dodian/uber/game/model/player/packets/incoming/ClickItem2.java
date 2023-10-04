@@ -45,5 +45,4 @@ public class ClickItem2 implements Packet {
             client.requestAnim(1835, 0);
         }
     }
-
 }

@@ -30,7 +30,8 @@ public class SocketHandler implements Runnable {
     }
 
     public void run() {
-        try {
+        //try {
+        long lastProcess = System.currentTimeMillis();
             while (processRunning) {
                 if (!isConnected()) {
                     myPackets.clear();
@@ -38,18 +39,22 @@ public class SocketHandler implements Runnable {
                 }
                 while (writeOutput());
                 flush();
-                while (parsePackets());
-            LinkedList<PacketData> temp = packets.getPackets();
-            if (myPackets == null)
-                myPackets.clear();
-            if (temp != null)
-                myPackets.addAll(temp);
+                if (lastProcess + 50 <= System.currentTimeMillis()) {
+                    while (parsePackets());
+                    LinkedList<PacketData> temp = packets.getPackets();
+                    if (myPackets == null)
+                        myPackets.clear();
+                    if (temp != null)
+                        myPackets.addAll(temp);
+                    lastProcess = System.currentTimeMillis();
+                }
+                try {
+                    Thread.sleep(50);
+                } catch (java.lang.Exception _ex) {
+                    YellSystem.alertStaff("Something is up with socket handler!");
+                    System.out.println("SocketHandling is throwing errors: " + _ex.getMessage());
+                }
             }
-            Thread.sleep(50);
-        } catch (Exception e) {
-            YellSystem.alertStaff("Something is up with socket handler!");
-            System.out.println("SocketHandling is throwing errors: " + e.getMessage());
-        }
     }
 
     private boolean isConnected() {
@@ -202,5 +207,4 @@ public class SocketHandler implements Runnable {
         }
         return false;
     }
-
 }

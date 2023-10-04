@@ -40,6 +40,7 @@ fun Client.handleMagic(): Int {
         resetAttack()
         return 0
     }
+    //TODO make spells cost more
     deleteItem(565, 1)
     requestAnim(1979, 0)
     var maxHit = baseDamage[autocast_spellIndex] * magicBonusDamage()

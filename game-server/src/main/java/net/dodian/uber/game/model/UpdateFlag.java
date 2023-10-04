@@ -13,7 +13,7 @@ public enum UpdateFlag {
     FACE_CHARACTER(1, 0x20),
     APPEARANCE(0x10, -1),
     FACE_COORDINATE(2, 0x4),
-    HIT(0x20, 0x40),
+    HIT(0x20, 0x40),//0x8
     HIT2(0x200, 0x8),
     FORCED_CHAT(0x4, 0x1),
     FACE_DIRECTION(0x40, -1),
@@ -51,5 +51,4 @@ public enum UpdateFlag {
             return npcMask;
         }
     }
-
 }

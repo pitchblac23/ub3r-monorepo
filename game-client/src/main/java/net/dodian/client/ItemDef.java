@@ -265,10 +265,62 @@ public final class ItemDef {
                 break;
             case 21295://infernalcape
             	def.name = "Infernal Cape";
-				def.originalModelColors= new int[1];
+				def.originalModelColors = new int[1];
 				def.modifiedModelColors = new int[1];
 				def.originalModelColors[0] = 40;
 				def.modifiedModelColors[0] = 40;
+                break;
+            case 11738:
+                def.name = "Herb Box";
+                def.itemActions[0] = "Open";
+                def.itemActions[2] = null;
+                def.itemActions[3] = null;
+                def.itemActions[4] = null;
+                break;
+            case 480:
+                def.modelID = 65298;
+                def.originalModelColors = new int[1];
+                def.modifiedModelColors = new int[1];
+                def.originalModelColors[0] = 5652;
+                def.modifiedModelColors[0] = 61;
+                break;
+            case 482:
+                def.modelID = 65298;
+                def.originalModelColors = new int[1];
+                def.modifiedModelColors = new int[1];
+                def.originalModelColors[0] = 33;
+                def.modifiedModelColors[0] = 61;
+                break;
+            case 490:
+                def.modelID = 65298;
+                def.originalModelColors = new int[1];
+                def.modifiedModelColors = new int[1];
+                def.originalModelColors[0] = 36133;
+                def.modifiedModelColors[0] = 61;
+                break;
+            case 484://steel
+                def.modelID = 65298;
+                break;
+            case 488://adamant
+                def.modelID = 65298;
+                def.originalModelColors = new int[1];
+                def.modifiedModelColors = new int[1];
+                def.originalModelColors[0] = 21662;
+                def.modifiedModelColors[0] = 61;
+                break;
+            case 486://mithril
+                def.modelID = 65298;
+                def.originalModelColors = new int[1];
+                def.modifiedModelColors = new int[1];
+                def.originalModelColors[0] = 43297;
+                def.modifiedModelColors[0] = 61;
+                break;
+            case 10748:
+            case 10750:
+            case 10752:
+            case 10754:
+            case 10756:
+                def.itemActions = new String[]{null, "Wear", null, null, "Drop"};
                 break;
         }
         if (def.certTemplateID != -1)
@@ -652,5 +704,4 @@ public final class ItemDef {
     public boolean searchable;
     public int unnotedId = -1;
     public int notedId = -1;
-
 }

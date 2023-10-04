@@ -755,8 +755,10 @@ public class Commands implements Packet {
                         int otherPIndex = PlayerHandler.getPlayerID(otherPName);
                         if (otherPIndex != -1) {
                             Client p = (Client) PlayerHandler.players[otherPIndex];
-                            p.logout();
+                            //p.logout();
+                            p.disconnected = true;
                             CommandLog.recordCommand(client, command);
+                            client.send(new SendMessage("Player " + p.getPlayerName() + " has been kicked!"));
                         } else {
                             client.send(new SendMessage("Player " + otherPName + " is not online!"));
                         }
@@ -1124,7 +1126,8 @@ public class Commands implements Packet {
                         ArrayList<Integer> lootedItem = new ArrayList<>();
                         ArrayList<Integer> lootedAmount = new ArrayList<>();
                         boolean wealth = client.getEquipment()[Equipment.Slot.RING.getId()] == 2572, itemDropped;
-                        double chance, currentChance;
+                        //double chance, currentChance;
+                        double chance, currentChance, checkChance;
                         for (int LOOP = 0; LOOP < amount; LOOP++) {
                             chance = Misc.chance(100000) / 1000D;
                             currentChance = 0.0;
@@ -1132,8 +1135,11 @@ public class Commands implements Packet {
                             for (NpcDrop drop : n.getDrops()) {
                                 if (drop == null) continue;
 
-                                if (wealth && drop.getChance() < 10.0) //Ring of wealth effect!
-                                    currentChance += drop.getId() >= 5509 && drop.getId() <= 5515 ? 0.0 : drop.getChance() <= 1.0 ? 0.2 : 0.1;
+                                /*if (wealth && drop.getChance() < 10.0) //Ring of wealth effect!
+                                    currentChance += drop.getId() >= 5509 && drop.getId() <= 5515 ? 0.0 : drop.getChance() <= 1.0 ? 0.2 : 0.1;*/
+                                checkChance = drop.getChance();
+                                if (wealth && drop.getChance() < 10.0)
+                                    checkChance *= drop.getId() >= 5509 && drop.getId() <= 5515 ? 1.0 : drop.getChance() <= 0.1 ? 1.25 : drop.getChance() <= 1.0 ? 1.15 : 1.05;
 
                                 if (drop.getChance() >= 100.0) { // 100% items!
                                     int pos = lootedItem.lastIndexOf(drop.getId());
@@ -1142,7 +1148,8 @@ public class Commands implements Packet {
                                         lootedAmount.add(drop.getAmount());
                                     } else
                                         lootedAmount.set(pos, lootedAmount.get(pos) + drop.getAmount());
-                                } else if (drop.getChance() + currentChance >= chance && !itemDropped) { // user won the roll
+                                //} else if (drop.getChance() + currentChance >= chance && !itemDropped) { // user won the roll
+                                } else if (checkChance + currentChance >= chance && !itemDropped) { // user won the roll
                                     if (drop.getId() >= 5509 && drop.getId() <= 5515) //Just incase shiet!
                                         if (client.checkItem(drop.getId()))
                                             continue;
@@ -1155,7 +1162,8 @@ public class Commands implements Packet {
                                     itemDropped = true;
                                 }
                                 if (!itemDropped && drop.getChance() < 100.0)
-                                    currentChance += drop.getChance();
+                                    //currentChance += drop.getChance();
+                                    currentChance += checkChance;
                             }
                         }
                         for (int i = 0; i < lootedItem.size(); i++)

@@ -239,6 +239,7 @@ public class Client extends Player implements Runnable {
 			"Smoke Blitz", "Shadow Blitz", "Blood Blitz", "Ice Blitz",
 			"Smoke Barrage", "Shadow Barrage", "Blood Barrage", "Ice Barrage"};
 	public int[] requiredLevel = {1, 10, 20, 30, 40, 50, 60, 70, 74, 76, 80, 82, 86, 88, 92, 94, 96};
+	public int[] requiredRunes = {1, 2, 3, 4};
 	public int[] baseDamage = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
 	public long[] coolDown = {2400, 2400, 3000, 3000};
 	/**End*/
@@ -355,7 +356,6 @@ public class Client extends Player implements Runnable {
 	}
 
 	public void stillgfx(int id, Position pos, int time) {
-		// for (Player p : server.playerHandler.players) {
 		for (int i = 0; i < PlayerHandler.players.length; i++) {
 			Player p = PlayerHandler.players[i];
 			if (p != null) {
@@ -375,9 +375,8 @@ public class Client extends Player implements Runnable {
 		getOutputStream().createFrame(4);
 		getOutputStream().writeByte(0); // Tiles away (X >> 4 + Y & 7)
 		getOutputStream().writeWord(id); // Graphic id
-		getOutputStream().writeByte(height); // height of the spell above it's basic
-		// place, i think it's written in pixels
-		// 100 pixels higher
+		getOutputStream().writeByte(height);
+		// height of the spell above it's basic place, i think it's written in pixels 100 pixels higher
 		getOutputStream().writeWord(time); // Time before casting the graphic
 	}
 	// ActionTimer
@@ -515,18 +514,6 @@ public class Client extends Player implements Runnable {
 			if (saveNeeded && !tradeSuccessful) { //Attempt to fix a potential dupe?
 				saveStats(true, true);
 			}
-			/*if (in != null) {
-				in.close();
-			}
-			if (out != null) {
-				out.close();
-			}
-			ConnectionList.getInstance().remove(mySock.getInetAddress());
-			in = null;
-			out = null;
-			synchronized (this) { //??
-				notify();
-			}*/
 			disconnected = true;
 			mySock.close();
 			mySock = null;
@@ -558,8 +545,8 @@ public class Client extends Player implements Runnable {
 		if (disconnected || getOutputStream().currentOffset == 0) {
 			return;
 		}
-		//Integer length = getOutputStream().currentOffset;
-		int length = getOutputStream().currentOffset;
+		Integer length = getOutputStream().currentOffset;
+		//int length = getOutputStream().currentOffset;
 		byte[] copy = new byte[length];
 		System.arraycopy(getOutputStream().buffer, 0, copy, 0, copy.length);
 		mySocketHandler.queueOutput(copy);
@@ -588,12 +575,6 @@ public class Client extends Player implements Runnable {
 		// we just accepted a new connection - handle the login stuff
 		isActive = false;
 		long serverSessionKey, clientSessionKey;
-
-//	if (!KeyServer.verifiedKeys()){
-//		System.out.println("User rejected due to unverified client.");
-//		disconnected = true;
-//		returnCode = 4;
-//	}
 
 		// randomize server part of the session key
 		serverSessionKey = ((long) (java.lang.Math.random() * 99999999D) << 32)
@@ -806,11 +787,12 @@ public class Client extends Player implements Runnable {
 		if (!validClient) {
 			return;
 		}
+		saveStats(true, true);
 		saveNeeded = false;
 		//ConnectionList.getInstance().remove(mySock.getInetAddress());
 		send(new SendMessage("Please wait... logging out may take time"));
 		send(new SendString("     Please wait...", 2458));
-		saveStats(true, true);
+		//saveStats(true, true);
 		send(new SendString("Click here to logout", 2458));
 		getOutputStream().createFrame(109);
 		loggingOut = true;
@@ -824,11 +806,14 @@ public class Client extends Player implements Runnable {
 	 */
 
 	public void saveStats(boolean logout, boolean updateProgress) {
-		if (!loadingDone || !validLogin) {
+		/*if (!loadingDone || !validLogin) {
 			return;
-		}
+		}*/
 		if (loginDelay > 0) {
 			println("Incomplete login, aborting save");
+			return;
+		}
+		if (!loadingDone || !validLogin) {
 			return;
 		}
 		if (getPlayerName() == null || getPlayerName().equals("null") || dbId < 1) {
@@ -853,7 +838,9 @@ public class Client extends Player implements Runnable {
 				int minutes = (int) (elapsed / 60000);
 				Server.login.sendSession(dbId, officialClient ? 1 : 1337, minutes, connectedFrom, start, System.currentTimeMillis());
 			}
+			//System.out.println("exorth save!");
 			PlayerHandler.playersOnline.remove(longName);
+			PlayerHandler.allOnline.remove(longName);
 			for (Client c : PlayerHandler.playersOnline.values()) {
 				if (c.hasFriend(longName)) {
 					c.refreshFriends();
@@ -876,9 +863,6 @@ public class Client extends Player implements Runnable {
 						.sum();
 
 				int totalLevel = totalLevel();
-				/*for (int i = 0; i < 21; i++) {
-					totallvl += Skills.getLevelForExperience(getExperience(Skills.getSkill(i)));
-				}*/
 				String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 				StringBuilder query = new StringBuilder("UPDATE " + DbTables.GAME_CHARACTERS_STATS + " SET total=" + totalLevel + ", combat=" + determineCombatLevel() + ", ");
 				StringBuilder query2 = new StringBuilder("INSERT INTO " + DbTables.GAME_CHARACTERS_STATS_PROGRESS + " SET updated='" + timeStamp + "', total=" + totalLevel + ", combat=" + determineCombatLevel() + ", uid=" + dbId + ", ");
@@ -1418,8 +1402,7 @@ public class Client extends Player implements Runnable {
 				getOutputStream().writeByte(255); // item's stack count. if over 254,
 				// write byte 255
 				getOutputStream().writeDWord_v2(playerItemsN[i]); // and then the real
-				// value with
-				// writeDWord_v2
+				// value with writeDWord_v2
 			} else {
 				getOutputStream().writeByte(playerItemsN[i]);
 			}
@@ -1461,11 +1444,10 @@ public class Client extends Player implements Runnable {
 		getOutputStream().writeWord(len);
 		for (GameItem item : other.offeredItems) {
 			if (item.getAmount() > 254) {
-				getOutputStream().writeByte(255); // item's stack count. if over 254,
-				// write byte 255
-				getOutputStream().writeDWord_v2(item.getAmount()); // and then the real
-				// value with
-				// writeDWord_v2
+				getOutputStream().writeByte(255);
+				// item's stack count. if over 254, write byte 255
+				getOutputStream().writeDWord_v2(item.getAmount());
+				// and then the real value with writeDWord_v2
 			} else {
 				getOutputStream().writeByte(item.getAmount());
 			}
@@ -1489,11 +1471,10 @@ public class Client extends Player implements Runnable {
 		getOutputStream().writeWord(len);
 		for (GameItem item : offeredItems) {
 			if (item.getAmount() > 254) {
-				getOutputStream().writeByte(255); // item's stack count. if over 254,
-				// write byte 255
-				getOutputStream().writeDWord_v2(item.getAmount()); // and then the real
-				// value with
-				// writeDWord_v2
+				getOutputStream().writeByte(255);
+				// item's stack count. if over 254, write byte 255
+				getOutputStream().writeDWord_v2(item.getAmount());
+				// and then the real value with writeDWord_v2
 			} else {
 				getOutputStream().writeByte(item.getAmount());
 			}
@@ -2079,8 +2060,7 @@ public class Client extends Player implements Runnable {
 
 	public void setChatOptions(int publicChat, int privateChat, int tradeBlock) {
 		getOutputStream().createFrame(206);
-		getOutputStream().writeByte(publicChat); // On = 0, Friends = 1, Off = 2,
-		// Hide = 3
+		getOutputStream().writeByte(publicChat); // On = 0, Friends = 1, Off = 2, Hide = 3
 		getOutputStream().writeByte(privateChat); // On = 0, Friends = 1, Off = 2
 		getOutputStream().writeByte(tradeBlock); // On = 0, Friends = 1, Off = 2
 	}
@@ -2137,20 +2117,24 @@ public class Client extends Player implements Runnable {
 //    send(new SendMessage("<col=CB1D1D>Click it for a present!! =)"));
 //    send(new SendMessage("@redPlease have one inventory space open! If you don't PM Logan.."));
 		CheckGear();
-		//Login.banUid();
+		/* Set a player active to a world! */
+		PlayerHandler.playersOnline.put(longName, this);
+		PlayerHandler.allOnline.put(longName, getGameWorldId());
 		/* Sets look! */
 		if (lookNeeded) {
 			defaultCharacterLook(this);
 			showInterface(3559);
 		} else
 			setLook(playerLooks);
-		//Arrays.fill(lastMessage, ""); //We need this?!
 		/* Friend configs! */
 		for (Client c : PlayerHandler.playersOnline.values()) {
 			if (c.hasFriend(longName)) {
 				c.refreshFriends();
 			}
 		}
+		/* Update of both player and npc! */
+		PlayerUpdating.getInstance().update(this, outputStream);
+		NpcUpdating.getInstance().update(this, outputStream);
 		/* Login write settings! */
 		frame36(287, 1);
 		WriteEnergy();
@@ -2185,7 +2169,6 @@ public class Client extends Player implements Runnable {
 		/* Reset values for items*/
 		resetItems(3214);
 		resetBank();
-		//replaceDoors(); //Not sure we need this at this point!
 		send(new SendString("Using this will send a notification to all online mods", 5967));
 		send(new SendString("@yel@Then click below to indicate which of our rules is being broken.", 5969));
 		send(new SendString("4: Bug abuse (includes noclip)", 5974));
@@ -2205,36 +2188,21 @@ public class Client extends Player implements Runnable {
 		if (newPms > 0) {
 			send(new SendMessage("You have " + newPms + " new messages.  Check your inbox at Dodian.net to view them."));
 		}
-		/* Check for refunded items!
-		try {
-			String query = "SELECT * FROM uber3_refunds WHERE receiver='"+dbId+"' AND message='0' AND claimed IS NULL ORDER BY date ASC";
-			Statement stm = getDbConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY,ResultSet.CONCUR_UPDATABLE);
-			boolean gotResult = stm.executeQuery(query).next();
-			if(gotResult) {
-				send(new SendMessage("<col=4C4B73>You have some unclaimed items to claim!"));
-				stm.executeUpdate("UPDATE uber3_refunds SET message='1' where message='0'");
-			}
-			stm.close();
-		} catch (Exception e) {
-			System.out.println("Error in checking sql!!" + e.getMessage() + ", " + e);
-			e.printStackTrace();
-		}*/
 		loaded = true;
-		PlayerUpdating.getInstance().update(this, getOutputStream());
-		//initialized = true;
 	}
 
-	public void update() {
-		PlayerUpdating.getInstance().update(this, getOutputStream());
-		NpcUpdating.getInstance().update(this, getOutputStream());
+	public void update() { //Update npc before player!
+		PlayerUpdating.getInstance().update(this, outputStream);
+		flushOutStream();
+		NpcUpdating.getInstance().update(this, outputStream);
 		flushOutStream();
 	}
 
 	public int packetSize = 0, packetType = -1;
 	public boolean canAttack = true;
 
-	public void process() {// is being called regularily every 600 ms
-		//RegionMusic.handleRegionMusic(this);
+	public void process() {
+		// is being called regularily every 600 ms RegionMusic.handleRegionMusic(this);
 		if (mutedTill * 1000 <= rightNow) {
 			send(new SendString(invis ? "You are invisible!" : "", 6572));
 		} else {
@@ -2583,8 +2551,7 @@ public class Client extends Player implements Runnable {
 			lastAction = now;
 			Cooking.cook(this);
 		}
-		// Snowing
-		// Npc Talking
+		// Snowing, Npc Talking
 		if (NpcWanneTalk == 2) { // Bank Booth
 			if (GoodDistance2(getPosition().getX(), getPosition().getY(), skillX, skillY, 1)) {
 				NpcDialogue = 1;
@@ -2612,6 +2579,27 @@ public class Client extends Player implements Runnable {
 				saveStats(true);
 			}
 			getOutputStream().createFrame(109);
+		}
+
+		/* Items update! Might cause some lag if more than 500 items?! */
+		/* TODO: Add better way of handling ground items! */
+		if (!Ground.items.isEmpty() || !(Ground.items.size() < 0)) {
+			for (GroundItem item : Ground.items) {
+				if (!item.canDespawn && item.taken && now - item.dropped >= item.timeDisplay) {
+					item.taken = false;
+					item.visible = false;
+				}
+				if (!item.visible && (now - item.dropped >= item.timeDisplay || !item.canDespawn) || (!item.visible && !item.canDespawn && !item.taken) && (now - item.dropped >= item.timeDisplay || !item.canDespawn)) {
+					if (Server.itemManager.isTradable(item.id) && dbId != item.playerId
+							&& Math.abs(getPosition().getX() - item.x) <= 114 && Math.abs(getPosition().getY() - item.y) <= 114 && getPosition().getZ() == item.z) {
+						send(new CreateGroundItem(new GameItem(item.id, item.amount), new Position(item.x, item.y, item.z)));
+					}
+				}
+				item.visible = true;
+				if (item.canDespawn && item.visible && now - item.dropped >= (item.timeDisplay + item.timeDespawn)) {
+					Ground.deleteItem(item);
+				}
+			}
 		}
 
 		if (Server.updateRunning && now - Server.updateStartTime > (Server.updateSeconds * 1000L)) {
@@ -2760,8 +2748,7 @@ public class Client extends Player implements Runnable {
 		return -1;
 	}
 
-	public void pmstatus(int status) { // status: loading = 0 connecting = 1
-		// fine = 2
+	public void pmstatus(int status) { // status: loading = 0 connecting = 1 fine = 2
 		getOutputStream().createFrame(221);
 		getOutputStream().writeByte(status);
 	}
@@ -3619,11 +3606,10 @@ public class Client extends Player implements Runnable {
 		getOutputStream().writeWord(otherOfferedItems.toArray().length);
 		for (GameItem item : otherOfferedItems) {
 			if (item.getAmount() > 254) {
-				getOutputStream().writeByte(255); // item's stack count. if over 254,
-				// write byte 255
-				getOutputStream().writeDWord_v2(item.getAmount()); // and then the real
-				// value with
-				// writeDWord_v2
+				getOutputStream().writeByte(255);
+				// item's stack count. if over 254, write byte 255
+				getOutputStream().writeDWord_v2(item.getAmount());
+				// and then the real value with writeDWord_v2
 			} else {
 				getOutputStream().writeByte(item.getAmount());
 			}
@@ -3643,11 +3629,10 @@ public class Client extends Player implements Runnable {
 		int current = 0;
 		for (GameItem item : offeredItems) {
 			if (item.getAmount() > 254) {
-				getOutputStream().writeByte(255); // item's stack count. if over 254,
-				// write byte 255
-				getOutputStream().writeDWord_v2(item.getAmount()); // and then the real
-				// value with
-				// writeDWord_v2
+				getOutputStream().writeByte(255);
+				// item's stack count. if over 254, write byte 255
+				getOutputStream().writeDWord_v2(item.getAmount());
+				// and then the real value with writeDWord_v2
 			} else {
 				getOutputStream().writeByte(item.getAmount());
 			}
@@ -3667,11 +3652,10 @@ public class Client extends Player implements Runnable {
 		current = 0;
 		for (GameItem item : other.offeredItems) {
 			if (item.getAmount() > 254) {
-				getOutputStream().writeByte(255); // item's stack count. if over 254,
-				// write byte 255
-				getOutputStream().writeDWord_v2(item.getAmount()); // and then the real
-				// value with
-				// writeDWord_v2
+				getOutputStream().writeByte(255);
+				// item's stack count. if over 254, write byte 255
+				getOutputStream().writeDWord_v2(item.getAmount());
+				// and then the real value with writeDWord_v2
 			} else {
 				getOutputStream().writeByte(item.getAmount());
 			}
@@ -3904,15 +3888,16 @@ public class Client extends Player implements Runnable {
 			showRandomEvent();
 			chestEvent = 0;
 		}
-		if(chestEvent >= 50) { //Prevent auto clicking I believe!
+		//TODO need to make something better so its not a autoclicker
+		/*if(chestEvent >= 50) {
 			int chance = Misc.chance(100);
 			int trigger = (chestEvent - 50) * 2;
 			if(trigger >= chance) {
 				chestEventOccur = true;
 				chestEvent = 0;
-				send(new SendMessage("The server randomly detect you standing still for to long! Please move!"));
+				send(new SendMessage("The server randomly detect you auto-clicking!"));
 			}
-		}
+		}*/
 	}
 
 	public void openGenie() {
@@ -4556,6 +4541,7 @@ public class Client extends Player implements Runnable {
 			if (to.Privatechat == 0 || (to.Privatechat == 1 && to.hasFriend(longName))) {
 				to.sendpm(longName, playerRights, pmchatText, pmchatTextSize);
 				PmLog.recordPm(this.getPlayerName(), to.getPlayerName(), Utils.textUnpack(pmchatText, pmchatTextSize));
+			} else if (PlayerHandler.allOnline.containsKey(friend)) { //Not sure why we need this code!
 			} else {
 				send(new SendMessage("That player is not available"));
 			}
@@ -4590,8 +4576,22 @@ public class Client extends Player implements Runnable {
 
 	public void refreshFriends() {
 		for (Friend f : friends) {
-			if (PlayerHandler.playersOnline.containsKey(f.name)) {
-				loadpm(f.name, getGameWorldId());
+			if (PlayerHandler.allOnline.containsKey(f.name)) {
+				boolean ignored = false;
+				for (Player p : PlayerHandler.players) {
+					if (p == null)
+						continue;
+					if (p.longName == f.name) {
+						Client player = (Client) p;
+						for (Friend ignore : player.ignores) {
+							ignored = ignore.name == this.longName;
+						}
+					}
+				}
+				if (!ignored)
+					loadpm(f.name, 1);
+				else
+					loadpm(f.name, 0);
 			} else {
 				loadpm(f.name, 0);
 			}
@@ -4613,12 +4613,46 @@ public class Client extends Player implements Runnable {
 			if (f.name == name) {
 				ignores.remove(f);
 				refreshFriends();
-				return;
+				if (PlayerHandler.allOnline.containsKey(f.name)) {
+					for (Player p : PlayerHandler.players) {
+						if (p == null)
+							continue;
+						if (p.longName == f.name) {
+							Client player = (Client) p;
+							player.refreshFriends();
+						}
+					}
+				}
+				break;
 			}
 		}
 	}
 
 	public void addIgnore(long name) {
+		boolean canAdd = true;
+		for (Friend f : ignores) {
+			if (f.name == name) {
+				send(new SendMessage("You already got this guy on your ignoreList!"));
+				canAdd = false;
+				break;
+			}
+		}
+		if (canAdd) {
+			if (ignores.size() < 100) {
+				ignores.add(new Friend(name, true));
+				if (PlayerHandler.allOnline.containsKey(name)) {
+					for (Player p : PlayerHandler.players) {
+						if (p == null)
+							continue;
+						if (p.longName == name) {
+							Client player = (Client) p;
+							player.refreshFriends();
+						}
+					}
+				}
+			} else
+				send(new SendMessage("Maximum ignores reached!"));
+		}
 	}
 
 	public void triggerChat(int button) {
@@ -4746,7 +4780,7 @@ public class Client extends Player implements Runnable {
 		 */
 		if (NpcDialogue == 163) {
 			if (button == 1)
-				Agility.spendTickets(this);
+				showInterface(8292);
 			else
 				nextDiag = 164;
 		} else if (NpcDialogue == 164) {

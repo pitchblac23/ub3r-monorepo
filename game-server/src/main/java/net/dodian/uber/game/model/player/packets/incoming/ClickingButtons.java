@@ -16,6 +16,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.crafting.Tanning;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
@@ -161,13 +162,11 @@ public class ClickingButtons implements Packet {
             case 49046: // old magic off
 
                 if (client.ancients == 1) {
-                    client.setSidebarInterface(6, 1151); // magic tab (ancient =
-                    // 12855);
+                    client.setSidebarInterface(6, 1151); // magic tab (ancient = 12855);
                     client.ancients = 0;
                     client.send(new SendMessage("Normal magic enabled"));
                 } else {
-                    client.setSidebarInterface(6, 12855); // magic tab (ancient =
-                    // 12855);
+                    client.setSidebarInterface(6, 12855); // magic tab (ancient = 12855);
                     client.ancients = 1;
                     client.send(new SendMessage("Ancient magic enabled"));
                 }
@@ -1093,6 +1092,24 @@ public class ClickingButtons implements Packet {
                     client.send(new SendMessage("You need to be wearing a skillcape to do that!"));
                 }
                 break;
+            case 32195:
+                if (client.playerHasItem(2996)) {
+                    client.giveExperience(700, Skills.AGILITY);
+                    client.send(new SendMessage("You exchange your agility tickets"));
+                    client.deleteItem(2996, 1);
+                } else {
+                    client.send(new SendMessage("You have no agility tickets!"));
+                }
+                break;
+            case 32197:
+                if (client.playerHasItem(2996, 10)) {
+                    client.giveExperience(10 * 700, Skills.AGILITY);
+                    client.send(new SendMessage("You exchange your agility tickets."));
+                    client.deleteItem(2996, 10);
+                } else {
+                    client.send(new SendMessage("You need 10 agility tickets."));
+                }
+                break;
 
             default:
                 // System.out.println("Player stands in: X="+absX+" Y="+absY);
@@ -1102,5 +1119,4 @@ public class ClickingButtons implements Packet {
                 break;
         }
     }
-
 }

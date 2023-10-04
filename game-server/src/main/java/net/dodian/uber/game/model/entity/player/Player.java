@@ -21,14 +21,13 @@ import net.dodian.uber.game.party.Balloons;
 import net.dodian.uber.game.party.RewardItem;
 import net.dodian.utilities.Stream;
 import net.dodian.utilities.Utils;
-
 import java.util.*;
 
 public abstract class Player extends Entity {
     public boolean yellOn = true, genie = false;
     public boolean saving = false;
     public long disconnectAt = 0, longName = 0;
-    public int wildyLevel = 0;
+    public int wildyLevel = 0, violations = 0;
     public long lastAction = 0;
     public long lastMagic = 0;
     public long lastTeleport = 0;
@@ -50,9 +49,8 @@ public abstract class Player extends Entity {
     "TzTok-Jad"};
     public int[] boss_amount = new int[boss_name.length];
     // dueling
-    public int duelStatus = -1; // 0 = Requesting duel, 1 = in duel screen, 2 =
-    // waiting for other player to accept, 3 = in
-    // duel, 4 = won
+    public int duelStatus = -1;
+    // 0 = Requesting duel, 1 = in duel screen, 2 = waiting for other player to accept, 3 = in duel, 4 = won
     public int duelChatTimer = -1, iconTimer = 6;
     public boolean startDuel = false;
     public String forcedChat = "";
@@ -87,11 +85,12 @@ public abstract class Player extends Entity {
     public boolean isKicked = false;
     public int actionTimer = 0;
     public String connectedFrom = "";
+    public int ip = 0;
     public String UUID = "";
     public boolean takeAsNote = false;
     private String playerName = null; // name of the connecting client
     public String playerPass = null; // name of the connecting client
-    public int playerRights; // 0=normal player, 1=player mod, 2=real mod,
+    public int playerRights; // 0 = player, 1 = mod, 2 = admin,
     public PlayerHandler handler = null;
     public int maxItemAmount = Integer.MAX_VALUE;
     public int[] playerItems = new int[28];
@@ -180,30 +179,6 @@ public abstract class Player extends Entity {
     public Player(int slot) {
         super(new Position(-1, -1, 0), slot, Entity.Type.PLAYER);
         lastPacket = System.currentTimeMillis();
-        /*playerRights = 0; // player rights
-        // Setting player items
-        Arrays.fill(playerItems, 0);
-        // Setting Item amounts
-        Arrays.fill(playerItemsN, 0);
-
-        for (int i = 0; i < playerLevel.length; i++) { // Setting Levels
-            if (i == 3) {
-                playerLevel[i] = 10;
-                playerXP[i] = 1155;
-            } else {
-                playerLevel[i] = 1;
-                playerXP[i] = 0;
-            }
-        }
-
-        for (int i = 0; i < playerBankSize; i++) { // Setting bank items
-            bankItems[i] = 0;
-        }
-
-        for (int i = 0; i < playerBankSize; i++) { // Setting bank item amounts
-            bankItemsN[i] = 0;
-        }*/
-
         teleportToX = teleportToY = -1;
         mapRegionX = mapRegionY = -1;
         currentX = currentY = 0;
@@ -372,8 +347,8 @@ public abstract class Player extends Entity {
 
     public int mapRegionX, mapRegionY; // the map region the player is
     // currently in
-    private int currentX, currentY; // relative x/y coordinates (to map region)
-    // Note that mapRegionX*8+currentX yields absX
+    private int currentX, currentY;
+    // relative x/y coordinates (to map region) Note that mapRegionX*8+currentX yields absX
 
     public static final int WALKING_QUEUE_SIZE = 50;
     public int[] walkingQueueX = new int[WALKING_QUEUE_SIZE], walkingQueueY = new int[WALKING_QUEUE_SIZE];
@@ -425,8 +400,7 @@ public abstract class Player extends Entity {
         return dir;
     }
 
-    // calculates directions of player movement, or the new coordinates when
-    // teleporting
+    // calculates directions of player movement, or the new coordinates when teleporting
     private boolean didTeleport = false; // set to true if char did teleport in
     // this cycle
     private boolean mapRegionDidChange = false;
@@ -448,8 +422,7 @@ public abstract class Player extends Entity {
                     mapRegionDidChange = false;
             }
             if (mapRegionDidChange) {
-                // after map region change the relative coordinates range
-                // between 48 - 55+
+                // after map region change the relative coordinates range between 48 - 55+
                 mapRegionX = (teleportToX >> 3) - 6;
                 mapRegionY = (teleportToY >> 3) - 6;
                 if (firstSend) {
@@ -457,8 +430,7 @@ public abstract class Player extends Entity {
                 } else {
                     firstSend = true;
                 }
-                // playerListSize = 0; // completely rebuild playerList after
-                // teleport AND map region change
+                // playerListSize = 0; // completely rebuild playerList after teleport AND map region change
             }
             currentX = teleportToX - 8 * mapRegionX;
             currentY = teleportToY - 8 * mapRegionY;
@@ -534,13 +506,11 @@ public abstract class Player extends Entity {
     }
 
     // handles anything related to character position basically walking, running
-    // and standing
-    // applies to only to "non-thisPlayer" charracters
+    // and standing applies to only to "non-thisPlayer" charracters
     public void updatePlayerMovement(Stream str) {
         if (primaryDirection == -1) {
-            // don't have to update the character position, because the char is
-            // just standing
-            if (getUpdateFlags().isUpdateRequired()) {
+            // don't have to update the character position, because the char is just standing
+            if (getUpdateFlags().isUpdateRequired() || getUpdateFlags().get(UpdateFlag.CHAT)) {
                 // tell client there's an update block appended at the end
                 str.writeBits(1, 1);
                 str.writeBits(2, 0);
@@ -573,8 +543,8 @@ public abstract class Player extends Entity {
         plr.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
         PlayerUpdating.getInstance().appendBlockUpdate(plr, updateBlock);
         plr.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, savedFlag);
-        str.writeBits(1, 1); // set to true, if we want to discard the
-        // (clientside) walking queue
+        str.writeBits(1, 1);
+        // set to true, if we want to discard the (clientside) walking queue
         // no idea what this might be useful for yet
         int z = plr.getPosition().getY() - getPosition().getY();
         if (z < 0)
@@ -650,9 +620,8 @@ public abstract class Player extends Entity {
 
     public void postProcessing() {
         if (newWalkCmdSteps > 0) {
-            int firstX = newWalkCmdX[0], firstY = newWalkCmdY[0]; // the point
-
-            // travel backwards to find a proper connection vertex
+            int firstX = newWalkCmdX[0], firstY = newWalkCmdY[0];
+            // the point travel backwards to find a proper connection vertex
             int lastDir;
             boolean found = false;
             numTravelBackSteps = 0;
@@ -670,8 +639,7 @@ public abstract class Player extends Entity {
                     dir = Utils.direction(walkingQueueX[ptr], walkingQueueY[ptr], firstX, firstY);
                     if (lastDir != dir) {
                         found = true;
-                        break; // either of those two, or a vertex between
-                        // those is a candidate
+                        break; // either of those two, or a vertex between those is a candidate
                     }
 
                 } while (ptr != wQueueWritePtr);
@@ -684,13 +652,10 @@ public abstract class Player extends Entity {
                 temp.saveStats(true);
                 disconnected = true;
             } else {
-                wQueueWritePtr = wQueueReadPtr; // discard any yet unprocessed
-                // waypoints from queue
+                wQueueWritePtr = wQueueReadPtr; // discard any yet unprocessed waypoints from queue
 
-                addToWalkingQueue(currentX, currentY); // have to add this in
-                // order to keep
-                // consistency in the
-                // queue
+                addToWalkingQueue(currentX, currentY);
+                // have to add this in order to keep consistency in the queue
 
                 if (dir != -1 && (dir & 1) != 0) {
 
