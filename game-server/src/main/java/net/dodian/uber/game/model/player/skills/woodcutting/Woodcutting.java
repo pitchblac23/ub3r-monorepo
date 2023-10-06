@@ -16,7 +16,6 @@ public class Woodcutting {
 
     public static boolean CheckObjectSkill(int objectID, String name, Client c) {
         boolean GoFalse = false;
-        /* Do we wish to keep? */
         if (name.contains("oak"))
             objectID = 1281;
         else if (name.contains("willow"))
@@ -151,7 +150,7 @@ public class Woodcutting {
     public static long getWoodcuttingSpeed(Client c) {
         double axeBonus = Utils.axeBonus[findAxe(c)];
         double level = (double) c.getLevel(Skills.WOODCUTTING) / 600;
-        double random = (double) Misc.random(150) / 100;
+        double random = (75 + Misc.random(50)) / 100D;
         double bonus = 1 + axeBonus * random + level;
         double time = woodcuttingDelays[c.woodcuttingIndex] / bonus;
         return (long) time;
@@ -173,8 +172,7 @@ public class Woodcutting {
             return false;
         }
         if (woodcuttingLevels[c.woodcuttingIndex] > c.getLevel(Skills.WOODCUTTING)) {
-            c.send(new SendMessage(
-                    "You need a woodcutting level of " + woodcuttingLevels[c.woodcuttingIndex] + " to cut this tree."));
+            c.send(new SendMessage("You need a woodcutting level of " + woodcuttingLevels[c.woodcuttingIndex] + " to cut this tree."));
             c.resetAction();
             return false;
         }
@@ -197,11 +195,6 @@ public class Woodcutting {
             c.send(new SendMessage("You cut some " + c.GetItemName(woodcuttingLogs[c.woodcuttingIndex]).toLowerCase() + "."));
             c.addItem(woodcuttingLogs[c.woodcuttingIndex], 1);
             c.triggerRandom(woodcuttingExp[c.woodcuttingIndex]);
-            if (Misc.chance(30) == 1) {
-                c.send(new SendMessage("You take a rest"));
-                c.resetAction(true);
-                return false;
-            }
         }
         return true;
     }

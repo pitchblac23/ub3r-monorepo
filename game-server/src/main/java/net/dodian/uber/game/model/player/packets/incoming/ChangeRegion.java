@@ -85,6 +85,8 @@ public class ChangeRegion implements Packet {
             client.ReplaceObject2(new Position(2493, 9915, 0), 7491, 0, 10);
             /*Cooking oven fishing guild*/
             client.ReplaceObject2(new Position(2593, 3423, 0), 21302, 0, 10);
+            /*Bankbooth at cath*/
+            client.ReplaceObject2(new Position(2810, 3442, 0), 6943, 0, 10);
 
         if (client.inWildy() || client.duelFight) {
             client.getOutputStream().createFrameVarSize(104);

@@ -215,13 +215,20 @@ public class ItemOnItem implements Packet {
                 } else client.send(new SendMessage("You need level 70 crafting to combine these items!"));
             }
         }
+        if ((itemUsed == 1733 || otherItem == 1733) && (itemUsed == 1741 || otherItem == 1741)) {
+            client.showInterface(2311);
+        }
+        for (int id = 0; id < Constants.leathers.length; id++) {
+            if ((itemUsed == 1733 || otherItem == 1733)
+                    && (itemUsed == Constants.leathers[id] || otherItem == Constants.leathers[id])) {
+                Crafting.craftMenu(id, client);
+                Crafting.cIndex = id;
+            }
+        }
 
         if (knife && (itemUsed == 1511 || otherItem == 1511)) {
             client.resetAction();
             client.shafting = true;
-        }
-        if ((itemUsed == 1733 || otherItem == 1733) && (itemUsed == 1741 || otherItem == 1741)) {
-            client.showInterface(2311);
         }
         if ((itemUsed == 314 || otherItem == 314)
                 && (itemUsed == 52 || otherItem == 52)) {
@@ -331,14 +338,6 @@ public class ItemOnItem implements Packet {
                 client.fletchOtherTime = 1200;
             }
         }
-        for (int h = 0; h < Constants.leathers.length; h++) {
-            if ((itemUsed == 1733 || otherItem == 1733)
-                    && (itemUsed == Constants.leathers[h] || otherItem == Constants.leathers[h])) {
-                Crafting.craftMenu(h, client);
-                Crafting.cIndex = h;
-            }
-        }
-
         if (itemUsed == 1755 || otherItem == 1755) {
             int gem = -1, slot = -1;
             if (itemUsed == 1755)

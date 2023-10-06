@@ -15,6 +15,7 @@ import net.dodian.uber.game.model.object.GlobalObject;
 import net.dodian.uber.game.model.object.Object;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.farming.Farming;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
 import net.dodian.uber.game.party.Balloons;
@@ -24,6 +25,8 @@ import net.dodian.utilities.Utils;
 import java.util.*;
 
 public abstract class Player extends Entity {
+
+    public Farming farm;
     public boolean yellOn = true, genie = false;
     public boolean saving = false;
     public long disconnectAt = 0, longName = 0;
@@ -414,7 +417,6 @@ public abstract class Player extends Entity {
         primaryDirection = secondaryDirection = -1;
         if (teleportToX != -1 && teleportToY != -1) {
             mapRegionDidChange = true;
-            didTeleport = true;
             if (mapRegionX != -1 && mapRegionY != -1) {
                 // check, whether destination is within current map region
                 int relX = teleportToX - mapRegionX * 8, relY = teleportToY - mapRegionY * 8;
@@ -423,13 +425,13 @@ public abstract class Player extends Entity {
             }
             if (mapRegionDidChange) {
                 // after map region change the relative coordinates range between 48 - 55+
-                mapRegionX = (teleportToX >> 3) - 6;
-                mapRegionY = (teleportToY >> 3) - 6;
                 if (firstSend) {
                     temp.pLoaded = false;
                 } else {
                     firstSend = true;
                 }
+                mapRegionX = (teleportToX >> 3) - 6;
+                mapRegionY = (teleportToY >> 3) - 6;
                 // playerListSize = 0; // completely rebuild playerList after teleport AND map region change
             }
             currentX = teleportToX - 8 * mapRegionX;
@@ -439,6 +441,7 @@ public abstract class Player extends Entity {
             Balloons.updateBalloons(temp);
             GlobalObject.updateObject(temp);
             teleportToX = teleportToY = -1;
+            didTeleport = true;
         } else {
             primaryDirection = getNextWalkingDirection();
             if (primaryDirection == -1)

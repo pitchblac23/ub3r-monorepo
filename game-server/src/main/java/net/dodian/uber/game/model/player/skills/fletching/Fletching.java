@@ -31,7 +31,7 @@ public class Fletching {
             player.triggerRandom(player.fletchOtherXp * player.fletchOtherAmt);
         } else {
             if (player.fletchOtherAmt == 15)
-                player.send(new SendMessage("You need atleast 15 " + player.GetItemName(player.fletchOtherId1).toLowerCase() + " and " + player.GetItemName(player.fletchOtherId2).toLowerCase() + ""));
+                player.send(new SendMessage("You need at least 15 " + player.GetItemName(player.fletchOtherId1).toLowerCase() + " and " + player.GetItemName(player.fletchOtherId2).toLowerCase() + ""));
             player.resetAction();
         }
     }
@@ -92,4 +92,35 @@ public class Fletching {
             c.resetAction();
         }
     }
+
+    public static void pickHandle(Client c) {
+        if (c.IsCutting || c.isFiremaking)
+            c.resetAction();
+        c.send(new RemoveInterfaces());
+        if (c.playerHasItem(1517)) {
+            c.deleteItem(1517, 1);
+            c.addItem(466, 1);
+            c.requestAnim(1248, 0);
+            c.giveExperience(50, Skills.FLETCHING);
+            c.triggerRandom(50);
+        } else {
+            c.resetAction();
+        }
+    }
+
+    public static void axeHandle(Client c) {
+        if (c.IsCutting || c.isFiremaking)
+            c.resetAction();
+        c.send(new RemoveInterfaces());
+        if (c.playerHasItem(1515)) {
+            c.deleteItem(1515, 1);
+            c.addItem(492, 1);
+            c.requestAnim(1248, 0);
+            c.giveExperience(50, Skills.FLETCHING);
+            c.triggerRandom(50);
+        } else {
+            c.resetAction();
+        }
+    }
+
 }

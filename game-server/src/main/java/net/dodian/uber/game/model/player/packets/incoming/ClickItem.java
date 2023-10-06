@@ -112,7 +112,10 @@ public class ClickItem implements Packet {
             }
         }
         if (itemId == 11738) {
-            client.send(new SendMessage("coming soon!"));
+            client.deleteItem(itemId, 1);
+            int[] herbs = {200, 202, 204, 206, 208, 210, 212, 214, 216, 218, 220};
+            int Herbs = herbs[Misc.random(herbs.length -1)] ;
+                client.addItem(Herbs, 5);
         }
     }
 

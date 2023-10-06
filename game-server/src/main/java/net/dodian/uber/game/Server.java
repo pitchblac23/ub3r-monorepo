@@ -113,6 +113,7 @@ public class Server implements Runnable {
         job.ScheduleStaticRepeatForeverJob(TICK, ShopProcessor.class);
         job.ScheduleStaticRepeatForeverJob(TICK, ObjectProcess.class);
         job.ScheduleStaticRepeatForeverJob(TICK * 100, WorldProcessor.class);
+        //job.ScheduleStaticRepeatForeverJob(TICK, GroundItemProcessor.class); //TODO: Fix this messy with timers!
         /* Done loading */
         System.gc();
         System.out.println("Server is now running on world " + getGameWorldId() + "!");

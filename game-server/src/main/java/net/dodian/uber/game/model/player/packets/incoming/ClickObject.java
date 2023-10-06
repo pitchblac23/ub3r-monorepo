@@ -9,6 +9,7 @@ import net.dodian.uber.game.event.EventManager;
 import net.dodian.uber.game.model.Position;
 import net.dodian.uber.game.model.WalkToTask;
 import net.dodian.uber.game.model.entity.player.Client;
+import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.object.*;
@@ -17,6 +18,7 @@ import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.agility.Agility;
+import net.dodian.uber.game.model.player.skills.farming.Farming;
 import net.dodian.uber.game.model.player.skills.mining.Mining;
 import net.dodian.uber.game.model.player.skills.runecrafting.Runecrafting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
@@ -100,6 +102,35 @@ public class ClickObject implements Packet {
         client.setFocus(objectPosition.getX(), objectPosition.getY());
         if (xDiff > 5 || yDiff > 5) {
             return;
+        }
+        /*if (objectID == client.farm.HarvestID) {
+            client.farm.Harvest(client);
+        }*/
+        if (objectID == 8553) {
+            if (client.playerHasItem(5341)) {
+                if (Misc.goodDistance(objectPosition.getX(), objectPosition.getY(), client.getPosition().getX(), client.getPosition().getY(), 1)) {
+                    client.requestAnim(2273, 0);
+                    EventManager.getInstance().registerEvent(new Event(2000) {
+                        public void execute() {
+                            Farming.updatePatches(8573, client);
+                            client.addItem(6055, 1);
+                            client.addItem(6055, 1);
+                            client.addItem(6055, 1);
+                            client.giveExperience(50, Skills.FARMING);
+                            //needs to wait patch 8575 8574 8573
+                            stop();
+                        }
+                    });
+                    EventManager.getInstance().registerEvent(new Event(20000) {
+                        public void execute() {
+                            Farming.updatePatches(8553, client);
+                            stop();
+                        }
+                    });
+                }
+            } else {
+                client.send(new SendMessage("Nothing interesting happens."));
+            }
         }
         if (Balloons.lootBalloon(client, objectPosition.copy()) && objectID >= 115 && objectID <= 122) {
             return;
@@ -765,14 +796,14 @@ public class ClickObject implements Packet {
             double roll = Math.random() * 100;
             if (roll <= 0.3) {
                 int[] items = {2577, 2579, 2631, 10400, 10402, 10404, 10406, 10408,
-                               10410, 10412, 10414, 10416, 10418, 12315, 13217, 10420,
+                               10410, 10412, 10414, 10416, 10418, 12315, 12217, 10420,
                                10422, 10424, 10426, 10428, 10430, 10432, 10434, 10436,
                                10438, 12339, 12341};
                 int r = (int) (Math.random() * items.length);
                 client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "!"));
                 client.addItem(items[r], 1);
-                client.yell("[Server] - " + client.getPlayerName() + " has received" + client.GetItemName(items[r]) +  "from the chest a.");
-            } else if (roll <= 3.0) {
+                client.yell("@bla@[@yel@Server@bla@] - @blu@" + client.getPlayerName() + " @or2@has received a " + client.GetItemName(items[r]).toLowerCase() +  " from a chest.");
+            } else if (roll <= 2.5) {
                 int natures = 50 + Utils.random(100);
                 client.send(new SendMessage("You find " + natures + " natures inside the chest."));
                 client.addItem(561, natures);
@@ -786,9 +817,11 @@ public class ClickObject implements Packet {
             client.chestEvent++;
             client.stillgfx(444, objectPosition.getY(), objectPosition.getX());
             client.triggerRandom(900);
-            /*if (!GlobalObject.addGlobalObject(emptyObj, 12000)) {
+            final Object o = new Object(6421, 2733, 3374, objectPosition.getZ(), 11, -1, objectID);
+            if (!GlobalObject.addGlobalObject(o, 10000)) {
+                GlobalObject.updateObject(client);
                 return;
-            }*/
+            }
         }
         if (objectID == 6420 && objectPosition.getX() == 2733 && objectPosition.getY() == 3374) {
             if(client.chestEventOccur) {
@@ -806,10 +839,11 @@ public class ClickObject implements Packet {
                 client.lastAction = System.currentTimeMillis();
                 return;
             }
-            //final Object o = new Object(6421, objectPosition.getX(), objectPosition.getY(), objectPosition.getZ(), 11, -1, objectID);
-            /*if (!GlobalObject.addGlobalObject(o, 15000)) {
+            final Object o = new Object(6421, 2733/*objectPosition.getX()*/, 3374/*objectPosition.getY()*/, objectPosition.getZ(), 11, -1, objectID);
+            if (!GlobalObject.addGlobalObject(o, 10000)) {
+                GlobalObject.updateObject(client);
                 return;
-            }*/
+            }
             client.lastAction = System.currentTimeMillis();
             double roll = Math.random() * 100;
             if (roll <= 0.3) {
@@ -818,8 +852,8 @@ public class ClickObject implements Packet {
                 int r = (int) (Math.random() * items.length);
                 client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "."));
                 client.addItem(items[r], 1);
-                client.yell("[Server] - " + client.getPlayerName() + " has just received from the premium chest a  " + client.GetItemName(items[r]) + ".");
-            } else if (roll <= 3.0) {
+                client.yell("@bla@[@yel@Server@bla@] - @blu@" + client.getPlayerName() + " @or2@has received a " + client.GetItemName(items[r]).toLowerCase() + " from the burnt chest.");
+            } else if (roll <= 2.5) {
                 int bloods = 100 + Utils.random(150);
                 client.send(new SendMessage("You find " + bloods + " bloods inside the chest."));
                 client.addItem(565, bloods);

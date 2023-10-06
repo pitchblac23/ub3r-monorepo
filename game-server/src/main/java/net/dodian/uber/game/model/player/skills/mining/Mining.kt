@@ -51,7 +51,7 @@ class Mining {
         fun getMiningSpeed(player: Client): Long {
             val pickBonus = Utils.pickBonus[player.minePick]
             val level = player.getLevel(Skills.MINING).toDouble() / 600
-            val random = Misc.random(150).toDouble() / 100
+            val random = (50 + Misc.random(100)) / 100.0
             val bonus = 1 + pickBonus * random + level
             val time = Utils.mineTimes[player.mineIndex] / bonus
             return time.toLong()

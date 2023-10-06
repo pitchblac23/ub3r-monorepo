@@ -83,12 +83,6 @@ public class PlayerHandler {
     }
 
     public static boolean isPlayerOn(String playerName) {
-        if (PlayerHandler.allOnline.containsKey(playerName)) {
-            System.out.println("hello?!");
-        }
-        if (PlayerHandler.allOnline.containsKey(Utils.playerNameToLong(playerName))) {
-            System.out.println("hello 2?!");
-        }
         return allOnline.containsKey(Utils.playerNameToLong(playerName));
     }
 

@@ -10,7 +10,6 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Range;
 
-
 public class Thieving {
 
     public static final int PICKPOCKET_EMOTE = 881;

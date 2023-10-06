@@ -567,7 +567,6 @@ public class ClickingButtons implements Packet {
             case 8237: // lunge (dagger)
             case 8236: // slash (dagger)
                 client.FightType = 2;
-                // client.SkillID = 2;
                 break;
 
             case 9154: // Log out

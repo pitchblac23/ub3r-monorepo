@@ -16,5 +16,4 @@ public class SetMap implements OutgoingPacket {
         client.getOutputStream().writeByteC(pos.getY() - (client.mapRegionY * 8));
         client.getOutputStream().writeByteC(pos.getX() - (client.mapRegionX * 8));
     }
-
 }

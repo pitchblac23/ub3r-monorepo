@@ -15,6 +15,7 @@ var cSelected = -1
 class Crafting {
 
     companion object {
+
         @kotlin.jvm.JvmField
         var cIndex: Int = -1
 

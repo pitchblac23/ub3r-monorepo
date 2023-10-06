@@ -8,6 +8,7 @@ import net.dodian.uber.game.model.UpdateFlag;
 import net.dodian.uber.game.model.UpdateFlags;
 import net.dodian.uber.game.model.combat.impl.CombatStyleHandler;
 import net.dodian.uber.game.model.entity.npc.Npc;
+import net.dodian.uber.game.model.entity.player.Player;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public abstract class Entity {
 
     private int animationDelay;
     private int animationId;
-    private String text;//
+    private String text;
 
     private Map<Entity, Integer> damage = new HashMap<Entity, Integer>();
 
@@ -180,5 +181,4 @@ public abstract class Entity {
         FIRE_BREATH, JAD_MAGIC, JAD_RANGED //Special
         ;
     }
-
 }

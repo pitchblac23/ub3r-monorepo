@@ -9010,7 +9010,7 @@ public class Client extends RSApplet {
             player.textCycle = 150;
         }
         if ((i & 0x80) != 0) {
-            // right fucking here
+            // right here
             int i1 = stream.method434();
             int j2 = stream.readUnsignedByte();
             int j3 = stream.method427();
@@ -12979,5 +12979,4 @@ public class Client extends RSApplet {
         this.anInt1186 += i * 3;
         this.anInt1187 += (j << 1);
     }
-
 }
