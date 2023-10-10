@@ -56,5 +56,4 @@ public class BankX2 implements Packet {
             client.fromTrade(client.XremoveID, client.XremoveSlot, EnteredAmount);
         }
     }
-
 }

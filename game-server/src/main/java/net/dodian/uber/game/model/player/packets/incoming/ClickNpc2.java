@@ -82,6 +82,9 @@ public class ClickNpc2 implements Packet {
                 Thieving.attemptSteal(client, npcId, tempNpc.getPosition());
                 break;
         }
+        if (npcId == 1174) {
+            client.WanneShop = 39;
+        }
         if (npcId == 394 || npcId == 395 || npcId == 7677) { /* Banking */
             client.WanneBank = 1;
         } else if (npcId == 5034 || npcId == 844 || npcId == 462) {

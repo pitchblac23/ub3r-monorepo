@@ -16,7 +16,7 @@ public class RemoveItem implements Packet {
         int interfaceID = client.getInputStream().readUnsignedWordA();
         int removeSlot = client.getInputStream().readUnsignedWordA();
         int removeID = client.getInputStream().readUnsignedWordA();
-        if (client.playerRights == 2) {
+        if (client.playerGroup >= 3) {
             client.println_debug("RemoveItem: " + removeID + " InterID: " + interfaceID + " slot: " + removeSlot);
         }
         if (interfaceID == 3322 && client.inDuel) { // remove from bag to duel window
@@ -40,11 +40,9 @@ public class RemoveItem implements Packet {
             client.fromBank(removeID, removeSlot, 1);
         } else if (interfaceID == 2274) { // remove from party
             Balloons.removeOfferItems(client, removeID, 1, removeSlot);
-        } else if (interfaceID == 3322 && client.inTrade) { // remove from bag to
-            // trade
-            // window
+        } else if (interfaceID == 3322 && client.inTrade) { // remove from bag to trade window
             client.tradeItem(removeID, removeSlot, 1);
-        } else if (interfaceID == 3415 && client.inTrade) { // remove from trade window
+        } else if (interfaceID == 3415 && client.inTrade) { // remove from a trade window
             client.fromTrade(removeID, removeSlot, 1);
         } else if (interfaceID >= 24469 && interfaceID <= 24493) {
             GoldCrafting.startGoldCrafting(interfaceID, removeSlot, 1, client);
@@ -54,8 +52,7 @@ public class RemoveItem implements Packet {
                 return;
             }
             if (Server.itemManager.getShopBuyValue(removeID) < 1) {
-                client.send(
-                        new SendMessage("You cannot sell " + client.GetItemName(removeID).toLowerCase() + " in this store."));
+                client.send(new SendMessage("You cannot sell " + client.GetItemName(removeID).toLowerCase() + " in this store."));
                 return;
             }
             boolean IsIn = false;
@@ -82,8 +79,7 @@ public class RemoveItem implements Packet {
                     int leftover = ShopValue - ((ShopValue / million) * million);
                     ShopAdd = " (" + (ShopValue / 1000000) + "" + ((leftover / 100000) > 0 ? "."+ (leftover / 100000) : "") + " million)";
                 }
-                client.send(
-                        new SendMessage(client.GetItemName(removeID) + ": shop will buy for " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "" + ShopAdd));
+                client.send(new SendMessage(client.GetItemName(removeID) + ": shop will buy for " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "" + ShopAdd));
             }
         } else if (interfaceID == 3900) { // Show value to buy items
             int currency = client.MyShopID == 55 ? 11997 : 995;
@@ -98,8 +94,7 @@ public class RemoveItem implements Packet {
                 int leftover = ShopValue - ((ShopValue / million) * million);
                 ShopAdd = " (" + (ShopValue / 1000000) + "" + ((leftover / 100000) > 0 ? "."+ (leftover / 100000) : "") + " million)";
             }
-            client
-                    .send(new SendMessage(client.GetItemName(removeID) + ": currently costs " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "" + ShopAdd));
+            client.send(new SendMessage(client.GetItemName(removeID) + ": currently costs " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "" + ShopAdd));
         } else if (interfaceID >= 1119 && interfaceID <= 1123) { // Smithing
             if (client.smithing[2] > 0) {
                 client.smithing[4] = removeID;
@@ -111,5 +106,4 @@ public class RemoveItem implements Packet {
         }
         client.CheckGear();
     }
-
 }

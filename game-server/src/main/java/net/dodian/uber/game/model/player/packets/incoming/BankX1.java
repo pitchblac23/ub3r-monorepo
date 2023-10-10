@@ -17,5 +17,4 @@ public class BankX1 implements Packet {
             client.println_debug(
                     "RemoveItem X: " + client.XremoveID + " InterID: " + client.XinterfaceID + " slot: " + client.XremoveSlot);
     }
-
 }

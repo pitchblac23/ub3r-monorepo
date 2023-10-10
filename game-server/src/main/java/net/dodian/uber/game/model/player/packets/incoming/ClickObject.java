@@ -14,6 +14,7 @@ import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.object.*;
 import net.dodian.uber.game.model.object.Object;
+import net.dodian.uber.game.model.player.content.Minigames.Barrows;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
@@ -78,6 +79,7 @@ public class ClickObject implements Packet {
                 if (objectPosition == null)
                     return;
                 atObject(client, task.getWalkToId(), task.getWalkToPosition(), object);
+                Barrows.barrowsObject(client, objectID);
                 client.setWalkToTask(null);
                 this.stop();
             }
@@ -1134,36 +1136,6 @@ public class ClickObject implements Packet {
                     client.setSkillY(objectPosition.getY());
                     client.stairDistance = 1;
                 }
-            } else if (objectID ==  20667) {
-                client.teleportToX = 3565;
-                client.teleportToY = 3289;
-                client.getPosition().setZ(0);
-                //20667 ahrim's
-            } else if (objectID ==  20668) {
-                client.teleportToX = 3576;
-                client.teleportToY = 3299;
-                client.getPosition().setZ(0);
-                //20668 dharok's
-            } else if (objectID ==  20669) {
-                client.teleportToX = 3577;
-                client.teleportToY = 3283;
-                client.getPosition().setZ(0);
-                //20669 guthan's
-            } else if (objectID ==  20670) {
-                client.teleportToX = 3566;
-                client.teleportToY = 3276;
-                client.getPosition().setZ(0);
-                //20670 karil's
-            } else if (objectID ==  20671) {//TODO: have to walk around stairs to tele
-                client.teleportToX = 3554;
-                client.teleportToY = 3283;
-                client.getPosition().setZ(0);
-                //20671 torag's
-            } else if (objectID ==  20672) {
-                client.teleportToX = 3557;
-                client.teleportToY = 3298;
-                client.getPosition().setZ(0);
-                //20672 verac's
             }
             // go downstairs
             if (objectID == 1746 || objectID == 1749) {

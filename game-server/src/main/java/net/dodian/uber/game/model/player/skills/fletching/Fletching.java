@@ -122,5 +122,4 @@ public class Fletching {
             c.resetAction();
         }
     }
-
 }

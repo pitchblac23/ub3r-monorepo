@@ -320,13 +320,19 @@ public class Smithing {
                         c.lastAction = System.currentTimeMillis();
                         for (int i = 0; i < bars; i++) {
                             c.deleteItem(barid, c.GetItemSlot(barid), c.playerItemsN[c.GetItemSlot(barid)]);
+                            c.println_debug("Smithing amount: " +c.smithing[5]);
                         }
+                        c.smithing[5]--;
                         int experience = xp * bars * 30;
                         c.giveExperience(experience, Skills.SMITHING);
                         c.addItem(c.smithing[4], ItemN);
                         c.send(new SendMessage("You hammer the " + c.GetItemName(c.smithing[3]).toLowerCase() + " and make a " + c.GetItemName(c.smithing[4]).toLowerCase() + "."));
                         c.requestAnim(0x382, 0);
                         c.triggerRandom(experience);
+                    }
+                    if (c.smithing[5] <= 0) {
+                        c.rerequestAnim();
+                        c.resetAction();
                     }
                 } else {
                     c.send(new SendMessage("You need " + bars + " " + c.GetItemName(barid) + " to smith a " + c.GetItemName(c.smithing[4]) + "."));

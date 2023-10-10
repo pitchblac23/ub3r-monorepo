@@ -541,8 +541,7 @@ public class Commands implements Packet {
                         int id = Integer.parseInt(cmd[1]);
                         Position pos = client.getPosition().copy();
                         Server.npcManager.createNpc(id, pos, 0);
-                        client.send(new SendMessage("Npc temporary spawned = " + id + ", at x = " + pos.getX()
-                                + " y = " + pos.getY() + " with height " + pos.getZ() + ""));
+                        client.send(new SendMessage("Npc temporary spawned = " + id + ", at x = " + pos.getX() + " y = " + pos.getY() + " with height " + pos.getZ() + ""));
                     } catch (Exception e) {
                         client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " npcid"));
                     }
@@ -1037,7 +1036,7 @@ public class Commands implements Packet {
                 }
             }
             if (cmd[0].equalsIgnoreCase("mypos") || command.equalsIgnoreCase("pos")) {
-                client.send(new SendMessage("Your position is (" + client.getPosition().getX() + " , " + client.getPosition().getY() + ")"));
+                client.send(new SendMessage("Your position is (" + client.getPosition().getX() + " , " + client.getPosition().getY() + " , " + client.getPosition().getZ() + ")"));
             }
             if (cmd[0].equalsIgnoreCase("noclip") && client.playerRights < 2) {
                 client.kick();

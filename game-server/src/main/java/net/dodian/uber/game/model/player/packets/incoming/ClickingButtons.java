@@ -1092,6 +1092,7 @@ public class ClickingButtons implements Packet {
                 }
                 break;
             case 32195:
+            case 32196:
                 if (client.playerHasItem(2996)) {
                     client.giveExperience(700, Skills.AGILITY);
                     client.send(new SendMessage("You exchange your agility tickets"));
@@ -1101,9 +1102,30 @@ public class ClickingButtons implements Packet {
                 }
                 break;
             case 32197:
+            case 32203:
                 if (client.playerHasItem(2996, 10)) {
                     client.giveExperience(10 * 700, Skills.AGILITY);
                     client.send(new SendMessage("You exchange your agility tickets."));
+                    client.deleteItem(2996, 10);
+                } else {
+                    client.send(new SendMessage("You need 10 agility tickets."));
+                }
+                break;
+            case 32204:
+            case 32198:
+                if (client.playerHasItem(2996, 25)) {
+                    client.giveExperience(25 * 700, Skills.AGILITY);
+                    client.send(new SendMessage("You exchange your agility tickets."));
+                    client.deleteItem(2996, 25);
+                } else {
+                    client.send(new SendMessage("You need 25 agility tickets."));
+                }
+                break;
+            case 32193:
+            case 32189:
+                if (client.playerHasItem(2996, 10)) {
+                    client.send(new SendMessage("You exchange your agility tickets."));
+                    client.addItem(11738, 1);
                     client.deleteItem(2996, 10);
                 } else {
                     client.send(new SendMessage("You need 10 agility tickets."));

@@ -20,8 +20,9 @@ public class Bank5 implements Packet {
         int interfaceID = client.getInputStream().readSignedWordBigEndianA();
         int removeID = client.getInputStream().readSignedWordBigEndianA();
         int removeSlot = client.getInputStream().readSignedWordBigEndian();
-        if (getGameWorldId() > 1)
+        if (client.playerGroup >= 3) {
             client.println_debug("RemoveItem 5: " + removeID + " InterID: " + interfaceID + " slot: " + removeSlot);
+        }
         if (interfaceID == 3322 && client.inDuel) { // remove from bag to duel window
             client.stakeItem(removeID, removeSlot, 5);
         } else if (interfaceID == 6669) { // remove from duel window
@@ -65,8 +66,7 @@ public class Bank5 implements Packet {
                 Skillcape skillcape = Skillcape.getSkillCape(removeID);
                 if (skillcape != null) {
                     if (client.getExperience(skillcape.getSkill()) < 50000000) {
-                        client.send(new SendMessage("Need 50 million in "
-                                + skillcape.name().toLowerCase().replace("_", " ").replace(" cape", "") + " to convert this cape!"));
+                        client.send(new SendMessage("Need 50 million in " + skillcape.name().toLowerCase().replace("_", " ").replace(" cape", "") + " to convert this cape!"));
                         return;
                     }
                     if (!Skillcape.isTrimmed(removeID)) {
@@ -96,5 +96,4 @@ public class Bank5 implements Packet {
             }
         }
     }
-
 }

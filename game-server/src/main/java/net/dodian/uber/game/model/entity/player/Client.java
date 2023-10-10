@@ -1081,7 +1081,7 @@ public class Client extends Player implements Runnable {
 			if (newLevel == 99) {
 				animation = 623;
 				publicyell(getPlayerName() + " has just reached the max level for " + skill.getName() + "!");
-			} else if (newLevel > 90)
+			} else if (newLevel > 89)
 				publicyell(getPlayerName() + "'s " + skill.getName() + " level is now " + newLevel + "!");
 			send(new SendMessage("Congratulations, you just advanced " + (skill == Skills.ATTACK || skill == Skills.AGILITY ? "an" : "a") + " " + skill.getName() + " level."));
 		}
@@ -2273,6 +2273,10 @@ public class Client extends Player implements Runnable {
 			updatePlayerDisplay();
 		} else
 			setWildLevel(getWildLevel());
+		if (inZone(3521, 9662, 3579, 9722) || inZone(3545, 326, 3584, 3307)) {
+			send(new SendString("Kill Count: 0", 4536));
+			setInterfaceWalkable(4535);
+		}
 		if (duelFight || inWildy()) {
 			getOutputStream().createFrameVarSize(104);
 			getOutputStream().writeByteC(3);
@@ -3377,6 +3381,8 @@ public class Client extends Player implements Runnable {
 			if (ItemName.startsWith("Saradomin") || ItemName.startsWith("Zamorak") || ItemName.startsWith("Guthix")
 					&& ItemName.toLowerCase().contains("staff") && ItemName.toLowerCase().contains("cape"))
 				return 1;
+			if (ItemID == 10748 || ItemID == 10402)
+				return 1;
 			if (ItemID == 11284)
 				return 75;
 			if (ItemID == 4224)
@@ -3419,6 +3425,9 @@ public class Client extends Player implements Runnable {
 			return 45;
 		if (ItemID == 6524 || ItemID == 21298 || ItemID == 21301 || ItemID == 21304) //Obsidian
 			return 55;
+		if (ItemName.startsWith("Guthan") || (ItemName.startsWith("Karil")) || (ItemName.startsWith("Torag"))
+		|| (ItemName.startsWith("Dharok")) || (ItemName.startsWith("Verac")) || (ItemName.startsWith("Ahrim")))
+			return 70;
 		return 1;
 	}
 
@@ -3461,10 +3470,10 @@ public class Client extends Player implements Runnable {
 		if (ItemID == -1) return 1;
 		String ItemName = GetItemName(ItemID);
 		if (ItemName.startsWith("Karil")) {
-			return 90;
+			return 80;
 		}
 		if (ItemName.startsWith("Snakeskin")) {
-			return 80;
+			return 55;
 		}
 		if (ItemName.startsWith("New crystal bow")) {
 			return 65;

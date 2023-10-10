@@ -16,8 +16,9 @@ public class Bank10 implements Packet {
         int interfaceID = client.getInputStream().readUnsignedWordBigEndian();
         int removeID = client.getInputStream().readUnsignedWordA();
         int removeSlot = client.getInputStream().readUnsignedWordA();
-        if (getGameWorldId() > 1)
+        if (client.playerGroup >= 3) {
             client.println_debug("RemoveItem 10: " + removeID + " InterID: " + interfaceID + " slot: " + removeSlot);
+        }
         if (interfaceID == 3322 && client.inDuel) { // remove from bag to duel window
             client.stakeItem(removeID, removeSlot, 10);
         } else if (interfaceID == 6669 && client.inDuel) { // remove from duel window
@@ -53,5 +54,4 @@ public class Bank10 implements Packet {
             }
         }
     }
-
 }
