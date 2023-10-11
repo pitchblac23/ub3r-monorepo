@@ -320,7 +320,6 @@ public class Smithing {
                         c.lastAction = System.currentTimeMillis();
                         for (int i = 0; i < bars; i++) {
                             c.deleteItem(barid, c.GetItemSlot(barid), c.playerItemsN[c.GetItemSlot(barid)]);
-                            c.println_debug("Smithing amount: " +c.smithing[5]);
                         }
                         c.smithing[5]--;
                         int experience = xp * bars * 30;

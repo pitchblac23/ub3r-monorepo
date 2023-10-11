@@ -5107,7 +5107,7 @@ public class Client extends Player implements Runnable {
 
 	public void updatePlayerDisplay() {
 		String serverName = getGameWorldId() == 1 ? "Dodian" : "Beta World";
-		send(new SendString(serverName + " (" + PlayerHandler.getPlayerCount() + " online)", 6570));
+		send(new SendString("               " + serverName + " (" + PlayerHandler.getPlayerCount() + " online)", 6570));
 		send(new SendString("", 6664));
 		setInterfaceWalkable(6673);
 	}

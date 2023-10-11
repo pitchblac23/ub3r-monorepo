@@ -3,6 +3,8 @@ package net.dodian.uber.game.model.player.packets.incoming;
 import net.dodian.uber.game.Server;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
+import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
+import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.party.Balloons;
 
 public class BankAll implements Packet {
@@ -45,6 +47,16 @@ public class BankAll implements Packet {
             client.XinterfaceID = interfaceID;
             client.XremoveID = removeID;
             client.XremoveSlot = removeSlot;
+        } else if (interfaceID >= 1119 && interfaceID <= 1123) { // Smithing
+            if (client.smithing[2] > 0) {
+                client.smithing[4] = removeID;
+                client.smithing[0] = 1;
+                client.smithing[5] = client.getInvAmt(client.smithing[3]);
+                client.send(new RemoveInterfaces());
+            } else {
+                client.send(new SendMessage("Illigal Smithing !"));
+                client.println_debug("Illigal Smithing !");
+            }
         }
     }
 }

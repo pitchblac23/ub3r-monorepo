@@ -171,19 +171,19 @@ public class Client extends RSApplet {
         String s = String.valueOf(i);
         for (int k = s.length() - 3; k > 0; k -= 3)
             s = s.substring(0, k) + "," + s.substring(k);
-        if (s.length() > 8)
-            s = "@gre@" + s.substring(0, s.length() - 8) + " million @whi@(" + s + ")";
-        else if (s.length() > 4)
-            s = "@cya@" + s.substring(0, s.length() - 4) + "K @whi@(" + s + ")";
+        if (s.length() > 7)
+            s = "@gre@" + s.substring(0, s.length() - 7) + " M @whi@(" + s + ")";
+        else if (s.length() > 3)
+            s = "@cya@" + s.substring(0, s.length() - 3) + "K @whi@(" + s + ")";
         return " " + s;
     }
 
     public final String methodR(int j) {
-        if (j >= 0 && j < 10000)
+        if (j >= 0 && j < 1000)
             return String.valueOf(j);
-        if (j >= 10000 && j < 10000000)
-            return j / 1000 + "K";
-        if (j >= 10000000 && j < 999999999)
+        if (j >= 100000 && j < 1000000)
+            return j / 100 + "K";
+        if (j >= 1000000 && j < 999999999)
             return j / 1000000 + "M";
         if (j >= 999999999)
             return "*";
@@ -338,25 +338,16 @@ public class Client extends RSApplet {
         drawChannelButtons();
         TextDrawingArea textDrawingArea = aTextDrawingArea_1271;
         if (messagePromptRaised) {
-            //chatTextDrawingArea.drawText(0, aString1121, y + 60, 259);
-            //chatTextDrawingArea.drawText(128, promptInput + "*", y + 80, 259);
             newBoldFont.drawCenteredString(aString1121, 259, y + 60, 0, -1);
             newBoldFont.drawCenteredString(promptInput + "*", 259, y + 80, 128, -1);
         } else if (inputDialogState == 1) {
-            //chatTextDrawingArea.drawText(0, "Enter amount:", y + 60, 259);
-            //chatTextDrawingArea.drawText(128, amountOrNameInput + "*", y + 80,
-            //	259);
             newBoldFont.drawCenteredString("Enter amount:", 259, y + 60, 0, -1);
             newBoldFont.drawCenteredString(amountOrNameInput + "*", 259, y + 80, 128, -1);
         } else if (inputDialogState == 2) {
-            //chatTextDrawingArea.drawText(0, "Enter name:", y + 60, 259);
-            //chatTextDrawingArea.drawText(128, amountOrNameInput + "*", y + 80,
             //	259);
             newBoldFont.drawCenteredString("Enter name:", 259, y + 60, 0, -1);
             newBoldFont.drawCenteredString(amountOrNameInput + "*", 259, y + 80, 128, -1);
         } else if (aString844 != null) {
-            //chatTextDrawingArea.drawText(0, aString844, y + 60, 259);
-            //chatTextDrawingArea.drawText(128, "Click to continue", y + 80, 259);
             newBoldFont.drawCenteredString(aString844, 259, y + 60, 0, -1);
             newBoldFont.drawCenteredString("Click to continue", 259, y + 80, 128, -1);
         } else if (backDialogID != -1) {
@@ -2660,7 +2651,7 @@ public class Client extends RSApplet {
     private static String intToKOrMil(int j) {
         if (j < 0x186a0)
             return String.valueOf(j);
-        if (j < 0x989680)
+        if (j < 0xf4240)
             return j / 1000 + "K";
         else
             return j / 0xf4240 + "M";
@@ -5309,12 +5300,23 @@ public class Client extends RSApplet {
                     amountOrNameInput += (char) j;
                     inputTaken = true;
                 }
+                if ((!amountOrNameInput.toLowerCase().contains("k") && !amountOrNameInput.toLowerCase().contains("m") /*&& !amountOrNameInput.toLowerCase().contains("b")*/) && (j == 107 || j == 109) || j == 98) {
+                    amountOrNameInput += (char) j;
+                    inputTaken = true;
+                }
                 if (j == 8 && amountOrNameInput.length() > 0) {
                     amountOrNameInput = amountOrNameInput.substring(0, amountOrNameInput.length() - 1);
                     inputTaken = true;
                 }
                 if (j == 13 || j == 10) {
                     if (amountOrNameInput.length() > 0) {
+                        if (amountOrNameInput.toLowerCase().contains("k")) {
+                            amountOrNameInput = amountOrNameInput.replaceAll("k", "000");
+                        } else if (amountOrNameInput.toLowerCase().contains("m")) {
+                            amountOrNameInput = amountOrNameInput.replaceAll("m", "000000");
+                        }/* else if (amountOrNameInput.toLowerCase().contains("b")) {
+                            amountOrNameInput = amountOrNameInput.replaceAll("b", "000000000");
+                        }*/
                         int i1 = 0;
                         try {
                             i1 = Integer.parseInt(amountOrNameInput);
@@ -8578,9 +8580,9 @@ public class Client extends RSApplet {
                                             smallText.method385(0, intToKOrMil(k10), j6 + 10 + j7, k5 + 1 + k6);
                                             if (k10 >= 1)
                                                 smallText.method385(0xFFFF00, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
-                                            if (k10 >= 100000)
+                                            if (k10 >= 1000)
                                                 smallText.method385(0xFFFFFF, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
-                                            if (k10 >= 10000000)
+                                            if (k10 >= 1000000)
                                                 smallText.method385(0x00FF80, intToKOrMil(k10), j6 + 9 + j7, k5 + k6);
                                         }
                                     }
@@ -9245,7 +9247,7 @@ public class Client extends RSApplet {
             } else if ((anInt1018 == 15892 || anInt1018 == 15917 || anInt1018 == 15931 || anInt1018 == 15962) && clientSize != 0) {
                 drawInterface(0, (anInt1018 == 15892 ? -325 : -349), RSInterface.interfaceCache[anInt1018], 25);
             } else if (anInt1018 == 6673 && clientSize != 0) {
-                drawInterface(0, (clientWidth - 500) / 2, RSInterface.interfaceCache[anInt1018], 0);
+                drawInterface(0, (clientWidth - 700) / 2, RSInterface.interfaceCache[anInt1018], 0);
             } else
                 drawInterface(0, clientSize == 0 ? 0 : (clientWidth / 2) - -80, RSInterface.interfaceCache[anInt1018], clientSize == 0 ? 0 : (clientHeight / 2) - 550);
         }
@@ -9883,16 +9885,15 @@ public class Client extends RSApplet {
 
     public void drawHPOrb() {
         int health;
-        String cHP = RSInterface.interfaceCache[24139].message;//24140//4016
+        String cHP = RSInterface.interfaceCache[24139].message;
         int currentHP = Integer.parseInt(cHP);
-        String mHP = RSInterface.interfaceCache[24140].message;//24139//4017
+        String mHP = RSInterface.interfaceCache[24140].message;
         int maxHP2 = Integer.parseInt(mHP);
         health = (int) (((double) currentHP / (double) maxHP2) * 100D);
         /* Draws empty orb */
-        //emptyOrb.drawSprite(160, 13);
         hitPointsBg.drawSprite(clientSize == 0 ? 190 : clientWidth - 55, clientSize == 0 ? 22 : 10);
         hitPointsFill.drawSprite(clientSize == 0 ? 217 : clientWidth - 28, clientSize == 0 ? 26 : 14);
-        heartIcon.drawSprite(clientSize == 0 ? 222 : clientWidth - 23, clientSize == 0 ? 31 : 19);
+        heartIcon.drawSprite(clientSize == 0 ? 222 : clientWidth - 23, clientSize == 0 ? 32 : 20);
         /* Draws current HP text */
         if (health > 100) {
             smallText.method382(65280, clientSize == 0 ? 205 : clientWidth - 42, cHP, clientSize == 0 ? 48 : 36, true);
@@ -9911,28 +9912,27 @@ public class Client extends RSApplet {
 
     public void drawPrayerOrb() {
         int prayer;
-        String cP = RSInterface.interfaceCache[24201].message;//24201//4012
+        String cP = RSInterface.interfaceCache[24201].message;
         int currentPrayer = Integer.parseInt(cP);
-        String mP = RSInterface.interfaceCache[24202].message;//24202//4013
+        String mP = RSInterface.interfaceCache[24202].message;
         int maxPrayer = Integer.parseInt(mP);
         prayer = (int) (((double) currentPrayer / (double) maxPrayer) * 100D);
-        /* Draws empty orb */
-        //emptyOrb.drawSprite(220, 78);
-        prayerBg.drawSprite(195, 52);
-        prayerFill.drawSprite(222, 56);
-        prayerIcon.drawSprite(225, 58);
-        /* Draws current HP text */
+        /* Draws Prayer orb */
+        prayerBg.drawSprite(clientSize == 0 ? 195 : clientWidth - 55, clientSize == 0 ? 52 : 41);
+        prayerFill.drawSprite(clientSize == 0 ? 222 : clientWidth - 28, clientSize == 0 ? 56 : 45);
+        prayerIcon.drawSprite(clientSize == 0 ? 225 : clientWidth - 25, clientSize == 0 ? 59 : 48);
+        /* Draws current Prayer text */
 		if(prayer <= 100 && prayer >= 75) {
-			smallText.method382(65280, 209, cP, 78, true);
+			smallText.method382(65280, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
 		}
 		else if(prayer <= 74 && prayer >= 50) {
-			smallText.method382(0xffff00, 209, cP, 78, true);
+			smallText.method382(0xffff00, clientSize == 0 ? 209 : clientWidth - 42, cP, 78, true);
 		}
 		else if(prayer <= 49 && prayer >= 25) {
-			smallText.method382(0xfca607, 209, cP, 78, true);
+			smallText.method382(0xfca607, clientSize == 0 ? 209 : clientWidth - 42, cP, 78, true);
 		}
 		else if(prayer <= 24 && prayer >= 0) {
-			smallText.method382(0xf50d0d, 209, cP, 78, true);
+			smallText.method382(0xf50d0d, clientSize == 0 ? 209 : clientWidth - 42, cP, 78, true);
 		}
         /* Draws inside orb sprites */
     }

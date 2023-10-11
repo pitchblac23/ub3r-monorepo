@@ -46,7 +46,7 @@ public class Bank10 implements Packet {
             if (client.smithing[2] > 0) {
                 client.smithing[4] = removeID;
                 client.smithing[0] = 1;
-                client.smithing[5] = client.smithing[3] != -1 ? client.getInvAmt(client.smithing[3]) : 10;
+                client.smithing[5] = 10;
                 client.send(new RemoveInterfaces());
             } else {
                 client.send(new SendMessage("Illigal Smithing !"));
