@@ -34,6 +34,8 @@ public class Jframe extends Client implements ActionListener {
             JPopupMenu.setDefaultLightWeightPopupEnabled(false);
             frame = new JFrame(WINDOW_TITLE);
             frame.setLayout(new BorderLayout());
+            setFocusTraversalKeysEnabled(false);
+            frame.setIconImage(new ImageIcon(Signlink.findCacheDir() + "Sprites/icon.png").getImage());
             frame.setResizable(false);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             JPanel gamePanel = new JPanel();
@@ -58,7 +60,7 @@ public class Jframe extends Client implements ActionListener {
         JButton screenshot = new JButton("");
         screenshot.setActionCommand("screenshot");
         screenshot.addActionListener(this);
-        Icon screenicon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("Sprites/PrintScreenIcon.png"));
+        Icon screenicon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Signlink.findCacheDir() + "Sprites/PrintScreenIcon.png"));
         screenshot.setIcon(screenicon);
         JMenu fileMenu = new JMenu("File");
         String[] mainButtons = new String[]{"Website", "-", "Exit"};
@@ -110,8 +112,8 @@ public class Jframe extends Client implements ActionListener {
                     break;
                 }
             }
-            File file = new File((new StringBuilder()).append("Screenshots/" + fileExtension + " ").append(screenshot).append(".png").toString());
-            if (takeScreenshot == true) {
+            File file = new File(Signlink.findCacheDir() + "Screenshots/" + fileExtension + " " + screenshot + ".png");
+            if (takeScreenshot) {
                 pushMessage("<col=6E0085>" + fileExtension + " "+ screenshot +" was saved in your screenshot folder!", 0, "");
                 ImageIO.write(bufferedimage, "png", file);
             } else {

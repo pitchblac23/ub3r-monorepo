@@ -3678,7 +3678,7 @@ public class Client extends RSApplet {
         char c = '\u0168';
         char c1 = '\310';
         byte byte1 = 20;
-        chatTextDrawingArea.drawText(0xffffff, "RuneScape is loading - please wait...", c1 / 2 - 26 - byte1, c / 2);
+        chatTextDrawingArea.drawText(0xffffff, "Dodian is loading - please wait...", c1 / 2 - 26 - byte1, c / 2);
         int j = c1 / 2 - 18 - byte1;
         DrawingArea.fillPixels(c / 2 - 152, 304, 34, 0x8c1111, j);
         DrawingArea.fillPixels(c / 2 - 151, 302, 32, 0, j + 1);
@@ -9926,13 +9926,13 @@ public class Client extends RSApplet {
 			smallText.method382(65280, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
 		}
 		else if(prayer <= 74 && prayer >= 50) {
-			smallText.method382(0xffff00, clientSize == 0 ? 209 : clientWidth - 42, cP, 78, true);
+			smallText.method382(0xffff00, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
 		}
 		else if(prayer <= 49 && prayer >= 25) {
-			smallText.method382(0xfca607, clientSize == 0 ? 209 : clientWidth - 42, cP, 78, true);
+			smallText.method382(0xfca607, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
 		}
 		else if(prayer <= 24 && prayer >= 0) {
-			smallText.method382(0xf50d0d, clientSize == 0 ? 209 : clientWidth - 42, cP, 78, true);
+			smallText.method382(0xf50d0d, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
 		}
         /* Draws inside orb sprites */
     }
@@ -10375,18 +10375,18 @@ public class Client extends RSApplet {
         if (loginScreenState == 2) {
             int j = c1 / 2 - 40;
             if (loginMessage1.length() > 0) {
-                chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage1, j - 15, true);
-                chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j, true);
+                chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage1, j - 40, true);
+                chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j - 50, true);
                 j += 30;
             } else {
-                chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j + 15, true);
+                chatTextDrawingArea.method382(0xffff00, c / 2, loginMessage2, j - 42, true);
                 j += 30;
             }
-            chatTextDrawingArea.method389(true, c / 2 + 10, 0xffffff, myUsername + ((loginScreenCursorPos == 0) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 142);
+            chatTextDrawingArea.method389(true, c / 2 - 85, 0xffffff, myUsername + ((loginScreenCursorPos == 0) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 88);
             j += 15;
-            chatTextDrawingArea.method389(true, c / 2 + 40, 0xffffff, TextClass.passwordAsterisks(myPassword) + ((loginScreenCursorPos == 1) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 175);
+            chatTextDrawingArea.method389(true, c / 2 - 85, 0xffffff, TextClass.passwordAsterisks(myPassword) + ((loginScreenCursorPos == 1) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 152);
             j += 15;
-            chatTextDrawingArea.method389(true, c / 2 + 70, 0xffffff, "Dodian Server" + ((loginScreenCursorPos == 2) & (loopCycle % 40 < 20) ? "@yel@|" : ""), 208);
+            chatTextDrawingArea.method389(true, c / 2 - 61, 0xffff00, "Welcome to Dodian", 250);
 
             // Disable RS Login + Cancel buttons
 //            if (!flag) {
@@ -10795,20 +10795,16 @@ public class Client extends RSApplet {
             }
         } else {
             if (loginScreenState == 2) {
-                if (super.clickMode3 == 1 && super.saveClickY >= 296 && super.saveClickY <= 319) {
+                if (super.clickMode3 == 1 && super.saveClickY >= 244 && super.saveClickY <= 270) {
                     loginScreenCursorPos = 0;
-                } else if (super.clickMode3 == 1 && super.saveClickY >= 327 && super.saveClickY <= 351) {
+                } else if (super.clickMode3 == 1 && super.saveClickY >= 300 && super.saveClickY <= 330) {
                     loginScreenCursorPos = 1;
-                } else if (super.clickMode3 == 1 && super.saveClickX >= 215 && super.saveClickX <= 378 && super.saveClickY >= 423 && super.saveClickY <= 469) {
+                //} else if (super.clickMode3 == 1 && super.saveClickX >= 215 && super.saveClickX <= 378 && super.saveClickY >= 423 && super.saveClickY <= 469) {
+                } else if (super.clickMode3 == 1 && super.saveClickX >= 335 && super.saveClickX <= 429 && super.saveClickY >= 352 && super.saveClickY <= 383) {
                     loginFailures = 0;
                     login(myUsername, myPassword, false);
                     if (loggedIn)
                         return;
-                } else if (super.clickMode3 == 1 && super.saveClickX >= 458 && super.saveClickX <= 622 && super.saveClickY >= 423 && super.saveClickY <= 469) {
-                    myUsername = "";
-                    settings.put("username", "");
-
-                    myPassword = "";
                 }
 
                 // Disable RS cancel log in state change

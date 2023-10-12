@@ -45,56 +45,56 @@ public class Prayers {
         /**
          * Low level prayers
          */
-        THICK_SKIN(5, 3, 83, 21233, DEFENCE_PRAYER),
-        BURST_OF_STRENGTH(5, 3, 84, 21234, STRENGTH_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
-        CLARITY_OF_THOUGHT(5,3, 85, 21235, ATTACK_PRAYER),
-        SHARP_EYE(10, 5, 700, 77100, RANGE_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
-        MYSTIC_WILL(10,3, 701, 77102, MAGIC_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
+        THICK_SKIN(1, 5, 83, 21233, DEFENCE_PRAYER),
+        BURST_OF_STRENGTH(4, 5, 84, 21234, STRENGTH_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
+        CLARITY_OF_THOUGHT(7,5, 85, 21235, ATTACK_PRAYER),
+        SHARP_EYE(8, 5, 700, 77100, RANGE_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
+        MYSTIC_WILL(9,5, 701, 77102, MAGIC_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
 
         /**
          * Medium level prayers
          */
-        ROCK_SKIN(20, 6, 86, 21236, DEFENCE_PRAYER),
-        SUPERHUMAN_STRENGTH(20, 6, 87, 21237, STRENGTH_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
-        IMPROVED_REFLEXES(20,6, 88, 21238, ATTACK_PRAYER),
-        HAWK_EYE(25, 10, 702, 77104, RANGE_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
-        MYSTIC_LORE(25, 10, 703, 77106,MAGIC_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
+        ROCK_SKIN(10, 10, 86, 21236, DEFENCE_PRAYER),
+        SUPERHUMAN_STRENGTH(13, 10, 87, 21237, STRENGTH_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
+        IMPROVED_REFLEXES(16,10, 88, 21238, ATTACK_PRAYER),
+        HAWK_EYE(26, 10, 702, 77104, RANGE_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
+        MYSTIC_LORE(27, 10, 703, 77106,MAGIC_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
 
         /**
          * Misc prayers like protect item
          */
-        RAPID_RESTORE(-1, 1, 89, 21239),
-        RAPID_HEAL(-1, 1, 90, 21240),
-        PROTECT_ITEM(-1, 1, 91, 21241),
+        RAPID_RESTORE(19, 2, 89, 21239),
+        RAPID_HEAL(22, 3, 90, 21240),
+        PROTECT_ITEM(25, 3, 91, 21241),
 
         /**
          * High level prayers
          */
-        STEEL_SKIN(40, 12, 92, 21242, DEFENCE_PRAYER),
-        ULTIMATE_STRENGTH(40, 12, 93, 21243, STRENGTH_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
-        INCREDIBLE_REFLEXES(40, 12, 94, 21244, ATTACK_PRAYER),
-        EAGLE_EYE(45, 18, 704, 77109, RANGE_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
-        MYSTIC_MIGHT(45, 18, 705, 77111, MAGIC_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
+        STEEL_SKIN(28, 20, 92, 21242, DEFENCE_PRAYER),
+        ULTIMATE_STRENGTH(31, 20, 93, 21243, STRENGTH_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
+        INCREDIBLE_REFLEXES(34, 20, 94, 21244, ATTACK_PRAYER),
+        EAGLE_EYE(44, 20, 704, 77109, RANGE_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
+        MYSTIC_MIGHT(45, 20, 705, 77111, MAGIC_PRAYER | STRENGTH_PRAYER | ATTACK_PRAYER),
 
         /**
          * Protect prayers
          */
-        PROTECT_MAGIC(55, 15, 95, 21245, OVERHEAD_PRAYER, HeadIcon.PROTECT_MAGIC),
-        PROTECT_RANGE(55, 15, 96, 21246, OVERHEAD_PRAYER, HeadIcon.PROTECT_MISSLES),
-        PROTECT_MELEE(55, 15, 97, 21247, OVERHEAD_PRAYER, HeadIcon.PROTECT_MELEE),
+        PROTECT_MAGIC(37, 20, 95, 21245, OVERHEAD_PRAYER, HeadIcon.PROTECT_MAGIC),
+        PROTECT_RANGE(40, 20, 96, 21246, OVERHEAD_PRAYER, HeadIcon.PROTECT_MISSLES),
+        PROTECT_MELEE(43, 20, 97, 21247, OVERHEAD_PRAYER, HeadIcon.PROTECT_MELEE),
 
         /**
          * Damage dealing/stat recovering/prayer "stealing" prayers
          */
-        RETRIBUTION(-1, 15,98, 2171, OVERHEAD_PRAYER, HeadIcon.RETRIBUTION),
-        REDEMPTION(-1, 15, 99, 2172, OVERHEAD_PRAYER, HeadIcon.REDEMPTION),
-        SMITE(-1, 15, 100, 2173, OVERHEAD_PRAYER, HeadIcon.SMITE),
+        RETRIBUTION(46, 5,98, 2171, OVERHEAD_PRAYER, HeadIcon.RETRIBUTION),
+        REDEMPTION(49, 10, 99, 2172, OVERHEAD_PRAYER, HeadIcon.REDEMPTION),
+        SMITE(52, 30, 100, 2173, OVERHEAD_PRAYER, HeadIcon.SMITE),
 
         /**
          * Highest level prayers available
          */
-        CHIVALRY(70, 24, 706, 77113, ATTACK_PRAYER | STRENGTH_PRAYER | DEFENCE_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
-        PIETY(80, 24, 707, 77115, ATTACK_PRAYER | STRENGTH_PRAYER | DEFENCE_PRAYER | MAGIC_PRAYER | RANGE_PRAYER);
+        CHIVALRY(60, 40, 706, 77113, ATTACK_PRAYER | STRENGTH_PRAYER | DEFENCE_PRAYER | MAGIC_PRAYER | RANGE_PRAYER),
+        PIETY(70, 40, 707, 77115, ATTACK_PRAYER | STRENGTH_PRAYER | DEFENCE_PRAYER | MAGIC_PRAYER | RANGE_PRAYER);
 
         /**
          * A map of Buttonid -> prayer
@@ -173,14 +173,13 @@ public class Prayers {
      */
     public void togglePrayer(Prayer prayer) {
         if (prayer.getPrayerLevel() != -1 && Skills.getLevelForExperience(p.getExperience(Skills.PRAYER)) < prayer.getPrayerLevel()) {
-            c.send(new SendMessage(
-                    "You need a prayer level of at least " + prayer.getPrayerLevel() + " to use " + formatEnum(prayer).toLowerCase()));
+            c.send(new SendMessage("You need a prayer level of at least " + prayer.getPrayerLevel() + " to use " + formatEnum(prayer).toLowerCase() + "."));
             c.frame87(prayer.getConfigId(), 0);
             //c.send(new Sound(447));
             return;
         }
         if(c.getCurrentPrayer() < 1) { //Can't use prayer with no prayer points!
-            c.send(new SendMessage("You have no prayer points currently! Recharge at a nearby altar"));
+            c.send(new SendMessage("You have no prayer points currently! Recharge at a nearby altar."));
             reset();
             return;
         }
