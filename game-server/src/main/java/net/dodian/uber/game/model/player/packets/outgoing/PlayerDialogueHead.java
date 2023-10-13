@@ -5,7 +5,7 @@ import net.dodian.uber.game.model.player.packets.OutgoingPacket;
 
 public class PlayerDialogueHead implements OutgoingPacket {
 
-    private int mainFrame;
+    private final int mainFrame;
 
     public PlayerDialogueHead(int mainFrame) {
         this.mainFrame = mainFrame;
@@ -15,7 +15,6 @@ public class PlayerDialogueHead implements OutgoingPacket {
     public void send(Client client) {
         client.getOutputStream().createFrame(185);
         client.getOutputStream().writeWordBigEndianA(mainFrame);
-        //client.flushOutStream();
+        client.flushOutStream();
     }
-
 }

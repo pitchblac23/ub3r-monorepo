@@ -3249,7 +3249,6 @@ public class Client extends RSApplet {
 
             System.arraycopy(ai, 0, sprite.myPixels, sprite.myWidth * j, sprite.myWidth);
         }
-        //TODO: Add background
     }
 
     private void processOnDemandQueue() {
@@ -11208,7 +11207,7 @@ public class Client extends RSApplet {
                     int k = inStream.method436();
                     RSInterface.interfaceCache[k].anInt233 = 3;
                     if (myPlayer.desc == null)
-                        RSInterface.interfaceCache[k].mediaID = (myPlayer.anIntArray1700[0] << 25) + (myPlayer.anIntArray1700[4] << 20) + (myPlayer.equipment[0] << 15) + (myPlayer.equipment[8] << 10) + (myPlayer.equipment[11] << 5) + myPlayer.equipment[1];
+                        RSInterface.interfaceCache[k].mediaID = (myPlayer.anIntArray1700[0] << 25) + (myPlayer.anIntArray1700[4] << 20) + (myPlayer.equipment[0] << 5) + (myPlayer.equipment[8] << 10) + (myPlayer.equipment[11] << 5) + myPlayer.equipment[1];
                     else
                         RSInterface.interfaceCache[k].mediaID = (int) (0x12345678L + myPlayer.desc.interfaceType);
                     pktType = -1;

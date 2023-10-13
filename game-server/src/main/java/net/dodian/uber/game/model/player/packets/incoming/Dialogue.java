@@ -27,5 +27,4 @@ public class Dialogue implements Packet {
                 client.send(new RemoveInterfaces());
         }
     }
-
 }

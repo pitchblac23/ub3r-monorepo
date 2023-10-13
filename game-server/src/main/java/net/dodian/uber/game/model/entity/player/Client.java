@@ -13,20 +13,17 @@ import net.dodian.uber.game.model.UpdateFlag;
 import net.dodian.uber.game.model.combat.impl.CombatStyleHandler;
 import net.dodian.uber.game.model.entity.Entity;
 import net.dodian.uber.game.model.entity.npc.Npc;
-import net.dodian.uber.game.model.entity.npc.NpcDrop;
 import net.dodian.uber.game.model.entity.npc.NpcUpdating;
 import net.dodian.uber.game.model.item.*;
 import net.dodian.uber.game.model.object.DoorHandler;
 import net.dodian.uber.game.model.object.RS2Object;
 import net.dodian.uber.game.model.object.Stairs;
 import net.dodian.uber.game.model.player.content.Skillcape;
-import net.dodian.uber.game.model.player.dialogue.Dialogue;
 import net.dodian.uber.game.model.player.packets.OutgoingPacket;
 import net.dodian.uber.game.model.player.packets.PacketHandler;
 import net.dodian.uber.game.model.player.packets.outgoing.*;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skills;
-import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.cooking.Cooking;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
@@ -43,8 +40,12 @@ import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.RewardItem;
-import net.dodian.uber.game.security.*;
+import net.dodian.uber.game.security.DuelLog;
+import net.dodian.uber.game.security.PickupLog;
+import net.dodian.uber.game.security.PmLog;
+import net.dodian.uber.game.security.TradeLog;
 import net.dodian.utilities.*;
+
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -54,8 +55,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import static net.dodian.uber.game.combat.ClientExtensionsKt.getRangedStr;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.attackTarget;
+import static net.dodian.uber.game.model.player.dialogue.DialogueKt.updateNPCChat;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
 import static net.dodian.utilities.DotEnvKt.*;
 
@@ -116,7 +119,6 @@ public class Client extends Player implements Runnable {
 	public boolean adding = false;
 	public ArrayList<RS2Object> objects = new ArrayList<>();
 	public long animationReset = 0, lastButton = 0;
-	public String dMsg = "";
 	public int dialogInterface = 2459;
 	public int random_skill = -1;
 	public String[] otherGroups = new String[10];
@@ -822,7 +824,7 @@ public class Client extends Player implements Runnable {
 			return;
 		}
 		if (getPlayerName().indexOf("'") > 0 || playerPass.indexOf("`") > 0) {
-			println_debug("Invalid player name");
+			println("Invalid player name");
 			return;
 		}
 		if (logout) {
@@ -1652,7 +1654,7 @@ public class Client extends Player implements Runnable {
 
 	public void openUpShop(int ShopID) {
 		if (!Server.shopping) {
-			send(new SendMessage("Shopping have been disabled!"));
+			send(new SendMessage("Shopping has been disabled!"));
 			return;
 		}
 		send(new SendString(ShopHandler.ShopName[ShopID], 3901));
@@ -2578,7 +2580,7 @@ public class Client extends Player implements Runnable {
 				}
 		}
 		if (NpcDialogue > 0 && !NpcDialogueSend) {
-			Dialogue.UpdateNPCChat(this);
+			updateNPCChat(this);
 		}
 
 		if (isKicked) {
@@ -2809,8 +2811,7 @@ public class Client extends Player implements Runnable {
 	public void sendpm(long name, int rights, byte[] chatmessage, int messagesize) {
 		getOutputStream().createFrameVarSize(196);
 		getOutputStream().writeQWord(name);
-		getOutputStream().writeDWord(handler.lastchatid++); // must be different for
-		// each message
+		getOutputStream().writeDWord(handler.lastchatid++); // must be different for each message
 		getOutputStream().writeByte(rights);
 		getOutputStream().writeBytes(chatmessage, messagesize, 0);
 		getOutputStream().endFrameVarSize();
@@ -3264,6 +3265,7 @@ public class Client extends Player implements Runnable {
 		for (int i = 0; i < text.length; i++)
 			send(new SendString(text[i], base + 1 + i));
 		sendFrame164(base);
+		NpcDialogueSend = true;
 	}
 
 	public void showNPCChat(int npcId, int emote, String[] text) {
@@ -3281,6 +3283,7 @@ public class Client extends Player implements Runnable {
 			send(new SendString(text[i], base + 3 + i));
 		send(new SendString("Click here to continue", base + 3 + text.length));
 		sendFrame164(base);
+		NpcDialogueSend = true;
 	}
 
 	public void showPlayerChat(String[] text, int emote) {
@@ -3296,7 +3299,9 @@ public class Client extends Player implements Runnable {
 		send(new SendString(getPlayerName(), base + 2));
 		for (int i = 0; i < text.length; i++)
 			send(new SendString(text[i], base + 3 + i));
+		send(new SendString("Click here to continue", base + 3 + text.length));
 		sendFrame164(base);
+		NpcDialogueSend = true;
 	}
 
 	/* Equipment level checking */
@@ -4223,7 +4228,7 @@ public class Client extends Player implements Runnable {
 				for (GameItem item : other.offeredItems) {
 					if (item.getId() > 0) {
 						addItem(item.getId(), item.getAmount());
-						println("TradeConfirmed, item=" + item.getId());
+						println_debug("TradeConfirmed, item=" + item.getId());
 					}
 				}
 				if (this.dbId > other.dbId)
@@ -4325,7 +4330,7 @@ public class Client extends Player implements Runnable {
 			if (item.getAmount() < 1) {
 				continue;
 			}
-			println("adding " + item.getId() + ", " + item.getAmount());
+			println_debug("adding " + item.getId() + ", " + item.getAmount());
 			if (Server.itemManager.isStackable(item.getId()) || Server.itemManager.isNote(item.getId())) {
 				addItem(item.getId(), item.getAmount());
 			} else {
@@ -4665,362 +4670,6 @@ public class Client extends Player implements Runnable {
 				}
 			} else
 				send(new SendMessage("Maximum ignores reached!"));
-		}
-	}
-
-	public void triggerChat(int button) {
-		if (!playerPotato.isEmpty())
-			if (playerPotato.get(0) == 2 && playerPotato.get(3) == 1) {
-				send(new RemoveInterfaces());
-				Npc tempNpc = Server.npcManager.getNpc(playerPotato.get(1));
-				int npcId = playerPotato.get(2);
-
-				if (button == 1) {
-					try {
-						java.sql.Connection conn = getDbConnection();
-						Statement statement = conn.createStatement();
-						String sql = "delete from " + DbTables.GAME_NPC_SPAWNS + " where id='" + npcId + "' && x='" + tempNpc.getPosition().getX() + "' && y='" + tempNpc.getPosition().getY() + "' && height='" + tempNpc.getPosition().getZ() + "'";
-						if (statement.executeUpdate(sql) < 1)
-							send(new SendMessage("This npc has already been removed!"));
-						else { //Functions to remove npc!
-							tempNpc.die();
-							EventManager.getInstance().registerEvent(new Event(tempNpc.getTimeOnFloor() + 600) {
-								@Override
-								public void execute() {
-									Server.npcManager.getNpcs().remove(tempNpc);
-									this.stop();
-								}
-							});
-							send(new SendMessage("You removed this npc spawn!"));
-						}
-						statement.executeUpdate(sql);
-						statement.close();
-					} catch (Exception e) {
-						send(new SendMessage("Something went wrong in removing this npc!"));
-					}
-				} else if (button == 2) {
-					if (!tempNpc.getData().getDrops().isEmpty()) {
-						int line = 8147;
-						double totalChance = 0.0;
-						clearQuestInterface();
-						send(new SendString("@dre@Drops for @blu@" + tempNpc.npcName() + "@bla@(@gre@" + npcId + "@bla@)", 8144));
-						ArrayList<String> text = new ArrayList<>();
-						/* 100% drops! */
-						for (NpcDrop drop : tempNpc.getData().getDrops()) {
-							if(drop.getChance() >= 100.0)
-								text.add((drop.getMinAmount() == drop.getMaxAmount() ? drop.getMinAmount() + "" : drop.getMinAmount() + " - " + drop.getMaxAmount()) + " " + GetItemName(drop.getId()) + "(" + drop.getId() + ")");
-						}
-						/* All other drops! */
-						for (NpcDrop drop : tempNpc.getData().getDrops()) {
-							if(drop.getChance() < 100.0) {
-								int min = drop.getMinAmount();
-								int max = drop.getMaxAmount();
-								int itemId = drop.getId();
-								double chance = drop.getChance();
-								text.add((min == max ? min + "" : min + " - " + max) + " " + GetItemName(itemId) + "(" + itemId + ") " + chance + "% (1:"+ Math.round(100.0/chance) +")" + (drop.rareShout() ? ", YELL" : ""));
-								totalChance += chance;
-							}
-						}
-						for(String txt : text) {
-							send(new SendString(txt, line));
-							line++;
-							if (line == 8196) line = 12174;
-						}
-						send(new SendString(totalChance > 100.0 ? "You are currently " + (totalChance - 100.0) + " % over!" : "Total drops %: " + totalChance + "%", 8145));
-						send(new SendString(totalChance < 0.0 || totalChance >= 100.0 ? "" : "Nothing " + (100.0 - totalChance) + "%", line));
-						sendQuestSomething(8143);
-						showInterface(8134);
-						//flushOutStream();
-					} else
-						send(new SendMessage("Npc " + tempNpc.npcName() + " (" + npcId + ") has no assigned drops!"));
-				} else if (button == 3) {
-					Server.npcManager.reloadDrops(this, npcId);
-				} else if (button == 4) {
-					tempNpc.showConfig(this);
-				} else if (button == 5) {
-					Server.npcManager.reloadAllData(this, npcId);
-				}
-				playerPotato.clear();
-			}
-
-		if (convoId == 0) {
-			if (button == 1) {
-				openUpBank();
-			} else {
-				nextDiag = 8;
-			}
-		}
-		if (NpcDialogue == 12) { //Slayer dialogue
-			nextDiag = button == 1 ? 13 : button == 2 ? 31 : button == 4 ? 14 : 34;
-		}
-		if (NpcDialogue == 32) { //Slayer dialogue
-			if (button == 1)
-				nextDiag = 33;
-			else
-				send(new RemoveInterfaces());
-		}
-		if (NpcDialogue == 35) { //Slayer dialogue
-			if(button == 1) {
-				nextDiag = 36;
-			} else
-				showPlayerChat(new String[]{ "No, thank you." }, 614);
-		}
-		if (convoId == 2) {
-			if (button == 1) {
-				WanneShop = 39;
-			} else {
-				send(new RemoveInterfaces());
-			}
-		}
-		if (convoId == 3) {
-			if (button == 1) {
-				WanneShop = 9;
-			} else {
-				send(new RemoveInterfaces());
-			}
-		}
-		if (convoId == 4) {
-			if (button == 1) {
-				WanneShop = 22;
-			} else {
-				send(new RemoveInterfaces());
-			}
-		}
-		/*
-		 * if (convoId == 1001) { if (button == 1) { //send(new RemoveInterfaces());
-		 * getOutputStream().createFrame(27); } else { send(new RemoveInterfaces());
-		 * } }
-		 */
-		if (NpcDialogue == 163) {
-			if (button == 1)
-				showInterface(8292);
-			else
-				nextDiag = 164;
-		} else if (NpcDialogue == 164) {
-			int type = skillX == 3002 && skillY == 3931 ? 3 : skillX == 2547 && skillY == 3554 ? 2 : 1;
-			if (button == 1)
-				teleportTo(type == 1 ? 2547 : 2474, type == 1 ? 3553 : 3438, 0);
-			else if (button == 2)
-				teleportTo(type == 3 ? 2547 : 3002, type == 3 ? 3553 : 3932, 0);
-			send(new RemoveInterfaces());
-		} else if (NpcDialogue == 3649) {
-			if (button == 1)
-				setTravelMenu();
-			else if(button == 2)
-				showPlayerChat(new String[]{ "No thank you." }, 614);
-			NpcDialogueSend = false;
-			NpcDialogue = -1;
-		} else if (NpcDialogue == 2346) {
-			if (button == 1) { //One time pay!
-				nextDiag = 2347;
-			} else if (button == 2) { //One time fee
-				if(!checkUnlock(0)) {
-					int maximumTickets = 10, minimumTicket = 1, ticketValue = 300_000;
-					int missing = (maximumTickets - minimumTicket) * ticketValue;
-					if(!playerHasItem(621, minimumTicket)) {
-						showNPCChat(NpcTalkTo, 591, new String[]{"You need a minimum of " + minimumTicket + " ship ticket", "to unlock permanent!"});
-						return;
-					}
-					missing -= (getInvAmt(621) - minimumTicket) * ticketValue;
-					if(missing > 0) {
-						if(getInvAmt(995) >= missing) {
-							deleteItem(621, getInvAmt(621) < maximumTickets ? getInvAmt(621) : maximumTickets);
-							deleteItem(995, missing);
-							addUnlocks(0, checkUnlockPaid(0) + "", "1");
-							showNPCChat(NpcTalkTo, 591, new String[]{"Thank you for the payment.", "You may enter freely into my dungeon."});
-						} else showNPCChat(NpcTalkTo, 591, new String[]{"You do not have enough coins to do this!", "You are currently missing "+(missing - getInvAmt(995))+" coins or", (int)Math.ceil((missing - getInvAmt(995))/300_000D) + " ship tickets."});
-					} else { //Using ship tickets as payment!
-						deleteItem(621, maximumTickets);
-						addUnlocks(0, checkUnlockPaid(0) + "", "1");
-						showNPCChat(NpcTalkTo, 591, new String[]{"Thank you for the ship tickets.", "You may enter freely into my dungeon."});
-					}
-				}
-			} else if (button == 3) { //Nevermind!
-				showPlayerChat(new String[]{"I do not want anything."}, 614);
-			} else
-				send(new RemoveInterfaces());
-		} else if (NpcDialogue == 2347) {
-			if(checkUnlockPaid(0) > 0 || checkUnlock(0)) {
-				showNPCChat(NpcTalkTo, 591, new String[]{"You have already paid me.", "Please step into my dungeon."});
-			} else if(button == 1) {
-				if(getInvAmt(621) > 0 || getBankAmt(621) > 0) {
-					addUnlocks(0, "1", checkUnlock(0) ? "1" : "0");
-					if(getInvAmt(621) > 0)
-						deleteItem(621, 1);
-					else deleteItemBank(621, 1);
-					showNPCChat(NpcTalkTo, 591, new String[]{"You can now step into the dungeon."});
-				} else showNPCChat(NpcTalkTo, 596, new String[]{"You need a ship ticket to enter my dungeon!"});
-			} else if (button == 2) {
-				long amount = getInvAmt(995) + getBankAmt(995);
-				int total = 300_000;
-				if(amount >= total) {
-					addUnlocks(0, "1", checkUnlock(0) ? "1" : "0");
-					int remain = total - getInvAmt(995);
-					deleteItem(995, total);
-					if(remain > 0)
-						deleteItemBank(995, remain);
-					showNPCChat(NpcTalkTo, 591, new String[]{"You can now step into the dungeon."});
-				} else showNPCChat(NpcTalkTo, 596, new String[]{"You need atleast "+(300_000 - amount)+" more coins to enter my dungeon!"});
-			}
-		} else if (NpcDialogue == 2181) {
-			if (button == 1) { //One time pay!
-				nextDiag = 2182;
-			} else if (button == 2) { //One time fee
-				if(!checkUnlock(1)) {
-					int maximumTickets = 20, minimumTicket = 3, ticketValue = 300_000;
-					int missing = (maximumTickets - minimumTicket) * ticketValue;
-					if(!playerHasItem(621, minimumTicket)) {
-						showNPCChat(NpcTalkTo, 591, new String[]{"You need a minimum of " + minimumTicket + " ship ticket", "to unlock permanent!"});
-						return;
-					}
-					missing -= (getInvAmt(621) - minimumTicket) * ticketValue;
-					if(missing > 0) {
-						if(getInvAmt(995) >= missing) {
-							deleteItem(621, getInvAmt(621) < maximumTickets ? getInvAmt(621) : maximumTickets);
-							deleteItem(995, missing);
-							addUnlocks(1, checkUnlockPaid(1) + "", "1");
-							showNPCChat(NpcTalkTo, 591, new String[]{"Thank you for the payment.", "You may enter freely into my cave."});
-						} else showNPCChat(NpcTalkTo, 591, new String[]{"You do not have enough coins to do this!", "You are currently missing "+(missing - getInvAmt(995))+" coins or", (int)Math.ceil((missing - getInvAmt(995))/300_000D) + " ship tickets."});
-					} else { //Using ship tickets as payment!
-						deleteItem(621, maximumTickets);
-						addUnlocks(1, checkUnlockPaid(1) + "", "1");
-						showNPCChat(NpcTalkTo, 591, new String[]{"Thank you for the ship tickets.", "You may enter freely into my cave."});
-					}
-				}
-			} else if (button == 3) { //Nevermind!
-				showPlayerChat(new String[]{"I do not want anything."}, 614);
-			} else
-				send(new RemoveInterfaces());
-		} else if (NpcDialogue == 2182) {
-			if(checkUnlockPaid(1) > 0 || checkUnlock(1)) {
-				showNPCChat(NpcTalkTo, 591, new String[]{"You have already paid me.", "Please step into my cave."});
-			} else if(button == 1) {
-				if(getInvAmt(621) > 0 || getBankAmt(621) > 0) {
-					addUnlocks(1, "1", checkUnlock(1) ? "1" : "0");
-					if(getInvAmt(621) > 0)
-						deleteItem(621, 1);
-					else deleteItemBank(621, 1);
-					showNPCChat(NpcTalkTo, 591, new String[]{"You can now step into the cave."});
-				} else showNPCChat(NpcTalkTo, 596, new String[]{"You need a ship ticket to enter my cave!"});
-			} else if (button == 2) {
-				long amount = getInvAmt(995) + getBankAmt(995);
-				int total = 300_000;
-				if(amount >= total) {
-					addUnlocks(1, "1", checkUnlock(1) ? "1" : "0");
-					int remain = total - getInvAmt(995);
-					deleteItem(995, total);
-					if(remain > 0)
-						deleteItemBank(995, remain);
-					showNPCChat(NpcTalkTo, 591, new String[]{"You can now step into the cave."});
-				} else showNPCChat(NpcTalkTo, 596, new String[]{"You need atleast "+(300_000 - amount)+" more coins to enter my cave!"});
-			}
-		} else if (NpcDialogue == 8053) {
-			if (button == 1) {
-				send(new RemoveInterfaces());
-				openUpShop(55);
-				//TODO: Add reward shop
-			} else
-				send(new RemoveInterfaces());
-		} else if (NpcDialogue == 10000) {
-			if (button == 1) {
-				if(playerHasItem(6161) && playerHasItem(6159)) {
-					deleteItem(6159, 1);
-					deleteItem(6161, 1);
-					addItem(6128, 1);
-					showPlayerChat(new String[]{ "I just made Rock-shell head." }, 614);
-				} else
-					showPlayerChat(new String[]{"I need the following items:", GetItemName(6161) + " and " + GetItemName(6159)}, 614);
-			} else if (button == 2) {
-				if(playerHasItem(6157) && playerHasItem(6159) && playerHasItem(6161)) {
-					deleteItem(6157, 1);
-					deleteItem(6159, 1);
-					deleteItem(6161, 1);
-					addItem(6129, 1);
-					showPlayerChat(new String[]{ "I just made Rock-shell body." }, 614);
-				} else
-					showPlayerChat(new String[]{"I need the following items:", GetItemName(6161) + ", " + GetItemName(6159) + " and " + GetItemName(6157)}, 614);
-			} else if (button == 3) {
-				if(playerHasItem(6159) && playerHasItem(6157)) {
-					deleteItem(6157, 1);
-					deleteItem(6159, 1);
-					addItem(6130, 1);
-					showPlayerChat(new String[]{ "I just made Rock-shell legs." }, 614);
-				} else
-					showPlayerChat(new String[]{"I need the following items:", GetItemName(6159) + " and " + GetItemName(6157)}, 614);
-			} else if (button == 4) {
-				if (playerHasItem(6161) && playerHasItem(6159)) {
-					deleteItem(6159, 1);
-					deleteItem(6161, 1);
-					addItem(6145, 1);
-					showPlayerChat(new String[]{"I just made Rock-shell boots."}, 614);
-				} else
-					showPlayerChat(new String[]{"I need the following items:", GetItemName(6161) + " and " + GetItemName(6159)}, 614);
-			} else if (button == 5) {
-				if (playerHasItem(6161, 2)) {
-					deleteItem(6161, 1);
-					deleteItem(6161, 1);
-					addItem(6151, 1);
-					showPlayerChat(new String[]{"I just made Rock-shell gloves."}, 614);
-				} else
-					showPlayerChat(new String[]{"I need two of " + GetItemName(6161)}, 614);
-			}
-			NpcDialogueSend = true;
-		} else if (NpcDialogue == 536) {
-			if (button == 1) {
-				long amount = getInvAmt(536) + getInvAmt(537) + getBankAmt(536);
-				int amt = 5;
-				if (amount >= 5) {
-					while (amt > 0) {
-						for (int slot = 0; slot < 28 && amt > 0; slot++) {
-							if (playerItems[slot] - 1 == 536) {
-								deleteItem(536, slot, 1);
-								amt--;
-							}
-						}
-						for (int slot = 0; slot < 28; slot++) {
-							if (playerItems[slot] - 1 == 537) {
-								int toDelete = playerItemsN[slot] >= amt ? amt : playerItemsN[slot];
-								deleteItem(537, slot, toDelete);
-								amt -= toDelete;
-								break;
-							}
-						}
-						for (int slot = 0; slot < bankItems.length; slot++) {
-							if (bankItems[slot] - 1 == 536) {
-								bankItemsN[slot] -= amt;
-								break;
-							}
-						}
-						amt = 0;
-					}
-					Agility agi = new Agility(this);
-					agi.kbdEntrance();
-					send(new SendMessage("You sacrifice 5 dragon bones!"));
-				} else
-					send(new SendMessage("You need to have 5 dragon bones to sacrifice!"));
-				send(new RemoveInterfaces());
-			} else
-				send(new RemoveInterfaces());
-		} else if (NpcDialogue == 48054) {
-			if(getInvAmt(621) < 1) {
-				send(new SendMessage("You need a ship ticket to unlock this travel!"));
-			} else if (button == 1) {
-				int id = actionButtonId == 48054 ? 4 : actionButtonId == 3056 ? 3 : actionButtonId - 3058;
-				if(!getTravel(id)) {
-					deleteItem(621, 1);
-					saveTravel(id);
-					send(new SendMessage("You have now unlocked the travel!"));
-				} else
-					send(new SendMessage("You have already unlocked this travel!"));
-			}
-			NpcDialogueSend = false;
-			NpcDialogue = -1;
-			setTravelMenu();
-		}
-		if (nextDiag > 0) {
-			NpcDialogue = nextDiag;
-			NpcDialogueSend = false;
-			nextDiag = -1;
 		}
 	}
 

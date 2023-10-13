@@ -55,7 +55,7 @@ public class BankAll implements Packet {
                 client.send(new RemoveInterfaces());
             } else {
                 client.send(new SendMessage("Illigal Smithing !"));
-                client.println_debug("Illigal Smithing !");
+                client.println("Illigal Smithing !");
             }
         }
     }

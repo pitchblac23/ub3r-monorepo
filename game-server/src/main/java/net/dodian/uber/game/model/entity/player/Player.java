@@ -388,7 +388,7 @@ public abstract class Player extends Entity {
             if (dir == -1)
                 wQueueReadPtr = (wQueueReadPtr + 1) % WALKING_QUEUE_SIZE;
             else if ((dir & 1) != 0) {
-                println_debug("Invalid waypoint in walking queue!");
+                println("Invalid waypoint in walking queue!");
                 resetWalkingQueue();
                 return -1;
             }
@@ -693,8 +693,7 @@ public abstract class Player extends Entity {
                         }
                         if (!found) {
                             println_debug("Fatal: Internal error: unable to determine connection vertex!" + "  wp1=(" + wayPointX1
-                                    + ", " + wayPointY1 + "), wp2=(" + wayPointX2 + ", " + wayPointY2 + "), " + "first=(" + firstX + ", "
-                                    + firstY + ")");
+                                    + ", " + wayPointY1 + "), wp2=(" + wayPointX2 + ", " + wayPointY2 + "), " + "first=(" + firstX + ", " + firstY + ")");
                         } else
                             addToWalkingQueue(wayPointX1, wayPointY1);
                     }

@@ -16,13 +16,13 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
-import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.crafting.Crafting;
 import net.dodian.uber.game.model.player.skills.crafting.Tanning;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Utils;
+import static net.dodian.uber.game.model.player.dialogue.DialogueKt.triggerChat;
 import static net.dodian.uber.game.model.player.skills.Skills.*;
 import static net.dodian.utilities.DotEnvKt.getServerDebugMode;
 
@@ -31,9 +31,7 @@ public class ClickingButtons implements Packet {
     @Override
     public void ProcessPacket(Client client, int packetType, int packetSize) {
         int actionButton = Utils.HexToInt(client.getInputStream().buffer, 0, packetSize);
-        if (getServerDebugMode()) {
-            client.println("button= " + actionButton);
-        }
+        if (getServerDebugMode()) { client.println_debug("button= " + actionButton); }
         if (System.currentTimeMillis() - client.lastButton < 600 || !client.validClient) { //To prevent some shiez!
             client.lastButton = System.currentTimeMillis();
             return;
@@ -512,7 +510,7 @@ public class ClickingButtons implements Packet {
                 break;
 
             case 130: // close interface
-                client.println_debug("Closing Interface");
+                client.println("Closing Interface");
                 break;
 
             case 1177: // Gmaul!
@@ -662,93 +660,28 @@ public class ClickingButtons implements Packet {
                 break;
 
             case 9157:
-                client.triggerChat(1);
-                if (client.NpcDialogue == 2) {
-                    client.NpcDialogue = 0;
-                    client.NpcDialogueSend = false;
-                    client.openUpBank();
-                } else if (client.NpcDialogue == 4) { // Aubury
-                    client.NpcDialogue = 0;
-                    client.NpcDialogueSend = false;
-                    client.openUpShop(2);
-                } else if (client.NpcDialogue == 1001) { // Aubury
-                    client.getOutputStream().createFrame(27);
-                } else if (client.NpcDialogue == 22) { // Makeover Mage
-                    client.NpcDialogue = 23;
-                    client.NpcDialogueSend = false;
-                } else if (client.NpcDialogue == 26) {
-                    client.specsOn = true;
-                    client.send(new SendMessage("You have enabled specials."));
-                    client.send(new RemoveInterfaces());
-                    client.NpcDialogue = 0;
-                    client.NpcDialogueSend = false;
-                } else if (client.NpcDialogue == 27) {
-                    client.yellOn = true;
-                    client.send(new SendMessage("You have enabled boss yell messages."));
-                    client.send(new RemoveInterfaces());
-                    client.NpcDialogue = 0;
-                    client.NpcDialogueSend = false;
-                } else if (client.NpcDialogue == 9) { // mage arena
-                    if (client.determineCombatLevel() >= 80) {
-                        client.moveTo(3105, 3933, 0);
-                        client.send(new RemoveInterfaces());
-                    } else {
-                        client.send(new SendMessage("You need to be level 80 or above to enter the mage arena."));
-                        client.send(new SendMessage("The skeletons at the varrock castle are a good place until then."));
-                    }
-                }
-                break;
-
-            case 9158:
-                client.triggerChat(2);
-                if (client.NpcDialogue == 2) {
-                    client.NpcDialogue = 0;
-                    client.NpcDialogueSend = false;
-                } else if (client.NpcDialogue == 4) {
-                    client.NpcDialogue = 5;
-                    client.NpcDialogueSend = false;
-                } else if (client.NpcDialogue == 22) { // Makeover Mage
-                    client.NpcDialogue = 24;
-                    client.NpcDialogueSend = false;
-                } else if (client.NpcDialogue == 1001) { // dice
-                    client.setInterfaceWalkable(-1);
-                    client.send(new RemoveInterfaces());
-                } else if (client.NpcDialogue == 26) {
-                    client.specsOn = false;
-                    client.send(new SendMessage("You have disabled specials."));
-                    client.send(new RemoveInterfaces());
-                    client.NpcDialogue = 0;
-                    client.NpcDialogueSend = false;
-                } else if (client.NpcDialogue == 27) {
-                    client.yellOn = false;
-                    client.send(new SendMessage("You have disabled boss yell messages."));
-                    client.send(new RemoveInterfaces());
-                    client.NpcDialogue = 0;
-                    client.NpcDialogueSend = false;
-                }
-                break;
-
             case 9167:
             case 9178:
             case 9190:
-                client.triggerChat(1);
+                triggerChat(1, client);
                 break;
+            case 9158:
             case 9168:
             case 9179:
             case 9191:
-                client.triggerChat(2);
+                triggerChat(2, client);
                 break;
             case 9169:
             case 9180:
             case 9192:
-                client.triggerChat(3);
+                triggerChat(3, client);
                 break;
             case 9181:
             case 9193:
-                client.triggerChat(4);
+                triggerChat(4, client);
                 break;
             case 9194:
-                client.triggerChat(5);
+                triggerChat(5, client);
                 break;
 
             case 7212:

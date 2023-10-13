@@ -1,6 +1,5 @@
 package net.dodian.uber.game.model.player.packets.incoming;
 
-import net.dodian.uber.game.model.UpdateFlag;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.object.Stairs;
@@ -69,8 +68,7 @@ public class Walking implements Packet {
                 return;
             }
             if (client.newWalkCmdSteps % 2 != 0) {
-                client.println_debug("Warning: walkTo(" + packetType + ") command malformed: "
-                        + Utils.Hex(client.getInputStream().buffer, 0, packetSize));
+                client.println("Warning: walkTo(" + packetType + ") command malformed: " + Utils.Hex(client.getInputStream().buffer, 0, packetSize));
             }
             client.newWalkCmdSteps /= 2;
             if (++client.newWalkCmdSteps > Player.WALKING_QUEUE_SIZE) {
@@ -130,5 +128,4 @@ public class Walking implements Packet {
         //Reset npc face!
         client.faceNpc(65535);
     }
-
 }

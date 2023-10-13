@@ -120,9 +120,6 @@ public class ClickNpc implements Packet {
             client.NpcWanneTalk = 162;
         } else if (npcId == 8051) {
             client.NpcWanneTalk = 8051;
-        } else if (npcId == 659) {
-            client.NpcWanneTalk = 1000;
-            client.convoId = 1001;
         } else if (npcId == 3640) { // Beginner store!
             client.WanneShop = 22;
         } else if (npcId == 2825) {

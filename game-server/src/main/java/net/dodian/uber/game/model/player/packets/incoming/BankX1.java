@@ -14,7 +14,6 @@ public class BankX1 implements Packet {
         client.XinterfaceID = client.getInputStream().readUnsignedWordA();
         client.XremoveID = client.getInputStream().readSignedWordBigEndian();
         if (getGameWorldId() > 1)
-            client.println_debug(
-                    "RemoveItem X: " + client.XremoveID + " InterID: " + client.XinterfaceID + " slot: " + client.XremoveSlot);
+            client.println_debug("RemoveItem X: " + client.XremoveID + " InterID: " + client.XinterfaceID + " slot: " + client.XremoveSlot);
     }
 }
