@@ -5,10 +5,10 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
-import net.dodian.uber.game.model.player.skills.cooking.Cooking;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.utilities.Utils;
 
+import static net.dodian.uber.game.model.player.skills.cooking.CookingKt.*;
 import static net.dodian.uber.game.model.player.skills.crafting.GoldCraftingKt.*;
 import static net.dodian.uber.game.model.player.skills.prayer.PrayerKt.*;
 
@@ -83,7 +83,7 @@ public class ItemOnObject implements Packet {
          || UsedOnObjectID == 26181 || UsedOnObjectID == 21302) { // Cooking range!
             client.skillX = UsedOnX;
             client.setSkillY(UsedOnY);
-            Cooking.startCooking(ItemID, client);
+            startCooking(ItemID, client);
             client.setFocus(UsedOnX, UsedOnY);
         } else if (UsedOnObjectID == 2783) { // anvil
             int Type = Smithing.CheckSmithing(ItemID, client);

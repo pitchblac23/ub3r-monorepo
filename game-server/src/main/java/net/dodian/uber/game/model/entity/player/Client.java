@@ -24,7 +24,6 @@ import net.dodian.uber.game.model.player.packets.PacketHandler;
 import net.dodian.uber.game.model.player.packets.outgoing.*;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skills;
-import net.dodian.uber.game.model.player.skills.cooking.Cooking;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
@@ -51,6 +50,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static net.dodian.uber.game.combat.ClientExtensionsKt.getRangedStr;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.attackTarget;
 import static net.dodian.uber.game.model.player.dialogue.DialogueKt.*;
+import static net.dodian.uber.game.model.player.skills.cooking.CookingKt.*;
 import static net.dodian.uber.game.model.player.skills.crafting.CraftingKt.*;
 import static net.dodian.uber.game.model.player.skills.crafting.GoldCraftingKt.*;
 import static net.dodian.uber.game.model.player.skills.crafting.SpinningKt.*;
@@ -2552,7 +2552,7 @@ public class Client extends Player implements Runnable {
 			miningEss(this);
 		} else if (cooking && now - lastAction >= 1800) {
 			lastAction = now;
-			Cooking.cook(this);
+			cook(this);
 		}
 		// Snowing, Npc Talking
 		if (NpcWanneTalk == 2) { // Bank Booth
