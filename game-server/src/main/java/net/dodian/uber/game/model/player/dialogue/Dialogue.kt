@@ -29,24 +29,20 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
     fun updateNPCChat(p: Client) = when (p.NpcDialogue) {
             1 -> p.npcChat(p.NpcTalkTo, 591, "Good day, how can I help you?")
 
-            2 -> {
-                p.playerOptions(
+            2 -> p.playerOptions(
                     "What would you like to say?",
                     "I'd like to access my bank account, please.",
                     "I'd like to access my PIN settings.")
-            }
 
             3 -> {
                 p.npcChat(p.NpcTalkTo, 591, "Do you want to buy some runes?")
                 p.nextDiag = 4
             }
 
-            4 -> {
-                p.playerOptions(
+            4 -> p.playerOptions(
                     "Select an Option",
                     "Yes please!",
                     "Oh it's a rune shop. No thank you, then.")
-            }
 
             5 -> p.playerChat(592, "Oh it's a rune shop. No thank you, then.")
 
@@ -205,7 +201,10 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                 p.NpcDialogueSend = true
             }
 
-            35 -> p.playerOptions("Do you wish to upgrade?", "Yes, please", "No, please")
+            35 -> p.playerOptions(
+                "Do you wish to upgrade?",
+                "Yes, please",
+                "No, please")
 
             36 -> {
                 p.playerChat(614, "Yes, thank you.")
@@ -264,7 +263,8 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
 
             22 -> p.playerOptions(
                 "Would you like to change your looks?",
-                "Sure", "No thanks")
+                "Sure",
+                "No thanks")
 
             23 -> p.playerChat(614, "I would love that.")
 

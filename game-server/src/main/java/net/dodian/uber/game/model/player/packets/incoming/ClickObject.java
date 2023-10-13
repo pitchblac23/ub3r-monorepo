@@ -9,7 +9,6 @@ import net.dodian.uber.game.event.EventManager;
 import net.dodian.uber.game.model.Position;
 import net.dodian.uber.game.model.WalkToTask;
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.object.*;
@@ -20,14 +19,15 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.farming.Farming;
-import net.dodian.uber.game.model.player.skills.mining.Mining;
-import net.dodian.uber.game.model.player.skills.runecrafting.Runecrafting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.model.player.skills.thieving.Thieving;
 import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
+
+import static net.dodian.uber.game.model.player.skills.mining.MiningKt.*;
+import static net.dodian.uber.game.model.player.skills.runecrafting.RunecraftingKt.*;
 
 public class ClickObject implements Packet {
 
@@ -528,7 +528,7 @@ public class ClickObject implements Packet {
                     client.send(new SendMessage("You can not mine here or the Tzhaar's will be angry!"));
                     return;
                 }
-                int pickaxe = Mining.findPick(client);
+                int pickaxe = findPick(client);
                 if (pickaxe < 0) {
                     client.minePick = -1;
                     client.resetAction();
@@ -545,12 +545,12 @@ public class ClickObject implements Packet {
                 client.minePick = pickaxe;
                 client.mineIndex = r;
                 client.mining = true;
-                client.lastAction = System.currentTimeMillis() + Mining.getMiningSpeed(client);
-                client.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
+                client.lastAction = System.currentTimeMillis() + getMiningSpeed(client);
+                client.requestAnim(getMiningEmote(Utils.picks[pickaxe]), 0);
                 client.send(new SendMessage("You swing your pick at the rock."));
                 return;
             } else if (objectID == 7471) {
-                int pickaxe = Mining.findPick(client);
+                int pickaxe = findPick(client);
                 if (pickaxe < 0) {
                     client.minePick = -1;
                     client.resetAction();
@@ -564,8 +564,8 @@ public class ClickObject implements Packet {
                 client.minePick = pickaxe;
                 client.mineIndex = r;
                 client.miningEss = true;
-                client.lastAction = System.currentTimeMillis() + Mining.getMiningSpeed(client);
-                client.requestAnim(Mining.getMiningEmote(Utils.picks[pickaxe]), 0);
+                client.lastAction = System.currentTimeMillis() + getMiningSpeed(client);
+                client.requestAnim(getMiningEmote(Utils.picks[pickaxe]), 0);
                 client.send(new SendMessage("You swing your pick at the rock."));
                 return;
             }
@@ -611,15 +611,15 @@ public class ClickObject implements Packet {
             return;
         }
         if (objectID == 14905) {
-            Runecrafting.runecraft(client, 561, 1, 60);
+            runecraft(client, 561, 1, 60);
             return;
         }
         if (objectID == 27978) {
-            Runecrafting.runecraft(client, 565, 50, 85);
+            runecraft(client, 565, 50, 85);
             return;
         }
         if (objectID == 14903) {
-            Runecrafting.runecraft(client, 564, 75, 120);
+            runecraft(client, 564, 75, 120);
             return;
         }
         if (objectID == 2158 || objectID == 2156) {

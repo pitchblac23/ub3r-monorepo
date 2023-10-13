@@ -5,11 +5,6 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import kotlin.math.min
 
-class EssBags {
-
-    companion object {
-
-        @JvmStatic
         fun getPouches(c: Client): String {
             var out = ""
             for (i in c.runePouchesAmount.indices) {
@@ -18,7 +13,6 @@ class EssBags {
             return out
         }
 
-        @JvmStatic
         fun fillEssencePouch(pouch: Int, c: Client): Boolean {
             val slot = if (pouch == 5509) 0 else (pouch - 5508) / 2
             if (slot in 0..3) {
@@ -41,7 +35,6 @@ class EssBags {
             return false
         }
 
-        @JvmStatic
         fun emptyEssencePouch(pouch: Int, c: Client): Boolean {
             val slot = if (pouch == 5509) 0 else (pouch - 5508) / 2
             if (slot in 0..3) {
@@ -63,5 +56,3 @@ class EssBags {
             }
             return false
         }
-    }
-}

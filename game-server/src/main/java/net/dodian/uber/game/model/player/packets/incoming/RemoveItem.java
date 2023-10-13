@@ -6,8 +6,9 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
 import net.dodian.uber.game.party.Balloons;
+
+import static net.dodian.uber.game.model.player.skills.crafting.GoldCraftingKt.*;
 
 public class RemoveItem implements Packet {
 
@@ -45,7 +46,7 @@ public class RemoveItem implements Packet {
         } else if (interfaceID == 3415 && client.inTrade) { // remove from a trade window
             client.fromTrade(removeID, removeSlot, 1);
         } else if (interfaceID >= 24469 && interfaceID <= 24493) {
-            GoldCrafting.startGoldCrafting(interfaceID, removeSlot, 1, client);
+            startGoldCrafting(interfaceID, removeSlot, 1, client);
         } else if (interfaceID == 3823) { // Show value to sell items
             if (!Server.shopping || client.tradeLocked) {
                 client.send(new SendMessage(client.tradeLocked ? "You are trade locked!" : "Currently selling stuff to the store has been disabled!"));

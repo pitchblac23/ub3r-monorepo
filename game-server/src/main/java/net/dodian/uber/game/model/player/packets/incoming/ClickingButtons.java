@@ -14,16 +14,17 @@ import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
-import net.dodian.uber.game.model.player.skills.SkillGuides;
 import net.dodian.uber.game.model.player.skills.Skills;
-import net.dodian.uber.game.model.player.skills.crafting.Crafting;
-import net.dodian.uber.game.model.player.skills.crafting.Tanning;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Utils;
+
 import static net.dodian.uber.game.model.player.dialogue.DialogueKt.triggerChat;
+import static net.dodian.uber.game.model.player.skills.SkillGuidesKt.*;
 import static net.dodian.uber.game.model.player.skills.Skills.*;
+import static net.dodian.uber.game.model.player.skills.crafting.CraftingKt.*;
+import static net.dodian.uber.game.model.player.skills.crafting.TanningKt.*;
 import static net.dodian.utilities.DotEnvKt.getServerDebugMode;
 
 public class ClickingButtons implements Packet {
@@ -273,7 +274,7 @@ public class ClickingButtons implements Packet {
             case 34192:
             case 34191:
             case 34190:
-                Crafting.startHideCraft(client.actionButtonId, client);
+                startHideCraft(client.actionButtonId, client);
                 break;
             case 33187: // armor
             case 33186:
@@ -302,67 +303,67 @@ public class ClickingButtons implements Packet {
             case 33205:// cowl
             case 33204:
             case 33203:
-                Crafting.startCraft(client.actionButtonId, client);
+                startCraft(client.actionButtonId, client);
             break;
             case 57225:
-                Tanning.startTan(1, 0, client);
+                startTan(1, 0, client);
             break;
             case 57217:
-                Tanning.startTan(5, 0, client);
+                startTan(5, 0, client);
                 break;
             case 57201:
             case 57209:
-                Tanning.startTan(27, 0, client);
+                startTan(27, 0, client);
             break;
             case 57229: //Hard leather!
-                Tanning.startTan(1, 1, client);
+                startTan(1, 1, client);
             break;
             case 57221:
-                Tanning.startTan(5, 1, client);
+                startTan(5, 1, client);
             break;
             case 57205:
             case 57213:
-                Tanning.startTan(27, 1, client);
+                startTan(27, 1, client);
             break;
             case 57227:
-                Tanning.startTan(1, 2, client);
+                startTan(1, 2, client);
                 break;
             case 57219:
-                Tanning.startTan(5, 2, client);
+                startTan(5, 2, client);
                 break;
             case 57211:
             case 57203:
-                Tanning.startTan(27, 2, client);
+                startTan(27, 2, client);
                 break;
             case 57228:
-                Tanning.startTan(1, 3, client);
+                startTan(1, 3, client);
                 break;
             case 57220:
-                Tanning.startTan(5, 3, client);
+                startTan(5, 3, client);
                 break;
             case 57212:
             case 57204:
-                Tanning.startTan(27, 3, client);
+                startTan(27, 3, client);
                 break;
             case 57231:
-                Tanning.startTan(1, 4, client);
+                startTan(1, 4, client);
                 break;
             case 57223:
-                Tanning.startTan(5, 4, client);
+                startTan(5, 4, client);
                 break;
             case 57215:
             case 57207:
-                Tanning.startTan(27, 4, client);
+                startTan(27, 4, client);
                 break;
             case 57232:
-                Tanning.startTan(1, 5, client);
+                startTan(1, 5, client);
                 break;
             case 57224:
-                Tanning.startTan(5, 5, client);
+                startTan(5, 5, client);
                 break;
             case 57216:
             case 57208:
-                Tanning.startTan(27, 5, client);
+                startTan(27, 5, client);
                 break;
             case 10239: //make stuff 1
                 client.fletching.fletchOther(client, 1);
@@ -757,7 +758,7 @@ public class ClickingButtons implements Packet {
             case 33206:
             case 94167:
                 try {
-                    SkillGuides.showSkillMenu(ATTACK.getId(), 0, client);
+                    showSkillMenu(ATTACK.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -765,7 +766,7 @@ public class ClickingButtons implements Packet {
             case 33207:
             case 94168:
                 try {
-                    SkillGuides.showSkillMenu(HITPOINTS.getId(), 0, client);
+                    showSkillMenu(HITPOINTS.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -773,7 +774,7 @@ public class ClickingButtons implements Packet {
             case 33208:
             case 94169:
                 try {
-                    SkillGuides.showSkillMenu(MINING.getId(), 0, client);
+                    showSkillMenu(MINING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -781,7 +782,7 @@ public class ClickingButtons implements Packet {
             case 33209:
             case 94170:
                 try {
-                    SkillGuides.showSkillMenu(STRENGTH.getId(), 0, client);
+                    showSkillMenu(STRENGTH.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -789,7 +790,7 @@ public class ClickingButtons implements Packet {
             case 33210:
             case 94171:
                 try {
-                    SkillGuides.showSkillMenu(AGILITY.getId(), 0, client);
+                    showSkillMenu(AGILITY.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -797,7 +798,7 @@ public class ClickingButtons implements Packet {
             case 33212:
             case 94173:
                 try {
-                    SkillGuides.showSkillMenu(DEFENCE.getId(), 0, client);
+                    showSkillMenu(DEFENCE.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -805,7 +806,7 @@ public class ClickingButtons implements Packet {
             case 33215:
             case 94176:
                 try {
-                    SkillGuides.showSkillMenu(RANGED.getId(), 0, client);
+                    showSkillMenu(RANGED.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -813,7 +814,7 @@ public class ClickingButtons implements Packet {
             case 33216:
             case 94177:
                 try {
-                    SkillGuides.showSkillMenu(THIEVING.getId(), 0, client);
+                    showSkillMenu(THIEVING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -821,7 +822,7 @@ public class ClickingButtons implements Packet {
             case 33213:
             case 94174:
                 try {
-                    SkillGuides.showSkillMenu(HERBLORE.getId(), 0, client);
+                    showSkillMenu(HERBLORE.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -829,7 +830,7 @@ public class ClickingButtons implements Packet {
             case 33219:
             case 94180:
                 try {
-                    SkillGuides.showSkillMenu(CRAFTING.getId(), 0, client);
+                    showSkillMenu(CRAFTING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -837,7 +838,7 @@ public class ClickingButtons implements Packet {
             case 33211:
             case 94172:
                 try {
-                    SkillGuides.showSkillMenu(SMITHING.getId(), 0, client);
+                    showSkillMenu(SMITHING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -845,7 +846,7 @@ public class ClickingButtons implements Packet {
             case 33220:
             case 94184:
                 try {
-                    SkillGuides.showSkillMenu(WOODCUTTING.getId(), 0, client);
+                    showSkillMenu(WOODCUTTING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -853,7 +854,7 @@ public class ClickingButtons implements Packet {
             case 33221:
             case 94182:
                 try {
-                    SkillGuides.showSkillMenu(MAGIC.getId(), 0, client);
+                    showSkillMenu(MAGIC.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -861,7 +862,7 @@ public class ClickingButtons implements Packet {
             case 33222:
             case 94181:
                 try {
-                    SkillGuides.showSkillMenu(FIREMAKING.getId(), 0, client);
+                    showSkillMenu(FIREMAKING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -869,7 +870,7 @@ public class ClickingButtons implements Packet {
             case 33223:
             case 94178:
                 try {
-                    SkillGuides.showSkillMenu(COOKING.getId(), 0, client);
+                    showSkillMenu(COOKING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -877,7 +878,7 @@ public class ClickingButtons implements Packet {
             case 33224:
             case 95053:
                 try {
-                    SkillGuides.showSkillMenu(RUNECRAFTING.getId(), 0, client);
+                    showSkillMenu(RUNECRAFTING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -885,7 +886,7 @@ public class ClickingButtons implements Packet {
             case 33214:
             case 94183:
                 try {
-                    SkillGuides.showSkillMenu(FLETCHING.getId(), 0, client);
+                    showSkillMenu(FLETCHING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -893,7 +894,7 @@ public class ClickingButtons implements Packet {
             case 33217:
             case 94175:
                 try {
-                    SkillGuides.showSkillMenu(FISHING.getId(), 0, client);
+                    showSkillMenu(FISHING.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -901,9 +902,9 @@ public class ClickingButtons implements Packet {
             case 34142:
                 try {
                     if (client.currentSkill < 2)
-                        SkillGuides.showSkillMenu(ATTACK.getId(), 0, client);
+                        showSkillMenu(ATTACK.getId(), 0, client);
                     else
-                        SkillGuides.showSkillMenu(client.currentSkill, 0, client);
+                        showSkillMenu(client.currentSkill, 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -911,9 +912,9 @@ public class ClickingButtons implements Packet {
             case 34119:
                 try {
                     if (client.currentSkill < 2)
-                        SkillGuides.showSkillMenu(DEFENCE.getId(), 0, client);
+                        showSkillMenu(DEFENCE.getId(), 0, client);
                     else
-                        SkillGuides.showSkillMenu(client.currentSkill, 1, client);
+                        showSkillMenu(client.currentSkill, 1, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -921,13 +922,13 @@ public class ClickingButtons implements Packet {
             case 34120:
                 if (client.currentSkill < 2)
                     try {
-                        SkillGuides.showSkillMenu(RANGED.getId(), 0, client);
+                        showSkillMenu(RANGED.getId(), 0, client);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 else
                     try {
-                        SkillGuides.showSkillMenu(client.currentSkill, 2, client);
+                        showSkillMenu(client.currentSkill, 2, client);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -937,7 +938,7 @@ public class ClickingButtons implements Packet {
                     client.send(new SendMessage("Coming soon!"));
                 else
                     try {
-                        SkillGuides.showSkillMenu(client.currentSkill, 3, client);
+                        showSkillMenu(client.currentSkill, 3, client);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -948,28 +949,28 @@ public class ClickingButtons implements Packet {
                 break;
             case 34133:
                 try {
-                    SkillGuides.showSkillMenu(client.currentSkill, 4, client);
+                    showSkillMenu(client.currentSkill, 4, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 34136:
                 try {
-                    SkillGuides.showSkillMenu(client.currentSkill, 5, client);
+                    showSkillMenu(client.currentSkill, 5, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 34139:
                 try {
-                    SkillGuides.showSkillMenu(client.currentSkill, 6, client);
+                    showSkillMenu(client.currentSkill, 6, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
                 break;
             case 34155:
                 try {
-                    SkillGuides.showSkillMenu(client.currentSkill, 7, client);
+                    showSkillMenu(client.currentSkill, 7, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -977,7 +978,7 @@ public class ClickingButtons implements Packet {
             case 47130:
             case 95061:
                 try {
-                    SkillGuides.showSkillMenu(SLAYER.getId(), 0, client);
+                    showSkillMenu(SLAYER.getId(), 0, client);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

@@ -22,7 +22,7 @@ services:
       # Enable the below SQL file mappings if you want to initialize the database with data.
       # Do note that these files (the way they are done in this example) need to be in the same directory as this file.
       # You can find them in the "database"-directory of the game-server module
-      # !! Everything depends on the mandatory_tables.sql, unless you took care of database another way
+      # !! Everything depends on the mandatory_tables.sql, unless you take care of the database another way
       - ./mandatory_tables.sql:/docker-entrypoint-initdb.d/1_mandatory_game_tables.sql
       - ./dodian_default_data.sql:/docker-entrypoint-initdb.d/2_dodian_default_data.sql
       - ./convenient_data.sql:/docker-entrypoint-initdb.d/3_convenient_game_data.sql

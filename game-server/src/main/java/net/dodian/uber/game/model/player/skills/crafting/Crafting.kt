@@ -12,14 +12,9 @@ var cLevel = 1
 var cExp = 0
 var cSelected = -1
 
-class Crafting {
-
-    companion object {
-
-        @kotlin.jvm.JvmField
+        @JvmField
         var cIndex: Int = -1
 
-        @JvmStatic
         fun startCraft(actionbutton: Int, c: Client) {
             c.send(RemoveInterfaces())
             val buttons = intArrayOf(
@@ -72,7 +67,6 @@ class Crafting {
             }
         }
 
-        @JvmStatic
         fun craft(c: Client) {
             if (c.getLevel(Skills.CRAFTING) < cLevel) {
                 c.send(SendMessage("You need " + cLevel + " crafting to make a " + c.GetItemName(c.cItem).lowercase(Locale.getDefault())))
@@ -100,7 +94,6 @@ class Crafting {
             } else c.resetAction(true)
         }
 
-        @JvmStatic
         fun craftMenu(i: Int, c: Client) {
             c.send(SendString("What would you like to make?", 8898))
             c.send(SendString("Vambraces", 8889))
@@ -112,7 +105,6 @@ class Crafting {
             c.sendFrame164(8880)
         }
 
-        @JvmStatic
         fun startHideCraft(b: Int, c: Client) {
             val buttons = intArrayOf(34185, 34184, 34183, 34182, 34189, 34188, 34187, 34186, 34193, 34192, 34191, 34190)
             val amounts = intArrayOf(1, 5, 10, 27)
@@ -148,5 +140,3 @@ class Crafting {
                 c.send(RemoveInterfaces())
             } else c.send(SendMessage("Can't make this??"))
         }
-    }
-}

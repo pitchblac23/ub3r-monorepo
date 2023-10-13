@@ -6,10 +6,6 @@ import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.utilities.Misc
 import java.util.*
 
-class Runecrafting {
-
-    companion object {
-        @JvmStatic
         fun runecraft(player: Client, rune: Int, level: Int, xp: Int) {
             if (!player.contains(1436)) {
                 player.send(SendMessage("You do not have any rune essence!"))
@@ -35,5 +31,3 @@ class Runecrafting {
             player.giveExperience(xp * count, Skills.RUNECRAFTING)
             player.triggerRandom(xp * count)
         }
-    }
-}

@@ -6,7 +6,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import java.util.*
 
-@kotlin.jvm.JvmField
+@JvmField
 val jewelry_levels = arrayOf(
     intArrayOf(5, 20, 27, 34, 43, 55, 67),
     intArrayOf(6, 22, 29, 40, 56, 72, 82),
@@ -14,26 +14,20 @@ val jewelry_levels = arrayOf(
     intArrayOf(7, 24, 30, 42, 58, 74, 84)
 )
 
-@kotlin.jvm.JvmField
+@JvmField
 val jewelry_xp = arrayOf(
     intArrayOf(15, 40, 55, 70, 85, 100, 115),
     intArrayOf(20, 55, 60, 75, 90, 105, 120),
     intArrayOf(30, 65, 70, 85, 100, 150, 165),
-    intArrayOf(25, 60, 65, 80, 95, 110, 125)
-)
+    intArrayOf(25, 60, 65, 80, 95, 110, 125))
 
-class GoldCrafting {
-    companion object {
-
-        @kotlin.jvm.JvmField
+        @JvmField
         val jewelry = arrayOf(
             intArrayOf(1635, 1637, 1639, 1641, 1643, 1645, 6575),
             intArrayOf(1654, 1656, 1658, 1660, 1662, 1664, 6577),
             intArrayOf(1673, 1675, 1677, 1679, 1681, 1683, 6579),
-            intArrayOf(11069, 11072, 11076, 11085, 11092, 11115, 11130)
-        )
+            intArrayOf(11069, 11072, 11076, 11085, 11092, 11115, 11130))
 
-        @JvmStatic
         fun startGoldCrafting(interfaceID: Int, slot: Int, amount: Int, c: Client) {
             var index = 0
             val inters = intArrayOf(24469, 24481, 24493)
@@ -69,7 +63,6 @@ class GoldCrafting {
             } else jewelry.get(i).get(i2)
         }
 
-        @JvmStatic
         fun findStrungAmulet(amulet: Int, c: Client): Int {
             for (i in c.strungAmulets.indices) {
                 if (jewelry[2][i] == amulet) {
@@ -79,7 +72,6 @@ class GoldCrafting {
             return -1
         }
 
-        @JvmStatic
         fun goldCraft(c: Client) {
             // int gem = gemReq[goldSlot];
             val level = jewelry_levels[c.goldIndex][c.goldSlot]
@@ -140,7 +132,6 @@ class GoldCrafting {
             c.getOutputStream().endFrameVarSizeWord()
         }
 
-        @JvmStatic
         fun showItemsGold(c: Client) {
             var slot = 0
             for (i in 0..2) {
@@ -173,5 +164,3 @@ class GoldCrafting {
                 setGoldItems(slot, itemsToShow, c)
             }
         }
-    }
-}

@@ -6,10 +6,11 @@ import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.cooking.Cooking;
-import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
-import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.utilities.Utils;
+
+import static net.dodian.uber.game.model.player.skills.crafting.GoldCraftingKt.*;
+import static net.dodian.uber.game.model.player.skills.prayer.PrayerKt.*;
 
 public class ItemOnObject implements Packet {
 
@@ -41,7 +42,7 @@ public class ItemOnObject implements Packet {
         }
         if (UsedOnObjectID == 3994 || UsedOnObjectID == 11666 || UsedOnObjectID == 16469) {
             if (ItemID == 2357) { // 2357 = gold
-                GoldCrafting.showItemsGold(client);
+                showItemsGold(client);
                 client.showInterface(24397);
             } else {
                 for (int fi = 0; fi < Utils.smelt_frame.length; fi++) {
@@ -50,14 +51,14 @@ public class ItemOnObject implements Packet {
                 client.sendFrame164(24501);
             }
         }
-        if (UsedOnObjectID == 409 && Prayer.AltarBones(client, ItemID)) {
+        if (UsedOnObjectID == 409 && altarBones(client, ItemID)) {
             client.lastAction = System.currentTimeMillis();
             client.skillX = UsedOnX;
             client.setSkillY(UsedOnY);
             client.stillgfx(624, new Position(client.skillY, client.skillX, client.getPosition().getZ()), 0);
             client.boneAltar = ItemID;
         }
-        if (UsedOnObjectID == 412 && Prayer.ChaosAltarBones(client, ItemID)) {
+        if (UsedOnObjectID == 412 && chaosAltarBones(client, ItemID)) {
             client.lastAction = System.currentTimeMillis();
             client.skillX = UsedOnX;
             client.setSkillY(UsedOnY);

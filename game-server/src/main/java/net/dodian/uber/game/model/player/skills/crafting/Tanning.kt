@@ -5,12 +5,6 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.packets.outgoing.SendString
 import kotlin.math.min
 
-
-class Tanning {
-
-    companion object {
-
-        @JvmStatic
         fun openTan(c: Client) {
             c.send(SendString("Regular Leather", 14777))
             c.send(SendString("50gp", 14785))
@@ -42,7 +36,6 @@ class Tanning {
             c.showInterface(14670)
         }
 
-        @JvmStatic
         fun startTan(amount: Int, type: Int, c: Client) {
             var amount = amount
             val hide = intArrayOf(1739, -1, 1753, 1751, 1749, 1747)
@@ -60,5 +53,3 @@ class Tanning {
                 c.addItem(leather[type], 1)
             }
         }
-    }
-}

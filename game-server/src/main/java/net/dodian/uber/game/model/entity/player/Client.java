@@ -25,16 +25,8 @@ import net.dodian.uber.game.model.player.packets.outgoing.*;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.cooking.Cooking;
-import net.dodian.uber.game.model.player.skills.crafting.Crafting;
-import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
-import net.dodian.uber.game.model.player.skills.crafting.Spinning;
-import net.dodian.uber.game.model.player.skills.crafting.Tanning;
-import net.dodian.uber.game.model.player.skills.fishing.Fishing;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
-import net.dodian.uber.game.model.player.skills.mining.Mining;
-import net.dodian.uber.game.model.player.skills.prayer.Prayer;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
-import net.dodian.uber.game.model.player.skills.runecrafting.EssBags;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
 import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
@@ -58,7 +50,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import static net.dodian.uber.game.combat.ClientExtensionsKt.getRangedStr;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.attackTarget;
-import static net.dodian.uber.game.model.player.dialogue.DialogueKt.updateNPCChat;
+import static net.dodian.uber.game.model.player.dialogue.DialogueKt.*;
+import static net.dodian.uber.game.model.player.skills.crafting.CraftingKt.*;
+import static net.dodian.uber.game.model.player.skills.crafting.GoldCraftingKt.*;
+import static net.dodian.uber.game.model.player.skills.crafting.SpinningKt.*;
+import static net.dodian.uber.game.model.player.skills.crafting.TanningKt.*;
+import static net.dodian.uber.game.model.player.skills.fishing.FishingKt.*;
+import static net.dodian.uber.game.model.player.skills.mining.MiningKt.*;
+import static net.dodian.uber.game.model.player.skills.prayer.PrayerKt.*;
+import static net.dodian.uber.game.model.player.skills.runecrafting.EssBagsKt.*;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
 import static net.dodian.utilities.DotEnvKt.*;
 
@@ -72,7 +72,7 @@ public class Client extends Player implements Runnable {
 	public boolean checkTime = false;
 	public Entity target = null;
 	int otherdbId = -1;
-	public int convoId = -1, nextDiag = -1, npcFace = 591;
+	public int convoId = -1, nextDiag = -1;
 	public boolean pLoaded = false;
 	public String failer = "";
 	Date now = new Date();
@@ -132,7 +132,7 @@ public class Client extends Player implements Runnable {
 	public boolean validLogin = false;
 	public boolean wearing = false;
 	public int resetanim = 8;
-	public boolean AnimationReset; // Resets Animations With The Use Of The
+	public boolean AnimationReset; // Resets Animations
 	public int newheightLevel = 0;
 	public int bonusSpec = 0, animationSpec = 0, emoteSpec = 0;
 	public boolean specsOn = true;
@@ -241,7 +241,6 @@ public class Client extends Player implements Runnable {
 			"Smoke Blitz", "Shadow Blitz", "Blood Blitz", "Ice Blitz",
 			"Smoke Barrage", "Shadow Barrage", "Blood Barrage", "Ice Barrage"};
 	public int[] requiredLevel = {1, 10, 20, 30, 40, 50, 60, 70, 74, 76, 80, 82, 86, 88, 92, 94, 96};
-	public int[] requiredRunes = {1, 2, 3, 4};
 	public int[] baseDamage = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
 	public long[] coolDown = {2400, 2400, 3000, 3000};
 	/**End*/
@@ -380,7 +379,7 @@ public class Client extends Player implements Runnable {
 		getOutputStream().writeByte(0); // Tiles away (X >> 4 + Y & 7)
 		getOutputStream().writeWord(id); // Graphic id
 		getOutputStream().writeByte(height);
-		// height of the spell above it's basic place, i think it's written in pixels 100 pixels higher
+		// height of the spell above its basic place, I think it's written in pixels 100 pixels higher
 		getOutputStream().writeWord(time); // Time before casting the graphic
 	}
 	// ActionTimer
@@ -406,7 +405,7 @@ public class Client extends Player implements Runnable {
 			// set
 			getOutputStream().writeByte(slope); // Initial slope
 			getOutputStream().writeByte(initDistance); // Initial distance from source (in the
-			// direction of the missile) //64
+			// direction of the missile //64
 		} catch (Exception e) {
 			Server.logError(e.getMessage());
 		}
@@ -458,12 +457,6 @@ public class Client extends Player implements Runnable {
 		getOutputStream().writeWordBigEndian(MainFrame);
 		getOutputStream().writeWord(SubFrame);
 		getOutputStream().writeWord(SubFrame2);
-		flushOutStream();
-	}
-
-	public void sendFrame185(int Frame) {
-		getOutputStream().createFrame(185);
-		getOutputStream().writeWordBigEndianA(Frame);
 		flushOutStream();
 	}
 
@@ -549,8 +542,8 @@ public class Client extends Player implements Runnable {
 		if (disconnected || getOutputStream().currentOffset == 0) {
 			return;
 		}
-		Integer length = getOutputStream().currentOffset;
 		//int length = getOutputStream().currentOffset;
+		Integer length = getOutputStream().currentOffset;
 		byte[] copy = new byte[length];
 		System.arraycopy(getOutputStream().buffer, 0, copy, 0, copy.length);
 		mySocketHandler.queueOutput(copy);
@@ -695,7 +688,7 @@ public class Client extends Player implements Runnable {
 			properName = Character.toUpperCase(first) + getPlayerName().substring(1).toLowerCase();
 			setPlayerName(properName.replace("_", " "));
 			longName = Utils.playerNameToInt64(getPlayerName());
-			if (Server.updateRunning && (Server.updateStartTime + (Server.updateSeconds * 1000L)) - System.currentTimeMillis() < 60000) { //Checks if update!
+			if (Server.updateRunning && (Server.updateStartTime + (Server.updateSeconds * 1000L)) - System.currentTimeMillis() < 60000) { //Checks if updated!
 				returnCode = 14;
 				disconnected = true;
 			}
@@ -933,7 +926,7 @@ public class Client extends Player implements Runnable {
 				}
 				statement.executeUpdate("UPDATE " + DbTables.GAME_CHARACTERS + " SET uuid= '" + LoginManager.UUID + "', lastvote=" + lastVoted + ", pkrating=" + 1500 + ", health="
 						+ getCurrentHealth() + ", equipment='" + equipment + "', inventory='" + inventory + "', bank='" + bank
-						+ "', friends='" + list + "', fightStyle = " + FightType +", slayerData='" + saveTaskAsString() + "', essence_pouch='" + EssBags.getPouches(this) + "'" + ", coal_bag=" + coalBagAmount + ", autocast=" + autocast_spellIndex + ", news=" + latestNews + ", agility = '" + agilityCourseStage + "', height = " + getPosition().getZ() + ", x = " + getPosition().getX()
+						+ "', friends='" + list + "', fightStyle = " + FightType +", slayerData='" + saveTaskAsString() + "', essence_pouch='" + getPouches(this) + "'" + ", coal_bag=" + coalBagAmount + ", autocast=" + autocast_spellIndex + ", news=" + latestNews + ", agility = '" + agilityCourseStage + "', height = " + getPosition().getZ() + ", x = " + getPosition().getX()
 						+ ", y = " + getPosition().getY() + ", lastlogin = '" + System.currentTimeMillis() + "', Boss_Log='"
 						+ boss_log + "', songUnlocked='" + getSongUnlockedSaveText() + "', travel='" + saveTravelAsString() + "', look='" + getLook() + "', unlocks='" + saveUnlocksAsString() + "'"
 						+ ", prayer='"+prayer+"', boosted='"+boosted+"'" + last + " WHERE id = " + dbId);
@@ -1166,7 +1159,7 @@ public class Client extends Player implements Runnable {
 							i = playerBankSize + 1;
 						}
 					}
-					bankItems[toBankSlot] = itemID + 1; //To continue on comment above..Dodian thing :D
+					bankItems[toBankSlot] = itemID + 1; //To continue on the comment above, Dodian thing :D
 					if (playerItemsN[fromSlot] < amount) {
 						amount = playerItemsN[fromSlot];
 					}
@@ -1793,8 +1786,8 @@ public class Client extends Player implements Runnable {
 		}
 		/*
 		 * if(dropTries < 1){ dropTries++; for(int i = 0; i < 2; i++){ sendMessage (
-		 * "WARNING: dropping this item will DELETE it, not drop it"); send(new
-		 * SendMessage( "To confirm, drop again"); return; } }
+		 * "WARNING: dropping this item will DELETE it, not drop it; send(new
+		 * SendMessage( "To confirm, drop again"); return; {}
 		 */
 		//send(new Sound(376));
 		deleteItem(id, slot, amount);
@@ -1872,7 +1865,7 @@ public class Client extends Player implements Runnable {
 		if (inTrade) {
 			return false;
 		}
-		if (EssBags.emptyEssencePouch(wearID, this)) { //Runecrafting Pouches
+		if (emptyEssencePouch(wearID, this)) { //Runecrafting Pouches
 			return false;
 		}
 		if (wearID == 5733) { //Potato
@@ -2069,7 +2062,7 @@ public class Client extends Player implements Runnable {
 		getOutputStream().writeByte(tradeBlock); // On = 0, Friends = 1, Off = 2
 	}
 
-	// upon connection of a new client all the info has to be sent to client
+	// upon connection of a new client, all the info has to be sent to the client
 	// prior to starting the regular communication
 	public void initialize() {
 		getOutputStream().createFrame(249);
@@ -2119,7 +2112,7 @@ public class Client extends Player implements Runnable {
 		//send(new SendMessage("Please vote! You can earn your reward by doing ::redeem "+getPlayerName()+" every 6hrs."));
 //    send(new SendMessage("<col=CB1D1D>Santa has come! A bell MUST be rung to celebrate!!!"));
 //    send(new SendMessage("<col=CB1D1D>Click it for a present!! =)"));
-//    send(new SendMessage("@redPlease have one inventory space open! If you don't PM Logan.."));
+//    send(new SendMessage("@redPlease have one inventory space open! If you don't PM Logan."));
 		CheckGear();
 		/* Set a player active to a world! */
 		PlayerHandler.playersOnline.put(longName, this);
@@ -2463,7 +2456,7 @@ public class Client extends Player implements Runnable {
 		else if (attackingNpc && deathStage == 0) {
 			attackTarget(this);
 		}
-		// If killed apply dead
+		// If killed applies dead
 		if (deathStage == 0 && getCurrentHealth() < 1) {
 			if(target instanceof Npc) {
 				Npc npc = Server.npcManager.getNpc(target.getSlot());
@@ -2516,7 +2509,7 @@ public class Client extends Player implements Runnable {
 			Smelting.smelt(smelt_id, this);
 		} else if (goldCrafting && now - lastAction >= 1800) {
 			lastAction = now;
-			GoldCrafting.goldCraft(this);
+			goldCraft(this);
 		} else if (shafting && now - lastAction >= 1800) {
 			lastAction = now;
 			Fletching.shaft(this);
@@ -2529,34 +2522,34 @@ public class Client extends Player implements Runnable {
 		} else if (filling) {
 			lastAction = now;
 			fill();
-		} else if (spinning && now - lastAction >= Spinning.getSpinSpeed(this)) {
+		} else if (spinning && now - lastAction >= getSpinSpeed(this)) {
 			lastAction = now;
-			Spinning.spin(this);
+			spin(this);
 		} else if (boneAltar > 0 && now - lastAction >= 1800) {
 			lastAction = now;
 			stillgfx(624, new Position(skillY, skillX, getPosition().getZ()), 0);
-			Prayer.AltarBones(this, boneAltar);
+			altarBones(this, boneAltar);
 		} else if (boneChaos > 0 && now - lastAction >= 1800) {
 			lastAction = now;
 			stillgfx(624, new Position(skillY, skillX, getPosition().getZ()), 0);
-			Prayer.ChaosAltarBones(this, boneChaos);
+			chaosAltarBones(this, boneChaos);
 		} else if (mixPots && now - lastAction >= potTime) {
 			lastAction = now;
 			mixPots();
 		} else if (crafting && now - lastAction >= 1800) {
 			lastAction = now;
-			Crafting.craft(this);
+			craft(this);
 		} else if (fishing && now - lastAction >= Utils.fishTime[fishIndex]) {
 			lastAction = now;
-			Fishing.Fish(this);
-		} else if (mining && now - lastAction >= Mining.getMiningSpeed(this)) {
+			fish(this);
+		} else if (mining && now - lastAction >= getMiningSpeed(this)) {
 			lastAction = now;
-			requestAnim(Mining.getMiningEmote(Utils.picks[minePick]), 0);
-			Mining.mining(mineIndex, this);
-		} else if (miningEss && now - lastAction >= Mining.getMiningSpeed(this)) {
+			requestAnim(getMiningEmote(Utils.picks[minePick]), 0);
+			mining(mineIndex, this);
+		} else if (miningEss && now - lastAction >= getMiningSpeed(this)) {
 			lastAction = now;
-			requestAnim(Mining.getMiningEmote(Utils.picks[minePick]), 0);
-			Mining.miningEss(this);
+			requestAnim(getMiningEmote(Utils.picks[minePick]), 0);
+			miningEss(this);
 		} else if (cooking && now - lastAction >= 1800) {
 			lastAction = now;
 			Cooking.cook(this);
@@ -2571,7 +2564,7 @@ public class Client extends Player implements Runnable {
 		} else if (NpcWanneTalk > 0) {
 			if (GoodDistance2(getPosition().getX(), getPosition().getY(), skillX, skillY, 2))
 				if (NpcWanneTalk == 804) {
-					Tanning.openTan(this);
+					openTan(this);
 					NpcWanneTalk = 0;
 				} else {
 					NpcDialogue = NpcWanneTalk;
@@ -3034,7 +3027,7 @@ public class Client extends Player implements Runnable {
 							amount--;
 						}
 					}
-					if (found) { //If found add item to inventory!
+					if (found) { //If found, add item to inventory!
 						addItem(itemID, amount);
 						break;
 					}
@@ -3812,7 +3805,7 @@ public class Client extends Player implements Runnable {
 						amount--;
 					}
 				}
-				if (found) { //If found add item to inventory!
+				if (found) { //If found, add item to inventory!
 					addItem(itemID, amount);
 					break;
 				}
@@ -4946,7 +4939,7 @@ public class Client extends Player implements Runnable {
 	}
 
 	/**
-	 * @return if player has enough space to remove items.
+	 * @return if a player has enough space to remove items.
 	 */
 	public boolean hasEnoughSpace() {
 		if (!inDuel || !validClient(duel_with)) {
@@ -5521,7 +5514,7 @@ public class Client extends Player implements Runnable {
 			return;
 		}
 		boolean home = checkPos != 0;
-		int[] posTrigger = { 1, 3, 4, 7, 10, 2, 5, 6, 11 }; //0-4 is to something! rest is to the Catherby
+		int[] posTrigger = { 1, 3, 4, 7, 10, 2, 5, 6, 11 }; //0-4 is to something! the rest is to the Catherby
 		int[][] travel = {
 				{3057, 2803, 3421, 0}, //Home!
 				{3058, -1, -1, 0}, //Mountain!

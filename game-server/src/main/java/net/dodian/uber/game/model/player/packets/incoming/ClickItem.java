@@ -6,9 +6,6 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
-import net.dodian.uber.game.model.player.skills.mining.CoalBag;
-import net.dodian.uber.game.model.player.skills.prayer.Prayer;
-import net.dodian.uber.game.model.player.skills.runecrafting.EssBags;
 import net.dodian.utilities.DbTables;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
@@ -17,6 +14,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import static net.dodian.uber.game.model.player.content.Minigames.Barrows.digCrypt;
+import static net.dodian.uber.game.model.player.skills.mining.CoalBagKt.*;
+import static net.dodian.uber.game.model.player.skills.prayer.PrayerKt.*;
+import static net.dodian.uber.game.model.player.skills.runecrafting.EssBagsKt.*;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
 
 public class ClickItem implements Packet {
@@ -27,7 +27,7 @@ public class ClickItem implements Packet {
         int itemSlot = client.getInputStream().readUnsignedWordA();
         int itemId = client.getInputStream().readUnsignedWordBigEndian();
 
-        if (EssBags.fillEssencePouch(itemId, client)) {
+        if (fillEssencePouch(itemId, client)) {
             return;
         }
         if (itemId == 5733) {
@@ -66,7 +66,7 @@ public class ClickItem implements Packet {
             return;
         }
         if (itemId == 12019) {
-            CoalBag.fillCoalBag(client);
+            fillCoalBag(client);
             return;
         }
         if((itemId >= 199 && itemId <= 219) || itemId == 3049 || itemId == 3051)
@@ -102,7 +102,7 @@ public class ClickItem implements Packet {
             client.send(new SendMessage("RewardItem cannot be used in a duel!"));
             return;
         }
-        if (Prayer.buryBones(client, item, slot)) {
+        if (buryBones(client, item, slot)) {
             return;
         }
         if (client.playerHasItem(item)) {

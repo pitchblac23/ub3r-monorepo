@@ -10,7 +10,7 @@ import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.thieving.Thieving;
 
-import static net.dodian.uber.game.model.player.skills.fishing.Fishing.startFishing;
+import static net.dodian.uber.game.model.player.skills.fishing.FishingKt.*;
 
 public class ClickNpc2 implements Packet {
 

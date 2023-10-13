@@ -4,10 +4,9 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.skills.crafting.GoldCrafting;
 import net.dodian.uber.game.party.Balloons;
 
-import static net.dodian.utilities.DotEnvKt.getGameWorldId;
+import static net.dodian.uber.game.model.player.skills.crafting.GoldCraftingKt.*;
 
 public class Bank10 implements Packet {
 
@@ -37,7 +36,7 @@ public class Bank10 implements Packet {
         } else if (interfaceID == 3415 && client.inTrade) { // remove from trade window
             client.fromTrade(removeID, removeSlot, 10);
         } else if (interfaceID >= 24873 && interfaceID <= 24897) {
-            GoldCrafting.startGoldCrafting(interfaceID, removeSlot, 10, client);
+            startGoldCrafting(interfaceID, removeSlot, 10, client);
         } else if (interfaceID == 3823) { // Show value to sell items
             client.sellItem(removeID, removeSlot, 5);
         } else if (interfaceID == 3900) { // Show value to buy items
