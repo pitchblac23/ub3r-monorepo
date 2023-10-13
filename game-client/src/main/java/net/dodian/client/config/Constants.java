@@ -22,6 +22,6 @@ public class Constants {
 	 * Updating, Web & Cache
 	 */
 	public static String CLIENT_DOWNLOAD_URL	= "https://dodian.net/client/DodianClient.jar";
-	public static String CACHE_DOWNLOAD_URL		= "https://www.dropbox.com/scl/fi/as82yjl3n962ff1dsne1y/dodian-temp.zip?rlkey=i5wg2tfw4xa0q3q461kpu55lm&dl=1"; // Offical .net "https://dodian.net/client/cacheosrs.zip";
+	public static String CACHE_DOWNLOAD_URL		= "https://www.dropbox.com/scl/fi/j6cr32q0lln0jx5tmy6ko/dodian-temp.zip?rlkey=5ycah2i48iuh3uxqbglb3fleg&dl=1"; // Offical .net "https://dodian.net/client/cacheosrs.zip";
 	public static String CACHE_LOCAL_DIRECTORY	= System.getProperty("user.home") + "/.dodian-temp/";
 }
