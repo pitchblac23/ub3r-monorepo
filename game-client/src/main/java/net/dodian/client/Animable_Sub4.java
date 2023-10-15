@@ -36,10 +36,10 @@ final class Animable_Sub4 extends Animable {
             model_1.anIntArrayArray1658 = null;
             model_1.anIntArrayArray1657 = null;
         }
-        if (aSpotAnim_1592.anInt410 != 128 || aSpotAnim_1592.anInt411 != 128)
-            model_1.method478(aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt410, aSpotAnim_1592.anInt411);
+        if (aSpotAnim_1592.resizeX != 128 || aSpotAnim_1592.resizeY != 128)
+            model_1.method478(aSpotAnim_1592.resizeX, aSpotAnim_1592.resizeX, aSpotAnim_1592.resizeY);
         model_1.method474(anInt1596);
-        model_1.setLighting(64 + aSpotAnim_1592.anInt413, 850 + aSpotAnim_1592.anInt414, -30, -50, -30, true);
+        model_1.setLighting(64 + aSpotAnim_1592.ambient, 850 + aSpotAnim_1592.contrast, -30, -50, -30, true);
         return model_1;
     }
 

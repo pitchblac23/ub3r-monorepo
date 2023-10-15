@@ -451,14 +451,13 @@ public class Commands implements Packet {
                 }
                 if (cmd[0].equalsIgnoreCase("reloaditems")) {
                     Server.itemManager.reloadItems();
-                    client.send(new SendMessage("You reloaded all items!")); // Send msg to
-                    // playeR!
+                    client.send(new SendMessage("You reloaded all items!")); // Send msg to player!
                 }
                 if (cmd[0].equalsIgnoreCase("item")) {
                     int newItemID = Integer.parseInt(cmd[1]);
                     int newItemAmount = Integer.parseInt(cmd[2]);
-                    if (newItemID < 1 || newItemID > 22376) {
-                        client.send(new SendMessage("Maximum itemid = 22376!"));
+                    if (newItemID < 0 || newItemID > 27222) {
+                        client.send(new SendMessage("Maximum itemid = 27222!"));
                         return;
                     }
                     if (Server.itemManager.isStackable(newItemID))
@@ -649,12 +648,12 @@ public class Commands implements Packet {
                 if (cmd[0].equalsIgnoreCase("pnpc")) {
                     try {
                         int npcId = Integer.parseInt(cmd[1]);
-                        if (npcId <= 8195) {
+                        if (npcId <= 12512) {
                             client.setNpcMode(npcId >= 0);
                             client.setPlayerNpc(npcId >= 0 ? npcId : -1);
                             client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
                         }
-                        client.send(new SendMessage(npcId > 8195 ? "Maximum 8195 in npc id!" : npcId >= 0 ? "Setting npc to " + client.getPlayerNpc() : "Setting you normal!"));
+                        client.send(new SendMessage(npcId > 12512 ? "Maximum 12512 in npc id!" : npcId >= 0 ? "Setting npc to " + client.getPlayerNpc() : "Setting you normal!"));
                     } catch (Exception e) {
                         client.send(new SendMessage("Wrong usage.. ::" + cmd[0] + " npcid"));
                     }

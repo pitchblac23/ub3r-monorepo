@@ -22,9 +22,9 @@ public final class Player extends Entity {
                 model_3.method470(spotAnim.aAnimation_407.anIntArray353[super.anInt1521]);
                 model_3.anIntArrayArray1658 = null;
                 model_3.anIntArrayArray1657 = null;
-                if (spotAnim.anInt410 != 128 || spotAnim.anInt411 != 128)
-                    model_3.method478(spotAnim.anInt410, spotAnim.anInt410, spotAnim.anInt411);
-                model_3.setLighting(64 + spotAnim.anInt413, 850 + spotAnim.anInt414, -30, -50, -30, true);
+                if (spotAnim.resizeX != 128 || spotAnim.resizeY != 128)
+                    model_3.method478(spotAnim.resizeX, spotAnim.resizeX, spotAnim.resizeY);
+                model_3.setLighting(64 + spotAnim.ambient, 850 + spotAnim.contrast, -30, -50, -30, true);
                 Model aclass30_sub2_sub4_sub6_1s[] = {
                         model, model_3
                 };

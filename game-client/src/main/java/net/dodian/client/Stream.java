@@ -22,7 +22,7 @@ public final class Stream extends NodeSub {
         return stream_1;
     }
 
-    public int readShort2() {
+    public int readUnsignedShort() {
         currentOffset += 2;
         int i = ((buffer[currentOffset - 2] & 0xff) << 8) + (buffer[currentOffset - 1] & 0xff);
         if (i > 60000)

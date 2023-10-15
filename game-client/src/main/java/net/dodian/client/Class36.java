@@ -47,17 +47,17 @@ public final class Class36 {
                             n4 = 128;
                         }
                         if ((f2 & 0x1) != 0x0) {
-                            array3[c2] = ay.readShort2();
+                            array3[c2] = ay.readUnsignedShort();
                         } else {
                             array3[c2] = n4;
                         }
                         if ((f2 & 0x2) != 0x0) {
-                            array4[c2] = ay.readShort2();
+                            array4[c2] = ay.readUnsignedShort();
                         } else {
                             array4[c2] = n4;
                         }
                         if ((f2 & 0x4) != 0x0) {
-                            array5[c2] = ay.readShort2();
+                            array5[c2] = ay.readUnsignedShort();
                         } else {
                             array5[c2] = n4;
                         }

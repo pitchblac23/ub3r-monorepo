@@ -28,22 +28,22 @@ final class Animable_Sub3 extends Animable {
             model_1.anIntArrayArray1658 = null;
             model_1.anIntArrayArray1657 = null;
         }
-        if (aSpotAnim_1568.anInt410 != 128 || aSpotAnim_1568.anInt411 != 128)
-            model_1.method478(aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt410, aSpotAnim_1568.anInt411);
-        if (aSpotAnim_1568.anInt412 != 0) {
-            if (aSpotAnim_1568.anInt412 == 90)
+        if (aSpotAnim_1568.resizeX != 128 || aSpotAnim_1568.resizeY != 128)
+            model_1.method478(aSpotAnim_1568.resizeX, aSpotAnim_1568.resizeX, aSpotAnim_1568.resizeY);
+        if (aSpotAnim_1568.rotation != 0) {
+            if (aSpotAnim_1568.rotation == 90)
                 model_1.method473();
-            if (aSpotAnim_1568.anInt412 == 180) {
+            if (aSpotAnim_1568.rotation == 180) {
                 model_1.method473();
                 model_1.method473();
             }
-            if (aSpotAnim_1568.anInt412 == 270) {
+            if (aSpotAnim_1568.rotation == 270) {
                 model_1.method473();
                 model_1.method473();
                 model_1.method473();
             }
         }
-        model_1.setLighting(64 + aSpotAnim_1568.anInt413, 850 + aSpotAnim_1568.anInt414, -30, -50, -30, true);
+        model_1.setLighting(64 + aSpotAnim_1568.ambient, 850 + aSpotAnim_1568.contrast, -30, -50, -30, true);
         return model_1;
     }
 

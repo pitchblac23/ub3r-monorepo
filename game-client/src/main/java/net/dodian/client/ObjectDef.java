@@ -30,7 +30,7 @@ public final class ObjectDef {
 
     public static void objectDump(int max) {
         try {
-            FileWriter fw = new FileWriter(System.getProperty("user.home") + "/Object Dump.txt");
+            FileWriter fw = new FileWriter(System.getProperty("user.home") + "/Dodian-Dev/Object Dump.txt");
             for (int i = 0; i < max; i++) {
                 ObjectDef def = ObjectDef.forID(i);
                 if (def != null) {
@@ -55,7 +55,7 @@ public final class ObjectDef {
                     fw.write("itemDef.name = \"NULL\";");
                 }
             }
-            System.out.println("Done dumping!");
+            System.out.println("Done dumping objs!");
             fw.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -199,7 +199,7 @@ public final class ObjectDef {
         cache = new ObjectDef[20];
         for (int k = 0; k < 20; k++)
             cache[k] = new ObjectDef();
-        //objectDump(totalObjects);
+        objectDump(totalObjects);
     }
 
     public boolean method577(int i) {
@@ -237,7 +237,6 @@ public final class ObjectDef {
                 int j3 = l2 + ((i3 - l2) * (k2 + 64)) / 128;
                 model.anIntArray1628[i2] += j3 - l1;
             }
-
             model.method467();
         }
         return model;
@@ -582,5 +581,4 @@ public final class ObjectDef {
     public int[] modifiedModelColors;
     public static MRUNodes mruNodes1 = new MRUNodes(500);
     public String actions[];
-
 }

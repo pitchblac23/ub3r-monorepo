@@ -2,6 +2,9 @@ package net.dodian.client;
 
 import java.io.FileWriter;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class EntityDef {
 
@@ -9,14 +12,12 @@ public final class EntityDef {
         for (int j = 0; j < 20; j++)
             if (cache[j].interfaceType == (long) i)
                 return cache[j];
-
         anInt56 = (anInt56 + 1) % 20;
         EntityDef entityDef = cache[anInt56] = new EntityDef();
         stream.currentOffset = streamIndices[i];
         entityDef.interfaceType = i;
         entityDef.readValues(stream);
         customValues(entityDef);
-
         return entityDef;
     }
 
@@ -40,44 +41,42 @@ public final class EntityDef {
             else
                 return entityDef.method160();
         }
-        if (anIntArray73 == null)
+        if (chatheadModels == null)
             return null;
         boolean flag1 = false;
-        for (int i = 0; i < anIntArray73.length; i++)
-            if (!Model.method463(anIntArray73[i]))
+        for (int i = 0; i < chatheadModels.length; i++)
+            if (!Model.method463(chatheadModels[i]))
                 flag1 = true;
 
         if (flag1)
             return null;
-        Model aclass30_sub2_sub4_sub6s[] = new Model[anIntArray73.length];
-        for (int j = 0; j < anIntArray73.length; j++)
-            aclass30_sub2_sub4_sub6s[j] = Model.method462(anIntArray73[j]);
-
+        Model aclass30_sub2_sub4_sub6s[] = new Model[chatheadModels.length];
+        for (int j = 0; j < chatheadModels.length; j++)
+            aclass30_sub2_sub4_sub6s[j] = Model.method462(chatheadModels[j]);
         Model model;
         if (aclass30_sub2_sub4_sub6s.length == 1)
             model = aclass30_sub2_sub4_sub6s[0];
         else
             model = new Model(aclass30_sub2_sub4_sub6s.length,
                     aclass30_sub2_sub4_sub6s);
-        if (anIntArray76 != null) {
-            for (int k = 0; k < anIntArray76.length; k++)
-                model.method476(anIntArray76[k], anIntArray70[k]);
-
+        if (recolorToFind != null) {
+            for (int k = 0; k < recolorToFind.length; k++)
+                model.method476(recolorToFind[k], recolorToReplace[k]);
         }
         return model;
     }
 
     public EntityDef method161() {
         int j = -1;
-        if (anInt57 != -1) {
-            VarBit varBit = VarBit.cache[anInt57];
+        if (varbitId != -1) {
+            VarBit varBit = VarBit.cache[varbitId];
             int k = varBit.anInt648;
             int l = varBit.anInt649;
             int i1 = varBit.anInt650;
             int j1 = Client.anIntArray1232[i1 - l];
             j = clientInstance.variousSettings[k] >> l & j1;
-        } else if (anInt59 != -1)
-            j = clientInstance.variousSettings[anInt59];
+        } else if (varpIndex != -1)
+            j = clientInstance.variousSettings[varpIndex];
         if (j < 0 || j >= childrenIDs.length || childrenIDs[j] == -1)
             return null;
         else
@@ -87,8 +86,6 @@ public final class EntityDef {
     public static void unpackConfig(StreamLoader streamLoader) {
         stream = new Stream(streamLoader.getDataForName("npc.dat"));
         Stream stream2 = new Stream(streamLoader.getDataForName("npc.idx"));
-        //stream = new net.dodian.client.Stream(net.dodian.client.FileOperations.ReadFile(signlink.findcachedir()+ "npc.dat"));
-        //	net.dodian.client.Stream stream2 = new net.dodian.client.Stream(net.dodian.client.FileOperations.ReadFile(signlink.findcachedir()+ "npc.idx"));
         int totalNPCs = stream2.readUnsignedWord();
         streamIndices = new int[totalNPCs];
         int i = 2;
@@ -107,31 +104,23 @@ public final class EntityDef {
             if (ed.name == null)
                 continue;
         }
-        //npcDump(totalNPCs);
+        npcDump(totalNPCs);
     }
-
 
     /*
      *Dump item variables to a file
      */
     public static void npcDump(int max) {
         try {
-            FileWriter fw = new FileWriter(System.getProperty("user.home") + "/Npc Dump.txt");
+            FileWriter fw = new FileWriter(System.getProperty("user.home") + "/Dodian-Dev/Npc Dump.txt");
             for (int i = 0; i < max; i++) {
                 EntityDef def = EntityDef.forID(i);
                 if (def != null) {
                     fw.write("case " + i + ":");
                     fw.write(System.getProperty("line.separator"));
                     fw.write("itemDef.name = \"" + def.name + "\";");
-					/*fw.write(System.getProperty("line.separator"));
-	                                fw.write("Npc.actions = new String["+def.actions.length+"]");
-					fw.write(System.getProperty("line.separator"));
-					for(int act = 0; act < def.actions.length && def.actions != null; act++){
-							if(def.actions[act] != null) {
-							fw.write("itemDef.actions["+act+"] = \""+def.actions[act]+"\";");
-							fw.write(System.getProperty("line.separator"));
-						}
-					}*/
+                    fw.write(System.getProperty("line.separator"));
+                    fw.write("Npc.actions = new String[" + Arrays.toString(def.actions) +"];");
                     fw.write(System.getProperty("line.separator"));
                     fw.write("Npc.stand= " + def.standAnim + ";");
                     fw.write(System.getProperty("line.separator"));
@@ -153,7 +142,7 @@ public final class EntityDef {
                     fw.write("itemDef.name = \"NULL\";");
                 }
             }
-            System.out.println("Done dumping!");
+            System.out.println("Done dumping npcs!");
             fw.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -178,29 +167,29 @@ public final class EntityDef {
         Model model = (Model) mruNodes.insertFromCache(interfaceType);
         if (model == null) {
             boolean flag = false;
-            for (int i1 = 0; i1 < anIntArray94.length; i1++)
-                if (!Model.method463(anIntArray94[i1]))
+            for (int i1 = 0; i1 < models.length; i1++)
+                if (!Model.method463(models[i1]))
                     flag = true;
 
             if (flag)
                 return null;
-            Model aclass30_sub2_sub4_sub6s[] = new Model[anIntArray94.length];
-            for (int j1 = 0; j1 < anIntArray94.length; j1++)
+            Model aclass30_sub2_sub4_sub6s[] = new Model[models.length];
+            for (int j1 = 0; j1 < models.length; j1++)
                 aclass30_sub2_sub4_sub6s[j1] = Model
-                        .method462(anIntArray94[j1]);
+                        .method462(models[j1]);
 
             if (aclass30_sub2_sub4_sub6s.length == 1)
                 model = aclass30_sub2_sub4_sub6s[0];
             else
                 model = new Model(aclass30_sub2_sub4_sub6s.length,
                         aclass30_sub2_sub4_sub6s);
-            if (anIntArray76 != null) {
-                for (int k1 = 0; k1 < anIntArray76.length; k1++)
-                    model.method476(anIntArray76[k1], anIntArray70[k1]);
+            if (recolorToFind != null) {
+                for (int k1 = 0; k1 < recolorToFind.length; k1++)
+                    model.method476(recolorToFind[k1], recolorToReplace[k1]);
 
             }
             model.method469();
-            model.setLighting(64 + anInt85, 850 + anInt92, -30, -50, -30, true);
+            model.setLighting(64 + ambient, 850 + contrast, -30, -50, -30, true);
             mruNodes.removeFromCache(model, interfaceType);
         }
         Model model_1 = Model.aModel_1621;
@@ -209,161 +198,225 @@ public final class EntityDef {
             model_1.method471(ai, j, k);
         else if (k != -1)
             model_1.method470(k);
-        if (anInt91 != 128 || anInt86 != 128)
-            model_1.method478(anInt91, anInt91, anInt86);
+        if (widthScale != 128 || heightScale != 128)
+            model_1.method478(widthScale, widthScale, heightScale);
         model_1.method466();
         model_1.anIntArrayArray1658 = null;
         model_1.anIntArrayArray1657 = null;
-        if (aByte68 == 1)
+        if (size == 1)
             model_1.aBoolean1659 = true;
         return model_1;
     }
 
     public void readValues(Stream stream) {
         do {
-            int i = stream.readUnsignedByte();
-            if (i == 0)
+            int opcode = stream.readUnsignedByte();
+            if (opcode == 0)
                 return;
-            if (i == 1) {
-                int j = stream.readUnsignedByte();
-                anIntArray94 = new int[j];
-                for (int j1 = 0; j1 < j; j1++)
-                    anIntArray94[j1] = stream.readUnsignedWord();
-
-            } else if (i == 2)
+            if (opcode == 1) {
+                int length = stream.readUnsignedByte();
+                models = new int[length];
+                for (int index = 0; index < length; index++)
+                    models[index] = stream.readUnsignedShort();
+            } else if (opcode == 2)
                 name = stream.readString();
-            else if (i == 3)
+            else if (opcode == 3)
                 description = stream.readBytes();
-            else if (i == 12)
-                aByte68 = stream.readSignedByte();
-            else if (i == 13)
-                standAnim = stream.readUnsignedWord();
-            else if (i == 14)
-                walkAnim = stream.readUnsignedWord();
-            else if (i == 17) {
-                walkAnim = stream.readUnsignedWord();
-                anInt58 = stream.readUnsignedWord();
-                anInt83 = stream.readUnsignedWord();
-                anInt55 = stream.readUnsignedWord();
-            } else if (i >= 30 && i < 40) {
+            else if (opcode == 12)
+                size = stream.readSignedByte();
+            else if (opcode == 13)
+                standAnim = stream.readUnsignedShort();
+            else if (opcode == 14)
+                walkAnim = stream.readUnsignedShort();
+            else if (opcode == 15)
+                stream.readUnsignedShort();
+            else if (opcode == 16)
+                stream.readUnsignedShort();
+            else if (opcode == 17) {
+                walkAnim = stream.readUnsignedShort();
+                rotate180Animation = stream.readUnsignedShort();
+                rotate90RightAnimation = stream.readUnsignedShort();
+                rotate90LeftAnimation = stream.readUnsignedShort();
+                if (rotate180Animation == 65535) {
+                    rotate180Animation = walkAnim;
+                }
+                if (rotate90RightAnimation == 65535) {
+                    rotate90RightAnimation = walkAnim;
+                }
+                if (rotate90LeftAnimation == 65535) {
+                    rotate90LeftAnimation = walkAnim;
+                }
+            } else if (opcode == 18) {
+                stream.readUnsignedShort();
+            } else if (opcode >= 30 && opcode < 35) {//40//35
                 if (actions == null)
                     actions = new String[5];
-                actions[i - 30] = stream.readString();
-                if (actions[i - 30].equalsIgnoreCase("hidden"))
-                    actions[i - 30] = null;
-            } else if (i == 40) {
-                int k = stream.readUnsignedByte();
-                anIntArray76 = new int[k];
-                anIntArray70 = new int[k];
-                for (int k1 = 0; k1 < k; k1++) {
-                    anIntArray76[k1] = stream.readUnsignedWord();
-                    anIntArray70[k1] = stream.readUnsignedWord();
+                actions[opcode - 30] = stream.readString();
+                if (actions[opcode - 30].equalsIgnoreCase("hidden"))
+                    actions[opcode - 30] = null;
+            } else if (opcode == 40) {
+                int length = stream.readUnsignedByte();
+                recolorToFind = new int[length];
+                recolorToReplace = new int[length];
+                for (int index = 0; index < length; index++) {
+                    recolorToFind[index] = stream.readUnsignedShort();
+                    recolorToReplace[index] = stream.readUnsignedShort();
                 }
-
-            } else if (i == 60) {
-                int l = stream.readUnsignedByte();
-                anIntArray73 = new int[l];
-                for (int l1 = 0; l1 < l; l1++)
-                    anIntArray73[l1] = stream.readUnsignedWord();
-
-            } else if (i == 90)
-                stream.readUnsignedWord();
-            else if (i == 91)
-                stream.readUnsignedWord();
-            else if (i == 92)
-                stream.readUnsignedWord();
-            else if (i == 93)
-                aBoolean87 = false;
-            else if (i == 95)
-                combatLevel = stream.readUnsignedWord();
-            else if (i == 97)
-                anInt91 = stream.readUnsignedWord();
-            else if (i == 98)
-                anInt86 = stream.readUnsignedWord();
-            else if (i == 99)
-                aBoolean93 = true;
-            else if (i == 100)
-                anInt85 = stream.readSignedByte();
-            else if (i == 101)
-                anInt92 = stream.readSignedByte() * 5;
-            else if (i == 102)
-                anInt75 = stream.readUnsignedWord();
-            else if (i == 103)
-                anInt79 = stream.readUnsignedWord();
-            else if (i == 106) {
-                anInt57 = stream.readUnsignedWord();
-                if (anInt57 == 65535)
-                    anInt57 = -1;
-                anInt59 = stream.readUnsignedWord();
-                if (anInt59 == 65535)
-                    anInt59 = -1;
-                int i1 = stream.readUnsignedByte();
-                childrenIDs = new int[i1 + 1];
-                for (int i2 = 0; i2 <= i1; i2++) {
-                    childrenIDs[i2] = stream.readUnsignedWord();
-                    if (childrenIDs[i2] == 65535)
-                        childrenIDs[i2] = -1;
+            } else if (opcode == 41) {
+                int length = stream.readUnsignedByte();
+                recolorToFind = new int[length];
+                recolorToReplace = new int[length];
+                for (int index = 0; index < length; index++) {
+                    recolorToFind[index] = stream.readUnsignedShort();
+                    recolorToReplace[index] = stream.readUnsignedShort();
                 }
-
-            } else if (i == 107)
-                aBoolean84 = false;
+            } else if (opcode == 60) {
+                int length = stream.readUnsignedByte();
+                chatheadModels = new int[length];
+                for (int index = 0; index < length; index++)
+                    chatheadModels[index] = stream.readUnsignedShort();
+            } else if (opcode == 90)
+                stream.readUnsignedShort();
+            else if (opcode == 91)
+                stream.readUnsignedShort();
+            else if (opcode == 92)
+                stream.readUnsignedShort();
+            else if (opcode == 93)
+                isMinimapVisible = false;
+            else if (opcode == 95)
+                combatLevel = stream.readUnsignedShort();
+            else if (opcode == 97)
+                widthScale = stream.readUnsignedShort();
+            else if (opcode == 98)
+                heightScale = stream.readUnsignedShort();
+            else if (opcode == 99)
+                hadRenderPriority = true;
+            else if (opcode == 100)
+                ambient = stream.readSignedByte();
+            else if (opcode == 101)
+                contrast = stream.readSignedByte() * 5;
+            else if (opcode == 102)
+                headIcon = stream.readUnsignedShort();
+            else if (opcode == 103)
+                rotationSpeed = stream.readUnsignedShort();
+            else if (opcode == 106) {
+                varbitId = stream.readUnsignedShort();
+                if (varbitId == 65535)
+                    varbitId = -1;
+                varpIndex = stream.readUnsignedShort();
+                if (varpIndex == 65535)
+                    varpIndex = -1;
+                int length = stream.readUnsignedByte();
+                childrenIDs = new int[length + 2];//+1+2
+                for (int index = 0; index <= length; index++) {
+                    childrenIDs[index] = stream.readUnsignedShort();
+                    if (childrenIDs[index] == '\uffff')//65535'\uffff'
+                        childrenIDs[index] = -1;
+                }
+                childrenIDs[length + 1] = -1;
+            } else if (opcode == 107)
+                isInteractable = false;
+            else if (opcode == 109)
+                rotationFlag = false;
+            else if (opcode == 111)
+                isPet = true;
+            else if (opcode == 118) {
+                varbitId = stream.readUnsignedShort();
+                if (varbitId == 65535) {
+                    varbitId = -1;
+                }
+                varpIndex = stream.readUnsignedShort();
+                if (varpIndex == 65535) {
+                    varpIndex = -1;
+                }
+                int var = stream.readUnsignedShort();
+                if (var == 0xFFFF) {
+                    var = -1;
+                }
+                int length = stream.readUnsignedByte();
+                childrenIDs = new int[length +2];
+                for (int index = 0; index <= length; ++index) {
+                    childrenIDs[index] = stream.readUnsignedShort();
+                    if (childrenIDs[index] == '\uffff') {
+                        childrenIDs[index] = -1;
+                    }
+                }
+                childrenIDs[length + 1] = var;
+            } else if (opcode == 249) {
+                int length = stream.readUnsignedByte();
+                Map<Integer, Object> prams = new HashMap<>(length);
+                for (int index = 0; index < length; index++) {
+                    boolean isString = stream.readUnsignedByte() == 1;
+                    int key = stream.readUSmart2();
+                    Object value;
+                    if (isString) {
+                        value = stream.readString();
+                    } else {
+                        value = stream.readDWord();
+                    }
+                    prams.put(key, value);
+                }
+            } else {
+                System.err.printf("Unrecognized opcode {"+ opcode +"}");
+            }
         } while (true);
     }
 
     public EntityDef() {
-        anInt55 = -1;
-        anInt57 = -1;
-        anInt58 = -1;
-        anInt59 = -1;
+        rotate180Animation = -1;
+        rotate90LeftAnimation = -1;
+        rotate90RightAnimation = -1;
+        varbitId = -1;
+        varpIndex = -1;
         combatLevel = -1;
         anInt64 = 1834;
         walkAnim = -1;
-        aByte68 = 1;
-        anInt75 = -1;
+        size = 1;
+        headIcon = -1;
         standAnim = -1;
         interfaceType = -1L; //Id!
-        anInt79 = 32;
-        anInt83 = -1;
-        aBoolean84 = true;
-        anInt86 = 128;
-        aBoolean87 = true;
-        anInt91 = 128;
-        aBoolean93 = false;
+        rotationSpeed = 32;
+        isInteractable = true;
+        widthScale = 128;
+        heightScale = 128;
+        isMinimapVisible = true;
+        hadRenderPriority = false;
     }
 
-    public int anInt55;
     public static int anInt56;
-    public int anInt57;
-    public int anInt58;
-    public int anInt59;
+    public int varbitId;
+    public int varpIndex;
+    public int rotate180Animation;
+    public int rotate90RightAnimation;
+    public int rotate90LeftAnimation;
     public static Stream stream;
     public int combatLevel;
     public final int anInt64;
     public String name;
     public String actions[];
     public int walkAnim;
-    public byte aByte68;
-    public int[] anIntArray70;
+    public byte size;
     public static int[] streamIndices;
-    public int[] anIntArray73;
-    public int anInt75;
-    public int[] anIntArray76;
+    public int[] chatheadModels;
+    public int headIcon;
+    public int[] recolorToFind;
+    public int[] recolorToReplace;
     public int standAnim;
     public long interfaceType;
-    public int anInt79;
+    public int rotationSpeed;
     public static EntityDef[] cache;
     public static Client clientInstance;
-    public int anInt83;
-    public boolean aBoolean84;
-    public int anInt85;
-    public int anInt86;
-    public boolean aBoolean87;
+    public boolean isInteractable;
+    public int ambient;
+    public int widthScale;
+    public int heightScale;
+    public boolean isPet;
+    public boolean rotationFlag;
+    public boolean isMinimapVisible;
     public int childrenIDs[];
     public byte description[];
-    public int anInt91;
-    public int anInt92;
-    public boolean aBoolean93;
-    public int[] anIntArray94;
+    public int contrast;
+    public boolean hadRenderPriority;
+    public int[] models;
     public static MRUNodes mruNodes = new MRUNodes(30);
-
 }

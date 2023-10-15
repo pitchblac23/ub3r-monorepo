@@ -29,52 +29,54 @@ public final class Animation {
     }
 
     private void readValues(Stream stream) {
-        int i;
-        while ((i = stream.readUnsignedByte()) != 0) {
+        int opcode;
 
+        while ((opcode = stream.readUnsignedByte()) != 0) {
+            int var3;
+            int var4;
 
-            if (i == 1) {
+            if (opcode == 1) {
+                //var3 = stream.readUnsignedShort();
                 anInt352 = stream.readUnsignedWord();
                 anIntArray353 = new int[anInt352];
                 anIntArray354 = new int[anInt352];
                 anIntArray355 = new int[anInt352];
-                for (int j = 0; j < anInt352; j++) {
-                    anIntArray353[j] = stream.readDWord();
-                    anIntArray354[j] = -1;
+                for (var4 = 0; var4 < anInt352; var4++) {
+                    anIntArray353[var4] += stream.readDWord();
+                    anIntArray354[var4] = -1;
                 }
 
+                for (var4 = 0; var4 < anInt352; var4++)
+                    anIntArray355[var4] = stream.readUnsignedByte();
 
-                for (int j = 0; j < anInt352; j++)
-                    anIntArray355[j] = stream.readUnsignedByte();
-
-            } else if (i == 2)
+            } else if (opcode == 2)
                 anInt356 = stream.readUnsignedWord();
-            else if (i == 3) {
-                int k = stream.readUnsignedByte();
-                anIntArray357 = new int[k + 1];
-                for (int l = 0; l < k; l++)
-                    anIntArray357[l] = stream.readUnsignedByte();
-                anIntArray357[k] = 9999999;
-            } else if (i == 4)
+            else if (opcode == 3) {
+                var3 = stream.readUnsignedByte();
+                anIntArray357 = new int[var3 + 1];
+                for (var4 = 0; var4 < var3; var4++)
+                    anIntArray357[var4] = stream.readUnsignedByte();
+                anIntArray357[var3] = 9999999;
+            } else if (opcode == 4)
                 aBoolean358 = true;
-            else if (i == 5)
+            else if (opcode == 5)
                 anInt359 = stream.readUnsignedByte();
-            else if (i == 6)
+            else if (opcode == 6)
                 anInt360 = stream.readUnsignedWord();
-            else if (i == 7)
+            else if (opcode == 7)
                 anInt361 = stream.readUnsignedWord();
-            else if (i == 8)
+            else if (opcode == 8)
                 anInt362 = stream.readUnsignedByte();
-            else if (i == 9)
+            else if (opcode == 9)
                 anInt363 = stream.readUnsignedByte();
-            else if (i == 10)
+            else if (opcode == 10)
                 anInt364 = stream.readUnsignedByte();
-            else if (i == 11)
+            else if (opcode == 11)
                 anInt365 = stream.readUnsignedByte();
-            else if (i == 12)
+            else if (opcode == 12)
                 stream.readDWord();
             else
-                System.out.println("Error unrecognised seq config code: " + i);
+                System.out.println("Error unrecognised seq config code: " + opcode);
         }
         if (anInt352 == 0) {
             anInt352 = 1;

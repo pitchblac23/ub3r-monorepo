@@ -39,7 +39,8 @@ public class NpcUpdating extends EntityUpdating<Npc> {
                 appendBlockUpdate(npc, block);
             } else {
                 stream.writeBits(1, 1);
-                stream.writeBits(2, 3); // tells client to remove this npc from list
+                stream.writeBits(2, 3);
+                // tells client to remove this npc from list
                 i.remove();
             }
         }

@@ -47,6 +47,7 @@ public class Jframe extends Client implements ActionListener {
             initMenubar();
             frame.getContentPane().add(gamePanel, BorderLayout.CENTER);
             frame.pack();
+            frame.setLocationRelativeTo(null);
             frame.setVisible(true); // can see the client
             frame.setResizable(false); // resizeable frame
 

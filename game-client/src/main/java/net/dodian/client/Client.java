@@ -1161,7 +1161,7 @@ public class Client extends RSApplet {
         for (int j = 0; j < npcCount; j++) {
             NPC npc = npcArray[npcIndices[j]];
             int k = 0x20000000 + (npcIndices[j] << 14);
-            if (npc == null || !npc.isVisible() || npc.desc.aBoolean93 != flag)
+            if (npc == null || !npc.isVisible() || npc.desc.hadRenderPriority != flag)
                 continue;
             int l = npc.x >> 7;
             int i1 = npc.y >> 7;
@@ -1172,7 +1172,7 @@ public class Client extends RSApplet {
                     continue;
                 anIntArrayArray929[l][i1] = anInt1265;
             }
-            if (!npc.desc.aBoolean84)
+            if (!npc.desc.isInteractable)
                 k += 0x80000000;
             worldController.method285(plane, npc.anInt1552, method42(plane, npc.y, npc.x), k, npc.y, (npc.anInt1540 - 1) * 64 + 60, npc.x, npc, npc.aBoolean1541);
         }
@@ -1885,10 +1885,10 @@ public class Client extends RSApplet {
                     }
                 } else {
                     EntityDef entityDef_1 = ((NPC) obj).desc;
-                    if (entityDef_1.anInt75 >= 0 && entityDef_1.anInt75 < headIcons.length) {
+                    if (entityDef_1.headIcon >= 0 && entityDef_1.headIcon < headIcons.length) {
                         npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height + 15);
                         if (spriteDrawX > -1)
-                            headIcons[entityDef_1.anInt75].drawSprite(spriteDrawX - 12, spriteDrawY - 30);
+                            headIcons[entityDef_1.headIcon].drawSprite(spriteDrawX - 12, spriteDrawY - 30);
                     }
                     if (anInt855 == 1 && anInt1222 == npcIndices[j - playerCount] && loopCycle % 20 < 10) {
                         npcScreenPos(((Entity) (obj)), ((Entity) (obj)).height + 15);
@@ -2722,12 +2722,12 @@ public class Client extends RSApplet {
             int k1 = stream.readBits(1);
             if (k1 == 1)
                 anIntArray894[anInt893++] = k;
-            npc.anInt1540 = npc.desc.aByte68;
-            npc.anInt1504 = npc.desc.anInt79;
+            npc.anInt1540 = npc.desc.size;
+            npc.anInt1504 = npc.desc.rotationSpeed;
             npc.anInt1554 = npc.desc.walkAnim;
-            npc.anInt1555 = npc.desc.anInt58;
-            npc.anInt1556 = npc.desc.anInt83;
-            npc.anInt1557 = npc.desc.anInt55;
+            npc.anInt1555 = npc.desc.rotate180Animation;
+            npc.anInt1556 = npc.desc.rotate90RightAnimation;
+            npc.anInt1557 = npc.desc.rotate90LeftAnimation;
             npc.anInt1511 = npc.desc.standAnim;
             npc.setPos(myPlayer.smallX[0] + i1, myPlayer.smallY[0] + l, j1 == 1);
         }
@@ -4950,10 +4950,10 @@ public class Client extends RSApplet {
             if (k1 == 1) {
                 NPC npc = npcArray[l1];
                 try {
-                    if (npc.desc.aByte68 == 1 && (npc.x & 0x7f) == 64 && (npc.y & 0x7f) == 64) {
+                    if (npc.desc.size == 1 && (npc.x & 0x7f) == 64 && (npc.y & 0x7f) == 64) {
                         for (int j2 = 0; j2 < npcCount; j2++) {
                             NPC npc2 = npcArray[npcIndices[j2]];
-                            if (npc2 != null && npc2 != npc && npc2.desc.aByte68 == 1 && npc2.x == npc.x && npc2.y == npc.y)
+                            if (npc2 != null && npc2 != npc && npc2.desc.size == 1 && npc2.x == npc.x && npc2.y == npc.y)
                                 buildAtNPCMenu(npc2.desc, npcIndices[j2], j1, i1);
                         }
                         for (int l2 = 0; l2 < playerCount; l2++) {
@@ -4971,7 +4971,7 @@ public class Client extends RSApplet {
                 if ((player.x & 0x7f) == 64 && (player.y & 0x7f) == 64) {
                     for (int k2 = 0; k2 < npcCount; k2++) {
                         NPC class30_sub2_sub4_sub1_sub1_2 = npcArray[npcIndices[k2]];
-                        if (class30_sub2_sub4_sub1_sub1_2 != null && class30_sub2_sub4_sub1_sub1_2.desc.aByte68 == 1 && class30_sub2_sub4_sub1_sub1_2.x == player.x && class30_sub2_sub4_sub1_sub1_2.y == player.y)
+                        if (class30_sub2_sub4_sub1_sub1_2 != null && class30_sub2_sub4_sub1_sub1_2.desc.size == 1 && class30_sub2_sub4_sub1_sub1_2.x == player.x && class30_sub2_sub4_sub1_sub1_2.y == player.y)
                             buildAtNPCMenu(class30_sub2_sub4_sub1_sub1_2.desc, npcIndices[k2], j1, i1);
                     }
 
@@ -7403,12 +7403,12 @@ public class Client extends RSApplet {
             }
             if ((l & 2) != 0) {
                 npc.desc = EntityDef.forID(stream.method436());
-                npc.anInt1540 = npc.desc.aByte68;
-                npc.anInt1504 = npc.desc.anInt79;
+                npc.anInt1540 = npc.desc.size;
+                npc.anInt1504 = npc.desc.rotationSpeed;
                 npc.anInt1554 = npc.desc.walkAnim;
-                npc.anInt1555 = npc.desc.anInt58;
-                npc.anInt1556 = npc.desc.anInt83;
-                npc.anInt1557 = npc.desc.anInt55;
+                npc.anInt1555 = npc.desc.rotate180Animation;
+                npc.anInt1556 = npc.desc.rotate90RightAnimation;
+                npc.anInt1557 = npc.desc.rotate90LeftAnimation;
                 npc.anInt1511 = npc.desc.standAnim;
             }
             if ((l & 4) != 0) {
@@ -7425,7 +7425,7 @@ public class Client extends RSApplet {
             entityDef = entityDef.method161();
         if (entityDef == null)
             return;
-        if (!entityDef.aBoolean84)
+        if (!entityDef.isInteractable)
             return;
         String s = entityDef.name;
         if (entityDef.combatLevel != 0)
@@ -8547,7 +8547,7 @@ public class Client extends RSApplet {
                                                 k6 = 0;
                                             if (j7 < 5 && j7 > -5)
                                                 j7 = 0;
-                                            if (anInt989 < 5) {
+                                            if (anInt989 < 10) { //5
                                                 k6 = 0;
                                                 j7 = 0;
                                             }
@@ -9987,7 +9987,7 @@ public class Client extends RSApplet {
                 EntityDef entityDef = npc.desc;
                 if (entityDef.childrenIDs != null)
                     entityDef = entityDef.method161();
-                if (entityDef != null && entityDef.aBoolean87 && entityDef.aBoolean84) {
+                if (entityDef != null && entityDef.isMinimapVisible && entityDef.isInteractable) {
                     int i1 = npc.x / 32 - myPlayer.x / 32;
                     int k3 = npc.y / 32 - myPlayer.y / 32;
                     markMinimap(mapDotNPC, i1, k3);

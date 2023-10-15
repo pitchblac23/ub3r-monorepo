@@ -36,16 +36,16 @@ public final class NPC extends Entity {
                 model_2.method470(j);
                 model_2.anIntArrayArray1658 = null;
                 model_2.anIntArrayArray1657 = null;
-                if (spotAnim.anInt410 != 128 || spotAnim.anInt411 != 128)
-                    model_2.method478(spotAnim.anInt410, spotAnim.anInt410, spotAnim.anInt411);
-                model_2.setLighting(64 + spotAnim.anInt413, 850 + spotAnim.anInt414, -30, -50, -30, true);
+                if (spotAnim.resizeX != 128 || spotAnim.resizeY != 128)
+                    model_2.method478(spotAnim.resizeX, spotAnim.resizeX, spotAnim.resizeY);
+                model_2.setLighting(64 + spotAnim.ambient, 850 + spotAnim.contrast, -30, -50, -30, true);
                 Model aModel[] = {
                         model, model_2
                 };
                 model = new Model(aModel);
             }
         }
-        if (desc.aByte68 == 1)
+        if (desc.size == 1)
             model.aBoolean1659 = true;
         return model;
     }
