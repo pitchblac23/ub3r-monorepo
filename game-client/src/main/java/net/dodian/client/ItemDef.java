@@ -620,14 +620,15 @@ public final class ItemDef {
                 }
             } else if (opcode == 41) {
                 int var5 = stream.readUnsignedByte();
-                textureFind = new int[var5];
-                textureReplace = new int[var5];
+                orginalTexture = new int[var5];
+                modifiedTexture = new int[var5];
 
                 for (int var4 = 0; var4 < var5; ++var4) {
-                    textureFind[var4] = (short) stream.readUnsignedShort();
-                    textureReplace[var4] = (short) stream.readUnsignedShort();
+                    orginalTexture[var4] = (short) stream.readUnsignedShort();
+                    modifiedTexture[var4] = (short) stream.readUnsignedShort();
                 }
             } else if (opcode == 42)
+                /*shitCLickIndex*/
                 stream.readUnsignedByte();
             else if (opcode == 65)
                 searchable = true;
@@ -644,7 +645,8 @@ public final class ItemDef {
             else if (opcode == 93)
                 femaleHeadModel2 = stream.readUnsignedWord();
             else if (opcode == 94)
-                /*def.category =*/ stream.readUnsignedShort();
+                /*category?*/
+                stream.readUnsignedShort();
             else if (opcode == 95)
                 modelRotationZ = stream.readUnsignedWord();
             else if (opcode == 97)
@@ -679,7 +681,7 @@ public final class ItemDef {
             else if (opcode == 149)
                 stream.readUnsignedWord(); // placeholder template
             else
-            System.out.println("Unrecognized opcode {"+ opcode +"}");
+            System.out.println("Unrecognized itemDef opcode {"+ opcode +"}");
         } while (true);
     }
 
@@ -691,8 +693,8 @@ public final class ItemDef {
     public int value;
     public int[] modifiedModelColors;
     public int[] originalModelColors;
-    public int[] textureFind;
-    public int[] textureReplace;
+    public int[] orginalTexture;
+    public int[] modifiedTexture;
     public int id;
     static MRUNodes mruNodes1 = new MRUNodes(100);
     public static MRUNodes mruNodes2 = new MRUNodes(50);

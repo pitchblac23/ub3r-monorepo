@@ -1,12 +1,14 @@
 package net.dodian.client;
 
 import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ObjectDef {
 
     public static ObjectDef forID(int i) {
-        if (i > streamIndices.length)
-            i = streamIndices.length - 1;
+        if (i > offsets.length)
+            i = offsets.length - 1;
         /* Seers village fix */
 		/*if (i == 25913)
 			i = 15552;
@@ -17,10 +19,10 @@ public final class ObjectDef {
         for (int j = 0; j < 20; j++)
             if (cache[j].type == i)
                 return cache[j];
-        cacheIndex = (cacheIndex + 1) % 20;
 
+        cacheIndex = (cacheIndex + 1) % 20;
         ObjectDef class46 = cache[cacheIndex];
-        stream.currentOffset = streamIndices[i];
+        stream.currentOffset = offsets[i];
         class46.type = i;
         class46.setDefaults();
         class46.readValues(stream);
@@ -64,7 +66,7 @@ public final class ObjectDef {
 
     private static void customValues(ObjectDef def) {
         if (def.type >= 15552 && def.type <= 15554) {
-            def.aBoolean764 = true;
+            def.modelClipped = true;
         }
         if (def.type == 2097) {
             def.actions = new String[5];
@@ -132,55 +134,55 @@ public final class ObjectDef {
     }
 
     public void setDefaults() {
-        anIntArray773 = null;
-        anIntArray776 = null;
-        name = null;
+        modelIds = null;
+        modelTypes = null;
+        //name = null;
         description = null;
         modifiedModelColors = null;
         originalModelColors = null;
-        anInt744 = 1;
-        anInt761 = 1;
-        aBoolean767 = true;
-        aBoolean757 = true;
+        width = 1;
+        length = 1;
+        solid = true;
+        impenetrable = true;
         hasActions = false;
-        aBoolean762 = false;
-        aBoolean769 = false;
-        aBoolean764 = false;
-        anInt781 = -1;
-        anInt775 = 16;
-        aByte737 = 0;
-        aByte742 = 0;
+        contouredGround = false;
+        nonFlatShading = false;
+        modelClipped = false;
+        animation = -1;
+        decorDisplacement = 16;
+        ambientLighting = 0;
+        contrast = 0;
         actions = null;
-        anInt746 = -1;
-        anInt758 = -1;
-        aBoolean751 = false;
-        aBoolean779 = true;
-        anInt748 = 128;
-        anInt772 = 128;
-        anInt740 = 128;
-        anInt768 = 0;
-        anInt738 = 0;
-        anInt745 = 0;
-        anInt783 = 0;
-        aBoolean736 = false;
-        aBoolean766 = false;
-        anInt760 = -1;
-        anInt774 = -1;
-        anInt749 = -1;
+        mapIcon = -1;
+        mapscene = -1;
+        inverted = false;
+        castsShadow = true;
+        scaleX = 128;
+        scaleY = 128;
+        scaleZ = 128;
+        surroundings = 0;
+        translateX = 0;
+        translateY = 0;
+        translateZ = 0;
+        obstructsGround = false;
+        removeClipping = false;
+        supportItems = -1;
+        varbit = -1;
+        varp = -1;
         childrenIDs = null;
     }
 
     public void method574(OnDemandFetcher class42_sub1) {
-        if (anIntArray773 == null)
+        if (modelIds == null)
             return;
-        for (int j = 0; j < anIntArray773.length; j++)
-            class42_sub1.method560(anIntArray773[j] & 0xffff, 0);
+        for (int j = 0; j < modelIds.length; j++)
+            class42_sub1.method560(modelIds[j] & 0xffff, 0);
     }
 
     public static void nullLoader() {
         mruNodes1 = null;
         mruNodes2 = null;
-        streamIndices = null;
+        offsets = null;
         cache = null;
         stream = null;
     }
@@ -190,34 +192,32 @@ public final class ObjectDef {
         Stream stream = new Stream(streamLoader.getDataForName("loc.idx"));
         int totalObjects = stream.readUnsignedWord();
         System.out.println(String.format("Loaded: %d objects", totalObjects));
-        streamIndices = new int[totalObjects];
-        int i = 2;
+        offsets = new int[totalObjects];
+        int metaOffset = 2;
         for (int j = 0; j < totalObjects; j++) {
-            streamIndices[j] = i;
-            i += stream.readUnsignedWord();
+            offsets[j] = metaOffset;
+            metaOffset += stream.readUnsignedWord();
         }
         cache = new ObjectDef[20];
-        for (int k = 0; k < 20; k++)
-            cache[k] = new ObjectDef();
+        for (int index = 0; index < 20; index++)
+            cache[index] = new ObjectDef();
         objectDump(totalObjects);
     }
 
     public boolean method577(int i) {
-        if (anIntArray776 == null) {
-            if (anIntArray773 == null)
+        if (modelTypes == null) {
+            if (modelIds == null)
                 return true;
             if (i != 10)
                 return true;
             boolean flag1 = true;
-            for (int k = 0; k < anIntArray773.length; k++)
-                flag1 &= Model.method463(anIntArray773[k] & 0xffff);
-
+            for (int k = 0; k < modelIds.length; k++)
+                flag1 &= Model.method463(modelIds[k] & 0xffff);
             return flag1;
         }
-        for (int j = 0; j < anIntArray776.length; j++)
-            if (anIntArray776[j] == i)
-                return Model.method463(anIntArray773[j] & 0xffff);
-
+        for (int j = 0; j < modelTypes.length; j++)
+            if (modelTypes[j] == i)
+                return Model.method463(modelIds[j] & 0xffff);
         return true;
     }
 
@@ -225,9 +225,9 @@ public final class ObjectDef {
         Model model = method581(i, k1, j);
         if (model == null)
             return null;
-        if (aBoolean762 || aBoolean769)
-            model = new Model(aBoolean762, aBoolean769, model);
-        if (aBoolean762) {
+        if (contouredGround || nonFlatShading)
+            model = new Model(contouredGround, nonFlatShading, model);
+        if (contouredGround) {
             int l1 = (k + l + i1 + j1) / 4;
             for (int i2 = 0; i2 < model.anInt1626; i2++) {
                 int j2 = model.anIntArray1627[i2];
@@ -243,25 +243,25 @@ public final class ObjectDef {
     }
 
     public boolean method579() {
-        if (anIntArray773 == null)
+        if (modelIds == null)
             return true;
         boolean flag1 = true;
-        for (int i = 0; i < anIntArray773.length; i++)
-            flag1 &= Model.method463(anIntArray773[i] & 0xffff);
+        for (int i = 0; i < modelIds.length; i++)
+            flag1 &= Model.method463(modelIds[i] & 0xffff);
         return flag1;
     }
 
     public ObjectDef method580() {
         int i = -1;
-        if (anInt774 != -1) {
-            VarBit varBit = VarBit.cache[anInt774];
+        if (varbit != -1) {
+            VarBit varBit = VarBit.cache[varbit];
             int j = varBit.anInt648;
             int k = varBit.anInt649;
             int l = varBit.anInt650;
             int i1 = Client.anIntArray1232[l - k];
             i = clientInstance.variousSettings[j] >> k & i1;
-        } else if (anInt749 != -1)
-            i = clientInstance.variousSettings[anInt749];
+        } else if (varp != -1)
+            i = clientInstance.variousSettings[varp];
         if (i < 0 || i >= childrenIDs.length || childrenIDs[i] == -1)
             return null;
         else
@@ -271,19 +271,19 @@ public final class ObjectDef {
     public Model method581(int j, int k, int l) {
         Model model = null;
         long l1;
-        if (anIntArray776 == null) {
+        if (modelTypes == null) {
             if (j != 10)
                 return null;
             l1 = (long) ((type << 8) + (j << 3) + l) + ((long) (k + 1) << 32);
             Model model_1 = (Model) mruNodes2.insertFromCache(l1);
             if (model_1 != null)
                 return model_1;
-            if (anIntArray773 == null)
+            if (modelIds == null)
                 return null;
-            boolean flag1 = aBoolean751 ^ (l > 3);
-            int k1 = anIntArray773.length;
+            boolean flag1 = inverted ^ (l > 3);
+            int k1 = modelIds.length;
             for (int i2 = 0; i2 < k1; i2++) {
-                int l2 = anIntArray773[i2];
+                int l2 = modelIds[i2];
                 if (flag1)
                     l2 += 0x10000;
                 model = (Model) mruNodes1.insertFromCache(l2);
@@ -303,8 +303,8 @@ public final class ObjectDef {
                 model = new Model(k1, aModelArray741s);
         } else {
             int i1 = -1;
-            for (int j1 = 0; j1 < anIntArray776.length; j1++) {
-                if (anIntArray776[j1] != j)
+            for (int j1 = 0; j1 < modelTypes.length; j1++) {
+                if (modelTypes[j1] != j)
                     continue;
                 i1 = j1;
                 break;
@@ -316,8 +316,8 @@ public final class ObjectDef {
             Model model_2 = (Model) mruNodes2.insertFromCache(l1);
             if (model_2 != null)
                 return model_2;
-            int j2 = anIntArray773[i1];
-            boolean flag3 = aBoolean751 ^ (l > 3);
+            int j2 = modelIds[i1];
+            boolean flag3 = inverted ^ (l > 3);
             if (flag3)
                 j2 += 0x10000;
             model = (Model) mruNodes1.insertFromCache(j2);
@@ -331,9 +331,9 @@ public final class ObjectDef {
             }
         }
         boolean flag;
-        flag = anInt748 != 128 || anInt772 != 128 || anInt740 != 128;
+        flag = scaleX != 128 || scaleY != 128 || scaleZ != 128;
         boolean flag2;
-        flag2 = anInt738 != 0 || anInt745 != 0 || anInt783 != 0;
+        flag2 = translateX != 0 || translateY != 0 || translateZ != 0;
         Model model_3 = new Model(modifiedModelColors == null, Class36
                 .method532(k), l == 0 && k == -1 && !flag && !flag2, model);
         if (k != -1) {
@@ -351,14 +351,14 @@ public final class ObjectDef {
 
         }
         if (flag)
-            model_3.method478(anInt748, anInt740, anInt772);
+            model_3.method478(scaleX, scaleZ, scaleY);
         if (flag2)
-            model_3.method475(anInt738, anInt745, anInt783);
+            model_3.method475(translateX, translateY, translateZ);
         //model_3.method479(64, 768, -50, -10, -50, !aBoolean769);
         //model_3.method479(64 + aByte737, 768 + aByte742 * 5, -50, -10, -50, !aBoolean769);
 
-        model_3.setLighting(84, 1500, -90, -280, -70, !aBoolean769);
-        if (anInt760 == 1)
+        model_3.setLighting(84, 1500, -90, -280, -70, !nonFlatShading);
+        if (supportItems == 1)
             model_3.anInt1654 = model_3.modelHeight;
         mruNodes2.removeFromCache(model_3, l1);
         return model_3;
@@ -367,218 +367,231 @@ public final class ObjectDef {
     public void readValues(Stream stream) {
         int flag = -1;
         do {
-            int type = stream.readUnsignedByte();
-            if (type == 0)
+            int opcode = stream.readUnsignedByte();
+            if (opcode == 0)
                 break;
-            if (type == 1) {
+            if (opcode == 1) {
                 int len = stream.readUnsignedByte();
                 if (len > 0) {
-                    if (anIntArray773 == null) {
-                        anIntArray776 = new int[len];
-                        anIntArray773 = new int[len];
-                        for (int k1 = 0; k1 < len; k1++) {
-                            anIntArray773[k1] = stream.readUnsignedWord();
-                            anIntArray776[k1] = stream.readUnsignedByte();
+                    if (modelIds == null) {
+                        modelTypes = new int[len];
+                        modelIds = new int[len];
+                        for (int i = 0; i < len; i++) {
+                            modelIds[i] = stream.readUnsignedWord();
+                            modelTypes[i] = stream.readUnsignedByte();
                         }
                     } else {
                         stream.currentOffset += len * 3;
                     }
                 }
-            } else if (type == 2)
+            } else if (opcode == 2)
                 name = stream.readString();
-            else if (type == 5) {
+            else if (opcode == 5) {
                 int len = stream.readUnsignedByte();
                 if (len > 0) {
-                    if (anIntArray773 == null) {
-                        anIntArray776 = null;
-                        anIntArray773 = new int[len];
-                        for (int l1 = 0; l1 < len; l1++)
-                            anIntArray773[l1] = stream.readUnsignedWord();
+                    if (modelIds == null) {
+                        modelTypes = null;
+                        modelIds = new int[len];
+                        for (int i = 0; i < len; i++)
+                            modelIds[i] = stream.readUnsignedWord();
                     } else {
                         stream.currentOffset += len * 2;
                     }
                 }
-            } else if (type == 14)
-                anInt744 = stream.readUnsignedByte();
-            else if (type == 15)
-                anInt761 = stream.readUnsignedByte();
-            else if (type == 17)
-                aBoolean767 = false;
-            else if (type == 18)
-                aBoolean757 = false;
-            else if (type == 19)
+            } else if (opcode == 14)
+                width = stream.readUnsignedByte();
+            else if (opcode == 15)
+                length = stream.readUnsignedByte();
+            else if (opcode == 17)
+                solid = false;
+            else if (opcode == 18)
+                impenetrable = false;
+            else if (opcode == 19)
                 hasActions = (stream.readUnsignedByte() == 1);
-            else if (type == 21)
-                aBoolean762 = true;
-            else if (type == 22)
-                aBoolean769 = false;
-            else if (type == 23)
-                aBoolean764 = true;
-            else if (type == 24) {
-                anInt781 = stream.readUnsignedWord();
-                if (anInt781 == 0xFFFF)
-                    anInt781 = -1;
-            } else if (type == 28)
-                anInt775 = stream.readUnsignedByte();
-            else if (type == 29)
-                aByte737 = stream.readSignedByte();
-            else if (type == 39)
-                aByte742 = (byte) (stream.readSignedByte() * 25);
-            else if (type >= 30 && type < 39) {
+            else if (opcode == 21)
+                contouredGround = true;
+            else if (opcode == 22)
+                nonFlatShading = true;
+            else if (opcode == 23)
+                modelClipped = true;
+            else if (opcode == 24) {
+                animation = stream.readUnsignedShort();
+                if (animation == 0xFFFF)
+                    animation = -1;
+            } else if (opcode == 27) {
+                clipType = 1;
+            } else if (opcode == 28)
+                decorDisplacement = stream.readUnsignedByte();
+            else if (opcode == 29)
+                ambientLighting = stream.readSignedByte();
+            else if (opcode >= 30 && opcode < 35) {
                 if (actions == null)
                     actions = new String[5];
-                actions[type - 30] = stream.readString();
-                if (actions[type - 30].equalsIgnoreCase("Hidden"))
-                    actions[type - 30] = null;
-            } else if (type == 40) {
-                int i1 = stream.readUnsignedByte();
-                modifiedModelColors = new int[i1];
-                originalModelColors = new int[i1];
-                for (int i2 = 0; i2 < i1; i2++) {
-                    modifiedModelColors[i2] = stream.readUnsignedWord();
-                    originalModelColors[i2] = stream.readUnsignedWord();
+                actions[opcode - 30] = stream.readString();
+                if (actions[opcode - 30].equalsIgnoreCase("Hidden"))
+                    actions[opcode - 30] = null;
+            } else if (opcode == 39)
+                contrast = stream.readSignedByte() * 25;
+            else if (opcode == 40) {
+                int len = stream.readUnsignedByte();
+                modifiedModelColors = new int[len];
+                originalModelColors = new int[len];
+                for (int i = 0; i < len; i++) {
+                    modifiedModelColors[i] = stream.readUnsignedShort();
+                    originalModelColors[i] = stream.readUnsignedShort();
                 }
-            } else if (type == 41) {
-                int i1 = stream.readUnsignedByte();
-                //modifiedModelColors = new int[i1];
-                //originalModelColors = new int[i1];
-                for (int i2 = 0; i2 < i1; i2++) {
-                    stream.readUnsignedWord();
-                    stream.readUnsignedWord();
-                    //modifiedModelColors[i2] = stream.readUnsignedWord();
-                    //originalModelColors[i2] = stream.readUnsignedWord();
+            } else if (opcode == 41) {
+                int len = stream.readUnsignedByte();
+                modifiedModelColors = new int[len];
+                originalModelColors = new int[len];
+                for (int i = 0; i < len; i++) {
+                    modifiedModelColors[i] = stream.readUnsignedShort();
+                    originalModelColors[i] = stream.readUnsignedShort();
                 }
-            } else if (type == 62)
-                aBoolean751 = true;
-            else if (type == 64)
-                aBoolean779 = false;
-            else if (type == 65)
-                anInt748 = stream.readUnsignedWord();
-            else if (type == 66)
-                anInt772 = stream.readUnsignedWord();
-            else if (type == 67)
-                anInt740 = stream.readUnsignedWord();
-            else if (type == 68)
-                anInt758 = stream.readUnsignedWord();
-            else if (type == 69)
-                anInt768 = stream.readUnsignedByte();
-            else if (type == 70)
-                anInt738 = stream.readSignedWord();
-            else if (type == 71)
-                anInt745 = stream.readSignedWord();
-            else if (type == 72)
-                anInt783 = stream.readSignedWord();
-            else if (type == 73)
-                aBoolean736 = true;
-            else if (type == 74)
-                aBoolean766 = true;
-            else if (type == 75)
-                anInt760 = stream.readUnsignedByte();
-            else if (type == 78) {
-                stream.readUnsignedWord(); // ambient sound id
+            } else if (opcode == 61)
+                stream.readUnsignedShort();
+            else if (opcode == 62)
+                inverted = true;
+            else if (opcode == 64)
+                castsShadow = false;
+            else if (opcode == 65)
+                scaleX = stream.readUnsignedShort();
+            else if (opcode == 66)
+                scaleY = stream.readUnsignedShort();
+            else if (opcode == 67)
+                scaleZ = stream.readUnsignedWord();
+            else if (opcode == 68)
+                mapscene = stream.readUnsignedWord();
+            else if (opcode == 69)
+                surroundings = stream.readUnsignedByte();
+            else if (opcode == 70)
+                translateX = stream.readUnsignedShort();
+            else if (opcode == 71)
+                translateY = stream.readUnsignedShort();
+            else if (opcode == 72)
+                translateZ = stream.readUnsignedShort();
+            else if (opcode == 73)
+                obstructsGround = true;
+            else if (opcode == 74)
+                removeClipping = true;
+            else if (opcode == 75)
+                supportItems = stream.readUnsignedByte();
+            else if (opcode == 78) {
+                stream.readUnsignedShort(); // ambient sound id
                 stream.readUnsignedByte();
-            } else if (type == 79) {
-                stream.readUnsignedWord();
-                stream.readUnsignedWord();
+            } else if (opcode == 79) {
+                stream.readUnsignedShort();
+                stream.readUnsignedShort();
                 stream.readUnsignedByte();
                 int len = stream.readUnsignedByte();
                 for (int i = 0; i < len; i++) {
-                    stream.readUnsignedWord();
+                    stream.readUnsignedShort();
                 }
-            } else if (type == 81)
-                anInt760 = stream.readUnsignedByte();
-            else if (type == 82) {
-                int test = stream.readUnsignedWord();
-                if (test == 0xFFFF)
-                    test = -1;
-            } else if (type == 77 || type == 92) {
-                anInt774 = stream.readUnsignedWord();
-                if (anInt774 == 65535)
-                    anInt774 = -1;
-                anInt749 = stream.readUnsignedWord();
-                if (anInt749 == 65535)
-                    anInt749 = -1;
+            } else if (opcode == 81) {
+                stream.readUnsignedByte();
+            } else if (opcode == 82) {
+                int mapIcon = stream.readUnsignedShort();
+                if (mapIcon == 0xFFFF)
+                    mapIcon = -1;
+            }else if (opcode == 89) {
+                stream.readUnsignedShort();
+            } else if (opcode == 77 || opcode == 92) {
+                varbit = stream.readUnsignedShort();
+                if (varbit == 0xFFFF)//65535
+                    varbit = -1;
+                varp = stream.readUnsignedShort();
+                if (varp == 0xFFFF)//65535
+                    varp = -1;
                 int value = -1;
-                if (type == 92) {
-                    value = stream.readUnsignedWord();
 
-                    if (value == 0xFFFF) {
-                        value = -1;
-                    }
-                }
                 /* Morphis */
-                int j1 = stream.readUnsignedByte();
-                childrenIDs = new int[j1 + 2];
-                for (int j2 = 0; j2 <= j1; j2++) {
-                    childrenIDs[j2] = stream.readUnsignedWord();
-                    if (childrenIDs[j2] == 0xFFFF)
-                        childrenIDs[j2] = -1;
-                    childrenIDs[j2 + 1] = value;
+                int len = stream.readUnsignedByte();
+                childrenIDs = new int[len + 2];
+                for (int i = 0; i <= len; i++) {
+                    childrenIDs[i] = stream.readUnsignedWord();
+                    if (childrenIDs[i] == 0xFFFF)
+                        childrenIDs[i] = -1;
+                    childrenIDs[i + 1] = value;
                 }
-            }
+            } else if (opcode == 249) {
+                int length = stream.readUnsignedByte();
+
+                Map<Integer, Object> params = new HashMap<>(length);
+                for (int i = 0; i < length; i++) {
+                    boolean isString = stream.readUnsignedByte() == 1;
+                    int key = stream.read3Bytes();
+                    Object value;
+                    if (isString) {
+                        value = stream.readString();
+                    } else {
+                        value = stream.readDWord();
+                    }
+                    params.put(key, value);
+                }
+            } else
+                System.out.println("invalid Object opcode:" + opcode);
         } while (true);
         if (flag == -1 && name != "null" && name != null) {
-            hasActions = anIntArray773 != null
-                    && (anIntArray776 == null || anIntArray776[0] == 10);
+            hasActions = modelIds != null
+                    && (modelTypes == null || modelTypes[0] == 10);
             if (actions != null)
                 hasActions = true;
         }
-        if (aBoolean766) {
-            aBoolean767 = false;
-            aBoolean757 = false;
+        if (removeClipping) {
+            solid = false;
+            impenetrable = false;
         }
-        if (anInt760 == -1)
-            anInt760 = aBoolean767 ? 1 : 0;
+        if (supportItems == -1)
+            supportItems = solid ? 1 : 0;
     }
 
-    public ObjectDef() {
-        type = -1;
-    }
+    public ObjectDef() { type = -1; }
 
-    public boolean aBoolean736;
-    public byte aByte737;
-    public int anInt738;
+    public boolean obstructsGround;
+    public byte ambientLighting;
+    public int translateX;
     public String name;
-    public int anInt740;
+    public int scaleZ;
     public static final Model[] aModelArray741s = new Model[4];
-    public byte aByte742;
-    public int anInt744;
-    public int anInt745;
-    public int anInt746;
+    public int contrast;
+    public int width;
+    public int translateY;
+    public int mapIcon;
     public int[] originalModelColors;
-    public int anInt748;
-    public int anInt749;
-    public boolean aBoolean751;
+    public int scaleX;
+    public int varp;
+    public boolean inverted;
     public static boolean lowMem;
     public static Stream stream;
     public int type;
-    public static int[] streamIndices;
-    public boolean aBoolean757;
-    public int anInt758;
+    public static int[] offsets;
+    public boolean impenetrable;
+    public int mapscene;
     public int childrenIDs[];
-    public int anInt760;
-    public static int anInt761;
-    public boolean aBoolean762;
-    public boolean aBoolean764;
+    public int supportItems;
+    public static int length;
+    public boolean contouredGround;
+    public boolean modelClipped;
     public static Client clientInstance;
-    public boolean aBoolean766;
-    public boolean aBoolean767;
-    public int anInt768;
-    public boolean aBoolean769;
+    public boolean removeClipping;
+    public boolean solid;
+    public int surroundings;
+    public boolean nonFlatShading;
     public static int cacheIndex;
-    public int anInt772;
-    public int[] anIntArray773;
-    public int anInt774;
-    public int anInt775;
-    public int[] anIntArray776;
+    public int scaleY;
+    public int[] modelIds;
+    public int varbit;
+    public int decorDisplacement;
+    public int[] modelTypes;
     public byte description[];
     public boolean hasActions;
-    public boolean aBoolean779;
+    public boolean castsShadow;
     public static MRUNodes mruNodes2 = new MRUNodes(30);
-    public int anInt781;
+    public int animation;
     public static ObjectDef[] cache;
-    public int anInt783;
+    public int translateZ;
     public int[] modifiedModelColors;
     public static MRUNodes mruNodes1 = new MRUNodes(500);
-    public String actions[];
+    public String[] actions;
+    int clipType = 2;
 }

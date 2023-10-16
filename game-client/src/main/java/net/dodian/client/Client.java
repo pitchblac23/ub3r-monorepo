@@ -1089,7 +1089,7 @@ public class Client extends RSApplet {
                 int i3 = worldController.method303(plane, k2, l2);
                 if (i3 != 0) {
                     i3 = i3 >> 14 & 0x7fff;
-                    int j3 = ObjectDef.forID(i3).anInt746;
+                    int j3 = ObjectDef.forID(i3).mapIcon;
                     if (j3 >= 0) {
                         int k3 = k2;
                         int l3 = l2;
@@ -2915,12 +2915,12 @@ public class Client extends RSApplet {
             int k4 = 24624 + l * 4 + (103 - i) * 512 * 4;
             int i5 = k1 >> 14 & 0x7fff;
             ObjectDef class46_2 = ObjectDef.forID(i5);
-            if (class46_2.anInt758 != -1) {
-                Background background_2 = mapScenes[class46_2.anInt758];
+            if (class46_2.mapscene != -1) {
+                Background background_2 = mapScenes[class46_2.mapscene];
                 if (background_2 != null) {
-                    int i6 = (class46_2.anInt744 * 4 - background_2.anInt1452) / 2;
-                    int j6 = (ObjectDef.anInt761 * 4 - background_2.anInt1453) / 2;
-                    background_2.drawBackground(48 + l * 4 + i6, 48 + (104 - i - ObjectDef.anInt761) * 4 + j6);
+                    int i6 = (class46_2.width * 4 - background_2.anInt1452) / 2;
+                    int j6 = (ObjectDef.length * 4 - background_2.anInt1453) / 2;
+                    background_2.drawBackground(48 + l * 4 + i6, 48 + (104 - i - ObjectDef.length) * 4 + j6);
                 }
             } else {
                 if (i3 == 0 || i3 == 2)
@@ -2985,12 +2985,12 @@ public class Client extends RSApplet {
             int j3 = i2 & 0x1f;
             int l3 = k1 >> 14 & 0x7fff;
             ObjectDef class46_1 = ObjectDef.forID(l3);
-            if (class46_1.anInt758 != -1) {
-                Background background_1 = mapScenes[class46_1.anInt758];
+            if (class46_1.mapscene != -1) {
+                Background background_1 = mapScenes[class46_1.mapscene];
                 if (background_1 != null) {
-                    int j5 = (class46_1.anInt744 * 4 - background_1.anInt1452) / 2;
-                    int k5 = (ObjectDef.anInt761 * 4 - background_1.anInt1453) / 2;
-                    background_1.drawBackground(48 + l * 4 + j5, 48 + (104 - i - ObjectDef.anInt761) * 4 + k5);
+                    int j5 = (class46_1.width * 4 - background_1.anInt1452) / 2;
+                    int k5 = (ObjectDef.length * 4 - background_1.anInt1453) / 2;
+                    background_1.drawBackground(48 + l * 4 + j5, 48 + (104 - i - ObjectDef.length) * 4 + k5);
                 }
             } else if (j3 == 9) {
                 int l4 = 0xeeeeee;
@@ -3015,12 +3015,12 @@ public class Client extends RSApplet {
         if (k1 != 0) {
             int j2 = k1 >> 14 & 0x7fff;
             ObjectDef class46 = ObjectDef.forID(j2);
-            if (class46.anInt758 != -1) {
-                Background background = mapScenes[class46.anInt758];
+            if (class46.mapscene != -1) {
+                Background background = mapScenes[class46.mapscene];
                 if (background != null) {
-                    int i4 = (class46.anInt744 * 4 - background.anInt1452) / 2;
-                    int j4 = (ObjectDef.anInt761 * 4 - background.anInt1453) / 2;
-                    background.drawBackground(48 + l * 4 + i4, 48 + (104 - i - ObjectDef.anInt761) * 4 + j4);
+                    int i4 = (class46.width * 4 - background.anInt1452) / 2;
+                    int j4 = (ObjectDef.length * 4 - background.anInt1453) / 2;
+                    background.drawBackground(48 + l * 4 + i4, 48 + (104 - i - ObjectDef.length) * 4 + j4);
                 }
             }
         }
@@ -3743,13 +3743,13 @@ public class Client extends RSApplet {
             int i2;
             int j2;
             if (l1 == 0 || l1 == 2) {
-                i2 = class46.anInt744;
-                j2 = ObjectDef.anInt761;
+                i2 = class46.width;
+                j2 = ObjectDef.length;
             } else {
-                i2 = ObjectDef.anInt761;
-                j2 = class46.anInt744;
+                i2 = ObjectDef.length;
+                j2 = class46.width;
             }
-            int k2 = class46.anInt768;
+            int k2 = class46.surroundings;
             if (l1 != 0)
                 k2 = (k2 << l1 & 0xf) + (k2 >> 4 - l1);
             doWalkTo(2, 0, j2, 0, myPlayer.smallY[0], i2, k2, j, myPlayer.smallX[0], false, k);
@@ -10616,11 +10616,11 @@ public class Client extends RSApplet {
                     player.anInt1707 = l14 + loopCycle;
                     player.anInt1708 = k17 + loopCycle;
                     player.aModel_1714 = model;
-                    int i23 = class46.anInt744;
-                    int j23 = ObjectDef.anInt761;
+                    int i23 = class46.width;
+                    int j23 = ObjectDef.length;
                     if (i20 == 1 || i20 == 3) {
-                        i23 = ObjectDef.anInt761;
-                        j23 = class46.anInt744;
+                        i23 = ObjectDef.length;
+                        j23 = class46.width;
                     }
                     player.anInt1711 = k4 * 128 + i23 * 64;
                     player.anInt1713 = j7 * 128 + j23 * 64;
@@ -10891,23 +10891,23 @@ public class Client extends RSApplet {
                 if (j1 == 0) {
                     worldController.method291(i1, j, i, (byte) -119);
                     ObjectDef class46 = ObjectDef.forID(j2);
-                    if (class46.aBoolean767)
-                        aClass11Array1230[j].method215(l2, k2, class46.aBoolean757, i1, i);
+                    if (class46.solid)
+                        aClass11Array1230[j].method215(l2, k2, class46.impenetrable, i1, i);
                 }
                 if (j1 == 1)
                     worldController.method292(i, j, i1);
                 if (j1 == 2) {
                     worldController.method293(j, i1, i);
                     ObjectDef class46_1 = ObjectDef.forID(j2);
-                    if (i1 + class46_1.anInt744 > 103 || i + class46_1.anInt744 > 103 || i1 + ObjectDef.anInt761 > 103 || i + ObjectDef.anInt761 > 103)
+                    if (i1 + class46_1.width > 103 || i + class46_1.width > 103 || i1 + ObjectDef.length > 103 || i + ObjectDef.length > 103)
                         return;
-                    if (class46_1.aBoolean767)
-                        aClass11Array1230[j].method216(l2, class46_1.anInt744, i1, i, ObjectDef.anInt761, class46_1.aBoolean757);
+                    if (class46_1.solid)
+                        aClass11Array1230[j].method216(l2, class46_1.width, i1, i, ObjectDef.length, class46_1.impenetrable);
                 }
                 if (j1 == 3) {
                     worldController.method294(j, i, i1);
                     ObjectDef class46_2 = ObjectDef.forID(j2);
-                    if (class46_2.aBoolean767 && class46_2.hasActions)
+                    if (class46_2.solid && class46_2.hasActions)
                         aClass11Array1230[j].method218(i, i1);
                 }
             }

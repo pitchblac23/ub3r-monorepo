@@ -46,7 +46,7 @@ public class ItemOnItem implements Packet {
                 client.send(new SendMessage("You need 60 crafting to make the crystal key"));
             }
         }
-        if(itemUsed >= 6157 && itemUsed <= 6161 && useWith >= 6157 && useWith <= 6161) {
+        if (itemUsed >= 6157 && itemUsed <= 6161 && useWith >= 6157 && useWith <= 6161) {
             client.NpcDialogueSend = false;
             client.NpcDialogue = 10000;
         }
@@ -57,7 +57,7 @@ public class ItemOnItem implements Packet {
                     return;
                 }
                 int xp = 0;
-                    xp = Utils.grimy_herbs_xp[h];
+                xp = Utils.grimy_herbs_xp[h];
                 client.setPots(600, itemUsed, otherItem, Utils.unfinished[h], xp);
                 return;
             }
@@ -125,15 +125,15 @@ public class ItemOnItem implements Packet {
 
         if (itemUsed == 85 || otherItem == 85) {
             int otherId = itemUsed == 85 ? otherItem : itemUsed;
-            if(otherId == 1543 || otherId == 1544) {
-                if(!client.checkItem(otherId + 1)) {
+            if (otherId == 1543 || otherId == 1544) {
+                if (!client.checkItem(otherId + 1)) {
                     client.deleteItem(85, 1);
                     client.addItem(otherId + 1, 1);
                     client.send(new SendMessage("Your key shine bright and turned your " + client.GetItemName(85).toLowerCase() + " into a " + client.GetItemName(otherId + 1).toLowerCase()));
                 } else
                     client.send(new SendMessage("I already have a " + client.GetItemName(otherId + 1).toLowerCase() + " in " + (client.playerHasItem(otherId + 1) ? "my inventory!" : "my bank!")));
             } else if (otherId == 2382 || otherId == 2383) {
-                if(!client.checkItem(989) && (!client.checkItem(2382) || !client.checkItem(2383))) {
+                if (!client.checkItem(989) && (!client.checkItem(2382) || !client.checkItem(2383))) {
                     client.deleteItem(85, 1);
                     client.addItem(otherId == 2382 ? 2383 : 2382, 1);
                     client.send(new SendMessage("Your key shine bright and turned your " + client.GetItemName(85).toLowerCase() + " into a " + client.GetItemName(otherId == 2382 ? 2383 : 2382).toLowerCase()));
@@ -145,33 +145,35 @@ public class ItemOnItem implements Packet {
         }
 
         boolean rainbowHat = Server.itemManager.getName(itemUsed).endsWith("partyhat") && Server.itemManager.getName(otherItem).endsWith("partyhat") && Server.itemManager.isNote(itemUsed) && Server.itemManager.isNote(otherItem);
-        if(rainbowHat) {
+        if (rainbowHat) {
             boolean hasItems = true;
-            for(int i = 1038; i <= 1048 && hasItems; i += 2)
-                if(!client.playerHasItem(i))
+            for (int i = 1038; i <= 1048 && hasItems; i += 2)
+                if (!client.playerHasItem(i))
                     hasItems = false;
-            if(hasItems) {
-                for(int i = 1038; i <= 1048; i += 2)
+            if (hasItems) {
+                for (int i = 1038; i <= 1048; i += 2)
                     client.deleteItem(i, 1);
                 client.addItemSlot(11863, 1, itemUsedSlot);
-            } else client.send(new SendMessage("You need one of each partyhat to combine it into the rainbow partyhat!"));
+            } else
+                client.send(new SendMessage("You need one of each partyhat to combine it into the rainbow partyhat!"));
         }
         if (knife && (itemUsed == 11863 || otherItem == 11863)) {
             int slotRemain = 5 - client.getFreeSpace();
-            if(slotRemain <= 0) {
+            if (slotRemain <= 0) {
                 client.deleteItem(11863, 1);
-                for(int i = 1038; i <= 1048; i += 2)
+                for (int i = 1038; i <= 1048; i += 2)
                     client.addItem(i, 1);
                 client.send(new SendMessage("You gentle used the knife on the paper hat and cut it into different color partyhats."));
-            } else client.send(new SendMessage("You need to have " + (slotRemain == 1 ? "one" : slotRemain) + " empty slot"+ (slotRemain != 1 ? "s" : "")+" to tear the rainbow partyhat apart."));
+            } else
+                client.send(new SendMessage("You need to have " + (slotRemain == 1 ? "one" : slotRemain) + " empty slot" + (slotRemain != 1 ? "s" : "") + " to tear the rainbow partyhat apart."));
         }
-        if((itemUsed == 962 || otherItem == 962) && (itemUsed == 11863 || otherItem == 11863)) {
+        if ((itemUsed == 962 || otherItem == 962) && (itemUsed == 11863 || otherItem == 11863)) {
             client.deleteItem(962, itemUsed == 962 ? itemUsedSlot : usedWithSlot, 1);
             client.deleteItem(11863, itemUsed == 11863 ? itemUsedSlot : usedWithSlot, 1);
             client.addItemSlot(11862, 1, itemUsed == 11863 ? itemUsedSlot : usedWithSlot);
         }
         if (knife && (itemUsed == 11862 || otherItem == 11862)) {
-            if(client.getFreeSpace() > 0) {
+            if (client.getFreeSpace() > 0) {
                 client.deleteItem(11862, itemUsed == 11862 ? itemUsedSlot : usedWithSlot, 1);
                 client.addItemSlot(11863, 1, itemUsed == 11862 ? itemUsedSlot : usedWithSlot);
                 client.addItem(962, 1);
@@ -180,37 +182,37 @@ public class ItemOnItem implements Packet {
         }
 
         int[][] dyes = {{-1, 1019}, {1763, 1007}, {1765, 1023}, {1767, 1021}, {1769, 1031}, {1771, 1027}, {1773, 1029}}; //Black, Red, yellow, blue, orange, green, purple
-        for(int i = 0; i < dyes.length; i++)
-            if(itemUsed == dyes[i][0] || otherItem == dyes[i][0]) {
-                for(int dye = 0; dye < dyes.length; dye++)
-                    if((itemUsed == dyes[i][0] && otherItem == dyes[dye][1]) || (otherItem == dyes[i][0] && itemUsed == dyes[dye][1])) {
-                        if(dyes[dye][1] != dyes[i][1]) {
+        for (int i = 0; i < dyes.length; i++)
+            if (itemUsed == dyes[i][0] || otherItem == dyes[i][0]) {
+                for (int dye = 0; dye < dyes.length; dye++)
+                    if ((itemUsed == dyes[i][0] && otherItem == dyes[dye][1]) || (otherItem == dyes[i][0] && itemUsed == dyes[dye][1])) {
+                        if (dyes[dye][1] != dyes[i][1]) {
                             client.deleteItem(itemUsed, itemUsedSlot, 1);
-                            client.deleteItem(otherItem, usedWithSlot,1);
+                            client.deleteItem(otherItem, usedWithSlot, 1);
                             client.addItemSlot(dyes[i][1], 1, itemUsed == dyes[dye][1] ? itemUsedSlot : usedWithSlot);
                         } else client.send(new SendMessage("There is no point in using the same color as the cape!"));
-                    break;
+                        break;
                     }
             }
 
         int[] otherSlayerItems = {8923, 6708, 4166};
         boolean maskCreation = false, blackmask = (itemUsed == 8921 && otherItem != 11784) || (itemUsed == 11784 && otherItem != 8921) || (otherItem == 8921 && itemUsed != 11784) || (otherItem == 11784 && itemUsed != 8921);
-        if(blackmask) {
-            for(int i = 0; i < otherSlayerItems.length && !maskCreation; i++)
-                if(itemUsed == otherSlayerItems[i] || otherItem == otherSlayerItems[i])
+        if (blackmask) {
+            for (int i = 0; i < otherSlayerItems.length && !maskCreation; i++)
+                if (itemUsed == otherSlayerItems[i] || otherItem == otherSlayerItems[i])
                     maskCreation = true;
-            if(maskCreation) {
-                if(client.getSkillLevel(Skills.CRAFTING) >= 70) {
+            if (maskCreation) {
+                if (client.getSkillLevel(Skills.CRAFTING) >= 70) {
                     boolean gotItems = true;
-                    for(int i = 0; i < otherSlayerItems.length && gotItems; i++)
-                        if(!client.playerHasItem(otherSlayerItems[i])) {
+                    for (int i = 0; i < otherSlayerItems.length && gotItems; i++)
+                        if (!client.playerHasItem(otherSlayerItems[i])) {
                             gotItems = false;
                             client.send(new SendMessage("You are missing " + Server.itemManager.getName(otherSlayerItems[i]).toLowerCase() + " in order to craft the " + Server.itemManager.getName(itemUsed == 8921 || otherItem == 8921 ? 11864 : 11865).toLowerCase() + "!"));
                         }
-                    if(gotItems) {
-                        for(int i = 0; i < otherSlayerItems.length && gotItems; i++)
+                    if (gotItems) {
+                        for (int i = 0; i < otherSlayerItems.length && gotItems; i++)
                             client.deleteItem(otherSlayerItems[i], 1);
-                        client.deleteItem(itemUsed == 8921 || otherItem == 8921 ? 8921: 11784, 1);
+                        client.deleteItem(itemUsed == 8921 || otherItem == 8921 ? 8921 : 11784, 1);
                         client.addItem(itemUsed == 8921 || otherItem == 8921 ? 11864 : 11865, 1);
                     }
                 } else client.send(new SendMessage("You need level 70 crafting to combine these items!"));
@@ -219,14 +221,6 @@ public class ItemOnItem implements Packet {
         if ((itemUsed == 1733 || otherItem == 1733) && (itemUsed == 1741 || otherItem == 1741)) {
             client.showInterface(2311);
         }
-        for (int id = 0; id < Constants.leathers.length; id++) {
-            if ((itemUsed == 1733 || otherItem == 1733)
-                    && (itemUsed == Constants.leathers[id] || otherItem == Constants.leathers[id])) {
-                craftMenu(id, client);
-                cIndex = id;
-            }
-        }
-
         if (knife && (itemUsed == 1511 || otherItem == 1511)) {
             client.resetAction();
             client.shafting = true;
@@ -273,8 +267,7 @@ public class ItemOnItem implements Packet {
                     && (itemUsed == 53 || otherItem == 53)) {
                 client.resetAction();
                 if (client.getLevel(Skills.FLETCHING) < Constants.required[h]) {
-                    client.send(new SendMessage("Requires level " + Constants.required[h]
-                            + " fletching"));
+                    client.send(new SendMessage("Requires level " + Constants.required[h] + " fletching"));
                     return;
                 }
                 client.send(new SendString("" + client.GetItemName(Constants.arrows[h]), 2799));
@@ -339,6 +332,14 @@ public class ItemOnItem implements Packet {
                 client.fletchOtherTime = 1200;
             }
         }
+        for (int id = 0; id < Constants.leathers.length; id++) {
+            if ((itemUsed == 1733 || otherItem == 1733)
+                    && (itemUsed == Constants.leathers[id] || otherItem == Constants.leathers[id])) {
+                craftMenu(id, client);
+                cIndex = id;
+            }
+        }
+
         if (itemUsed == 1755 || otherItem == 1755) {
             int gem = -1, slot = -1;
             if (itemUsed == 1755)
@@ -359,9 +360,8 @@ public class ItemOnItem implements Packet {
             client.deleteItem(gem, 1);
             client.addItem(Utils.cutGems[slot], 1);
             client.giveExperience((int) (Utils.gemExp[slot] * 6), Skills.CRAFTING);
-            client.send(new SendMessage("You cut the " + client.GetItemName(Utils.cutGems[slot]) + ""));
+            client.send(new SendMessage("You cut the " + client.GetItemName(Utils.cutGems[slot]) + "."));
         }
-
         if (itemUsed == 1759 || otherItem == 1759) {
             int amulet;
             if (itemUsed == 1759)

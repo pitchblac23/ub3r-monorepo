@@ -87,8 +87,8 @@ final class Animable_Sub5 extends Animable {
             }
         }
         ObjectDef class46 = ObjectDef.forID(anInt1610);
-        anInt1601 = class46.anInt774;
-        anInt1602 = class46.anInt749;
+        anInt1601 = class46.varbit;
+        anInt1602 = class46.varp;
         anIntArray1600 = class46.childrenIDs;
     }
 }

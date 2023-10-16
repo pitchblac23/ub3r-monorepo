@@ -149,7 +149,7 @@ public class Commands implements Packet {
                     else if(npcName.equalsIgnoreCase(client.boss_name[13]) || npcName.equalsIgnoreCase("jad")) //TzTok-Jad
                         client.respawnBoss(3127);
                 }
-                if (command.startsWith("bosstele")) {
+                if (cmd[0].equalsIgnoreCase("bosstele")) {
                     String npcName = command.substring(cmd[0].length() + 1).replaceAll(" ", "_");
                     if(npcName.equalsIgnoreCase(client.boss_name[0])) //Dad
                         client.triggerTele(2543, 3091, 0,false);
@@ -488,6 +488,30 @@ public class Commands implements Packet {
                     client.setExperience(Skills.getXPForLevel(level), Skills.getSkill(skill));
                     client.setLevel(level, Skills.getSkill(skill));
                     client.refreshSkill(Skills.getSkill(skill));
+                }
+                if (cmd[0].equalsIgnoreCase("setlvl")) {
+                    String skillName = cmd[1];
+                    int level = Integer.parseInt(cmd[2]);
+                    int skillId = -1;
+
+                    if (skillName.equalsIgnoreCase("att")) {
+                        skillId = 0;
+                    } else if (skillName.equalsIgnoreCase("def")) {
+                        skillId = 1;
+                    } else if (skillName.equalsIgnoreCase("str")) {
+                        skillId = 2;
+                    } else if (skillName.equalsIgnoreCase("hp")) {
+                        skillId = 3;
+                    } else if (skillName.equalsIgnoreCase("range")) {
+                        skillId = 4;
+                    } else if (skillName.equalsIgnoreCase("prayer")) {
+                        skillId = 5;
+                    } else if (skillName.equalsIgnoreCase("magic")) {
+                        skillId = 6;
+                    }
+                    client.setExperience(Skills.getXPForLevel(level), Skills.getSkill(skillId));
+                    client.setLevel(level, Skills.getSkill(skillId));
+                    client.refreshSkill(Skills.getSkill(skillId));
                 }
                 if (cmd[0].equalsIgnoreCase("setxp")) {
                     int skill = Integer.parseInt(cmd[1]);
@@ -858,7 +882,7 @@ public class Commands implements Packet {
                         if (n == null)
                             client.send(new SendMessage("This npc have no data!"));
                         else if (n.getDrops().isEmpty())
-                            client.send(new SendMessage(n.getName() + " do not got any drops!"));
+                            client.send(new SendMessage(n.getName() + "'s do not have any drops!"));
                         else {
                             ArrayList<Integer> lootedItem = new ArrayList<>();
                             ArrayList<Integer> lootedAmount = new ArrayList<>();
@@ -1119,7 +1143,7 @@ public class Commands implements Packet {
                     if (n == null)
                         client.send(new SendMessage("This npc have no data!"));
                     else if (n.getDrops().isEmpty())
-                        client.send(new SendMessage(n.getName() + " do not got any drops!"));
+                        client.send(new SendMessage(n.getName() + "'s do not have any drops!"));
                     else {
                         ArrayList<Integer> lootedItem = new ArrayList<>();
                         ArrayList<Integer> lootedAmount = new ArrayList<>();

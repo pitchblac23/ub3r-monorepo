@@ -91,7 +91,7 @@ public class ClickNpc implements Packet {
             }
             client.showNPCChat(3306, 590, new String[]{"There is currently " + peopleInWild + " player" + (peopleInWild != 1 ? "s" : "") + " in the wild!", "There is " + peopleInEdge + " player" + (peopleInEdge != 1 ? "s" : "") + " in Edgeville!"});
         }
-        if (npcId == 394 || npcId == 395 || npcId == 7677) { /* Banking */
+        if (npcId == 1613 || npcId == 1618 || npcId == 7677) { /* Banking */
             client.NpcWanneTalk = 1;
             client.convoId = 0;
         } else if (npcId == 637) { /* Aubury */

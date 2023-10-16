@@ -357,7 +357,7 @@ public final class EntityDef {
                     prams.put(key, value);
                 }
             } else {
-                System.err.printf("Unrecognized opcode {"+ opcode +"}");
+                System.err.printf("Unrecognized EntityDef opcode {"+ opcode +"}");
             }
         } while (true);
     }
