@@ -1,3 +1,4 @@
 data
 .env
 .initialized_database
+docker-compose.yml
