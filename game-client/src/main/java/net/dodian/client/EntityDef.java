@@ -2,6 +2,7 @@ package net.dodian.client;
 
 import java.io.FileWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -120,15 +121,15 @@ public final class EntityDef {
                     fw.write(System.getProperty("line.separator"));
                     fw.write("itemDef.name = \"" + def.name + "\";");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("Npc.actions = new String[" + Arrays.toString(def.actions) +"];");
+                    fw.write("Npc.actions = [" + Arrays.toString(def.actions) +"];");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("Npc.stand= " + def.standAnim + ";");
+                    fw.write("Npc.stand = " + def.standAnim + ";");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("Npc.walk= " + def.walkAnim + ";");
+                    fw.write("Npc.walk = " + def.walkAnim + ";");
                     fw.write(System.getProperty("line.separator"));
                     if (def.description != null) {
-                        String test = new String(def.description, Charset.forName("UTF-8"));
-                        fw.write("Npc.description= " + test + ";");
+                        String test = new String(def.description, StandardCharsets.UTF_8);
+                        fw.write("Npc.description = " + test + ";");
                         fw.write(System.getProperty("line.separator"));
                     }
                     fw.write("Npc.combat = " + def.combatLevel + ";");
@@ -248,7 +249,7 @@ public final class EntityDef {
                 }
             } else if (opcode == 18) {
                 stream.readUnsignedShort();
-            } else if (opcode >= 30 && opcode < 35) {//40//35
+            } else if (opcode >= 30 && opcode < 35) {//40
                 if (actions == null)
                     actions = new String[5];
                 actions[opcode - 30] = stream.readString();
@@ -307,10 +308,10 @@ public final class EntityDef {
                 if (varpIndex == 65535)
                     varpIndex = -1;
                 int length = stream.readUnsignedByte();
-                childrenIDs = new int[length + 2];//+1+2
+                childrenIDs = new int[length + 2];//+1
                 for (int index = 0; index <= length; index++) {
                     childrenIDs[index] = stream.readUnsignedShort();
-                    if (childrenIDs[index] == '\uffff')//65535'\uffff'
+                    if (childrenIDs[index] == '\uffff')//65535
                         childrenIDs[index] = -1;
                 }
                 childrenIDs[length + 1] = -1;

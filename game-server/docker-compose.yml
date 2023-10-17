@@ -13,7 +13,7 @@ services:
       MYSQL_DATABASE: dodiannet
       MYSQL_USER: dodian
       MYSQL_PASSWORD: dodian_local_development_123
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'false'
     ports:
       - '3306:3306'
     volumes:
@@ -23,7 +23,7 @@ services:
       # Do note that these files (the way they are done in this example) need to be in the same directory as this file.
       # You can find them in the "database"-directory of the game-server module
       # !! Everything depends on the mandatory_tables.sql, unless you take care of the database another way
-      - ./mandatory_tables.sql:/docker-entrypoint-initdb.d/1_mandatory_game_tables.sql
-      - ./dodian_default_data.sql:/docker-entrypoint-initdb.d/2_dodian_default_data.sql
-      - ./convenient_data.sql:/docker-entrypoint-initdb.d/3_convenient_game_data.sql
-      - ./dummy_development_data.sql:/docker-entrypoint-initdb/4_dummy_game_data.sql
+      #- ./mandatory_tables.sql:/docker-entrypoint-initdb.d/1_mandatory_game_tables.sql
+      #- ./dodian_default_data.sql:/docker-entrypoint-initdb.d/2_dodian_default_data.sql
+      #- ./convenient_data.sql:/docker-entrypoint-initdb.d/3_convenient_game_data.sql
+      #- ./dummy_development_data.sql:/docker-entrypoint-initdb/4_dummy_game_data.sql

@@ -94,7 +94,7 @@ public class ClickNpc implements Packet {
         if (npcId == 1613 || npcId == 1618 || npcId == 7677) { /* Banking */
             client.NpcWanneTalk = 1;
             client.convoId = 0;
-        } else if (npcId == 637) { /* Aubury */
+        } else if (npcId == 11435) { /* Aubury */
             client.NpcWanneTalk = 3;
             client.convoId = 3;
         } else if (npcId == 3648) {

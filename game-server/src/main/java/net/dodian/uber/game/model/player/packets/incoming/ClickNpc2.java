@@ -87,10 +87,10 @@ public class ClickNpc2 implements Packet {
         }
         if (npcId == 394 || npcId == 395 || npcId == 7677) { /* Banking */
             client.WanneBank = 1;
-        } else if (npcId == 5034 || npcId == 844 || npcId == 462) {
+        } else if (npcId == 11433) {
             client.stairs = 26;
             client.stairDistance = 1;
-            client.Essence = npcId == 5034 ? 1 : npcId == 844 ? 2 : 3;
+            client.Essence = 1;
         } else if (npcId == 2345) {
             client.NpcWanneTalk = npcId + 1;
         } else if (npcId == 2180) {
@@ -103,84 +103,84 @@ public class ClickNpc2 implements Packet {
 
 //3, 9, 10, 11, 15, 18, 20, 25, 34, 40, 55
         /*Shops Start*/
-        else if (npcId == 522 || npcId == 523) { // shopkeeper + Assistant
-            client.WanneShop = 1; // Varrock General Store
-        } else if (npcId == 506 || npcId == 527) { // ShopKeeper + Assistant
-            client.WanneShop = 3; // Falador General Store
-        } else if (npcId == 4965) { // Gnome general store
+        else if (npcId == 522 || npcId == 523) { // shopkeeper + Assistant General Store
+            client.WanneShop = 1;
+        } else if (npcId == 2813 || npcId == 527) { // ShopKeeper + Assistant General Store
+            client.WanneShop = 3;
+        } else if (npcId == 4965) {
             client.WanneShop = 4;
-        } else if (npcId == 577) { // Cassie
-            client.WanneShop = 4; // Falador Shield Shop
+        } else if (npcId == 577) { // Cassie Falador Shield Shop
+            client.WanneShop = 4;
         } else if (npcId == 1032) { // Catherby general store
             client.WanneShop = 5;
-        } else if (npcId == 580) { // Flynn
-            client.WanneShop = 5; // Falador Mace Shop
-        } else if (npcId == 538) { // Peksa
-            client.WanneShop = 6; // Barbarian Vullage Helmet Shop
-        } else if (npcId == 546) { // Zaff
-            client.WanneShop = 7; // Varrock Staff Shop
-        } else if (npcId == 548) { // Thessalia
-            client.WanneShop = 8; // Varrock Cloth shop
+        } else if (npcId == 580) { // Flynn Falador Mace Shop
+            client.WanneShop = 5;
+        } else if (npcId == 538) { // Peksa Barbarian Vullage Helmet Shop
+            client.WanneShop = 6;
+        } else if (npcId == 546) { // Zaff Varrock Staff Shop
+            client.WanneShop = 7;
+        } else if (npcId == 548) { // Thessalia Varrock Cloth shop
+            client.WanneShop = 8;
         }else if (npcId == 637) { // Aubury rune shop
-            client.WanneShop = 9; // Aubury Magic Shop
-        }else if (npcId == 535) { // Horvik
-            client.WanneShop = 10; // Varrock Armor shop
+            client.WanneShop = 9;
+        }else if (npcId == 2882) { // Horvik Armor shop
+            client.WanneShop = 10;
         } else if (npcId == 6060) { // Bow and arrows
             client.WanneShop = 11;
-        } else if (npcId == 584) { // Heruin
-            client.WanneShop = 12; // Falador Gem Shop
-        } else if (npcId == 581) { // Wayne
-            client.WanneShop = 13; // Falador Chainmail Shop
-        } else if (npcId == 585) { // Rommik
-            client.WanneShop = 14; // Rimmington Crafting Shop
-        } else if (npcId == 531 || npcId == 530) { // ShopKeeper + Assistant
-            client.WanneShop = 15; // Rimmington General Store
-        } else if (npcId == 1860) { // Brian
-            client.WanneShop = 16; // Rimmington Archery Shop
-        } else if (npcId == 557) { // Wydin
-            client.WanneShop = 17; // Port Sarim Food Shop
-        } else if (npcId == 1027) { // Gerrant
-            client.WanneShop = 18; // Port Sarim Fishing Shop
-        } else if (npcId == 559) { // Brian
-            client.WanneShop = 19; // Port Sarim Battleaxe Shop
-        } else if (npcId == 556) { // Grum
-            client.WanneShop = 20; // Port Sarim Jewelery Shop
-        } else if (npcId == 583) { // Betty
-            client.WanneShop = 21; // Port Sarim Magic Shop
-        } else if (npcId == 520 || npcId == 521) { // ShopKeeper + Assistant
-            client.WanneShop = 22; // Lumbridge General Store
-        } else if (npcId == 519) { // Bob
-            client.WanneShop = 23; // Lumbridge Axe Shop
-        } else if (npcId == 541) { // Zeke
-            client.WanneShop = 24; // Al-Kharid Scimitar Shop
-        } else if (npcId == 545) { // Dommik
-            client.WanneShop = 25; // Al-Kharid Crafting Shop
-        } else if (npcId == 5809) {
-            client.WanneShop = 25; // Crafting shop
-        } else if (npcId == 524 || npcId == 525) { // ShopKeeper + Assistant
-            client.WanneShop = 26; // Al-Kharid General Store
-        } else if (npcId == 542) { // Louie Legs
-            client.WanneShop = 27; // Al-Kharid Legs Shop
-        } else if (npcId == 544) { // Ranael
-            client.WanneShop = 28; // Al-Kharid Skirt Shop
-        } else if (npcId == 2621) { // Hur-Koz
-            client.WanneShop = 29; // TzHaar Shop Weapons,Amour
-        } else if (npcId == 2622) { // Hur-Lek
-            client.WanneShop = 30; // TzHaar Shop Runes
-        } else if (npcId == 2620) { // Hur-Tel
-            client.WanneShop = 31; // TzHaar Shop General Store
-        } else if (npcId == 692) { // Throwing shop
-            client.WanneShop = 32; // Authentic Throwing Weapons
-        } else if (npcId == 6059) { // Archer's Armour
-            client.WanneShop = 34; // Aaron's Archery Appendages
-        } else if (npcId == 537) { // Scavvo
-            client.WanneShop = 35; // Champion's Rune shop
-        } else if (npcId == 536) { // Valaine
-            client.WanneShop = 36; // Champion's guild shop
+        } else if (npcId == 584) { // Heruin Falador Gem Shop
+            client.WanneShop = 12;
+        } else if (npcId == 581) { // Wayne Falador Chainmail Shop
+            client.WanneShop = 13;
+        } else if (npcId == 585) { // Rommik Rimmington Crafting Shop
+            client.WanneShop = 14;
+        } else if (npcId == 531 || npcId == 530) { // ShopKeeper + Assistant General Store
+            client.WanneShop = 15;
+        } else if (npcId == 1860) { // Brian Rimmington Archery Shop
+            client.WanneShop = 16;
+        } else if (npcId == 557) { // Wydin Port Sarim Food Shop
+            client.WanneShop = 17;
+        } else if (npcId == 1027) { // Gerrant Port Sarim Fishing Shop
+            client.WanneShop = 18;
+        } else if (npcId == 559) { // Brian Port Sarim Battleaxe Shop
+            client.WanneShop = 19;
+        } else if (npcId == 556) { // Grum Port Sarim Jewelery Shop
+            client.WanneShop = 20;
+        } else if (npcId == 583) { // Betty Port Sarim Magic Shop
+            client.WanneShop = 21;
+        } else if (npcId == 520 || npcId == 521) { // ShopKeeper + Assistant General Store
+            client.WanneShop = 22;
+        } else if (npcId == 519) { // Bob Lumbridge Axe Shop
+            client.WanneShop = 23;
+        } else if (npcId == 541) { // Zeke Al-Kharid Scimitar Shop
+            client.WanneShop = 24;
+        } else if (npcId == 545) { // Dommik Al-Kharid Crafting Shop
+            client.WanneShop = 25;
+        } else if (npcId == 5809) { // Crafting shop
+            client.WanneShop = 25;
+        } else if (npcId == 524 || npcId == 525) { // ShopKeeper + Assistant General Store
+            client.WanneShop = 26;
+        } else if (npcId == 542) { // Louie Legs Al-Kharid Legs Shop
+            client.WanneShop = 27;
+        } else if (npcId == 544) { // Ranael Al-Kharid Skirt Shop
+            client.WanneShop = 28;
+        } else if (npcId == 2621) { // Hur-Koz TzHaar Shop Weapons,Amour
+            client.WanneShop = 29;
+        } else if (npcId == 2622) { // Hur-Lek TzHaar Shop Runes
+            client.WanneShop = 30;
+        } else if (npcId == 2620) { // Hur-Tel TzHaar Shop General Store
+            client.WanneShop = 31;
+        } else if (npcId == 692) { // Throwing shop Authentic Throwing Weapons
+            client.WanneShop = 32;
+        } else if (npcId == 6059) { // Archer's Armour Aaron's Archery Appendages
+            client.WanneShop = 34;
+        } else if (npcId == 537) { // Scavvo Champion's Rune shop
+            client.WanneShop = 35;
+        } else if (npcId == 536) { // Valaine Champion's guild shop
+            client.WanneShop = 36;
         } else if (npcId == 933) { // Legend's Shop
-            client.WanneShop = 37; // Legend's Shop
+            client.WanneShop = 37;
         } else if (npcId == 932) { // Legends General Store
-            client.WanneShop = 38; // Legend's Gen. Store
+            client.WanneShop = 38;
         }
         /*Ends*/
         else {

@@ -424,7 +424,7 @@ public final class ObjectDef {
                 decorDisplacement = stream.readUnsignedByte();
             else if (opcode == 29)
                 ambientLighting = stream.readSignedByte();
-            else if (opcode >= 30 && opcode < 35) {
+            else if (opcode >= 30 && opcode < 39) {
                 if (actions == null)
                     actions = new String[5];
                 actions[opcode - 30] = stream.readString();
