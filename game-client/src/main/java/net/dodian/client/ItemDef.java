@@ -1,9 +1,9 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 import java.io.FileWriter;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ItemDef {
 
@@ -36,16 +36,16 @@ public final class ItemDef {
 
         stream = new Stream(archive.getDataForName("obj.dat"));
         Stream stream = new Stream(archive.getDataForName("obj.idx"));
-        totalItems = stream.readUnsignedWord() +21;
-        System.out.println(String.format("Loaded: %d items", totalItems));
-        streamIndices = new int[totalItems + 1];
+        totalItems = stream.readUnsignedShort();
+        System.out.printf("Loaded: %d items%n", totalItems);
+        streamIndices = new int[totalItems];
         int i = 2;
-        for (int j = 0; j < totalItems -21; j++) {
+        for (int j = 0; j < totalItems; j++) {
             streamIndices[j] = i;
-            i += stream.readUnsignedWord();
+            i += stream.readUnsignedShort();
         }
-        cache = new ItemDef[20];
-        for (int k = 0; k < 20; k++)
+        cache = new ItemDef[10];
+        for (int k = 0; k < 10; k++)
             cache[k] = new ItemDef();
         itemDump(totalItems);
     }
@@ -56,11 +56,11 @@ public final class ItemDef {
             for (int i = 0; i < max; i++) {
                 ItemDef def = ItemDef.forID(i);
                 if (def != null) {
-                    fw.write("case " + i + ":");
+                    fw.write("Id " + i + ":");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("itemDef.name = \"" + def.name + "\";");
+                    fw.write("Item Name = " + def.name);
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("Item.actions = new String[" + Arrays.toString(def.itemActions) +"];");
+                    fw.write("Actions = [" + Arrays.toString(def.itemActions) +"];");
                     fw.write(System.getProperty("line.separator"));
                     fw.write("break;");
                     fw.write(System.getProperty("line.separator"));
@@ -90,7 +90,7 @@ public final class ItemDef {
         Model model = Model.method462(k);
         if (l != -1) {
             Model model_1 = Model.method462(l);
-            Model aclass30_sub2_sub4_sub6s[] = {model, model_1};
+            Model[] aclass30_sub2_sub4_sub6s = {model, model_1};
             model = new Model(2, aclass30_sub2_sub4_sub6s);
         }
         if (modifiedModelColors != null) {
@@ -145,18 +145,14 @@ public final class ItemDef {
                 Model model_2 = Model.method462(k);
                 Model aclass30_sub2_sub4_sub6s[] = {model, model_2};
                 model = new Model(2, aclass30_sub2_sub4_sub6s);
-
             }
-
         if (i == 0 && maleOffset != 0)
             model.method475(0, maleOffset, 0);
-
         if (i == 1 && femaleOffset != 0)
             model.method475(0, femaleOffset, 0);
         if (modifiedModelColors != null) {
             for (int i1 = 0; i1 < modifiedModelColors.length; i1++)
-                model.method476(modifiedModelColors[i1],
-                        originalModelColors[i1]);
+                model.method476(modifiedModelColors[i1], originalModelColors[i1]);
         }
         return model;
     }
@@ -218,6 +214,9 @@ public final class ItemDef {
     }
 
     private static void customValues(ItemDef def) {
+        //def.itemActions = new String[]{null, "option1", null, null, null};
+        //def.originalModelColors[0] = is the modified color;
+        //def.modifiedModelColors[0] = is the original color;
         switch (def.id) {
             case 5733:
                 def.name = "Admin Tool";
@@ -225,42 +224,6 @@ public final class ItemDef {
                 def.itemActions[1] = "Option 2";
                 def.itemActions[2] = "Option 3";
                 def.itemActions[3] = "Option 4";
-                break;
-            case 7453:
-                def.name = "Hardleather gloves";
-                break;
-            case 11862:
-                def.name = "Black partyhat";
-                break;
-            case 11863:
-                def.name = "Rainbow partyhat";
-                break;
-            case 7454:
-                def.name = "Bronze gloves";
-                break;
-            case 7455:
-                def.name = "Iron gloves";
-                break;
-            case 7456:
-                def.name = "Steel gloves";
-                break;
-            case 7457:
-                def.name = "Black gloves";
-                break;
-            case 7458:
-                def.name = "Mithril gloves";
-                break;
-            case 7459:
-                def.name = "Adamant gloves";
-                break;
-            case 7460:
-                def.name = "Rune gloves";
-                break;
-            case 7461:
-                def.name = "Dragon gloves";
-                break;
-            case 7462:
-                def.name = "Barrows gloves";
                 break;
             case 12854:
                 def.name = "Santa's sack";
@@ -289,19 +252,8 @@ public final class ItemDef {
                 def.name = "Event shards";
                 def.itemActions[2] = "Info";
                 break;
-            case 21295://infernalcape
-            	def.name = "Infernal Cape";
-				def.originalModelColors = new int[1];
-				def.modifiedModelColors = new int[1];
-				def.originalModelColors[0] = 40;
-				def.modifiedModelColors[0] = 40;
-                break;
             case 11738:
-                def.name = "Herb Box";
-                def.itemActions[0] = "Open";
-                def.itemActions[2] = null;
-                def.itemActions[3] = null;
-                def.itemActions[4] = null;
+                def.itemActions = new String[]{"Open", null, null, null, null};
                 break;
             case 480:
                 def.modelID = 65298;
@@ -317,22 +269,8 @@ public final class ItemDef {
                 def.originalModelColors[0] = 33;
                 def.modifiedModelColors[0] = 61;
                 break;
-            case 490:
-                def.modelID = 65298;
-                def.originalModelColors = new int[1];
-                def.modifiedModelColors = new int[1];
-                def.originalModelColors[0] = 36133;
-                def.modifiedModelColors[0] = 61;
-                break;
             case 484://steel
                 def.modelID = 65298;
-                break;
-            case 488://adamant
-                def.modelID = 65298;
-                def.originalModelColors = new int[1];
-                def.modifiedModelColors = new int[1];
-                def.originalModelColors[0] = 21662;
-                def.modifiedModelColors[0] = 61;
                 break;
             case 486://mithril
                 def.modelID = 65298;
@@ -341,12 +279,19 @@ public final class ItemDef {
                 def.originalModelColors[0] = 43297;
                 def.modifiedModelColors[0] = 61;
                 break;
-            case 10748:
-            case 10750:
-            case 10752:
-            case 10754:
-            case 10756:
-                def.itemActions = new String[]{null, "Wear", null, null, "Drop"};
+            case 488://adamant
+                def.modelID = 65298;
+                def.originalModelColors = new int[1];
+                def.modifiedModelColors = new int[1];
+                def.originalModelColors[0] = 21662;
+                def.modifiedModelColors[0] = 61;
+                break;
+            case 490:
+                def.modelID = 65298;
+                def.originalModelColors = new int[1];
+                def.modifiedModelColors = new int[1];
+                def.originalModelColors[0] = 36133;
+                def.modifiedModelColors[0] = 61;
                 break;
         }
         if (def.notedTemplate != -1)
@@ -410,7 +355,7 @@ public final class ItemDef {
             return null;
         Sprite sprite = null;
         if (itemDef.notedTemplate != -1) {
-            sprite = getSprite(itemDef.unnotedTemplate, 20, -1);
+            sprite = getSprite(itemDef.unnotedTemplate, 10, -1);
             if (sprite == null)
                 return null;
         }
@@ -427,6 +372,7 @@ public final class ItemDef {
         int j3 = DrawingArea.bottomY;
         Texture.aBoolean1464 = false;
         DrawingArea.initDrawingArea(32, 32, enabledSprite.myPixels);
+        //DrawingArea.method336(0, 0, 32, 32, 0);
         DrawingArea.method336(32, 0, 0, 0, 32);
         Texture.method364();
         int k3 = itemDef.modelZoom;
@@ -557,12 +503,11 @@ public final class ItemDef {
         if (modifiedModelColors != null) {
             for (int l = 0; l < modifiedModelColors.length; l++)
                 model.method476(modifiedModelColors[l], originalModelColors[l]);
-
         }
         return model;
     }
     private void readValues(Stream stream) {
-        do {
+        while (true) {
             int opcode = stream.readUnsignedByte();
             if (opcode == 0)
                 return;
@@ -579,27 +524,35 @@ public final class ItemDef {
             else if (opcode == 7) {
                 modelOffset1 = stream.readUnsignedWord();
                 if (modelOffset1 > 32767)
-                    modelOffset1 -= 0x10000;
+                    modelOffset1 -= 65536;//0x10000
             } else if (opcode == 8) {
                 modelOffset2 = stream.readUnsignedWord();
                 if (modelOffset2 > 32767)
-                    modelOffset2 -= 0x10000;
-            } else if (opcode == 11)
+                    modelOffset2 -= 65536;
+            } else if (opcode == 9)
+                unknown1 = stream.readString();
+            else if (opcode == 11)
                 stackable = true;
             else if (opcode == 12)
                 value = stream.readDWord();
+            else if (opcode == 13)
+                wearPos1 = stream.readBytes();
+            else if (opcode == 14)
+                wearPos2 = stream.readBytes();
             else if (opcode == 16)
                 membersObject = true;
             else if (opcode == 23) {
                 maleModel0 = stream.readUnsignedWord();
                 maleOffset = stream.readSignedByte();
             } else if (opcode == 24)
-                maleHeadModel = stream.readUnsignedWord();
+                maleModel1 = stream.readUnsignedWord();
             else if (opcode == 25) {
                 femaleModel0 = stream.readUnsignedWord();
                 femaleOffset = stream.readSignedByte();
             } else if (opcode == 26)
                 femaleModel1 = stream.readUnsignedWord();
+            else if (opcode == 27)
+                wearPos3 = stream.readBytes();
             else if (opcode >= 30 && opcode < 35) {
                 if (groundActions == null)
                     groundActions = new String[5];
@@ -620,18 +573,18 @@ public final class ItemDef {
                 }
             } else if (opcode == 41) {
                 int var5 = stream.readUnsignedByte();
-                orginalTexture = new int[var5];
+                originalTexture = new int[var5];
                 modifiedTexture = new int[var5];
-
                 for (int var4 = 0; var4 < var5; ++var4) {
-                    orginalTexture[var4] = (short) stream.readUnsignedShort();
+                    originalTexture[var4] = (short) stream.readUnsignedShort();
                     modifiedTexture[var4] = (short) stream.readUnsignedShort();
                 }
             } else if (opcode == 42)
-                /*shitCLickIndex*/
-                stream.readUnsignedByte();
+                shiftClickDropIndex = stream.readUnsignedByte();
             else if (opcode == 65)
                 searchable = true;
+            else if (opcode == 75)
+                weight = stream.readUnsignedWord();
             else if (opcode == 78)
                 maleModel2 = stream.readUnsignedWord();
             else if (opcode == 79)
@@ -645,21 +598,20 @@ public final class ItemDef {
             else if (opcode == 93)
                 femaleHeadModel2 = stream.readUnsignedWord();
             else if (opcode == 94)
-                /*category?*/
-                stream.readUnsignedShort();
+                category = stream.readUnsignedShort();
             else if (opcode == 95)
                 modelRotationZ = stream.readUnsignedWord();
             else if (opcode == 97)
-                unnotedTemplate = stream.readUnsignedWord();
+                unnotedTemplate = stream.readUnsignedWord() & 0xFFFF;
             else if (opcode == 98)
-                notedTemplate = stream.readUnsignedWord();
+                notedTemplate = stream.readUnsignedWord() & 0xFFFF;
             else if (opcode >= 100 && opcode < 110) {
                 if (stackIDs == null) {
                     stackIDs = new int[10];
                     stackAmounts = new int[10];
                 }
-                stackIDs[opcode - 100] = stream.readUnsignedWord();
-                stackAmounts[opcode - 100] = stream.readUnsignedWord();
+                stackIDs[opcode - 100] = stream.readUnsignedShort();
+                stackAmounts[opcode - 100] = stream.readUnsignedShort();
             } else if (opcode == 110)
                 resizeX = stream.readUnsignedWord();
             else if (opcode == 111)
@@ -680,66 +632,99 @@ public final class ItemDef {
                 stream.readUnsignedWord(); // placeholder id
             else if (opcode == 149)
                 stream.readUnsignedWord(); // placeholder template
-            else
+            else if (opcode == 249) {
+                int length = stream.readUnsignedByte();
+
+                Map<Integer, Object> params = new HashMap<>(length);
+
+                for (int i = 0; i < length; i++) {
+                    boolean isString = stream.readUnsignedByte() == 1;
+                    int key = stream.read3Bytes();
+                    Object value;
+
+                    if (isString) { value = stream.readString(); }
+                    else { value = stream.readDWord(); }
+                    params.put(key, value);
+                }
+            } else
             System.out.println("Unrecognized itemDef opcode {"+ opcode +"}");
-        } while (true);
+        }
     }
 
-    private ItemDef() {
-        id = -1;
-    }
+    private ItemDef() { id = -1; }
 
-    public int femaleOffset;
-    public int value;
-    public int[] modifiedModelColors;
-    public int[] originalModelColors;
-    public int[] orginalTexture;
-    public int[] modifiedTexture;
     public int id;
+    public String name;
+    public String description;
+    public String unknown1;
+
+    private int resizeX;
+    private int resizeY;
+    private int resizeZ;
+
+    public int modelRotationX;
+    public int modelRotationY;
+    public int modelRotationZ;
+
+    public int value;
+    public boolean stackable;
+    public int[] stackIDs;
+    public int[] stackAmounts;
+    public int modelID;
+
+    public byte[] wearPos1;
+    public byte[] wearPos2;
+    public byte[] wearPos3;
+
+    public boolean membersObject;
+    public static boolean isMembers = false;
+
+    public int[] originalModelColors;
+    public int[] modifiedModelColors;
+    public int[] originalTexture;
+    public int[] modifiedTexture;
+
+    public int modelZoom;
+    public int modelOffset1;
+    public int modelOffset2;
+
+    private int ambient;
+    private int contrast;
+
+    public int maleModel0;
+    public int maleModel1;
+    private int maleModel2;
+    public byte maleOffset;
+    public int maleHeadModel;
+    private int maleHeadModel2;
+
+    public int femaleModel0;
+    public int femaleModel1;
+    private int femaleModel2;
+    public byte femaleOffset;
+    public int femaleHeadModel;
+    private int femaleHeadModel2;
+
+    public int category;
+
+    public int unnotedTemplate;
+    public int unnotedId = -1;
+    private int notedTemplate;
+    public int notedId = -1;
+
+    public int team;
+    public int weight;
+
+    public int shiftClickDropIndex = -2;
+
+    private static ItemDef[] cache;
+    private static int cacheIndex;
+    private static int[] streamIndices;
+    private static Stream stream;
     static MRUNodes mruNodes1 = new MRUNodes(100);
     public static MRUNodes mruNodes2 = new MRUNodes(50);
-    public boolean membersObject;
-    private int femaleModel2;
-    private int notedTemplate;
-    public int femaleModel1;
-    public int maleModel0;
-    private int maleHeadModel2;
-    private int resizeX;
-    public String groundActions[];
-    public String actions[];
-    public int modelOffset1;
-    public String name;
-    private static ItemDef[] cache;
-    private int femaleHeadModel2;
-    public int modelID;
-    public int maleHeadModel;
-    public boolean stackable;
-    public String description;
-    public int unnotedTemplate;
-    private static int cacheIndex;
-    public int modelZoom;
-    public static boolean isMembers = true;
-    private static Stream stream;
-    private int contrast;
-    private int maleModel2;
-    public int maleModel1;
-    public String itemActions[];
-    public int modelRotationY;
-    private int resizeZ;
-    private int resizeY;
-    public int[] stackIDs;
-    public int modelOffset2;
-    private static int[] streamIndices;
-    private int ambient;
-    public int femaleHeadModel;
-    public int modelRotationX;
-    public int femaleModel0;
-    public int[] stackAmounts;
-    public int team;
     public static int totalItems;
-    public int modelRotationZ;
-    public int maleOffset;
+    public String itemActions[];
+    public String groundActions[];
     public boolean searchable;
-    public int unnotedId = -1;
-    public int notedId = -1;
 }

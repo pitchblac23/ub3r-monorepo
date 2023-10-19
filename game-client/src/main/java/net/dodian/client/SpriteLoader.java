@@ -2,6 +2,7 @@ package net.dodian.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 
@@ -80,7 +81,13 @@ public class SpriteLoader {
                 byte[] dataread = new byte[indexLength];
                 data.readFully(dataread);
                 spriteData = dataread;
+            } else if (opCode == 6) {
+                /*fontSize = */data.readUnsignedByte();
+            } else if (opCode >= 6 && opCode < 11) {
+                //if (actions == null)
+                    //actions = new String[5];
             }
+            //actions[opCode - 6] = data.readChar();
         } while (true);
     }
 

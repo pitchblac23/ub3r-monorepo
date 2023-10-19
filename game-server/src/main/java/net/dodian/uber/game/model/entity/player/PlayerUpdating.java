@@ -235,7 +235,7 @@ public class PlayerUpdating extends EntityUpdating<Player> {
             if (!Server.itemManager.isFullBody(player.getEquipment()[Equipment.Slot.CHEST.getId()])) {
                 playerProps.writeWord(0x100 + player.getArms());
             } else {
-                playerProps.writeByte(0);
+               playerProps.writeByte(0);
             }
             if (player.getEquipment()[Equipment.Slot.LEGS.getId()] > 1) {
                 playerProps.writeWord(0x200 + player.getEquipment()[Equipment.Slot.LEGS.getId()]);
@@ -243,7 +243,7 @@ public class PlayerUpdating extends EntityUpdating<Player> {
                 playerProps.writeWord(0x100 + player.getLegs());
             }
             if (!Server.itemManager.isFullHelm(player.getEquipment()[Equipment.Slot.HEAD.getId()]) && !Server.itemManager.isMask(player.getEquipment()[Equipment.Slot.HEAD.getId()])) {
-                playerProps.writeWord(0x100 + player.getHead()); // head
+                playerProps.writeWord(0x100 + player.getHead());
             } else {
                 playerProps.writeByte(0);
             }

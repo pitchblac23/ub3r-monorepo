@@ -28,7 +28,11 @@ public final class Stream extends NodeSub {
         if (i > 60000)
             i = -65535 + i;
         return i;
+    }
 
+    public int readUnsignedWord() {
+        currentOffset += 2;
+        return ((buffer[currentOffset - 2] & 255) << 8) + (buffer[currentOffset - 1] & 255);
     }
 
     final int v(int i) {
@@ -137,11 +141,6 @@ public final class Stream extends NodeSub {
 
     public byte readSignedByte() {
         return buffer[currentOffset++];
-    }
-
-    public int readUnsignedWord() {
-        currentOffset += 2;
-        return ((buffer[currentOffset - 2] & 0xff) << 8) + (buffer[currentOffset - 1] & 0xff);
     }
 
     public int readSignedWord() {

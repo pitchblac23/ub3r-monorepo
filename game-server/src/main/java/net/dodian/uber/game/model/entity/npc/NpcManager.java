@@ -5,7 +5,6 @@ package net.dodian.uber.game.model.entity.npc;
 
 /**
  * @author Owner
- *
  */
 
 import net.dodian.uber.game.model.Position;

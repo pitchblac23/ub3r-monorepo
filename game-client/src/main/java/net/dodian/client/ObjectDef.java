@@ -262,10 +262,13 @@ public final class ObjectDef {
             i = clientInstance.variousSettings[j] >> k & i1;
         } else if (varp != -1)
             i = clientInstance.variousSettings[varp];
-        if (i < 0 || i >= childrenIDs.length || childrenIDs[i] == -1)
-            return null;
-        else
-            return forID(childrenIDs[i]);
+
+        int var;
+        if (i >= 0 && i < childrenIDs.length) {
+            var = childrenIDs[i];
+        } else
+            var = childrenIDs[childrenIDs.length -1];
+        return null;
     }
 
     public Model method581(int j, int k, int l) {
@@ -424,15 +427,15 @@ public final class ObjectDef {
                 decorDisplacement = stream.readUnsignedByte();
             else if (opcode == 29)
                 ambientLighting = stream.readSignedByte();
+            else if (opcode == 39)
+                contrast = stream.readSignedByte() * 25;
             else if (opcode >= 30 && opcode < 39) {
                 if (actions == null)
                     actions = new String[5];
                 actions[opcode - 30] = stream.readString();
                 if (actions[opcode - 30].equalsIgnoreCase("Hidden"))
                     actions[opcode - 30] = null;
-            } else if (opcode == 39)
-                contrast = stream.readSignedByte() * 25;
-            else if (opcode == 40) {
+            } else if (opcode == 40) {
                 int len = stream.readUnsignedByte();
                 modifiedModelColors = new int[len];
                 originalModelColors = new int[len];
@@ -442,13 +445,15 @@ public final class ObjectDef {
                 }
             } else if (opcode == 41) {
                 int len = stream.readUnsignedByte();
-                modifiedModelColors = new int[len];
-                originalModelColors = new int[len];
+                modifiedTexture = new short[len];
+                originalTexture = new short[len];
                 for (int i = 0; i < len; i++) {
-                    modifiedModelColors[i] = stream.readUnsignedShort();
-                    originalModelColors[i] = stream.readUnsignedShort();
+                    modifiedTexture[i] = (short) stream.readUnsignedShort();
+                    originalTexture[i] = (short) stream.readUnsignedShort();
                 }
-            } else if (opcode == 61)
+            } else if (opcode == 60)
+                stream.readUnsignedShort();
+            else if (opcode == 61)
                 stream.readUnsignedShort();
             else if (opcode == 62)
                 inverted = true;
@@ -503,6 +508,13 @@ public final class ObjectDef {
                 if (varp == 0xFFFF)//65535
                     varp = -1;
                 int value = -1;
+                if (opcode == 92) {
+                    value = stream.readUnsignedShort();
+
+                    if (value == 0xFFFF) {
+                        value = -1;
+                    }
+                }
 
                 /* Morphis */
                 int len = stream.readUnsignedByte();
@@ -546,7 +558,8 @@ public final class ObjectDef {
     }
 
     public ObjectDef() { type = -1; }
-
+    private short[] originalTexture;
+    private short[] modifiedTexture;
     public boolean obstructsGround;
     public byte ambientLighting;
     public int translateX;

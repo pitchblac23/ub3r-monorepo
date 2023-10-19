@@ -121,7 +121,7 @@ public class ClickNpc2 implements Packet {
             client.WanneShop = 7;
         } else if (npcId == 548) { // Thessalia Varrock Cloth shop
             client.WanneShop = 8;
-        }else if (npcId == 637) { // Aubury rune shop
+        }else if (npcId == 11435) { // Aubury rune shop
             client.WanneShop = 9;
         }else if (npcId == 2882) { // Horvik Armor shop
             client.WanneShop = 10;

@@ -28,7 +28,7 @@ public final class ObjectDef {
     public void setDefaults() {
         anIntArray773 = null;
         anIntArray776 = null;
-        name = null;
+        //name = null;
         description = null;
         modifiedModelColors = null;
         originalModelColors = null;
@@ -143,8 +143,10 @@ public final class ObjectDef {
                 aBoolean764 = true;
             else if (type == 24) {
                 anInt781 = stream.readUnsignedWord();
-                if (anInt781 == 65535)
+                if (anInt781 == 0xFFFF)
                     anInt781 = -1;
+            else if (type == 27)
+                stream.readDWord();
             } else if (type == 28)
                 anInt775 = stream.readUnsignedByte();
             else if (type == 29)
@@ -165,7 +167,14 @@ public final class ObjectDef {
                     modifiedModelColors[i2] = stream.readUnsignedWord();
                     originalModelColors[i2] = stream.readUnsignedWord();
                 }
-
+            } else if (type == 41) {
+                int len = stream.readUnsignedByte();
+                modifiedTexture = new short[len];
+                originalTexture = new short[len];
+                for (int i = 0; i < len; i++) {
+                    modifiedTexture[i] = (short) stream.readUnsignedWord();
+                    originalTexture[i] = (short) stream.readUnsignedWord();
+                }
             } else if (type == 60)
                 anInt746 = stream.readUnsignedWord();
             else if (type == 62)
@@ -194,20 +203,30 @@ public final class ObjectDef {
                 aBoolean766 = true;
             else if (type == 75)
                 anInt760 = stream.readUnsignedByte();
-            else if (type == 77) {
+            else if (type == 77 || type == 92) {
                 anInt774 = stream.readUnsignedWord();
-                if (anInt774 == 65535)
+                if (anInt774 == 0xFFFF)
                     anInt774 = -1;
                 anInt749 = stream.readUnsignedWord();
-                if (anInt749 == 65535)
+                if (anInt749 == 0xFFFF)
                     anInt749 = -1;
+                int value = -1;
+
+                if (type == 92) {
+                    value = stream.readUnsignedWord();
+
+                    if (value == 0xFFFF) {
+                        value = -1;
+                    }
+                }
                 int j1 = stream.readUnsignedByte();
-                childrenIDs = new int[j1 + 1];
+                childrenIDs = new int[j1 + 2];
                 for (int j2 = 0; j2 <= j1; j2++) {
                     childrenIDs[j2] = stream.readUnsignedWord();
-                    if (childrenIDs[j2] == 65535)
+                    if (childrenIDs[j2] == 0xFFFF)
                         childrenIDs[j2] = -1;
                 }
+                childrenIDs[j1 + 1] = value;
             }
         } while (true);
         if (flag == -1 && name != "null" && name != null) {
@@ -281,6 +300,8 @@ public final class ObjectDef {
         return false;
     }
 
+    public short[] originalTexture;
+    public short[] modifiedTexture;
     public boolean aBoolean736;
     public byte aByte737;
     public int anInt738;
@@ -323,5 +344,4 @@ public final class ObjectDef {
     public int[] modifiedModelColors;
     public String actions[];
     private static MemoryArchive archive;
-
 }

@@ -117,22 +117,25 @@ public final class EntityDef {
             for (int i = 0; i < max; i++) {
                 EntityDef def = EntityDef.forID(i);
                 if (def != null) {
-                    fw.write("case " + i + ":");
+                    fw.write("Npc Id = " + i + ":");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("itemDef.name = \"" + def.name + "\";");
+                    fw.write("Npc Name = \"" + def.name + "\";");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("Npc.actions = [" + Arrays.toString(def.actions) +"];");
+                    fw.write("Npc Combat = " + def.combatLevel + ";");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("Npc.stand = " + def.standAnim + ";");
+                    fw.write("Actions = " + Arrays.toString(def.actions) +";");
                     fw.write(System.getProperty("line.separator"));
-                    fw.write("Npc.walk = " + def.walkAnim + ";");
+                    fw.write("Stand Anim = " + def.standAnim + ";");
+                    fw.write(System.getProperty("line.separator"));
+                    fw.write("Walk Anim = " + def.walkAnim + ";");
+                    fw.write(System.getProperty("line.separator"));
+                    fw.write("Npc Models = " + Arrays.toString(def.models) + ";");
                     fw.write(System.getProperty("line.separator"));
                     if (def.description != null) {
                         String test = new String(def.description, StandardCharsets.UTF_8);
                         fw.write("Npc.description = " + test + ";");
                         fw.write(System.getProperty("line.separator"));
                     }
-                    fw.write("Npc.combat = " + def.combatLevel + ";");
                     fw.write(System.getProperty("line.separator"));
                     fw.write("break;");
                     fw.write(System.getProperty("line.separator"));

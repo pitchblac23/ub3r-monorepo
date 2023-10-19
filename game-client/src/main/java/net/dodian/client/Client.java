@@ -998,6 +998,7 @@ public class Client extends RSApplet {
             }
             method63();
         } catch (Exception exception) {
+            exception.printStackTrace();
         }
         ObjectDef.mruNodes1.unlinkAll();
         if (super.gameFrame != null) {
@@ -12350,7 +12351,7 @@ public class Client extends RSApplet {
         anIntArray968 = new int[33];
         anIntArray969 = new int[256];
         decompressors = new Decompressor[5];
-        variousSettings = new int[2000];
+        variousSettings = new int[10000];
         aBoolean972 = false;
         anInt975 = 50;
         anIntArray976 = new int[anInt975];

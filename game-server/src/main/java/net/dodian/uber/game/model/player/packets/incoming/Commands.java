@@ -456,8 +456,8 @@ public class Commands implements Packet {
                 if (cmd[0].equalsIgnoreCase("item")) {
                     int newItemID = Integer.parseInt(cmd[1]);
                     int newItemAmount = Integer.parseInt(cmd[2]);
-                    if (newItemID < 0 || newItemID > 27222) {
-                        client.send(new SendMessage("Maximum itemid = 27222!"));
+                    if (newItemID < 0 || newItemID > 27201) {
+                        client.send(new SendMessage("Maximum itemid = 27201."));
                         return;
                     }
                     if (Server.itemManager.isStackable(newItemID))

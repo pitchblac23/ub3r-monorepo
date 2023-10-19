@@ -16,5 +16,4 @@ public interface LandscapeListener {
      * @param obj The object that was parsed.
      */
     public void objectParsed(CacheObject obj);
-
 }

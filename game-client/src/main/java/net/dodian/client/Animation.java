@@ -7,7 +7,7 @@ public final class Animation {
         //net.dodian.client.Stream stream = new net.dodian.client.Stream(net.dodian.client.FileOperations.ReadFile(signlink.findcachedir()+ "seq.dat"));
         int length = stream.readUnsignedWord();
         if (anims == null)
-            anims = new Animation[length + 5000];
+            anims = new Animation[length + 10000];
         for (int j = 0; j < length; j++) {
             if (anims[j] == null)
                 anims[j] = new Animation();
@@ -73,9 +73,23 @@ public final class Animation {
                 anInt364 = stream.readUnsignedByte();
             else if (opcode == 11)
                 anInt365 = stream.readUnsignedByte();
-            else if (opcode == 12)
-                stream.readDWord();
-            else
+            else if (opcode == 12) {
+                int len = stream.readUnsignedByte();
+
+                for (int i = 0; i < len; i++) {
+                    stream.readUnsignedShort();
+                }
+
+                for (int i = 0; i < len; i++) {
+                    stream.readUnsignedShort();
+                }
+            } else if (opcode == 13) {
+                int len = stream.readUnsignedByte();
+
+                for (int i = 0; i < len; i++) {
+                    stream.readDWord();
+                }
+            } else
                 System.out.println("Error unrecognised seq config code: " + opcode);
         }
         if (anInt352 == 0) {
