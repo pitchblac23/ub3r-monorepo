@@ -1,10 +1,20 @@
 package net.dodian.utilities;
 
-// a collection of misc methods
-
 import java.text.NumberFormat;
 
 public class Utils {
+
+    /*Mining & Smithing*/
+    // cooper tin iron coal mith addy
+    public static int[] rocks = {7451, 7484, 7452, 7485, 7455, 7488, 7456, 7489, 7458, 7491, 7459, 7492, 7460, 7493, 7461, 7494, /*7464, 7463*/};
+    public static int[] rockLevels = {1, 1, 1, 1, 1, 15, 15, 30, 30, 40, 40, 55, 55, 70, 70, 85, 85, 50, 50};
+    public static long[] mineTimes = {900, 2000, 2000, 2000, 2000, 3000, 3000, 5000, 5000, 6000, 6000, 7000, 7000, 9000, 9000, 35000, 35000, 6500, 6500};
+    public static int[] ore = {436, 436, 438, 438, 440, 440, 453, 453, 444, 444, 447, 447, 449, 449, 451, 451, 1625, 1625};
+    public static int[] oreExp = {110, 110, 110, 110, 280, 280, 420, 420, 510, 510, 620, 620, 780, 780, 3100, 3100, 550, 550};
+    public static int[] picks = {1265, 1267, 1269, 1273, 1271, 1275, 11920, 20014};
+    public static double[] pickBonus = {0.06, 0.08, 0.1, 0.15, 0.2, 0.35, 0.55, 0.55};
+    public static int[] pickReq = {1, 1, 6, 21, 31, 41, 61, 61};
+
     public static int[] buttons_smelting = {95197, 95196, 95195, 95194,/*Bronze*/
                                             95201, 95200, 95199, 95198,/*Iron*/
                                             95205, 95204, 95203, 95202,/*Silver*/
@@ -17,39 +27,32 @@ public class Utils {
     public static int[][] smelt_bars = {{2349, 30}, {2351, 65}, {2355, 70}, {2353, 90}, {2357, 115},
                                         {2359, 150}, {2361, 190}, {2363, 250}};
 
+    /*Herblore*/
     public static int[] herbs = {249, 253, 257, 257, 259, 263, 3000, 265, 267,};
     public static int[] secondary = {221, 225, 239, 231, 221, 225, 223, 239, 245};
     public static int[] unfinished = {91, 95, 99, 99, 101, 105, 3004, 107, 109};
     public static int[] finished = {121, 115, 133, 139, 145, 157, 3026, 163, 169};
     public static int[] req = {3, 14, 25, 38, 46, 55, 60, 65, 75};
     public static int[] potexp = {200, 480, 560, 700, 840, 1000, 1120, 1200, 1350};
-    public static int[] grimy_herbs = {199, 203, 207, 209, 213, 3051, 215, 217, 219};
-    public static int[] grimy_herbs_lvl = {1, 10, 25, 40, 54, 59, 65, 70, 75};
-    public static int[] grimy_herbs_xp = {24, 40, 56, 72, 88, 96, 104, 120, 136}; //3 guam, 5 tarromin, 7 ranarr, 9 irit, kwuarm 11, snapdragon 12, cadantine 13, dwarfweed 15, torstol 17
+    public static int[] grimy_herbs = {199, 203, 207, 3049, 209, 213, 3051, 215, 217, 219};
+    public static int[] grimy_herbs_lvl = {1, 10, 25, 30, 40, 54, 59, 65, 70, 75};
+    public static int[] grimy_herbs_xp = {24, 40, 56, 65, 72, 88, 96, 104, 120, 136};
 
-    public static int[] pot_1_dose = {119, 125, 137, 143, 149, 161, 167, 173, 3030};
-    public static int[] pot_2_dose = {117, 123, 135, 141, 147, 159, 165, 171, 3028};
-    public static int[] pot_3_dose = {115, 121, 133, 139, 145, 157, 163, 169, 3026};
-    public static int[] pot_4_dose = {113, 2428, 2432, 2434, 2436, 2440, 2442, 2444, 3024};
+    public static int[] pot_1_dose = {119, 125, 137, 143, 149, 161, 167, 173, 3030, 3046, 11729};
+    public static int[] pot_2_dose = {117, 123, 135, 141, 147, 159, 165, 171, 3028, 3044, 11728};
+    public static int[] pot_3_dose = {115, 121, 133, 139, 145, 157, 163, 169, 3026, 3042, 11727};
+    public static int[] pot_4_dose = {113, 2428, 2432, 2434, 2436, 2440, 2442, 2444, 3024, 3040, 11726};
 
-    public static int[] shortExp = {80, 120, 160, 200, 250, 320};
-    public static int[] longExp = {90, 135, 180, 230, 290, 360};
 
-    // cooper tin iron coal mith addy
-    public static int[] rocks = {7451, 7484, 7452, 7485, 7455, 7488, 7456, 7489, 7458, 7491, 7459, 7492, 7460, 7493, 7461, 7494, /*7464, 7463*/};
-    public static int[] rockLevels = {1, 1, 1, 1, 1, 15, 15, 30, 30, 40, 40, 55, 55, 70, 70, 85, 85, 50, 50};
-    public static long[] mineTimes = {900, 2000, 2000, 2000, 2000, 3000, 3000, 5000, 5000, 6000, 6000, 7000, 7000, 9000, 9000, 35000, 35000, 6500, 6500};
-    public static int[] ore = {436, 436, 438, 438, 440, 440, 453, 453, 444, 444, 447, 447, 449, 449, 451, 451, 1625, 1625};
-    public static int[] oreExp = {110, 110, 110, 110, 280, 280, 420, 420, 510, 510, 620, 620, 780, 780, 3100, 3100, 550, 550};
-    public static int[] picks = {1265, 1267, 1269, 1273, 1271, 1275, 11920, 20014};
-    public static double[] pickBonus = {0.06, 0.08, 0.1, 0.15, 0.2, 0.35, 0.55, 0.55};
-    public static int[] pickReq = {1, 1, 6, 21, 31, 41, 61, 61};
-
-    // Tree timer here soon!
+    /*Woodcutting & Fletching*/
     public static int[] axes = {1351, 1349, 1353, 1355, 1357, 1359, 6739, 20011};
     public static double[] axeBonus = {0.06, 0.08, 0.1, 0.15, 0.2, 0.35, 0.55, 0.55};
     public static int[] axeReq = {1, 1, 6, 21, 31, 41, 61, 61};
+    public static int[] shortExp = {80, 120, 160, 200, 250, 320};
+    public static int[] longExp = {90, 135, 180, 230, 290, 360};
 
+
+    /*Fishing & Cooking*/
     public static int[] fishSpots = {1510, 1510, 1511, 1511, 1514, 1514, 1517, 1517};
     public static int[] fishId = {317, 335, 377, 371, 7944, 383, 395, 389};
     public static int[] fishAnim = {621, 622, 619, 618, 621, 618, 619, 618};
@@ -63,11 +66,12 @@ public class Utils {
     public static int[] cookExp = {150, 175, 100, 100, 170, 200, 250, 350, 500, 720, 870, 1220, 1600, 2100};
     public static int[] cookLevel = {1, 1, 1, 1, 10, 15, 20, 30, 40, 50, 60, 70, 85, 95};
 
-    // Crafting
+    /*Crafting*/
     public static int[] uncutGems = {1623, 1621, 1619, 1617, 1631, 6571};
     public static int[] cutGems = {1607, 1605, 1603, 1601, 1615, 6573};
     public static int[] gemReq = {20, 27, 34, 43, 55, 67};
     public static int[] gemExp = {50, 68, 85, 108, 137, 168};
+
     public static final char playerNameXlateTable[] = {'_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
             'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8',
             '9'};

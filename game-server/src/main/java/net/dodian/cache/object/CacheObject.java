@@ -87,5 +87,4 @@ public class CacheObject {
     public String toString() {
         return GameObjectData.forId(def.getId()) + " " + location + " " + type + " " + rotation;
     }
-
 }

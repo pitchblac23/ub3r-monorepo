@@ -44,7 +44,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                     "Yes please!",
                     "Oh it's a rune shop. No thank you, then.")
 
-            5 -> p.playerChat(592, "Oh it's a rune shop. No thank you, then.")
+            5 -> p.playerChat(591, "Oh it's a rune shop. No thank you, then.")
 
             6 -> p.npcChat(p.NpcTalkTo, 592, "Well, if you find someone who does want runes, please", "send them my way.")
 
@@ -532,19 +532,10 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                 p.nextDiag = 36
             } else p.playerChat(614, "No, thank you.")
         }
-        if (p.convoId == 2) {
+        if (p.NpcDialogue == 17) {
             if (button == 1) {
                 p.WanneShop = 39
-            } else {
-                p.send(RemoveInterfaces())
-            }
-        }
-        if (p.convoId == 3) {
-            if (button == 1) {
-                p.WanneShop = 9
-            } else {
-                p.send(RemoveInterfaces())
-            }
+            } else p.send(RemoveInterfaces())
         }
         if (p.convoId == 4) {
             if (button == 1) {
@@ -783,7 +774,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
         } else if (p.NpcDialogue == 4) { // Aubury
             if (button == 1) {
                 doAction(p, 0)
-                p.openUpShop(2)
+                p.openUpShop(9)
             } else if (button == 2) {
                 doAction(p, 5)
             }

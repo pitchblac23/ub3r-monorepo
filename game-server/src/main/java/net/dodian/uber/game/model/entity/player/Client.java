@@ -1853,7 +1853,8 @@ public class Client extends Player implements Runnable {
 		getOutputStream().endFrameVarSizeWord();
 		if (targetSlot == Equipment.Slot.WEAPON.getId()) {
 			CheckGear();
-			//FightType = 0; //TODO cancel shared xp on wep change
+			FightType = 0; //TODO better cancel share xp on wep change
+			frame87(43, 0);
 			CombatStyleHandler.setWeaponHandler(this, -1);
 			requestAnims(wearID);
 		}
@@ -3195,7 +3196,7 @@ public class Client extends Player implements Runnable {
 			int coins = getInvAmt(currency);
 			amount = amount * TotPrice2 > coins ? coins / TotPrice2 : amount;
 			if (amount == 0) {
-				send(new SendMessage("You don't have enough " + GetItemName(currency).toLowerCase() + ""));
+				send(new SendMessage("You don't have enough " + GetItemName(currency).toLowerCase() + "."));
 				return false;
 			}
 			if (!stack) {
@@ -3287,12 +3288,12 @@ public class Client extends Player implements Runnable {
 			base = 979;
 		if(text.length == 4)
 			base = 986;
-		send(new PlayerDialogueHead(base + 1));
 		sendFrame200(base + 1, emote); //614 seems standard!
 		send(new SendString(getPlayerName(), base + 2));
 		for (int i = 0; i < text.length; i++)
 			send(new SendString(text[i], base + 3 + i));
 		send(new SendString("Click here to continue", base + 3 + text.length));
+		send(new PlayerDialogueHead(base + 1));
 		sendFrame164(base);
 		NpcDialogueSend = true;
 	}
@@ -3337,12 +3338,14 @@ public class Client extends Player implements Runnable {
 				return 60;
 			}
 		}
+		if (ItemID == 3842 ||ItemID == 20223)
+			return 45;
 		if (ItemID == 21646)
 			return 50;
 		if (ItemID == 6523 || ItemID == 6525 || ItemID == 6527)
 			return 55;
-		if (ItemID == 3842 ||ItemID == 20223)
-			return 45;
+		if (ItemID == 4151)
+			return 70;
 		return 1;
 	}
 

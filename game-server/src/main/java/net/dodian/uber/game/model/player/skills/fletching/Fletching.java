@@ -44,7 +44,7 @@ public class Fletching {
                 player.resetAction();
                 return;
             }
-            player.fletchId = Constants.shortbows[player.fletchLog];
+            player.fletchId = Constants.shortbowU[player.fletchLog];
             player.fletchExp = Constants.shortexp[player.fletchLog];
         } else {
             if (player.getLevel(Skills.FLETCHING) < Constants.longreq[player.fletchLog]) {
@@ -52,7 +52,7 @@ public class Fletching {
                 player.resetAction();
                 return;
             }
-            player.fletchId = Constants.longbows[player.fletchLog];
+            player.fletchId = Constants.longbowU[player.fletchLog];
             player.fletchExp = Constants.longexp[player.fletchLog];
         }
         player.fletchings = true;

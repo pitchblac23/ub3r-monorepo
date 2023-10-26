@@ -43,6 +43,8 @@ public class Bank5 implements Packet {
             startGoldCrafting(interfaceID, removeSlot, 5, client);
         } else if (interfaceID == 3823) { // Show value to sell items
             client.sellItem(removeID, removeSlot, 1);
+        } else if (interfaceID == 3900) { // Show value to buy items
+            client.buyItem(removeID, removeSlot, 1);
         } else if (interfaceID == 1688) { // Operate on equipped item
             if (removeID == 13203) {
                 String[] quotes = {
@@ -81,8 +83,6 @@ public class Bank5 implements Packet {
                     }
                 }
             }
-        } else if (interfaceID == 3900) { // Show value to buy items
-            client.buyItem(removeID, removeSlot, 1);
         } else if (interfaceID >= 1119 && interfaceID <= 1123) { // Smithing
             if (client.smithing[2] > 0) {
                 client.smithing[4] = removeID;

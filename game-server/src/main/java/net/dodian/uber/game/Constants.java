@@ -5,14 +5,14 @@ public class Constants {
     public static final int maxPlayers = 2000;
 
     public static int[] logs = {1521, 1519, 1517, 1515, 1513};
-    public static int[] shortbows = {54, 60, 64, 68, 72};
+    public static int[] shortbowU = {54, 60, 64, 68, 72};
+    public static int[] shortbow = {843, 849, 853, 857, 861};
     public static int[] shortreq = {20, 35, 50, 65, 80};
     public static int[] shortexp = {102, 198, 300, 408, 504};
-    public static int[] shortbow = {843, 849, 853, 857, 861};
-    public static int[] longbows = {56, 58, 62, 66, 70};
+    public static int[] longbowU = {56, 58, 62, 66, 70};
+    public static int[] longbow = {845, 847, 851, 855, 859};
     public static int[] longreq = {25, 40, 55, 70, 85};
     public static int[] longexp = {150, 252, 348, 450, 552};
-    public static int[] longbow = {845, 847, 851, 855, 859};
     public static int[] heads = {39, 40, 41, 42, 43, 44, 11237};
     public static int[] arrows = {882, 884, 886, 888, 890, 892, 11212};
     public static int[] required = {1, 15, 30, 45, 60, 75, 90};

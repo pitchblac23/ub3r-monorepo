@@ -290,18 +290,18 @@ public class ItemOnItem implements Packet {
                 client.dialogInterface = 2459;
                 client.fletchLog = id;
                 client.send(new SendString("Select a bow", 8879));
-                client.sendFrame246(8870, 250, Constants.longbows[id]);// right picture
-                client.sendFrame246(8869, 250, Constants.shortbows[id]);// left picture
-                client.send(new SendString(client.GetItemName(Constants.shortbows[id]), 8871));
-                client.send(new SendString(client.GetItemName(Constants.shortbows[id]), 8874));
-                client.send(new SendString(client.GetItemName(Constants.longbows[id]), 8878));
-                client.send(new SendString(client.GetItemName(Constants.longbows[id]), 8875));
+                client.sendFrame246(8870, 250, Constants.longbowU[id]);// right picture
+                client.sendFrame246(8869, 250, Constants.shortbowU[id]);// left picture
+                client.send(new SendString(client.GetItemName(Constants.shortbowU[id]), 8871));
+                client.send(new SendString(client.GetItemName(Constants.shortbowU[id]), 8874));
+                client.send(new SendString(client.GetItemName(Constants.longbowU[id]), 8878));
+                client.send(new SendString(client.GetItemName(Constants.longbowU[id]), 8875));
                 client.sendFrame164(8866);
                 break;
             }
         }
         for (int id1 = 0; id1 < Constants.shortbow.length; id1++) {
-            if ((itemUsed == Constants.shortbows[id1] || otherItem == Constants.shortbows[id1])
+            if ((itemUsed == Constants.shortbowU[id1] || otherItem == Constants.shortbowU[id1])
                     && (itemUsed == 1777 || otherItem == 1777)) {
                 client.resetAction();
                 client.send(new SendString("" + client.GetItemName(Constants.shortbow[id1]), 2799));
@@ -316,8 +316,8 @@ public class ItemOnItem implements Packet {
                 client.fletchOtherTime = 1200;
             }
         }
-        for (int b2 = 0; b2 < Constants.longbows.length; b2++) {
-            if ((itemUsed == Constants.longbows[b2] || otherItem == Constants.longbows[b2])
+        for (int b2 = 0; b2 < Constants.longbowU.length; b2++) {
+            if ((itemUsed == Constants.longbowU[b2] || otherItem == Constants.longbowU[b2])
                     && (itemUsed == 1777 || otherItem == 1777)) {
                 client.resetAction();
                 client.send(new SendString("" + client.GetItemName(Constants.longbow[b2]), 2799));

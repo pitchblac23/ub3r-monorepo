@@ -1,6 +1,5 @@
 package net.dodian.uber.comm;
 
-import net.dodian.uber.game.Constants;
 import net.dodian.uber.game.Server;
 import net.dodian.uber.game.model.Login;
 import net.dodian.uber.game.model.entity.player.Client;
@@ -14,6 +13,8 @@ import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.security.DropLog;
 import net.dodian.utilities.DbTables;
+import net.dodian.utilities.Misc;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -33,21 +34,26 @@ public class LoginManager {
             ResultSet results = getDbConnection().createStatement().executeQuery(query);
             if (results.next()) {
                 p.dbId = results.getInt("userid");
-                p.playerGroup = getServerEnv().equals("dev") ? 10 : results.getInt("usergroupid");
+                p.playerGroup = getServerEnv().equals("dev") ? 10
+                        : results.getInt("usergroupid");
                 if (results.getString("username").equals(playerName)
                         || results.getString("username").equalsIgnoreCase(playerName)) {
-                    String playerSalt = results.getString("salt");
+                    /*String playerSalt = results.getString("salt");
                     String md5pass = Client.passHash(playerPass, playerSalt);
                     if (!md5pass.equals(results.getString("password"))
                             && (!getServerEnv().equals("dev") || (!p.connectedFrom.equals("127.0.0.1") && !(net.dodian.utilities.DotEnvKt.getServerDebugMode() && (p.playerGroup == 3 || p.playerGroup == 6))))) {
+                        return 3;
+                    }*/
+                    String md5pass = Misc.md5Hash(Misc.md5Hash(p.playerPass));
+                    if (!md5pass.equals(results.getString("password"))) {
                         return 3;
                     }
                     p.otherGroups = results.getString("membergroupids").split(",");
                     p.newPms = (results.getInt("pmunread"));
                 } else
                     return 12;
-            } else if (getServerEnv().equals("dev") && net.dodian.utilities.DotEnvKt.getServerDebugMode()) {
-                String newUserQuery = "INSERT INTO " + DbTables.WEB_USERS_TABLE + " SET username = '" + playerName + "', passworddate = '', birthday_search = ''";
+            } else if (/*getServerEnv().equals("dev") &&*/ net.dodian.utilities.DotEnvKt.getServerDebugMode()) {
+                String newUserQuery = "INSERT INTO " + DbTables.WEB_USERS_TABLE + " SET username = '" + playerName + "', password = '" + Misc.md5Hash(Misc.md5Hash(p.playerPass)) + "', passworddate = '', birthday_search = ''";
                 getDbConnection().createStatement().executeUpdate(newUserQuery);
                 return loadCharacterGame(p, playerName, playerPass);
             } else {

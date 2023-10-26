@@ -102,12 +102,12 @@ public final class RSInterface {
                 rsInterface.actions = new String[5];
                 for (int l3 = 0; l3 < 5; l3++) {
                     rsInterface.actions[l3] = stream.readString();
-                    if (rsInterface.actions[l3].length() == 0)
+                    if (rsInterface.actions[l3].isEmpty())
                         rsInterface.actions[l3] = null;
                     if(rsInterface.id == 3900)
-                        rsInterface.actions[4] = "Buy X";
+                        rsInterface.actions[4] = "Buy 50";
                     if(rsInterface.parentID == 3822)
-                        rsInterface.actions[4] = "Sell X";
+                        rsInterface.actions[4] = "Sell All";
                     if (rsInterface.parentID == 1644)
                         rsInterface.actions[2] = "Operate";
                 }
@@ -122,7 +122,7 @@ public final class RSInterface {
                 rsInterface.textShadow = stream.readUnsignedByte() == 1;
             }
             if (rsInterface.type == 4) {
-                rsInterface.message = stream.readString().replaceAll("RuneScape", "RuneScape");
+                rsInterface.message = stream.readString().replaceAll("RuneScape", "Dodian");
                 rsInterface.aString228 = stream.readString();
             }
             if (rsInterface.type == 1 || rsInterface.type == 3 || rsInterface.type == 4)

@@ -334,7 +334,7 @@ public final class EntityDef {
                     varpIndex = -1;
                 }
                 int var = stream.readUnsignedShort();
-                if (var == 0xFFFF) {
+                if (var == 65535) {
                     var = -1;
                 }
                 int length = stream.readUnsignedByte();

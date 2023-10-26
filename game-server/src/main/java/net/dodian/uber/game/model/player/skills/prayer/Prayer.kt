@@ -36,7 +36,7 @@ import java.util.*
         }
         client.deleteItem(itemId, 1)
         client.requestAnim(3705, 0)
-        val extra = (client.getLevel(Skills.PRAYER) + 1).toDouble() / 100
+        val extra = (client.getLevel(Skills.FIREMAKING) + 1).toDouble() / 100
         val chance = i + extra
         client.giveExperience(((bone.experience * chance).toInt()), Skills.PRAYER);
         client.triggerRandom((Bones.getBone(itemId).experience * chance).toInt())

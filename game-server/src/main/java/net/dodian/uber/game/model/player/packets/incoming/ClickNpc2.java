@@ -82,7 +82,7 @@ public class ClickNpc2 implements Packet {
                 Thieving.attemptSteal(client, npcId, tempNpc.getPosition());
                 break;
         }
-        if (npcId == 1174) {
+        if (npcId == 8532) {
             client.WanneShop = 39;
         }
         if (npcId == 394 || npcId == 395 || npcId == 7677) { /* Banking */
@@ -139,7 +139,7 @@ public class ClickNpc2 implements Packet {
             client.WanneShop = 16;
         } else if (npcId == 557) { // Wydin Port Sarim Food Shop
             client.WanneShop = 17;
-        } else if (npcId == 1027) { // Gerrant Port Sarim Fishing Shop
+        } else if (npcId == 1790 || npcId == 3213) { // Gerrant Port Sarim Fishing Shop
             client.WanneShop = 18;
         } else if (npcId == 559) { // Brian Port Sarim Battleaxe Shop
             client.WanneShop = 19;

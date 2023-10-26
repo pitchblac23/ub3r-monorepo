@@ -268,5 +268,4 @@ public class GameObjectData {
         }
         return false;
     }
-
 }

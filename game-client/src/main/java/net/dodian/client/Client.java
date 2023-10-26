@@ -11,7 +11,10 @@ import java.net.URI;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import static net.dodian.client.config.Constants.*;
+
 
 @SuppressWarnings("serial")
 public class Client extends RSApplet {
@@ -11019,7 +11022,36 @@ public class Client extends RSApplet {
         }
     }
 
+    /** @author MikeRSPS */
+    private Map<Integer, TinterfaceText> interfaceText = new HashMap<Integer, TinterfaceText>();
+
+    public class TinterfaceText {
+        public int id;
+        public String currentState;
+
+        public TinterfaceText(String s, int id) {
+            this.currentState = s;
+            this.id = id;
+        }
+    }
+    public boolean checkPacket126Update(String text, int id) {
+        if(!interfaceText.containsKey(id)) {
+            interfaceText.put(id, new TinterfaceText(text, id));
+        } else {
+            TinterfaceText t = interfaceText.get(id);
+            if(text.equals(t.currentState)) {
+                return false;
+            }
+            t.currentState = text;
+        }
+        return true;
+    }
+
     public void sendFrame126(String str, int i) {
+        if(!checkPacket126Update(str, i)) {
+            //int bytesSaved = (str.length() + 4);
+            return;
+        }
         RSInterface.interfaceCache[i].message = str;
         if (RSInterface.interfaceCache[i].parentID == tabInterfaceIDs[tabID]) {
             needDrawTabArea = true;

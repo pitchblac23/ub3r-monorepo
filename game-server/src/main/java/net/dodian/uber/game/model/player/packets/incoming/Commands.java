@@ -880,7 +880,7 @@ public class Commands implements Packet {
                         amount = amount < 1 ? 1 : Math.min(amount, 10000); // need to set amount 1 - 10000!
                         NpcData n = Server.npcManager.getData(npcId);
                         if (n == null)
-                            client.send(new SendMessage("This npc have no data!"));
+                            client.send(new SendMessage("This npc has no data!"));
                         else if (n.getDrops().isEmpty())
                             client.send(new SendMessage(n.getName() + "'s do not have any drops!"));
                         else {
@@ -1141,7 +1141,7 @@ public class Commands implements Packet {
                     amount = getGameWorldId() == 2 ? 100 : amount;
                     NpcData n = Server.npcManager.getData(npcId);
                     if (n == null)
-                        client.send(new SendMessage("This npc have no data!"));
+                        client.send(new SendMessage("This npc has no data!"));
                     else if (n.getDrops().isEmpty())
                         client.send(new SendMessage(n.getName() + "'s do not have any drops!"));
                     else {

@@ -49,5 +49,4 @@ public class LongSwordsHandler extends CombatStyleHandler {
                 break;
         }
     }
-
 }

@@ -96,7 +96,6 @@ public class ClickNpc implements Packet {
             client.convoId = 0;
         } else if (npcId == 11435) { /* Aubury */
             client.NpcWanneTalk = 3;
-            client.convoId = 3;
         } else if (npcId == 3648) {
             client.NpcWanneTalk = 3648;
         } else if (npcId == 1307 ||npcId == 1306) {
@@ -127,9 +126,8 @@ public class ClickNpc implements Packet {
             client.convoId = -1;
         } else if (npcId == 402 || npcId == 403 || npcId == 405) {
             client.NpcWanneTalk = 11;
-        } else if (npcId == 1174) {
+        } else if (npcId == 8532) {
             client.NpcWanneTalk = 16;
-            client.convoId = 2;
         } else if (npcId == 6481) {
             client.NpcWanneTalk = npcId;
         } else if (npcId == 520) {

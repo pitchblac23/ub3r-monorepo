@@ -29,5 +29,4 @@ public abstract class Index {
     public int getIdentifier() {
         return identifier;
     }
-
 }

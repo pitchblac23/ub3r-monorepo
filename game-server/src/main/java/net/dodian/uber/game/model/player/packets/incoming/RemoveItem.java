@@ -80,7 +80,7 @@ public class RemoveItem implements Packet {
                     int leftover = ShopValue - ((ShopValue / million) * million);
                     ShopAdd = " (" + (ShopValue / 1000000) + "" + ((leftover / 100000) > 0 ? "."+ (leftover / 100000) : "") + " million)";
                 }
-                client.send(new SendMessage(client.GetItemName(removeID) + ": shop will buy for " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "" + ShopAdd));
+                client.send(new SendMessage(client.GetItemName(removeID) + ": shop will buy for " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "." + ShopAdd));
             }
         } else if (interfaceID == 3900) { // Show value to buy items
             int currency = client.MyShopID == 55 ? 11997 : 995;

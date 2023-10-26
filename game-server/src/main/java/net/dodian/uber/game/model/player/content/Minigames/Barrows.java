@@ -46,7 +46,7 @@ public class Barrows {
         //player.getActionSender().sendItemOnInterface(4537, 100, player.getPosition().getZ() == 3 ? randomBarrowsHeadRED(): randomBarrowsHeadGREEN());
         int prayerLevel = client.getSkillLevel(Skills.PRAYER) - (Misc.random(12)+4);
         if (prayerLevel < 0)
-        client.refreshSkill(Skills.PRAYER);
+            client.refreshSkill(Skills.PRAYER);
         EventManager.getInstance().registerEvent(new Event(0) {
             @Override
             public void execute() {
@@ -150,7 +150,7 @@ public class Barrows {
             case 20689:
             case 20708:
                 if(client.getPosition().getX() == 3540){
-                    //client.getBarrowsPuzzel().RANDOM_PUZZEL(client);
+                    //client.getBarrowsPuzzle().RANDOM_PUZZLE(client);
                 }
                 if(client.getPosition().getX() == 3546 || client.getPosition().getX() == 3545) {
                     client.AddToCords(0, -7, 100);
@@ -165,7 +165,7 @@ public class Barrows {
             case 6725:
             case 6744:
                 if(client.getPosition().getX() == 3563){
-                    //player.getBarrowsPuzzel().RANDOM_PUZZEL(client);
+                    //player.getBarrowsPuzzle().RANDOM_PUZZLE(client);
                 }
                 if(client.getPosition().getX() == 3562) {
                     BarrowsDoor(6725, 6744, 3562, 9694, 3562, 9695, 0);
@@ -179,7 +179,7 @@ public class Barrows {
             case 6727:
             case 6746:
                 if(client.getPosition().getY() == 9683){
-                    //player.getBarrowsPuzzel().RANDOM_PUZZEL(client);
+                    //player.getBarrowsPuzzle().RANDOM_PUZZLE(client);
                 }
                 if(client.getPosition().getY() == 9684) {
                     BarrowsDoor(6727, 6746, 3551, 9684, 3552, 9684, 0);
@@ -193,7 +193,7 @@ public class Barrows {
             case 6720:
             case 6739:
                 if(client.getPosition().getY() == 9706){
-                    //player.getBarrowsPuzzel().RANDOM_PUZZEL(client);
+                    //player.getBarrowsPuzzle().RANDOM_PUZZLE(client);
                 }
                 if(client.getPosition().getY() == 9705) {
                     BarrowsDoor(6720, 6739, 3552, 9705, 3551, 9705, 0);
