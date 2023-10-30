@@ -76,7 +76,6 @@ final class Class6 {
                         anIntArray118[l5] += (l2 * anIntArray121[l5] >> 16) + anIntArray122[l5];
                     }
                 }
-
         }
 
         if (aClass29_104 != null) {
@@ -99,13 +98,11 @@ final class Class6 {
                 if (flag1)
                     anIntArray115[i7] = 0;
             }
-
         }
         if (anInt109 > 0 && anInt110 > 0) {
             int j3 = (int) ((double) anInt109 * d);
             for (int l4 = j3; l4 < i; l4++)
                 anIntArray115[l4] += (anIntArray115[l4 - j3] * anInt110) / 100;
-
         }
         if (aClass39_111.anIntArray665[0] > 0 || aClass39_111.anIntArray665[1] > 0) {
             aClass29_112.resetValues();
@@ -162,7 +159,6 @@ final class Class6 {
 
                     anIntArray115[j7] = i9;
                 }
-
             }
         }
         for (int i4 = 0; i4 < i; i4++) {
@@ -171,7 +167,6 @@ final class Class6 {
             if (anIntArray115[i4] > 32767)
                 anIntArray115[i4] = 32767;
         }
-
         return anIntArray115;
     }
 
@@ -271,5 +266,4 @@ final class Class6 {
     private static final int[] anIntArray120 = new int[5];
     private static final int[] anIntArray121 = new int[5];
     private static final int[] anIntArray122 = new int[5];
-
 }

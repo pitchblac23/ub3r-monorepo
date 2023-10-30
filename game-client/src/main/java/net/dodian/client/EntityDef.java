@@ -1,7 +1,6 @@
 package net.dodian.client;
 
 import java.io.FileWriter;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,7 +50,7 @@ public final class EntityDef {
 
         if (flag1)
             return null;
-        Model aclass30_sub2_sub4_sub6s[] = new Model[chatheadModels.length];
+        Model[] aclass30_sub2_sub4_sub6s = new Model[chatheadModels.length];
         for (int j = 0; j < chatheadModels.length; j++)
             aclass30_sub2_sub4_sub6s[j] = Model.method462(chatheadModels[j]);
         Model model;
@@ -177,7 +176,7 @@ public final class EntityDef {
 
             if (flag)
                 return null;
-            Model aclass30_sub2_sub4_sub6s[] = new Model[models.length];
+            Model[] aclass30_sub2_sub4_sub6s = new Model[models.length];
             for (int j1 = 0; j1 < models.length; j1++)
                 aclass30_sub2_sub4_sub6s[j1] = Model
                         .method462(models[j1]);
@@ -397,7 +396,7 @@ public final class EntityDef {
     public int combatLevel;
     public final int anInt64;
     public String name;
-    public String actions[];
+    public String[] actions;
     public int walkAnim;
     public byte size;
     public static int[] streamIndices;
@@ -417,8 +416,8 @@ public final class EntityDef {
     public boolean isPet;
     public boolean rotationFlag;
     public boolean isMinimapVisible;
-    public int childrenIDs[];
-    public byte description[];
+    public int[] childrenIDs;
+    public byte[] description;
     public int contrast;
     public boolean hadRenderPriority;
     public int[] models;

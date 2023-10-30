@@ -77,7 +77,7 @@ public final class Class36 {
                     q2.anIntArray642[l] = array5[l];
                 }
             }
-        } catch (Exception ex) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -113,9 +113,8 @@ public final class Class36 {
     public int anInt636;
     public Class18 aClass18_637;
     public int anInt638;
-    public int anIntArray639[];
-    public int anIntArray640[];
-    public int anIntArray641[];
-    public int anIntArray642[];
-
+    public int[] anIntArray639;
+    public int[] anIntArray640;
+    public int[] anIntArray641;
+    public int[] anIntArray642;
 }

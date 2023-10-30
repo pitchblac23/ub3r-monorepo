@@ -15,7 +15,6 @@ public final class Class18 {
         for (int j = 0; j < anInt341; j++)
             for (int l = 0; l < anIntArrayArray343[j].length; l++)
                 anIntArrayArray343[j][l] = stream.readUnsignedWord();
-
     }
 
     public final int[] anIntArray342;

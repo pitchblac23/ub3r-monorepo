@@ -15,7 +15,7 @@ public final class Sprite extends DrawingArea {
 
     public String location = Signlink.findCacheDir() + "Sprites/";
 
-    public Sprite(byte abyte0[], Component component) {
+    public Sprite(byte[] abyte0, Component component) {
         try {
             Image image = Toolkit.getDefaultToolkit().createImage(abyte0);
             MediaTracker mediatracker = new MediaTracker(component);
@@ -116,7 +116,7 @@ public final class Sprite extends DrawingArea {
         }
     }
 
-    private void renderARGBPixels(int spriteWidth, int spriteHeight, int spritePixels[], int renderAreaPixels[], int pixel, int alphaValue, int i, int l, int j1) {
+    private void renderARGBPixels(int spriteWidth, int spriteHeight, int[] spritePixels, int[] renderAreaPixels, int pixel, int alphaValue, int i, int l, int j1) {
         int pixelColor;
         int alphaLevel;
         int alpha = alphaValue;
@@ -231,7 +231,7 @@ public final class Sprite extends DrawingArea {
         }
     }
 
-    private void set24BitPixels(int width, int height, int destPixels[], int srcPixels[], int srcAlpha, int destOffset, int srcOffset, int destStep, int srcStep) {
+    private void set24BitPixels(int width, int height, int[] destPixels, int[] srcPixels, int srcAlpha, int destOffset, int srcOffset, int destStep, int srcStep) {
         int srcColor;
         int destAlpha;
         for (int loop = -height; loop < 0; loop++) {
@@ -264,7 +264,7 @@ public final class Sprite extends DrawingArea {
         anInt1444 = stream_1.readUnsignedWord();
         anInt1445 = stream_1.readUnsignedWord();
         int j = stream_1.readUnsignedByte();
-        int ai[] = new int[j];
+        int[] ai = new int[j];
         for (int k = 0; k < j - 1; k++) {
             ai[k + 1] = stream_1.read3Bytes();
             if (ai[k + 1] == 0)
@@ -295,7 +295,6 @@ public final class Sprite extends DrawingArea {
                 for (int i2 = 0; i2 < myHeight; i2++)
                     myPixels[l1 + i2 * myWidth] = ai[stream.readUnsignedByte()];
             }
-
         }
         setTransparency(255, 0, 255);
     }
@@ -329,15 +328,13 @@ public final class Sprite extends DrawingArea {
                 myPixels[i1] = (k1 << 16) + (l1 << 8) + i2;
             }
         }
-
     }
 
     public void method345() {
-        int ai[] = new int[anInt1444 * anInt1445];
+        int[] ai = new int[anInt1444 * anInt1445];
         for (int j = 0; j < myHeight; j++) {
             System.arraycopy(myPixels, j * myWidth, ai, j + drawOffsetY * anInt1444 + drawOffsetX, myWidth);
         }
-
         myPixels = ai;
         myWidth = anInt1444;
         myHeight = anInt1445;
@@ -384,7 +381,7 @@ public final class Sprite extends DrawingArea {
         }
     }
 
-    private void method347(int i, int j, int k, int l, int i1, int k1, int ai[], int ai1[]) {
+    private void method347(int i, int j, int k, int l, int i1, int k1, int[] ai, int[] ai1) {
         int l1 = -(j >> 2);
         j = -(j & 3);
         for (int i2 = -k; i2 < 0; i2++) {
@@ -587,7 +584,7 @@ public final class Sprite extends DrawingArea {
         }
     }
 
-    private void method349(int ai[], int ai1[], int j, int k, int l, int i1, int j1, int k1) {
+    private void method349(int[] ai, int[] ai1, int j, int k, int l, int i1, int j1, int k1) {
         int i;// was parameter
         int l1 = -(l >> 2);
         l = -(l & 3);
@@ -632,7 +629,7 @@ public final class Sprite extends DrawingArea {
         }
     }
 
-    private void method351(int i, int j, int ai[], int ai1[], int l, int i1, int j1, int k1, int l1) {
+    private void method351(int i, int j, int[] ai, int[] ai1, int l, int i1, int j1, int k1, int l1) {
         int k;// was parameter
         int j2 = 256 - k1;
         for (int k2 = -i1; k2 < 0; k2++) {
@@ -651,7 +648,7 @@ public final class Sprite extends DrawingArea {
         }
     }
 
-    public void method352(int i, int j, int ai[], int k, int ai1[], int i1, int j1, int k1, int l1, int i2) {
+    public void method352(int i, int j, int[] ai, int k, int[] ai1, int i1, int j1, int k1, int l1, int i2) {
         try {
             int j2 = -l1 / 2;
             int k2 = -i / 2;
@@ -678,18 +675,18 @@ public final class Sprite extends DrawingArea {
                 l3 += DrawingArea.width;
             }
 
-        } catch (Exception _ex) {
+        } catch (Exception ignored) {
         }
     }
 
     public void method353(int i, double d, int l1) {
-        // all of the following were parameters
+        // all the following were parameters
         int j = 15;
         int k = 20;
         int l = 15;
         int j1 = 256;
         int k1 = 20;
-        // all of the previous were parameters
+        // all the previous were parameters
         try {
             int i2 = -k / 2;
             int j2 = -k1 / 2;
@@ -719,11 +716,11 @@ public final class Sprite extends DrawingArea {
                 k3 += DrawingArea.width;
             }
 
-        } catch (Exception _ex) {
+        } catch (Exception ignored) {
         }
     }
 
-    public Sprite(byte spriteData[]) {
+    public Sprite(byte[] spriteData) {
         try {
             Image image = Toolkit.getDefaultToolkit().createImage(spriteData);
             ImageIcon sprite = new ImageIcon(image);
@@ -781,7 +778,7 @@ public final class Sprite extends DrawingArea {
         }
     }
 
-    private void method355(int ai[], int i, byte abyte0[], int j, int ai1[], int k, int l, int i1, int j1, int k1) {
+    private void method355(int[] ai, int i, byte[] abyte0, int j, int[] ai1, int k, int l, int i1, int j1, int k1) {
         int l1 = -(i >> 2);
         i = -(i & 3);
         for (int j2 = -j; j2 < 0; j2++) {
@@ -822,7 +819,7 @@ public final class Sprite extends DrawingArea {
 
     }
 
-    public int myPixels[];
+    public int[] myPixels;
     public int myWidth;
     public int myHeight;
     int drawOffsetX;

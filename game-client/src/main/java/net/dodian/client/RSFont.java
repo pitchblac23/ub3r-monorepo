@@ -57,7 +57,7 @@ import java.awt.Color;
         public static int transparency;
         public static int textColor;
 
-        private void drawCharacter(byte charPixels[], int x, int y, int width, int height, int color) {
+        private void drawCharacter(byte[] charPixels, int x, int y, int width, int height, int color) {
             int offset = x + y * DrawingArea.width;
             int k1 = DrawingArea.width - width;
             int l1 = 0;
@@ -96,7 +96,7 @@ import java.awt.Color;
             chatImages = icons;
         }
 
-        private void createPixels(int drawingAreaPixels[], byte charPixels[], int color, int pixel, int offset, int width, int height, int unknown1, int unknown2) {
+        private void createPixels(int[] drawingAreaPixels, byte[] charPixels, int color, int pixel, int offset, int width, int height, int unknown1, int unknown2) {
             int l1 = -(width >> 2);
             width = -(width & 3);
             for (int i2 = -height; i2 < 0; i2++) {
@@ -197,9 +197,7 @@ import java.awt.Color;
                         for (int l2 = 0; l2 < j1; l2++) {
                             fontPixels[l][j2 + l2 * i1] = stream.readSignedByte();
                         }
-
                     }
-
                 }
                 if (j1 > baseCharacterHeight && l < 128) {
                     baseCharacterHeight = j1;
@@ -364,15 +362,9 @@ import java.awt.Color;
             if (color.equals("end")) {
                 strikeThrough = false;
             }
-
-
-
             if (color.equals("mbl")) {
                 return 0x359BBD;
             }
-
-
-
             return -1;
         }
 

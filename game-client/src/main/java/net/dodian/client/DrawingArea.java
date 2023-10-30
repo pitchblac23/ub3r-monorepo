@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public class DrawingArea extends NodeSub {
 
@@ -42,7 +40,6 @@ public class DrawingArea extends NodeSub {
                         + (k2 + j3 >> 8);
                 pixels[l3++] = k4;
             }
-
             l3 += k3;
         }
     }
@@ -72,14 +69,11 @@ public class DrawingArea extends NodeSub {
         for (int i2 = -i; i2 < 0; i2++) {
             for (int j2 = -i1; j2 < 0; j2++)
                 pixels[l1++] = l;
-
             l1 += k1;
         }
-
     }
 
-    public static void drawFilledPixels(int x, int y, int pixelWidth,
-                                        int pixelHeight, int color) {// method578
+    public static void drawFilledPixels(int x, int y, int pixelWidth, int pixelHeight, int color) {// method578
         if (x < topX) {
             pixelWidth -= topX - x;
             x = topX;
@@ -101,8 +95,7 @@ public class DrawingArea extends NodeSub {
         }
     }
 
-    public static void drawAlphaFilledPixels(int xPos, int yPos,
-                                             int pixelWidth, int pixelHeight, int color, int alpha) { // method586
+    public static void drawAlphaFilledPixels(int xPos, int yPos, int pixelWidth, int pixelHeight, int color, int alpha) { // method586
         if (xPos < topX) {
             pixelWidth -= topX - xPos;
             xPos = topX;
@@ -176,7 +169,6 @@ public class DrawingArea extends NodeSub {
         int i = width * height;
         for (int j = 0; j < i; j++)
             pixels[j] = 0;
-
     }
 
     public static void method335(int i, int j, int k, int l, int i1, int k1) {
@@ -206,7 +198,6 @@ public class DrawingArea extends NodeSub {
                 int k4 = ((i2 + l2 >> 8) << 16) + ((j2 + i3 >> 8) << 8) + (k2 + j3 >> 8);
                 pixels[l3++] = k4;
             }
-
             l3 += k3;
         }
     }
@@ -229,7 +220,6 @@ public class DrawingArea extends NodeSub {
         for (int i2 = -i; i2 < 0; i2++) {
             for (int j2 = -i1; j2 < 0; j2++)
                 pixels[l1++] = l;
-
             l1 += k1;
         }
 
@@ -263,7 +253,6 @@ public class DrawingArea extends NodeSub {
         int i1 = l + i * width;
         for (int j1 = 0; j1 < k; j1++)
             pixels[i1 + j1] = j;
-
     }
 
     static void method340(int i, int j, int k, int l, int i1) {
@@ -287,7 +276,6 @@ public class DrawingArea extends NodeSub {
             int k3 = ((k1 + j2 >> 8) << 16) + ((l1 + k2 >> 8) << 8) + (i2 + l2 >> 8);
             pixels[i3++] = k3;
         }
-
     }
 
     public static void method341(int i, int j, int k, int l) {
@@ -302,7 +290,6 @@ public class DrawingArea extends NodeSub {
         int j1 = l + i * width;
         for (int k1 = 0; k1 < k; k1++)
             pixels[j1 + k1 * width] = j;
-
     }
 
     private static void method342(int i, int j, int k, int l, int i1) {
@@ -332,7 +319,7 @@ public class DrawingArea extends NodeSub {
     DrawingArea() {
     }
 
-    public static int pixels[];
+    public static int[] pixels;
     public static int width;
     public static int height;
     public static int topY;
@@ -347,5 +334,4 @@ public class DrawingArea extends NodeSub {
     public static int startX;
     public static int endX;
     public static int lastX;
-
 }

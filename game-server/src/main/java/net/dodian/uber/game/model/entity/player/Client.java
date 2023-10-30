@@ -2234,16 +2234,19 @@ public class Client extends Player implements Runnable {
 			lastRecover--;
 			if (lastRecover == 0) {
 				lastRecoverEffect = 0;
-				lastRecover = 4;
+				lastRecover = 5;
 				Skills.enabledSkills().forEach(skill -> {
 					switch (skill) {
 						case HITPOINTS:
 							heal(1);
 							break;
 						case PRAYER:
+							break;
+						default:
 							if (boostedLevel[skill.getId()] > 0)
 								boostedLevel[skill.getId()]--;
-							else boostedLevel[skill.getId()]++;
+							else if (boostedLevel[skill.getId()] != 0)
+								boostedLevel[skill.getId()]++;
 							break;
 					}
 					refreshSkill(skill);

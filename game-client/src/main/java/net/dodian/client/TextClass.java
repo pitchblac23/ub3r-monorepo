@@ -27,7 +27,7 @@ final class TextClass {
             if (l % 37L == 0L)
                 return "invalid_name";
             int i = 0;
-            char ac[] = new char[12];
+            char[] ac = new char[12];
             while (l != 0L) {
                 long l1 = l;
                 l /= 37L;
@@ -35,7 +35,7 @@ final class TextClass {
             }
             return new String(ac, 12 - i, i);
         } catch (RuntimeException runtimeexception) {
-            Signlink.reporterror("81570, " + l + ", " + (byte) -99 + ", " + runtimeexception.toString());
+            Signlink.reporterror("81570, " + l + ", " + (byte) -99 + ", " + runtimeexception);
         }
         throw new RuntimeException();
     }
@@ -73,12 +73,11 @@ final class TextClass {
     }
 
     public static String passwordAsterisks(String s) {
-        StringBuffer stringbuffer = new StringBuffer();
+        StringBuilder stringbuffer = new StringBuilder();
         for (int j = 0; j < s.length(); j++)
             stringbuffer.append("*");
         return stringbuffer.toString();
     }
 
     private static final char[] validChars = {'_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
 }

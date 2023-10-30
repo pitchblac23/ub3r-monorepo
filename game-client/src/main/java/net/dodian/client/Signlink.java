@@ -18,7 +18,7 @@ public final class Signlink implements Runnable {
         if (active) {
             try {
                 Thread.sleep(500L);
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
             active = false;
         }
@@ -34,7 +34,7 @@ public final class Signlink implements Runnable {
         while (!active)
             try {
                 Thread.sleep(50L);
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
     }
 
@@ -77,7 +77,7 @@ public final class Signlink implements Runnable {
                         FileOutputStream fileoutputstream = new FileOutputStream(s + savereq);
                         fileoutputstream.write(savebuf, 0, savelen);
                         fileoutputstream.close();
-                    } catch (Exception _ex) {
+                    } catch (Exception ignored) {
                     }
                 if (midiplay) {
                     midi = s + savereq;
@@ -95,7 +95,7 @@ public final class Signlink implements Runnable {
             }
             try {
                 Thread.sleep(50L);
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
         }
     }
@@ -130,7 +130,7 @@ public final class Signlink implements Runnable {
                 dataoutputstream.writeInt((int) (Math.random() * 99999999D));
                 dataoutputstream.close();
             }
-        } catch (Exception _ex) {
+        } catch (Exception ignored) {
         }
         try {
             DataInputStream datainputstream = new DataInputStream(new FileInputStream(s + "uid.dat"));
@@ -146,7 +146,7 @@ public final class Signlink implements Runnable {
         for (socketreq = i; socketreq != 0; )
             try {
                 Thread.sleep(50L);
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
 
         if (socket == null)
@@ -159,7 +159,7 @@ public final class Signlink implements Runnable {
         for (urlreq = s; urlreq != null; )
             try {
                 Thread.sleep(50L);
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
 
         if (urlstream == null)
@@ -178,7 +178,7 @@ public final class Signlink implements Runnable {
         threadreq = runnable;
     }
 
-    public static synchronized boolean wavesave(byte abyte0[], int i) {
+    public static synchronized boolean wavesave(byte[] abyte0, int i) {
         if (i > 0x1e8480)
             return false;
         if (savereq != null) {
@@ -204,7 +204,7 @@ public final class Signlink implements Runnable {
         }
     }
 
-    public static synchronized void midisave(byte abyte0[], int i) {
+    public static synchronized void midisave(byte[] abyte0, int i) {
         if (i > 0x1e8480)
             return;
         if (savereq != null) {

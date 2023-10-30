@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 final class Class11 {
 
@@ -164,9 +162,7 @@ final class Class11 {
                 for (int j2 = i1; j2 < i1 + k; j2++)
                     if (j2 >= 0 && j2 < anInt293)
                         method214(i2, j2, k1);
-
             }
-
     }
 
     public void method213(int i, int k) {
@@ -318,9 +314,7 @@ final class Class11 {
                 for (int i2 = l; i2 < l + i1; i2++)
                     if (i2 >= 0 && i2 < anInt293)
                         method217(j1, l1, i2);
-
             }
-
     }
 
     private void method217(int i, int j, int k) {
@@ -466,8 +460,7 @@ final class Class11 {
         return false;
     }
 
-    public boolean method221(int i, int j, int k, int l, int i1, int j1,
-                             int k1) {
+    public boolean method221(int i, int j, int k, int l, int i1, int j1, int k1) {
         int l1 = (j + j1) - 1;
         int i2 = (i + l) - 1;
         if (k >= j && k <= l1 && k1 >= i && k1 <= i2)

@@ -22,12 +22,16 @@ import net.dodian.uber.game.party.Balloons;
 import net.dodian.uber.game.security.CommandLog;
 import net.dodian.utilities.DbTables;
 import net.dodian.utilities.Misc;
+import org.apache.ibatis.javassist.bytecode.Bytecode;
+
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.BitSet;
+
 import static net.dodian.uber.game.combat.ClientExtensionsKt.*;
 import static net.dodian.utilities.DotEnvKt.getGameWorldId;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
@@ -253,15 +257,6 @@ public class Commands implements Packet {
                         client.send(new SendMessage("Wrong usage.. ::config36 id value"));
                     }
                 }
-                if (cmd[0].equalsIgnoreCase("t")) {
-                    //173 = run config!
-                    try {
-                        int id = Integer.parseInt(cmd[1]);
-                        client.frame36(153, id);
-                    } catch (Exception e) {
-                        client.send(new SendMessage("Wrong usage.. ::t id"));
-                    }
-                }
                 if (cmd[0].equalsIgnoreCase("config87")) {
                     //173 = run config!
                     try {
@@ -270,6 +265,31 @@ public class Commands implements Packet {
                         client.frame87(id, value);
                     } catch (Exception e) {
                         client.send(new SendMessage("Wrong usage.. ::config87 id value"));
+                    }
+                }
+                if (cmd[0].equalsIgnoreCase("varp")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    int value = Integer.parseInt(cmd[2]);
+                    client.frame36(id, value);
+                    client.send(new SendMessage("varp: " + id + " state: " + value));
+                }
+                if (cmd[0].equalsIgnoreCase("varbit")) {
+                    int id = Integer.parseInt(cmd[1]);
+                    int value = Integer.parseInt(cmd[2]);
+                    client.frame87(id, value);
+                    client.send(new SendMessage("varbit: " + id + " state: " + value));
+                }
+                if (cmd[0].equalsIgnoreCase("config")) {
+                    try {
+                        int id = Integer.parseInt(cmd[1]);
+                        int value = Integer.parseInt(cmd[2]);
+                        if(value < 128)
+                            client.frame36(id, value);
+                        else
+                            client.frame87(id, value);
+                        client.send(new SendMessage("done!"));
+                    } catch (Exception e) {
+                        client.send(new SendMessage("Wrong usage.. ::config id value"));
                     }
                 }
                 if (command.startsWith("update") && command.length() > 7) {
@@ -858,8 +878,7 @@ public class Commands implements Packet {
                     client.send(new SendMessage(!client.busy ? "You are no longer busy!" : "You are now busy!"));
                 }
                 if (cmd[0].equalsIgnoreCase("camera")) {
-                    client
-                            .send(new SendCamera("rotation", client.getPosition().getX(), client.getPosition().getY(), 100, 2, 2, ""));
+                    client.send(new SendCamera("rotation", client.getPosition().getX(), client.getPosition().getY(), 100, 2, 2, ""));
                 }
                 if (cmd[0].equalsIgnoreCase("creset")) {
                     client.send(new CameraReset());

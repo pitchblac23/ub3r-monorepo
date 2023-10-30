@@ -82,7 +82,7 @@ public class DataUtils {
         } finally {
             try {
                 out.close();
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return out.toByteArray();

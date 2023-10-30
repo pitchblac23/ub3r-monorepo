@@ -49,5 +49,4 @@ final class Class4 {
         else
             return j1;
     }
-
 }

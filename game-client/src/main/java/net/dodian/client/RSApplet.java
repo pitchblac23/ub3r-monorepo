@@ -16,7 +16,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
     private int anInt4;
     private int delayTime;
     int minDelay;
-    private final long aLongArray7[] = new long[10];
+    private final long[] aLongArray7 = new long[10];
     int fps;
     boolean shouldDebug;
     int myWidth;
@@ -38,8 +38,8 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
     public int saveClickX;
     public int saveClickY;
     long aLong29;
-    final int keyArray[] = new int[128];
-    private final int charQueue[] = new int[128];
+    final int[] keyArray = new int[128];
+    private final int[] charQueue = new int[128];
     public boolean isLoading;
     private int readIndex;
     private int writeIndex;
@@ -173,15 +173,15 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
             }
             processDrawing();
             if (shouldDebug) {
-                System.out.println((new StringBuilder()).append("ntime:").append(l2).toString());
+                System.out.println("ntime:" + l2);
                 for (int k2 = 0; k2 < 10; k2++) {
                     int i3 = ((i - k2 - 1) + 20) % 10;
-                    System.out.println((new StringBuilder()).append("otim").append(i3).append(":").append(aLongArray7[i3]).toString());
+                    System.out.println("otim" + i3 + ":" + aLongArray7[i3]);
                 }
 
-                System.out.println((new StringBuilder()).append("fps:").append(fps).append(" ratio:").append(j).append(" count:").append(l).toString());
-                System.out.println((new StringBuilder()).append("del:").append(k).append(" deltime:").append(delayTime).append(" mindel:").append(minDelay).toString());
-                System.out.println((new StringBuilder()).append("intex:").append(i1).append(" opos:").append(i).toString());
+                System.out.println("fps:" + fps + " ratio:" + j + " count:" + l);
+                System.out.println("del:" + k + " deltime:" + delayTime + " mindel:" + minDelay);
+                System.out.println("intex:" + i1 + " opos:" + i);
                 shouldDebug = false;
                 i1 = 0;
             }
@@ -213,11 +213,11 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
         if (gameFrame != null) {
             try {
                 Thread.sleep(1000L);
-            } catch (Exception exception) {
+            } catch (Exception ignored) {
             }
             try {
                 System.exit(0);
-            } catch (Throwable throwable) {
+            } catch (Throwable ignored) {
             }
         }
     }
@@ -242,7 +242,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
         anInt4 = -1;
         try {
             Thread.sleep(5000L);
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
         }
         if (anInt4 == -1) {
             exit();
@@ -726,7 +726,7 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
             long picNumber = random(9999);
             System.out.println(picNumber);
             String fileExtension = Client.myUsername;
-            File file = new File((new StringBuilder()).append(Signlink.findCacheDir() + "Screenshots/" + fileExtension + " ").append(picNumber).append(".png").toString());
+            File file = new File(Signlink.findCacheDir() + "Screenshots/" + fileExtension + " " + picNumber + ".png");
             ImageIO.write(bufferedimage, "png", file);
         } catch(Exception e) {
             e.printStackTrace();
@@ -745,16 +745,16 @@ public class RSApplet extends Applet implements Runnable, MouseListener, MouseMo
             graphics = (isApplet ? this : gameFrame).getGraphics();
             try {
                 getGameComponent().repaint();
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
             try {
                 Thread.sleep(1000L);
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
         }
-        Font font = new Font("Helvetica", 1, 13);
+        Font font = new Font("Helvetica", Font.BOLD, 13);
         FontMetrics fontmetrics = getGameComponent().getFontMetrics(font);
-        Font font1 = new Font("Helvetica", 0, 13);
+        Font font1 = new Font("Helvetica", Font.PLAIN, 13);
         FontMetrics fontmetrics1 = getGameComponent().getFontMetrics(font1);
         if (shouldClearScreen) {
             graphics.setColor(Color.black);

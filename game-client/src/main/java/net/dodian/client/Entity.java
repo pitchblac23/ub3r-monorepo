@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public class Entity extends Animable {
 
@@ -18,7 +16,6 @@ public class Entity extends Animable {
                     smallY[i1] = smallY[i1 - 1];
                     aBooleanArray1553[i1] = aBooleanArray1553[i1 - 1];
                 }
-
                 smallX[0] = i;
                 smallY[0] = j;
                 aBooleanArray1553[0] = false;

@@ -33,7 +33,6 @@ public final class ItemDef {
     }
 
     public static void unpackConfig(StreamLoader archive) {
-
         stream = new Stream(archive.getDataForName("obj.dat"));
         Stream stream = new Stream(archive.getDataForName("obj.idx"));
         totalItems = stream.readUnsignedShort();
@@ -139,11 +138,11 @@ public final class ItemDef {
             if (l != -1) {
                 Model model_1 = Model.method462(k);
                 Model model_3 = Model.method462(l);
-                Model aclass30_sub2_sub4_sub6_1s[] = {model, model_1, model_3};
+                Model[] aclass30_sub2_sub4_sub6_1s = {model, model_1, model_3};
                 model = new Model(3, aclass30_sub2_sub4_sub6_1s);
             } else {
                 Model model_2 = Model.method462(k);
-                Model aclass30_sub2_sub4_sub6s[] = {model, model_2};
+                Model[] aclass30_sub2_sub4_sub6s = {model, model_2};
                 model = new Model(2, aclass30_sub2_sub4_sub6s);
             }
         if (i == 0 && maleOffset != 0)
@@ -362,8 +361,8 @@ public final class ItemDef {
         Sprite enabledSprite = new Sprite(32, 32);
         int k1 = Texture.textureInt1;
         int l1 = Texture.textureInt2;
-        int ai[] = Texture.anIntArray1472;
-        int ai1[] = DrawingArea.pixels;
+        int[] ai = Texture.anIntArray1472;
+        int[] ai1 = DrawingArea.pixels;
         int i2 = DrawingArea.width;
         int j2 = DrawingArea.height;
         int k2 = DrawingArea.topX;
@@ -420,7 +419,6 @@ public final class ItemDef {
                                 && enabledSprite.myPixels[j5 + (k4 + 1) * 32] == 1)
                             enabledSprite.myPixels[j5 + k4 * 32] = k;
             }
-
         } else if (k == 0) {
             for (int k5 = 31; k5 >= 0; k5--) {
                 for (int l4 = 31; l4 >= 0; l4--)
@@ -462,14 +460,12 @@ public final class ItemDef {
             for (int k = 0; k < 10; k++)
                 if (i >= stackAmounts[k] && stackAmounts[k] != 0)
                     j = stackIDs[k];
-
             if (j != -1)
                 return forID(j).method201(1);
         }
         Model model = (Model) mruNodes2.insertFromCache(id);
         if (model != null)
             return model;
-
 
         model = Model.method462(modelID);
         if (model == null)
@@ -479,7 +475,6 @@ public final class ItemDef {
         if (modifiedModelColors != null) {
             for (int l = 0; l < modifiedModelColors.length; l++)
                 model.method476(modifiedModelColors[l], originalModelColors[l]);
-
         }
         model.setLighting(64 + ambient, 768 + contrast, -50, -10, -50, true);
         model.aBoolean1659 = true;
@@ -724,7 +719,7 @@ public final class ItemDef {
     static MRUNodes mruNodes1 = new MRUNodes(100);
     public static MRUNodes mruNodes2 = new MRUNodes(50);
     public static int totalItems;
-    public String itemActions[];
-    public String groundActions[];
+    public String[] itemActions;
+    public String[] groundActions;
     public boolean searchable;
 }

@@ -27,7 +27,10 @@ fun Client.npcChat(npc: Int, emote: Int, vararg lines: String) = showNPCChat(npc
 fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
 
     fun updateNPCChat(p: Client) = when (p.NpcDialogue) {
-            1 -> p.npcChat(p.NpcTalkTo, 591, "Good day, how can I help you?")
+            1 -> {
+                p.npcChat(p.NpcTalkTo, DEFAULT, "Good day, how can I help you?")
+                p.nextDiag = 2
+            }
 
             2 -> p.playerOptions(
                     "What would you like to say?",
@@ -35,7 +38,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                     "I'd like to access my PIN settings.")
 
             3 -> {
-                p.npcChat(p.NpcTalkTo, 591, "Do you want to buy some runes?")
+                p.npcChat(p.NpcTalkTo, DEFAULT, "Do you want to buy some runes?")
                 p.nextDiag = 4
             }
 
@@ -44,11 +47,12 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                     "Yes please!",
                     "Oh it's a rune shop. No thank you, then.")
 
-            5 -> p.playerChat(591, "Oh it's a rune shop. No thank you, then.")
+            5 -> {
+                p.playerChat(DEFAULT, "Oh it's a rune shop. No thank you, then.")
+                p.nextDiag = 6
+            }
 
             6 -> p.npcChat(p.NpcTalkTo, 592, "Well, if you find someone who does want runes, please", "send them my way.")
-
-            7 -> p.npcChat(p.NpcTalkTo, 591, "Well, if you find someone who does want runes, please", "send them my way.")
 
             8 -> p.npcChat(p.NpcTalkTo, 591, "Pins have not been implemented yet.")
 

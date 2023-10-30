@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public final class IDK {
 
@@ -49,14 +47,13 @@ public final class IDK {
         for (int j = 0; j < anIntArray658.length; j++)
             if (!Model.method463(anIntArray658[j]))
                 flag = false;
-
         return flag;
     }
 
     public Model method538() {
         if (anIntArray658 == null)
             return null;
-        Model aclass30_sub2_sub4_sub6s[] = new Model[anIntArray658.length];
+        Model[] aclass30_sub2_sub4_sub6s = new Model[anIntArray658.length];
         for (int i = 0; i < anIntArray658.length; i++)
             aclass30_sub2_sub4_sub6s[i] = Model.method462(anIntArray658[i]);
 
@@ -70,7 +67,6 @@ public final class IDK {
                 break;
             model.method476(anIntArray659[j], anIntArray660[j]);
         }
-
         return model;
     }
 
@@ -79,12 +75,11 @@ public final class IDK {
         for (int i = 0; i < 5; i++)
             if (anIntArray661[i] != -1 && !Model.method463(anIntArray661[i]))
                 flag1 = false;
-
         return flag1;
     }
 
     public Model method540() {
-        Model aclass30_sub2_sub4_sub6s[] = new Model[5];
+        Model[] aclass30_sub2_sub4_sub6s = new Model[5];
         int j = 0;
         for (int k = 0; k < 5; k++)
             if (anIntArray661[k] != -1)
@@ -96,7 +91,6 @@ public final class IDK {
                 break;
             model.method476(anIntArray659[l], anIntArray660[l]);
         }
-
         return model;
     }
 
@@ -108,7 +102,7 @@ public final class IDK {
     }
 
     public static int length;
-    public static IDK cache[];
+    public static IDK[] cache;
     public int anInt657;
     private int[] anIntArray658;
     private final int[] anIntArray659;

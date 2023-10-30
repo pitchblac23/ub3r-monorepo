@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public class Animable extends NodeSub {
 
@@ -21,6 +19,6 @@ public class Animable extends NodeSub {
         modelHeight = 1000;
     }
 
-    Class33 aClass33Array1425[];
+    Class33[] aClass33Array1425;
     public int modelHeight;
 }

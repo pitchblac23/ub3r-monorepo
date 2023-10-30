@@ -18,7 +18,7 @@ public class Jframe extends Client implements ActionListener {
     private JFrame frame;
     private static final long serialVersionUID = 1L;
 
-    public Jframe(String args[]) {
+    public Jframe(String[] args) {
         super();
         try {
             Signlink.startpriv(InetAddress.getByName(server));
@@ -149,7 +149,7 @@ public class Jframe extends Client implements ActionListener {
         Desktop d = Desktop.getDesktop();
         try {
             d.browse(new URI(url));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -167,7 +167,7 @@ public class Jframe extends Client implements ActionListener {
                     openURL("https://dodian.net/");
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 }

@@ -599,7 +599,7 @@ public class ClickingButtons implements Packet {
             case 95075:
                 if(client.IsBanking) {
                     if (client.freeSlots() < 28) {
-                        for (int i = 0; i < 28; i++)
+                        for (int i = 0; i < client.playerItems.length; i++)
                             if (client.playerItems[i] > 0)
                                 client.bankItem(client.playerItems[i] - 1, i, client.playerItemsN[i]);
                         client.send(new SendMessage("You banked all your items."));

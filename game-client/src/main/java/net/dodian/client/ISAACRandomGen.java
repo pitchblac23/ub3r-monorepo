@@ -1,10 +1,8 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public final class ISAACRandomGen {
 
-    public ISAACRandomGen(int seed[]) {
+    public ISAACRandomGen(int[] seed) {
         memory = new int[256];
         results = new int[256];
         System.arraycopy(seed, 0, results, 0, seed.length);
@@ -36,7 +34,6 @@ public final class ISAACRandomGen {
             memory[i] = k = memory[(j & 0x3fc) >> 2] + accumulator + lastResult;
             results[i] = lastResult = memory[(k >> 8 & 0x3fc) >> 2] + j;
         }
-
     }
 
     private void initializeKeySet() {
@@ -160,7 +157,6 @@ public final class ISAACRandomGen {
             memory[k + 6] = j2;
             memory[k + 7] = k2;
         }
-
         isaac();
         count = 256;
     }

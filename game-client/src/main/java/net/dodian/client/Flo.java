@@ -6,7 +6,7 @@ public final class Flo {
         Stream stream = new Stream(streamLoader.getDataForName("flo.dat"));
         int underlayAmount = stream.readUnsignedWord();
         underlays = new Flo[underlayAmount];
-        System.out.println(String.format("Loaded: %d underlays", underlayAmount));
+        System.out.printf("Loaded: %d underlays%n", underlayAmount);
 
         for (int i = 0; i < underlayAmount; i++) {
             if (underlays[i] == null) {
@@ -16,7 +16,7 @@ public final class Flo {
             underlays[i].generateHsl(true);
         }
         int overlayAmount = stream.readUnsignedWord();
-        System.out.println(String.format("Loaded: %d overlays", overlayAmount));
+        System.out.printf("Loaded: %d overlays%n", overlayAmount);
 
         overlays = new Flo[overlayAmount];
         for (int i = 0; i < overlayAmount; i++) {
@@ -72,51 +72,6 @@ public final class Flo {
     }
 
     private boolean snow = false;
-
-	/*
-	private void readValues(net.dodian.client.Stream stream)
-	{
-		do
-		{
-			int i = stream.readUnsignedByte();
-			if(i == 0)
-				return;
-			else
-			if(i == 1)
-			{
-				anInt390 = stream.read3Bytes();
-				method262(anInt390);
-			} else
-			if(i == 2)
-				anInt391 = stream.readUnsignedByte();
-			else
-			if(i == 3) {
-			} else
-			if(i == 5)
-				aBoolean393 = false;
-			else
-			if(i == 6)
-				stream.readString();
-			else
-			if(i == 7)
-			{
-				int j = anInt394;
-				int k = anInt395;
-				int l = anInt396;
-				int i1 = anInt397;
-				int j1 = stream.read3Bytes();
-				method262(j1);
-				anInt394 = j;
-				anInt395 = k;
-				anInt396 = l;
-				anInt397 = i1;
-				anInt398 = i1;
-			} else
-			{
-				System.out.println("Error unrecognised config code: " + i);
-			}
-		} while(true);
-	}*/
 
     private void method262(int i) {
         double d = (double) (i >> 16 & 0xff) / 256D;

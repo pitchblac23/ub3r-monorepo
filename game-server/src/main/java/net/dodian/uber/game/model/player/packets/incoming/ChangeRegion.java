@@ -58,35 +58,39 @@ public class ChangeRegion implements Packet {
             client.ReplaceObject2(new Position(2716, 3472, 0), -1, -1, 0); // Remove seers door?
             client.ReplaceObject2(new Position(2594, 3102, 0), -1, -1, 0); // Remove Yanille door?
             client.ReplaceObject2(new Position(2816, 3438, 0), -1, -1, 0); // Remove Catherby door?
+
             /* Rope from Tzhaar city */
             client.ReplaceObject2(new Position(2443, 5169, 0), 2352, 0, 10);
-            /*
-             * Danno: Box off new area from noobs =]
-             */
+
+            /* Danno: Box off new area from noobs =] */
             client.ReplaceObject2(new Position(2770, 3140, 0), 2050, 0, 10);
             client.ReplaceObject2(new Position(2771, 3140, 0), 2050, 0, 10);
             client.ReplaceObject2(new Position(2772, 3140, 0), 2050, 0, 10);
             client.ReplaceObject2(new Position(2772, 3141, 0), 2050, 0, 10);
             client.ReplaceObject2(new Position(2772, 3142, 0), 2050, 0, 10);
             client.ReplaceObject2(new Position(2772, 3143, 0), 2050, 0, 10);
-            /* Blocking object! */
-            client.ReplaceObject2(new Position(2832, 2971, 0), 2050, 0, 10);
+
             /* ? */
             client.ReplaceObject2(new Position(2998, 3931, 0), 6951, 0, 0);
             client.ReplaceObject2(new Position(2904, 9678, 0), 6951, 0, 10);
+
             // slayer update
             //ReplaceObject2(2904, 9678, -1, -1, 11);
             // ReplaceObject2(2691, 9774, 2107, 0, 11);
+
             // Ancient slayer dunegon
             client.ReplaceObject(2661, 9815, 2391, 0, 0);
             client.ReplaceObject(2662, 9815, 2392, -2, 0);
+
             /* Gnome mining cavern */
             client.ReplaceObject2(new Position(2492, 9916, 0), 7491, 0, 10);
             client.ReplaceObject2(new Position(2493, 9915, 0), 7491, 0, 10);
+
             /*Cooking oven fishing guild*/
             client.ReplaceObject2(new Position(2593, 3423, 0), 21302, 0, 10);
+
             /*Bankbooth at cath*/
-            //client.ReplaceObject2(new Position(2810, 3442, 0), 6943, 0, 10);
+            client.ReplaceObject2(new Position(2810, 3442, 0), 6943, 0, 10);
 
         if (client.inWildy() || client.duelFight) {
             client.getOutputStream().createFrameVarSize(104);

@@ -1,14 +1,11 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
-
+package net.dodian.client;
 
 final class Class21 {
 
     public Class21() {
     }
 
-    public byte aByteArray368[];
+    public byte[] aByteArray368;
     public int anInt369;
     public int anInt370;
     public int anInt371;

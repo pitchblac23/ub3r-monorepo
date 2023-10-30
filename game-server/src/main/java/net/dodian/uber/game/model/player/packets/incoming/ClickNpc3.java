@@ -51,7 +51,6 @@ public class ClickNpc3 implements Packet {
                 client.setWalkToTask(null);
                 this.stop();
             }
-
         });
     }
 

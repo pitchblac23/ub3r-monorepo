@@ -50,7 +50,7 @@ public class ClickNpc implements Packet {
                     return;
                 }
 
-                if (!client.goodDistanceEntity(tempNpc, 1)) {
+                if (!client.goodDistanceEntity(tempNpc, 2)) {
                     return;
                 }
 
@@ -91,7 +91,7 @@ public class ClickNpc implements Packet {
             }
             client.showNPCChat(3306, 590, new String[]{"There is currently " + peopleInWild + " player" + (peopleInWild != 1 ? "s" : "") + " in the wild!", "There is " + peopleInEdge + " player" + (peopleInEdge != 1 ? "s" : "") + " in Edgeville!"});
         }
-        if (npcId == 1613 || npcId == 1618 || npcId == 7677) { /* Banking */
+        if ((npcId == 1613 || npcId == 1618 || npcId == 7677) && client.goodDistanceEntity(tempNpc, 2)) { /* Banking */
             client.NpcWanneTalk = 1;
             client.convoId = 0;
         } else if (npcId == 11435) { /* Aubury */
@@ -121,6 +121,8 @@ public class ClickNpc implements Packet {
             client.NpcWanneTalk = 8051;
         } else if (npcId == 3640) { // Beginner store!
             client.WanneShop = 22;
+        } else if (npcId == 2813) {
+            client.WanneShop = 3;
         } else if (npcId == 2825) {
             client.NpcWanneTalk = 1002;
             client.convoId = -1;
@@ -142,6 +144,7 @@ public class ClickNpc implements Packet {
             tempNpc.setText("There are currently " + num + " people in the wilderness");
         } else {
             client.println_debug("atNPC 1: " + npcId);
+            client.send(new SendMessage("Please inform Admin of click1 on " + npcId + "."));
         }
     }
 }

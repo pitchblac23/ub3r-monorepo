@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +56,7 @@ final class RSSocket
             return inputStream.available();
     }
 
-    public void flushInputStream(byte abyte0[], int j)
+    public void flushInputStream(byte[] abyte0, int j)
             throws IOException {
         int i = 0;//was parameter
         if (closed)
@@ -73,7 +71,7 @@ final class RSSocket
 
     }
 
-    public void queueBytes(int i, byte abyte0[])
+    public void queueBytes(int i, byte[] abyte0)
             throws IOException {
         if (closed)
             return;
@@ -107,7 +105,7 @@ final class RSSocket
                 if (buffIndex == writeIndex)
                     try {
                         wait();
-                    } catch (InterruptedException _ex) {
+                    } catch (InterruptedException ignored) {
                     }
                 if (!isWriter)
                     return;
@@ -142,7 +140,7 @@ final class RSSocket
         System.out.println("ioerror:" + hasIOError);
         try {
             System.out.println("available:" + available());
-        } catch (IOException _ex) {
+        } catch (IOException ignored) {
         }
     }
 

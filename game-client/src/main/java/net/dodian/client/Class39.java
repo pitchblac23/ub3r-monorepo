@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 final class Class39 {
 
@@ -49,7 +47,6 @@ final class Class39 {
         if (i == 0) {
             for (int l = 0; l < anIntArray665[0] * 2; l++)
                 aFloatArrayArray669[0][l] *= aFloat671;
-
         }
         for (int i1 = 0; i1 < anIntArray665[i] * 2; i1++)
             anIntArrayArray670[i][i1] = (int) (aFloatArrayArray669[i][i1] * 65536F);
@@ -70,7 +67,6 @@ final class Class39 {
                     anIntArrayArrayArray666[k][0][l] = stream.readUnsignedWord();
                     anIntArrayArrayArray667[k][0][l] = stream.readUnsignedWord();
                 }
-
             }
 
             for (int i1 = 0; i1 < 2; i1++) {
@@ -82,7 +78,6 @@ final class Class39 {
                         anIntArrayArrayArray666[i1][1][j1] = anIntArrayArrayArray666[i1][0][j1];
                         anIntArrayArrayArray667[i1][1][j1] = anIntArrayArrayArray667[i1][0][j1];
                     }
-
             }
 
             if (j != 0 || anIntArray668[1] != anIntArray668[0])
@@ -107,5 +102,4 @@ final class Class39 {
     static final int[][] anIntArrayArray670 = new int[2][8];
     private static float aFloat671;
     static int anInt672;
-
 }

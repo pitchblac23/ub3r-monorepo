@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 import java.util.Random;
 
@@ -249,7 +247,7 @@ public final class TextDrawingArea extends DrawingArea {
         return -1;
     }
 
-    private void method392(byte abyte0[], int i, int j, int k, int l, int i1) {
+    private void method392(byte[] abyte0, int i, int j, int k, int l, int i1) {
         int j1 = i + j * width;
         int k1 = width - k;
         int l1 = 0;
@@ -283,7 +281,7 @@ public final class TextDrawingArea extends DrawingArea {
         }
     }
 
-    private void method393(int ai[], byte abyte0[], int i, int j, int k, int l, int i1, int j1, int k1) {
+    private void method393(int[] ai, byte[] abyte0, int i, int j, int k, int l, int i1, int j1, int k1) {
         int l1 = -(l >> 2);
         l = -(l & 3);
         for (int i2 = -i1; i2 < 0; i2++) {
@@ -316,7 +314,7 @@ public final class TextDrawingArea extends DrawingArea {
         }
     }
 
-    private void method394(int i, int j, byte abyte0[], int k, int l, int i1,
+    private void method394(int i, int j, byte[] abyte0, int k, int l, int i1,
                            int j1) {
         int k1 = j + l * width;
         int l1 = width - k;
@@ -351,7 +349,7 @@ public final class TextDrawingArea extends DrawingArea {
         method395(abyte0, i1, k1, pixels, j2, k, i2, l1, j1, i);
     }
 
-    private void method395(byte abyte0[], int i, int j, int ai[], int l, int i1, int j1, int k1, int l1, int i2) {
+    private void method395(byte[] abyte0, int i, int j, int[] ai, int l, int i1, int j1, int k1, int l1, int i2) {
         l1 = ((l1 & 0xff00ff) * i2 & 0xff00ff00) + ((l1 & 0xff00) * i2 & 0xff0000) >> 8;
         i2 = 256 - i2;
         for (int j2 = -i; j2 < 0; j2++) {

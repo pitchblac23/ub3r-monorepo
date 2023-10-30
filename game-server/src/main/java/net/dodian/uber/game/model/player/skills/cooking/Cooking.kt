@@ -14,8 +14,8 @@ fun startCooking(id: Int, c: Client) {
         return
     }
     var valid = false
-    for (i in Utils.cookIds.indices) {
-        if (id == Utils.cookIds[i]) {
+    for (i in Utils.rawIds.indices) {
+        if (id == Utils.rawIds[i]) {
             c.cookIndex = i
             valid = true
         }
@@ -31,27 +31,21 @@ fun cook(c: Client) {
         c.resetAction(true)
         return
     }
-    if (!c.playerHasItem(Utils.cookIds[c.cookIndex])) {
+    if (!c.playerHasItem(Utils.rawIds[c.cookIndex])) {
         c.send(SendMessage("You are out of fish"))
         c.resetAction(true)
         return
     }
-    val id = Utils.cookIds[c.cookIndex]
+    val id = Utils.rawIds[c.cookIndex]
     var ran = 0
     var index = 0
-    for (i in Utils.cookIds.indices) {
-        if (id == Utils.cookIds[i]) {
+    for (i in Utils.rawIds.indices) {
+        if (id == Utils.rawIds[i]) {
             index = i
         }
     }
     if (c.getLevel(Skills.COOKING) < Utils.cookLevel[index]) {
-        c.send(
-            SendMessage(
-                "You need " + Utils.cookLevel[index] + " cooking to cook the " + Server.itemManager.getName(
-                    id
-                ).lowercase(Locale.getDefault()) + "."
-            )
-        )
+        c.send(SendMessage("You need " + Utils.cookLevel[index] + " cooking to cook the " + Server.itemManager.getName(id).lowercase(Locale.getDefault()) + "."))
         c.resetAction(true)
         return
     }
@@ -70,9 +64,7 @@ fun cook(c: Client) {
     }
     if (c.getEquipment().get(Equipment.Slot.HANDS.id) == 775) ran -= 4
     if (c.getEquipment().get(Equipment.Slot.HEAD.id) == 1949) ran -= 4
-    if (c.getEquipment().get(Equipment.Slot.HEAD.id) == 1949 && c.getEquipment()
-            .get(Equipment.Slot.HANDS.id) == 775
-    ) ran -= 2
+    if (c.getEquipment().get(Equipment.Slot.HEAD.id) == 1949 && c.getEquipment().get(Equipment.Slot.HANDS.id) == 775) ran -= 2
     ran = if (ran < 0) 0 else if (ran > 100) 100 else ran
     val burn = 1 + Utils.random(99) <= ran
     if (Utils.cookExp[index] > 0) {

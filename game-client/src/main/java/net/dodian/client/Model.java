@@ -40,7 +40,7 @@ public class Model extends Animable {
         }
     }
 
-    public void readNewModel(byte abyte0[], int modelID) {
+    public void readNewModel(byte[] abyte0, int modelID) {
         Stream nc1 = new Stream(abyte0);
         Stream nc2 = new Stream(abyte0);
         Stream nc3 = new Stream(abyte0);
@@ -89,7 +89,7 @@ public class Model extends Animable {
         int[] y = null;
         int[] N = null;
         short[] D = null;
-        int[] triangleColours2 = new int[numTriangles];
+        int[] triangleColours2;
         if (numTexTriangles > 0) {
             O = new byte[numTexTriangles];
             nc1.currentOffset = 0;
@@ -514,7 +514,7 @@ public class Model extends Animable {
         }
     }
 
-    public static void method460(byte abyte0[], int j) {
+    public static void method460(byte[] abyte0, int j) {
         try {
             if (abyte0 == null) {
                 Class21 class21 = aClass21Array1661[j] = new Class21();
@@ -581,14 +581,13 @@ public class Model extends Animable {
             l2 += i2;
             class21_1.anInt375 = l2;
             l2 += j2;
-        } catch (Exception _ex) {
+        } catch (Exception ignored) {
         }
     }
 
-    public static boolean newmodel[];
+    public static boolean[] newmodel;
 
-    public static void method459(int i,
-                                 OnDemandFetcherParent onDemandFetcherParent) {
+    public static void method459(int i, OnDemandFetcherParent onDemandFetcherParent) {
         aClass21Array1661 = new Class21[80000];
         newmodel = new boolean[100000];
         aOnDemandFetcherParent_1662 = onDemandFetcherParent;
@@ -630,7 +629,7 @@ public class Model extends Animable {
             aBoolean1618 = !aBoolean1618;
     }
 
-    public Model(int i, Model amodel[]) {
+    public Model(int i, Model[] amodel) {
         aBoolean1618 = true;
         aBoolean1659 = false;
         anInt1620++;
@@ -737,7 +736,7 @@ public class Model extends Animable {
 
     }
 
-    public Model(Model amodel[]) {
+    public Model(Model[] amodel) {
         int i = 2;
         aBoolean1618 = true;
         aBoolean1659 = false;
@@ -1178,7 +1177,7 @@ public class Model extends Animable {
 
     public void method469() {
         if (anIntArray1655 != null) {
-            int ai[] = new int[256];
+            int[] ai = new int[256];
             int j = 0;
             for (int l = 0; l < anInt1626; l++) {
                 int j1 = anIntArray1655[l];
@@ -1201,7 +1200,7 @@ public class Model extends Animable {
             anIntArray1655 = null;
         }
         if (anIntArray1656 != null) {
-            int ai1[] = new int[256];
+            int[] ai1 = new int[256];
             int k = 0;
             for (int i1 = 0; i1 < anInt1630; i1++) {
                 int l1 = anIntArray1656[i1];
@@ -1246,7 +1245,7 @@ public class Model extends Animable {
 
     }
 
-    public void method471(int ai[], int j, int k) {
+    public void method471(int[] ai, int j, int k) {
         if (k == -1)
             return;
         if (ai == null || j == -1) {
@@ -1297,7 +1296,7 @@ public class Model extends Animable {
 
     }
 
-    private void method472(int i, int ai[], int j, int k, int l) {
+    private void method472(int i, int[] ai, int j, int k, int l) {
 
         int i1 = ai.length;
         if (i == 0) {
@@ -1308,7 +1307,7 @@ public class Model extends Animable {
             for (int k2 = 0; k2 < i1; k2++) {
                 int l3 = ai[k2];
                 if (l3 < anIntArrayArray1657.length) {
-                    int ai5[] = anIntArrayArray1657[l3];
+                    int[] ai5 = anIntArrayArray1657[l3];
                     for (int i5 = 0; i5 < ai5.length; i5++) {
                         int j6 = ai5[i5];
                         anInt1681 += anIntArray1627[j6];
@@ -1336,7 +1335,7 @@ public class Model extends Animable {
             for (int k1 = 0; k1 < i1; k1++) {
                 int l2 = ai[k1];
                 if (l2 < anIntArrayArray1657.length) {
-                    int ai1[] = anIntArrayArray1657[l2];
+                    int[] ai1 = anIntArrayArray1657[l2];
                     for (int i4 = 0; i4 < ai1.length; i4++) {
                         int j5 = ai1[i4];
                         anIntArray1627[j5] += j;
@@ -1353,7 +1352,7 @@ public class Model extends Animable {
             for (int l1 = 0; l1 < i1; l1++) {
                 int i3 = ai[l1];
                 if (i3 < anIntArrayArray1657.length) {
-                    int ai2[] = anIntArrayArray1657[i3];
+                    int[] ai2 = anIntArrayArray1657[i3];
                     for (int j4 = 0; j4 < ai2.length; j4++) {
                         int k5 = ai2[j4];
                         anIntArray1627[k5] -= anInt1681;
@@ -1396,7 +1395,7 @@ public class Model extends Animable {
             for (int i2 = 0; i2 < i1; i2++) {
                 int j3 = ai[i2];
                 if (j3 < anIntArrayArray1657.length) {
-                    int ai3[] = anIntArrayArray1657[j3];
+                    int[] ai3 = anIntArrayArray1657[j3];
                     for (int k4 = 0; k4 < ai3.length; k4++) {
                         int l5 = ai3[k4];
                         anIntArray1627[l5] -= anInt1681;
@@ -1417,7 +1416,7 @@ public class Model extends Animable {
             for (int j2 = 0; j2 < i1; j2++) {
                 int k3 = ai[j2];
                 if (k3 < anIntArrayArray1658.length) {
-                    int ai4[] = anIntArrayArray1658[k3];
+                    int[] ai4 = anIntArrayArray1658[k3];
                     for (int l4 = 0; l4 < ai4.length; l4++) {
                         int i6 = ai4[l4];
                         anIntArray1639[i6] += j * 8;
@@ -1874,7 +1873,7 @@ public class Model extends Animable {
             for (int i1 = anInt1652 - 1; i1 >= 0; i1--) {
                 int l1 = anIntArray1671[i1];
                 if (l1 > 0) {
-                    int ai[] = anIntArrayArray1672[i1];
+                    int[] ai = anIntArrayArray1672[i1];
                     for (int j3 = 0; j3 < l1; j3++)
                         method484(ai[j3]);
 
@@ -1891,7 +1890,7 @@ public class Model extends Animable {
         for (int i2 = anInt1652 - 1; i2 >= 0; i2--) {
             int k2 = anIntArray1671[i2];
             if (k2 > 0) {
-                int ai1[] = anIntArrayArray1672[i2];
+                int[] ai1 = anIntArrayArray1672[i2];
                 for (int i4 = 0; i4 < k2; i4++) {
                     int l4 = ai1[i4];
                     int l5 = anIntArray1638[l4];
@@ -1922,8 +1921,8 @@ public class Model extends Animable {
                     / (anIntArray1673[6] + anIntArray1673[8]);
         int i6 = 0;
         int k6 = anIntArray1673[10];
-        int ai2[] = anIntArrayArray1674[10];
-        int ai3[] = anIntArray1675;
+        int[] ai2 = anIntArrayArray1674[10];
+        int[] ai3 = anIntArray1675;
         if (i6 == k6) {
             i6 = 0;
             k6 = anIntArray1673[11];
@@ -1976,7 +1975,7 @@ public class Model extends Animable {
                     i5 = -1000;
             }
             int i7 = anIntArray1673[l6];
-            int ai4[] = anIntArrayArray1674[l6];
+            int[] ai4 = anIntArrayArray1674[l6];
             for (int j7 = 0; j7 < i7; j7++)
                 method484(ai4[j7]);
 
@@ -2307,30 +2306,30 @@ public class Model extends Animable {
     private boolean aBoolean1618;
     public static int anInt1620;
     public static Model aModel_1621 = new Model(true);
-    private static int anIntArray1622[] = new int[2000];
-    private static int anIntArray1623[] = new int[2000];
-    private static int anIntArray1624[] = new int[2000];
-    private static int anIntArray1625[] = new int[2000];
+    private static int[] anIntArray1622 = new int[2000];
+    private static int[] anIntArray1623 = new int[2000];
+    private static int[] anIntArray1624 = new int[2000];
+    private static int[] anIntArray1625 = new int[2000];
     public int anInt1626;
-    public int anIntArray1627[];
-    public int anIntArray1628[];
-    public int anIntArray1629[];
+    public int[] anIntArray1627;
+    public int[] anIntArray1628;
+    public int[] anIntArray1629;
     public int anInt1630;
-    public int anIntArray1631[];
-    public int anIntArray1632[];
-    public int anIntArray1633[];
-    public int anIntArray1634[];
-    public int anIntArray1635[];
-    public int anIntArray1636[];
-    public int anIntArray1637[];
-    public int anIntArray1638[];
-    public int anIntArray1639[];
-    public int anIntArray1640[];
+    public int[] anIntArray1631;
+    public int[] anIntArray1632;
+    public int[] anIntArray1633;
+    public int[] anIntArray1634;
+    public int[] anIntArray1635;
+    public int[] anIntArray1636;
+    public int[] anIntArray1637;
+    public int[] anIntArray1638;
+    public int[] anIntArray1639;
+    public int[] anIntArray1640;
     public int anInt1641;
     public int anInt1642;
-    public int anIntArray1643[];
-    public int anIntArray1644[];
-    public int anIntArray1645[];
+    public int[] anIntArray1643;
+    public int[] anIntArray1644;
+    public int[] anIntArray1645;
     public int anInt1646;
     public int anInt1647;
     public int anInt1648;
@@ -2340,32 +2339,32 @@ public class Model extends Animable {
     public int anInt1652;
     public int anInt1653;
     public int anInt1654;
-    public int anIntArray1655[];
-    public int anIntArray1656[];
-    public int anIntArrayArray1657[][];
-    public int anIntArrayArray1658[][];
+    public int[] anIntArray1655;
+    public int[] anIntArray1656;
+    public int[][] anIntArrayArray1657;
+    public int[][] anIntArrayArray1658;
     public boolean aBoolean1659;
-    Class33 aClass33Array1660[];
-    static Class21 aClass21Array1661[];
+    Class33[] aClass33Array1660;
+    static Class21[] aClass21Array1661;
     static OnDemandFetcherParent aOnDemandFetcherParent_1662;
-    static boolean aBooleanArray1663[] = new boolean[8000];
-    static boolean aBooleanArray1664[] = new boolean[8000];
-    static int anIntArray1665[] = new int[8000];
-    static int anIntArray1666[] = new int[8000];
-    static int anIntArray1667[] = new int[8000];
-    static int anIntArray1668[] = new int[8000];
-    static int anIntArray1669[] = new int[8000];
-    static int anIntArray1670[] = new int[8000];
-    static int anIntArray1671[] = new int[1500];
-    static int anIntArrayArray1672[][] = new int[1500][512];
-    static int anIntArray1673[] = new int[12];
-    static int anIntArrayArray1674[][] = new int[12][2000];
-    static int anIntArray1675[] = new int[2000];
-    static int anIntArray1676[] = new int[2000];
-    static int anIntArray1677[] = new int[12];
-    static int anIntArray1678[] = new int[10];
-    static int anIntArray1679[] = new int[10];
-    static int anIntArray1680[] = new int[10];
+    static boolean[] aBooleanArray1663 = new boolean[8000];
+    static boolean[] aBooleanArray1664 = new boolean[8000];
+    static int[] anIntArray1665 = new int[8000];
+    static int[] anIntArray1666 = new int[8000];
+    static int[] anIntArray1667 = new int[8000];
+    static int[] anIntArray1668 = new int[8000];
+    static int[] anIntArray1669 = new int[8000];
+    static int[] anIntArray1670 = new int[8000];
+    static int[] anIntArray1671 = new int[1500];
+    static int[][] anIntArrayArray1672 = new int[1500][512];
+    static int[] anIntArray1673 = new int[12];
+    static int[][] anIntArrayArray1674 = new int[12][2000];
+    static int[] anIntArray1675 = new int[2000];
+    static int[] anIntArray1676 = new int[2000];
+    static int[] anIntArray1677 = new int[12];
+    static int[] anIntArray1678 = new int[10];
+    static int[] anIntArray1679 = new int[10];
+    static int[] anIntArray1680 = new int[10];
     static int anInt1681;
     static int anInt1682;
     static int anInt1683;
@@ -2373,11 +2372,11 @@ public class Model extends Animable {
     public static int anInt1685;
     public static int anInt1686;
     public static int anInt1687;
-    public static int anIntArray1688[] = new int[1000];
-    public static int modelIntArray1[];
-    public static int modelIntArray2[];
-    static int modelIntArray3[];
-    static int modelIntArray4[];
+    public static int[] anIntArray1688 = new int[1000];
+    public static int[] modelIntArray1;
+    public static int[] modelIntArray2;
+    static int[] modelIntArray3;
+    static int[] modelIntArray4;
 
     static {
         modelIntArray1 = Texture.anIntArray1470;

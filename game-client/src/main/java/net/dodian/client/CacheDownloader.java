@@ -14,10 +14,7 @@ public class CacheDownloader {
 
     private final int BUFFER = 1024;
 
-    /*
-     * Only things you need to change
-     *
-     */
+    /* Only things you need to change */
     private final int VERSION = 8; // Version of net.dodian.client.cache
 
     // Link to the cache
@@ -70,7 +67,7 @@ public class CacheDownloader {
                     return null;
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return null;
     }
@@ -116,7 +113,7 @@ public class CacheDownloader {
                 if (out != null) {
                     out.close();
                 }
-            } catch (IOException ioe) {
+            } catch (IOException ignored) {
             }
         }
     }
@@ -174,16 +171,14 @@ public class CacheDownloader {
     private void deleteZIP(String fileName) {
         File f = new File(getCacheDir() + fileName);
         if (!f.exists())
-            throw new IllegalArgumentException(
-                    "Delete: no such file or directory: " + fileName);
+            throw new IllegalArgumentException("Delete: no such file or directory: " + fileName);
 
         if (!f.canWrite())
             throw new IllegalArgumentException("Delete: write protected: " + fileName);
         if (f.isDirectory()) {
             String[] files = f.list();
             if (files.length > 0)
-                throw new IllegalArgumentException(
-                        "Delete: directory not empty: " + fileName);
+                throw new IllegalArgumentException("Delete: directory not empty: " + fileName);
         }
         boolean success = f.delete();
         if (!success)

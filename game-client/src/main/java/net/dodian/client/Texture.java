@@ -2,9 +2,7 @@ package net.dodian.client;
 
 final class Texture extends DrawingArea {
 
-
     public static void nullLoader() {
-        anIntArray1468 = null;
         anIntArray1468 = null;
         anIntArray1470 = null;
         anIntArray1471 = null;
@@ -41,7 +39,6 @@ final class Texture extends DrawingArea {
         anIntArrayArray1478 = null;
         for (int j = 0; j < 50; j++)
             anIntArrayArray1479[j] = null;
-
     }
 
     public static void method367() {
@@ -53,7 +50,6 @@ final class Texture extends DrawingArea {
                 anIntArrayArray1478 = new int[anInt1477][0x10000];
             for (int k = 0; k < 50; k++)
                 anIntArrayArray1479[k] = null;
-
         }
     }
 
@@ -67,9 +63,8 @@ final class Texture extends DrawingArea {
                 else
                     aBackgroundArray1474s[j].method357();
                 anInt1473++;
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
-
     }
 
     public static int method369(int i) {
@@ -104,7 +99,7 @@ final class Texture extends DrawingArea {
         anIntArray1480[i] = anInt1481++;
         if (anIntArrayArray1479[i] != null)
             return anIntArrayArray1479[i];
-        int ai[];
+        int[] ai;
         if (anInt1477 > 0) {
             ai = anIntArrayArray1478[--anInt1477];
             anIntArrayArray1478[anInt1477] = null;
@@ -116,13 +111,12 @@ final class Texture extends DrawingArea {
                     j = anIntArray1480[l];
                     k = l;
                 }
-
             ai = anIntArrayArray1479[k];
             anIntArrayArray1479[k] = null;
         }
         anIntArrayArray1479[i] = ai;
         Background background = aBackgroundArray1474s[i];
-        int ai1[] = anIntArrayArray1483[i];
+        int[] ai1 = anIntArrayArray1483[i];
         if (lowMem) {
             aBooleanArray1475[i] = false;
             for (int i1 = 0; i1 < 4096; i1++) {
@@ -133,19 +127,15 @@ final class Texture extends DrawingArea {
                 ai[8192 + i1] = i2 - (i2 >>> 2) & 0xf8f8ff;
                 ai[12288 + i1] = i2 - (i2 >>> 2) - (i2 >>> 3) & 0xf8f8ff;
             }
-
         } else {
             if (background.anInt1452 == 64) {
                 for (int j1 = 0; j1 < 128; j1++) {
                     for (int j2 = 0; j2 < 128; j2++)
                         ai[j2 + (j1 << 7)] = ai1[background.aByteArray1450[(j2 >> 1) + ((j1 >> 1) << 6)]];
-
                 }
-
             } else {
                 for (int k1 = 0; k1 < 16384; k1++)
                     ai[k1] = ai1[background.aByteArray1450[k1]];
-
             }
             aBooleanArray1475[i] = false;
             for (int l1 = 0; l1 < 16384; l1++) {
@@ -157,7 +147,6 @@ final class Texture extends DrawingArea {
                 ai[32768 + l1] = k2 - (k2 >>> 2) & 0xf8f8ff;
                 ai[49152 + l1] = k2 - (k2 >>> 2) - (k2 >>> 3) & 0xf8f8ff;
             }
-
         }
         return ai;
     }
@@ -221,24 +210,21 @@ final class Texture extends DrawingArea {
                     k2 = 1;
                 anIntArray1482[j++] = k2;
             }
-
         }
 
         for (int l = 0; l < 50; l++)
             if (aBackgroundArray1474s[l] != null) {
-                int ai[] = aBackgroundArray1474s[l].anIntArray1451;
+                int[] ai = aBackgroundArray1474s[l].anIntArray1451;
                 anIntArrayArray1483[l] = new int[ai.length];
                 for (int j1 = 0; j1 < ai.length; j1++) {
                     anIntArrayArray1483[l][j1] = method373(ai[j1], d);
                     if ((anIntArrayArray1483[l][j1] & 0xf8f8ff) == 0 && j1 != 0)
                         anIntArrayArray1483[l][j1] = 1;
                 }
-
             }
 
         for (int i1 = 0; i1 < 50; i1++)
             method370(i1);
-
     }
 
     private static int method373(int i, double d) {
@@ -1307,7 +1293,6 @@ final class Texture extends DrawingArea {
         }
     }
 
-
     public static void drawHDGouraudScanline(int[] dest, int offset, int x1, int x2, int r1, int g1, int b1, int r2, int g2, int b2) {
         int n = x2 - x1;
         if (n <= 0) {
@@ -1655,7 +1640,7 @@ final class Texture extends DrawingArea {
         }
     }
 
-    private static void method377(int ai[], int i, int j, int l, int i1) {
+    private static void method377(int[] ai, int i, int j, int l, int i1) {
         int k;//was parameter
         if (aBoolean1462) {
             if (i1 > DrawingArea.centerX)
@@ -1704,7 +1689,7 @@ final class Texture extends DrawingArea {
     public static void drawLDTexturedTriangle(int i, int j, int k, int l, int i1, int j1, int k1, int l1,
                                               int i2, int j2, int k2, int l2, int i3, int j3, int k3,
                                               int l3, int i4, int j4, int k4) {
-        int ai[] = method371(k4);
+        int[] ai = method371(k4);
         aBoolean1463 = !aBooleanArray1475[k4];
         k2 = j2 - k2;
         j3 = i3 - j3;
@@ -2212,7 +2197,7 @@ final class Texture extends DrawingArea {
         }
     }
 
-    private static void drawLDTexturedScanline(int ai[], int ai1[], int k, int l, int i1, int j1,
+    private static void drawLDTexturedScanline(int[] ai, int[] ai1, int k, int l, int i1, int j1,
                                                int k1, int l1, int i2, int j2, int k2, int l2, int i3) {
         int i = 0;//was parameter
         int j = 0;//was parameter
@@ -2559,7 +2544,7 @@ final class Texture extends DrawingArea {
         l1 = 0x7f - l1 << 1;
         l2 = 0x7f - l2 << 1;
         l3 = 0x7f - l3 << 1;
-        int ai[] = method371(tex);
+        int[] ai = method371(tex);
         aBoolean1463 = !aBooleanArray1475[tex];
         tx2 = tx1 - tx2;
         ty2 = ty1 - ty2;
@@ -3067,7 +3052,7 @@ final class Texture extends DrawingArea {
         }
     }
 
-    private static void drawHDTexturedScanline(int ai[], int ai1[], int k, int x1, int x2, int l1,
+    private static void drawHDTexturedScanline(int[] ai, int[] ai1, int k, int x1, int x2, int l1,
                                                int l2, int a1, int i2, int j2, int k2, int a2, int i3) {
         int i = 0;//was parameter
         int j = 0;//was parameter
@@ -3520,19 +3505,19 @@ final class Texture extends DrawingArea {
     public static int textureInt2;
     private static int[] anIntArray1468;
     public static final int[] anIntArray1469;
-    public static int anIntArray1470[];
-    public static int anIntArray1471[];
-    public static int anIntArray1472[];
+    public static int[] anIntArray1470;
+    public static int[] anIntArray1471;
+    public static int[] anIntArray1472;
     private static int anInt1473;
-    public static Background aBackgroundArray1474s[] = new Background[50];
+    public static Background[] aBackgroundArray1474s = new Background[50];
     private static boolean[] aBooleanArray1475 = new boolean[50];
     private static int[] anIntArray1476 = new int[50];
     private static int anInt1477;
     private static int[][] anIntArrayArray1478;
     private static int[][] anIntArrayArray1479 = new int[50][];
-    public static int anIntArray1480[] = new int[50];
+    public static int[] anIntArray1480 = new int[50];
     public static int anInt1481;
-    public static int anIntArray1482[] = new int[0x10000];
+    public static int[] anIntArray1482 = new int[0x10000];
     private static int[][] anIntArrayArray1483 = new int[50][];
 
     static {
@@ -3550,6 +3535,5 @@ final class Texture extends DrawingArea {
             anIntArray1470[k] = (int) (65536D * Math.sin((double) k * 0.0030679614999999999D));
             anIntArray1471[k] = (int) (65536D * Math.cos((double) k * 0.0030679614999999999D));
         }
-
     }
 }

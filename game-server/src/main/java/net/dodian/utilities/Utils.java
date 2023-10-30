@@ -60,7 +60,7 @@ public class Utils {
     public static int[] fishTime = {1200, 1800, 2400, 3000, 2400, 4200, 4800, 5400};
     public static int[] fishTool = {303, 309, 301, 311, 303, 311, 301, 311};
     public static int[] fishExp = {110, 130, 200, 440, 650, 780, 1100, 1450, 1900};
-    public static int[] cookIds = {317, 321, 2134, 2132, 2307, 3363, 335, 331, 377, 371, 7944, 383, 395, 389};
+    public static int[] rawIds = {317, 321, 2134, 2132, 2307, 3363, 335, 331, 377, 371, 7944, 383, 395, 389};
     public static int[] cookedIds = {315, 319, 2142, 2142, 2309, 3369, 333, 329, 379, 373, 7946, 385, 397, 391};
     public static int[] burnId = {323, 323, 2146, 2146, 2311, 3375, 343, 343, 381, 375, 7948, 387, 399, 393};
     public static int[] cookExp = {150, 175, 100, 100, 170, 200, 250, 350, 500, 720, 870, 1220, 1600, 2100};
@@ -208,7 +208,7 @@ public class Utils {
             ']'};
 
     // gets the direction between the two given points valid directions are N:0, NE:2, E:4, SE:6, S:8, SW:10, W:12, NW:14
-    // the invalid (inbetween) direction are 1,3,5,7,9,11,13,15 i.e. odd integers returns -1, if src and dest are the same
+    // the invalid (between) direction are 1,3,5,7,9,11,13,15 i.e. odd integers returns -1, if src and dest are the same
     public static int direction(int srcX, int srcY, int destX, int destY) {
         int dx = destX - srcX, dy = destY - srcY;
         // a lot of cases that have to be considered here ... is there a more sophisticated (and quick!) way?

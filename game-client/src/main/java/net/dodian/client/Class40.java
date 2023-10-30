@@ -14,13 +14,13 @@ final class Class40 {
         int i5 = c / 2;
         int j5 = c / 4;
         int k5 = (c * 3) / 4;
-        int ai[] = anIntArrayArray696[j3];
+        int[] ai = anIntArrayArray696[j3];
         int l5 = ai.length;
         anIntArray673 = new int[l5];
         anIntArray674 = new int[l5];
         anIntArray675 = new int[l5];
-        int ai1[] = new int[l5];
-        int ai2[] = new int[l5];
+        int[] ai1 = new int[l5];
+        int[] ai2 = new int[l5];
         int i6 = k4 * c;
         int j6 = i * c;
         for (int k6 = 0; k6 < l5; k6++) {
@@ -140,7 +140,7 @@ final class Class40 {
             ai2[k6] = j9;
         }
 
-        int ai3[] = anIntArrayArray697[j3];
+        int[] ai3 = anIntArrayArray697[j3];
         int j7 = ai3.length / 4;
         anIntArray679 = new int[j7];
         anIntArray680 = new int[j7];
@@ -208,7 +208,7 @@ final class Class40 {
     final int[] anIntArray679;
     final int[] anIntArray680;
     final int[] anIntArray681;
-    int anIntArray682[];
+    int[] anIntArray682;
     final boolean aBoolean683;
     final int anInt684;
     final int anInt685;
@@ -219,19 +219,13 @@ final class Class40 {
     static final int[] anIntArray690 = new int[6];
     static final int[] anIntArray691 = new int[6];
     static final int[] anIntArray692 = new int[6];
-    static final int[] anIntArray693 = {
-            1, 0
-    };
-    static final int[] anIntArray694 = {
-            2, 1
-    };
-    static final int[] anIntArray695 = {
-            3, 3
-    };
+    static final int[] anIntArray693 = { 1, 0 };
+    static final int[] anIntArray694 = { 2, 1 };
+    static final int[] anIntArray695 = { 3, 3 };
     private static final int[][] anIntArrayArray696 = {
             {
-                    1, 3, 5, 7
-            }, {
+            1, 3, 5, 7
+    }, {
             1, 3, 5, 7
     }, {
             1, 3, 5, 7
@@ -259,8 +253,8 @@ final class Class40 {
     };
     private static final int[][] anIntArrayArray697 = {
             {
-                    0, 1, 2, 3, 0, 0, 1, 3
-            }, {
+            0, 1, 2, 3, 0, 0, 1, 3
+    }, {
             1, 1, 2, 3, 1, 0, 1, 3
     }, {
             0, 1, 2, 3, 1, 0, 1, 3
@@ -299,5 +293,4 @@ final class Class40 {
             0, 1, 2, 5
     }
     };
-
 }

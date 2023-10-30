@@ -1,10 +1,8 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3)
+package net.dodian.client;
 
 final class ObjectManager {
 
-    public ObjectManager(byte abyte0[][][], int ai[][][]) {
+    public ObjectManager(byte[][][] abyte0, int[][][] ai) {
         anInt145 = 99;
         anInt146 = 104;
         anInt147 = 104;
@@ -31,7 +29,7 @@ final class ObjectManager {
         return l >> 19 & 0xff;
     }
 
-    public final void method171(Class11 aclass11[], WorldController worldController) {
+    public void method171(Class11[] aclass11, WorldController worldController) {
         try {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 104; k++) {
@@ -43,13 +41,11 @@ final class ObjectManager {
                             if (k1 >= 0)
                                 aclass11[k1].method213(i1, k);
                         }
-
                 }
-
             }
 
             for (int l = 0; l < 4; l++) {
-                byte abyte0[][] = aByteArrayArrayArray134[l];
+                byte[][] abyte0 = aByteArrayArrayArray134[l];
                 byte byte0 = 96;
                 char c = '\u0300';
                 byte byte1 = -50;
@@ -69,7 +65,6 @@ final class ObjectManager {
                         int j17 = (abyte0[j5 - 1][j4] >> 2) + (abyte0[j5 + 1][j4] >> 3) + (abyte0[j5][j4 - 1] >> 2) + (abyte0[j5][j4 + 1] >> 3) + (abyte0[j5][j4] >> 1);
                         anIntArrayArray139[j5][j4] = j16 - j17;
                     }
-
                 }
 
                 for (int k5 = 0; k5 < anInt147; k5++) {
@@ -152,7 +147,6 @@ final class ObjectManager {
                                         int j22 = j13 / k16;
                                         int l22 = j14 / k16;
                                         j21 = method177(l21, j22, l22);
-
                                         k21 = method177(l21, j22, l22);
                                     }
                                     if (l > 0) {
@@ -205,20 +199,17 @@ final class ObjectManager {
                                                 j23 = method177(25, 146, 24);
                                             }
                                             worldController.method279(l, l6, k17, k22, byte4, i23, j19, k19, l19, i20, method187(j21, j20), method187(j21, k20), method187(j21, l20), method187(j21, i21), method185(j23, j20), method185(j23, k20), method185(j23, l20), method185(j23, i21), i22, k23);
-                                        } else {
                                         }
                                     }
                                 }
                             }
                         }
-
                     }
                 }
 
                 for (int j8 = 1; j8 < anInt147 - 1; j8++) {
                     for (int i10 = 1; i10 < anInt146 - 1; i10++)
                         worldController.method278(l, i10, j8, method182(j8, l, i10));
-
                 }
             }
 
@@ -227,7 +218,6 @@ final class ObjectManager {
                 for (int l1 = 0; l1 < anInt147; l1++)
                     if ((aByteArrayArrayArray149[1][j1][l1] & 2) == 2)
                         worldController.method276(l1, j1);
-
             }
 
             int i2 = 1;
@@ -256,7 +246,6 @@ final class ObjectManager {
                                     for (int j10 = k4; j10 <= l5; j10++)
                                         if ((anIntArrayArrayArray135[i7 - 1][i4][j10] & i2) == 0)
                                             break label0;
-
                                 }
 
                                 label1:
@@ -264,7 +253,6 @@ final class ObjectManager {
                                     for (int k10 = k4; k10 <= l5; k10++)
                                         if ((anIntArrayArrayArray135[k8 + 1][i4][k10] & i2) == 0)
                                             break label1;
-
                                 }
 
                                 int l10 = ((k8 + 1) - i7) * ((l5 - k4) + 1);
@@ -276,9 +264,7 @@ final class ObjectManager {
                                     for (int l16 = i7; l16 <= k8; l16++) {
                                         for (int l17 = k4; l17 <= l5; l17++)
                                             anIntArrayArrayArray135[l16][i4][l17] &= ~i2;
-
                                     }
-
                                 }
                             }
                             if ((anIntArrayArrayArray135[i3][i4][k3] & j2) != 0) {
@@ -295,17 +281,13 @@ final class ObjectManager {
                                     for (int i11 = l4; i11 <= i6; i11++)
                                         if ((anIntArrayArrayArray135[j7 - 1][i11][k3] & j2) == 0)
                                             break label2;
-
                                 }
-
                                 label3:
                                 for (; l8 < l2; l8++) {
                                     for (int j11 = l4; j11 <= i6; j11++)
                                         if ((anIntArrayArrayArray135[l8 + 1][j11][k3] & j2) == 0)
                                             break label3;
-
                                 }
-
                                 int k11 = ((l8 + 1) - j7) * ((i6 - l4) + 1);
                                 if (k11 >= 8) {
                                     char c2 = '\360';
@@ -315,9 +297,7 @@ final class ObjectManager {
                                     for (int i17 = j7; i17 <= l8; i17++) {
                                         for (int i18 = l4; i18 <= i6; i18++)
                                             anIntArrayArrayArray135[i17][i18][k3] &= ~j2;
-
                                     }
-
                                 }
                             }
                             if ((anIntArrayArrayArray135[i3][i4][k3] & k2) != 0) {
@@ -334,36 +314,27 @@ final class ObjectManager {
                                     for (int l11 = k7; l11 <= i9; l11++)
                                         if ((anIntArrayArrayArray135[i3][i5 - 1][l11] & k2) == 0)
                                             break label4;
-
                                 }
-
                                 label5:
                                 for (; j6 < anInt146; j6++) {
                                     for (int i12 = k7; i12 <= i9; i12++)
                                         if ((anIntArrayArrayArray135[i3][j6 + 1][i12] & k2) == 0)
                                             break label5;
-
                                 }
-
                                 if (((j6 - i5) + 1) * ((i9 - k7) + 1) >= 4) {
                                     int j12 = anIntArrayArrayArray129[i3][i5][k7];
                                     WorldController.method277(l2, i5 * 128, j12, j6 * 128 + 128, i9 * 128 + 128, j12, k7 * 128, 4);
                                     for (int k13 = i5; k13 <= j6; k13++) {
                                         for (int i15 = k7; i15 <= i9; i15++)
                                             anIntArrayArrayArray135[i3][k13][i15] &= ~k2;
-
                                     }
-
                                 }
                             }
                         }
-
                     }
-
                 }
-
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -398,7 +369,7 @@ final class ObjectManager {
         }
     }
 
-    public final void method174(int i, int j, int l, int i1) {
+    public void method174(int i, int j, int l, int i1) {
         for (int j1 = i; j1 <= i + j; j1++) {
             for (int k1 = i1; k1 <= i1 + l; k1++)
                 if (k1 >= 0 && k1 < anInt146 && j1 >= 0 && j1 < anInt147) {
@@ -412,7 +383,6 @@ final class ObjectManager {
                     if (j1 == i + j && j1 < anInt147 - 1)
                         anIntArrayArrayArray129[0][k1][j1] = anIntArrayArrayArray129[0][k1][j1 + 1];
                 }
-
         }
     }
 
@@ -482,9 +452,7 @@ final class ObjectManager {
                                 if (l5 > aByteArrayArrayArray134[k][l + j5][i + k5])
                                     aByteArrayArrayArray134[k][l + j5][i + k5] = (byte) l5;
                             }
-
                         }
-
                     }
                 }
             }
@@ -736,7 +704,7 @@ final class ObjectManager {
         return class46.method577(j);
     }
 
-    public final void method179(int i, int j, Class11 aclass11[], int l, int i1, byte abyte0[], int j1, int k1, int l1) {
+    public void method179(int i, int j, Class11[] aclass11, int l, int i1, byte[] abyte0, int j1, int k1, int l1) {
         for (int i2 = 0; i2 < 8; i2++) {
             for (int j2 = 0; j2 < 8; j2++)
                 if (l + i2 > 0 && l + i2 < 103 && l1 + j2 > 0 && l1 + j2 < 103)
@@ -751,22 +719,17 @@ final class ObjectManager {
                         method181(l1 + Class4.method156(j3 & 7, j, i3 & 7), 0, stream, l + Class4.method155(j, j3 & 7, i3 & 7), k1, j, 0);
                     else
                         method181(-1, 0, stream, -1, 0, 0, 0);
-
             }
-
         }
-
     }
 
-    public final void method180(byte abyte0[], int i, int j, int k, int l, Class11 aclass11[]) {
+    public void method180(byte[] abyte0, int i, int j, int k, int l, Class11[] aclass11) {
         for (int i1 = 0; i1 < 4; i1++) {
             for (int j1 = 0; j1 < 64; j1++) {
                 for (int k1 = 0; k1 < 64; k1++)
                     if (j + j1 > 0 && j + j1 < 103 && i + k1 > 0 && i + k1 < 103)
                         aclass11[i1].anIntArrayArray294[j + j1][i + k1] &= 0xfeffffff;
-
             }
-
         }
 
         Stream stream = new Stream(abyte0);
@@ -774,9 +737,7 @@ final class ObjectManager {
             for (int i2 = 0; i2 < 64; i2++) {
                 for (int j2 = 0; j2 < 64; j2++)
                     method181(j2 + i, l, stream, i2 + j, l1, 0, k);
-
             }
-
         }
     }
 
@@ -827,7 +788,7 @@ final class ObjectManager {
                 if (i2 <= 49)
                     stream.readUnsignedByte();
             } while (true);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -840,7 +801,7 @@ final class ObjectManager {
             return j;
     }
 
-    public final void method183(Class11 aclass11[], WorldController worldController, int i, int j, int k, int l, byte abyte0[], int i1, int j1, int k1) {
+    public void method183(Class11[] aclass11, WorldController worldController, int i, int j, int k, int l, byte[] abyte0, int i1, int j1, int k1) {
         label0:
         {
             Stream stream = new Stream(abyte0);
@@ -923,7 +884,7 @@ final class ObjectManager {
         return (i & 0xff80) + j;
     }
 
-    public static void method188(WorldController worldController, int i, int j, int k, int l, Class11 class11, int ai[][][], int i1, int j1, int k1) {
+    public static void method188(WorldController worldController, int i, int j, int k, int l, Class11 class11, int[][][] ai, int i1, int j1, int k1) {
         int l1 = ai[l][i1][j];
         int i2 = ai[l][i1 + 1][j];
         int j2 = ai[l][i1 + 1][j + 1];
@@ -1113,9 +1074,7 @@ final class ObjectManager {
     }
 
     public static boolean method189(int i, byte[] is, int i_250_) // xxx bad
-    // method,
-    // decompiled
-    // with JODE
+    // method, decompiled with JODE
     {
         boolean bool = true;
         Stream stream = new Stream(is);
@@ -1156,7 +1115,7 @@ final class ObjectManager {
         return bool;
     }
 
-    public final void method190(int i, Class11 aclass11[], int j, WorldController worldController, byte abyte0[]) {
+    public void method190(int i, Class11[] aclass11, int j, WorldController worldController, byte[] abyte0) {
         label0:
         {
             Stream stream = new Stream(abyte0);
@@ -1205,17 +1164,16 @@ final class ObjectManager {
     private final byte[][][] aByteArrayArrayArray134;
     private final int[][][] anIntArrayArrayArray135;
     private final byte[][][] aByteArrayArrayArray136;
-    private static final int anIntArray137[] = {1, 0, -1, 0};
+    private static final int[] anIntArray137 = {1, 0, -1, 0};
     private final int[][] anIntArrayArray139;
-    private static final int anIntArray140[] = {16, 32, 64, 128};
+    private static final int[] anIntArray140 = {16, 32, 64, 128};
     private final byte[][][] aByteArrayArrayArray142;
-    private static final int anIntArray144[] = {0, -1, 0, 1};
+    private static final int[] anIntArray144 = {0, -1, 0, 1};
     static int anInt145 = 99;
     private final int anInt146;
     private final int anInt147;
     private final byte[][][] aByteArrayArrayArray148;
     private final byte[][][] aByteArrayArrayArray149;
     static boolean lowMem = true;
-    private static final int anIntArray152[] = {1, 2, 4, 8};
-
+    private static final int[] anIntArray152 = {1, 2, 4, 8};
 }

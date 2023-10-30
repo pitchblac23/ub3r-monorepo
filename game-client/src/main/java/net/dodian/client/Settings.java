@@ -3,7 +3,6 @@ package net.dodian.client;
 import java.io.*;
 import java.util.HashMap;
 
-
 @SuppressWarnings("serial")
 public class Settings extends HashMap<String, String> {
 

@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public final class Background extends DrawingArea {
 
@@ -47,7 +45,7 @@ public final class Background extends DrawingArea {
     public void method356() {
         anInt1456 /= 2;
         anInt1457 /= 2;
-        byte abyte0[] = new byte[anInt1456 * anInt1457];
+        byte[] abyte0 = new byte[anInt1456 * anInt1457];
         int i = 0;
         for (int j = 0; j < anInt1453; j++) {
             for (int k = 0; k < anInt1452; k++)
@@ -65,7 +63,7 @@ public final class Background extends DrawingArea {
     public void method357() {
         if (anInt1452 == anInt1456 && anInt1453 == anInt1457)
             return;
-        byte abyte0[] = new byte[anInt1456 * anInt1457];
+        byte[] abyte0 = new byte[anInt1456 * anInt1457];
         int i = 0;
         for (int j = 0; j < anInt1453; j++) {
             for (int k = 0; k < anInt1452; k++)
@@ -81,7 +79,7 @@ public final class Background extends DrawingArea {
     }
 
     public void method358() {
-        byte abyte0[] = new byte[anInt1452 * anInt1453];
+        byte[] abyte0 = new byte[anInt1452 * anInt1453];
         int j = 0;
         for (int k = 0; k < anInt1453; k++) {
             for (int l = anInt1452 - 1; l >= 0; l--)
@@ -94,7 +92,7 @@ public final class Background extends DrawingArea {
     }
 
     public void method359() {
-        byte abyte0[] = new byte[anInt1452 * anInt1453];
+        byte[] abyte0 = new byte[anInt1452 * anInt1453];
         int i = 0;
         for (int j = anInt1453 - 1; j >= 0; j--) {
             for (int k = 0; k < anInt1452; k++)
@@ -168,8 +166,8 @@ public final class Background extends DrawingArea {
         }
     }
 
-    private void method362(int i, int ai[], byte abyte0[], int j, int k, int l,
-                           int i1, int ai1[], int j1) {
+    private void method362(int i, int[] ai, byte[] abyte0, int j, int k, int l,
+                           int i1, int[] ai1, int j1) {
         int k1 = -(l >> 2);
         l = -(l & 3);
         for (int l1 = -i; l1 < 0; l1++) {
@@ -210,7 +208,7 @@ public final class Background extends DrawingArea {
 
     }
 
-    public byte aByteArray1450[];
+    public byte[] aByteArray1450;
     public final int[] anIntArray1451;
     public int anInt1452;
     public int anInt1453;

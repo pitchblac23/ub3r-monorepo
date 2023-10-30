@@ -11,7 +11,7 @@ public final class RSInterface {
         invStackSizes[j] = k;
     }
 
-    public static void unpack(StreamLoader streamLoader, TextDrawingArea textDrawingAreas[], StreamLoader streamLoader_1) {
+    public static void unpack(StreamLoader streamLoader, TextDrawingArea[] textDrawingAreas, StreamLoader streamLoader_1) {
         aMRUNodes_238 = new MRUNodes(50000);
         Stream stream = new Stream(streamLoader.getDataForName("data"));
         int i = -1;
@@ -45,7 +45,6 @@ public final class RSInterface {
                     rsInterface.anIntArray245[j1] = stream.readUnsignedByte();
                     rsInterface.anIntArray212[j1] = stream.readUnsignedWord();
                 }
-
             }
             int k1 = stream.readUnsignedByte();
             if (k1 > 0) {
@@ -188,7 +187,6 @@ public final class RSInterface {
                     if (rsInterface.actions[k4].length() == 0)
                         rsInterface.actions[k4] = null;
                 }
-
             }
             if (rsInterface.atActionType == 2 || rsInterface.type == 2) {
                 rsInterface.selectedActionName = stream.readString();
@@ -666,11 +664,11 @@ public final class RSInterface {
     public boolean drawsTransparent;
     public Sprite sprite1;
     public int anInt208;
-    public Sprite sprites[];
-    public static RSInterface interfaceCache[];
-    public int anIntArray212[];
+    public Sprite[] sprites;
+    public static RSInterface[] interfaceCache;
+    public int[] anIntArray212;
     public int contentType;// anInt214
-    public int spritesX[];
+    public int[] spritesX;
     public int anInt216;
     public int atActionType;
     public String spellName;
@@ -680,8 +678,8 @@ public final class RSInterface {
     public String selectedActionName;
     public boolean centerText;
     public int scrollPosition;
-    public String actions[];
-    public int scripts[][];
+    public String[] actions;
+    public int[][] scripts;
     public boolean aBoolean227;
     public String aString228;
     public int hoverType;
@@ -694,19 +692,19 @@ public final class RSInterface {
     public int spellUsableOn;
     private static MRUNodes aMRUNodes_238;
     public int anInt239;
-    public int children[];
-    public int childX[];
+    public int[] children;
+    public int[] childX;
     public boolean usableItemInterface;
     public TextDrawingArea textDrawingAreas;
     public int invSpritePadY;
-    public int anIntArray245[];
+    public int[] anIntArray245;
     public int anInt246;
-    public int spritesY[];
+    public int[] spritesY;
     public String message;
     public boolean isInventoryInterface;
     public int id;
-    public int invStackSizes[];
-    public int inv[];
+    public int[] invStackSizes;
+    public int[] inv;
     public byte aByte254;
     private int anInt255;
     private int anInt256;
@@ -725,7 +723,7 @@ public final class RSInterface {
     public int modelZoom;
     public int modelRotation1;
     public int modelRotation2;
-    public int childY[];
+    public int[] childY;
 
     public static void addLunarSprite(int i, int j, String name) {
         RSInterface RSInterface = addInterface(i);

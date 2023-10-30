@@ -43,7 +43,7 @@ public final class Stream extends NodeSub {
     private Stream() {
     }
 
-    public Stream(byte abyte0[]) {
+    public Stream(byte[] abyte0) {
         buffer = abyte0;
         currentOffset = 0;
     }
@@ -114,7 +114,7 @@ public final class Stream extends NodeSub {
             buffer[currentOffset++] = (byte) (int) (l >> 8);
             buffer[currentOffset++] = (byte) (int) l;
         } catch (RuntimeException runtimeexception) {
-            Signlink.reporterror("14395, " + 5 + ", " + l + ", " + runtimeexception.toString());
+            Signlink.reporterror("14395, " + 5 + ", " + l + ", " + runtimeexception);
             throw new RuntimeException();
         }
     }
@@ -126,7 +126,7 @@ public final class Stream extends NodeSub {
         buffer[currentOffset++] = 10;
     }
 
-    public void writeBytes(byte abyte0[], int i, int j) {
+    public void writeBytes(byte[] abyte0, int i, int j) {
         for (int k = j; k < j + i; k++)
             buffer[currentOffset++] = abyte0[k];
     }
@@ -178,12 +178,12 @@ public final class Stream extends NodeSub {
         int i = currentOffset;
         while (buffer[currentOffset++] != 10)
             ;
-        byte abyte0[] = new byte[currentOffset - i - 1];
+        byte[] abyte0 = new byte[currentOffset - i - 1];
         System.arraycopy(buffer, i, abyte0, i - i, currentOffset - 1 - i);
         return abyte0;
     }
 
-    public void readBytes(int i, int j, byte abyte0[]) {
+    public void readBytes(int i, int j, byte[] abyte0) {
         for (int l = j; l < j + i; l++)
             abyte0[l] = buffer[currentOffset++];
     }
@@ -237,14 +237,14 @@ public final class Stream extends NodeSub {
     public void doKeys() {
         int i = currentOffset;
         currentOffset = 0;
-        byte abyte0[] = new byte[i];
+        byte[] abyte0 = new byte[i];
         readBytes(i, 0, abyte0);
 		/*BigInteger biginteger2 = new BigInteger(abyte0);
 		BigInteger biginteger3 = biginteger2.modPow(RSA_EXPONENT, RSA_MODULUS);
 		byte abyte1[] = biginteger3.toByteArray();*/
         BigInteger biginteger2 = new BigInteger(abyte0);
         BigInteger biginteger3 = biginteger2/* .modPow(biginteger, biginteger1) */;
-        byte abyte1[] = biginteger3.toByteArray();
+        byte[] abyte1 = biginteger3.toByteArray();
         currentOffset = 0;
         writeWordBigEndian(abyte1.length);
         writeBytes(abyte1, abyte1.length, 0);
@@ -334,19 +334,19 @@ public final class Stream extends NodeSub {
         return ((buffer[currentOffset - 3] & 0xff) << 24) + ((buffer[currentOffset - 4] & 0xff) << 16) + ((buffer[currentOffset - 1] & 0xff) << 8) + (buffer[currentOffset - 2] & 0xff);
     }
 
-    public void method441(int i, byte abyte0[], int j) {
+    public void method441(int i, byte[] abyte0, int j) {
         for (int k = (i + j) - 1; k >= i; k--)
             buffer[currentOffset++] = (byte) (abyte0[k] + 128);
 
     }
 
-    public void method442(int i, int j, byte abyte0[]) {
+    public void method442(int i, int j, byte[] abyte0) {
         for (int k = (j + i) - 1; k >= j; k--)
             abyte0[k] = buffer[currentOffset++];
 
     }
 
-    public byte buffer[];
+    public byte[] buffer;
     public int currentOffset;
     public int bitPosition;
     private static final int[] anIntArray1409 = {0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535, 0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff, 0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1};

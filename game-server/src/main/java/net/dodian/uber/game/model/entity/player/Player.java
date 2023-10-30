@@ -173,7 +173,7 @@ public abstract class Player extends Entity {
     private final ArrayList<Integer> paid = new ArrayList<>();
     private final ArrayList<Boolean> unlocked = new ArrayList<>();
     public int unlockLength = 2;
-    public int lastRecoverEffect = 0, lastRecover = 4;
+    public int lastRecoverEffect = 0, lastRecover = 5;
     public int boostedLevel[] = new int[21];
     public int chestEvent = 0;
     public boolean chestEventOccur = false, updateAnnounced = false;

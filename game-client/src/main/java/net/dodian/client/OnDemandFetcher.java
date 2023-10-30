@@ -56,7 +56,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
             }
             if (expectedSize > 0 && j >= expectedSize) {
                 waiting = true;
-                byte abyte0[] = ioBuffer;
+                byte[] abyte0 = ioBuffer;
                 int i1 = 0;
                 if (current != null) {
                     abyte0 = current.buffer;
@@ -83,7 +83,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
         } catch (IOException ioexception) {
             try {
                 socket.close();
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
             socket = null;
             inputStream = null;
@@ -108,7 +108,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
             mapIndices3[i2] = stream2.readUnsignedWord();
             mapAmount++;
         }
-        System.out.println("Map Amount: " + mapAmount + "");
+        System.out.println("Map Amount: " + mapAmount);
         abyte2 = streamLoader.getDataForName("midi_index");
         stream2 = new Stream(abyte2);
         j1 = abyte2.length;
@@ -138,7 +138,6 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                 method563((byte) 2, 3, mapIndices3[k]);
                 method563((byte) 2, 3, mapIndices2[k]);
             }
-
     }
 
     public int getVersionCount(int j) {
@@ -174,11 +173,11 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
             writeLoopCycle = 0;
             anInt1349 = -10000;
             return;
-        } catch (IOException ioexception) {
+        } catch (IOException ignored) {
         }
         try {
             socket.close();
-        } catch (Exception _ex) {
+        } catch (Exception ignored) {
         }
         socket = null;
         inputStream = null;
@@ -225,7 +224,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                     i = 50;
                 try {
                     Thread.sleep(i);
-                } catch (Exception _ex) {
+                } catch (Exception ignored) {
                 }
                 waiting = true;
                 for (int j = 0; j < 100; j++) {
@@ -261,14 +260,13 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                             closeRequest(onDemandData_1);
                         }
                     }
-
                 }
                 if (flag) {
                     loopCycle++;
                     if (loopCycle > 750) {
                         try {
                             socket.close();
-                        } catch (Exception _ex) {
+                        } catch (Exception ignored) {
                         }
                         socket = null;
                         inputStream = null;
@@ -413,7 +411,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                 closeRequest(onDemandData_1);
                 waiting = true;
                 System.out.println("Error: file is missing  [ type = " + onDemandData_1.dataType + "]  [id = " + onDemandData_1.ID + "]");
-            } catch (Exception _ex) {
+            } catch (Exception ignored) {
             }
         }
     }
@@ -431,7 +429,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
         }
         while (onDemandData != null) {
             waiting = true;
-            byte abyte0[] = null;
+            byte[] abyte0 = null;
             if (clientInstance.decompressors[0] != null)
                 abyte0 = clientInstance.decompressors[onDemandData.dataType + 1].decompress(onDemandData.ID);
             synchronized (aClass19_1370) {
@@ -474,7 +472,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                 }
             }
             for (int j = 0; j < 4; j++) {
-                byte abyte0[] = fileStatus[j];
+                byte[] abyte0 = fileStatus[j];
                 int k = abyte0.length;
                 for (int l = 0; l < k; l++)
                     if (abyte0[l] == anInt1332) {
@@ -493,9 +491,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                         if (completedCount == 10)
                             return;
                     }
-
             }
-
             anInt1332--;
         }
     }

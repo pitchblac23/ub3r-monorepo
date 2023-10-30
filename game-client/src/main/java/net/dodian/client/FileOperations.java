@@ -11,18 +11,18 @@ public class FileOperations {
         try {
             File file = new File(s);
             int i = (int) file.length();
-            byte abyte0[] = new byte[i];
+            byte[] abyte0 = new byte[i];
             DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new FileInputStream(s)));
             datainputstream.readFully(abyte0, 0, i);
             datainputstream.close();
             TotalRead++;
             return abyte0;
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
         }
         return null;
     }
 
-    public static final void WriteFile(String s, byte abyte0[]) {
+    public static final void WriteFile(String s, byte[] abyte0) {
         try {
             (new File((new File(s)).getParent())).mkdirs();
             FileOutputStream fileoutputstream = new FileOutputStream(s);
@@ -31,7 +31,7 @@ public class FileOperations {
             TotalWrite++;
             CompleteWrite++;
         } catch (Throwable throwable) {
-            System.out.println((new StringBuilder()).append("Write Error: ").append(s).toString());
+            System.out.println("Write Error: " + s);
         }
     }
 

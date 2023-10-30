@@ -25,7 +25,7 @@ public final class Player extends Entity {
                 if (spotAnim.resizeX != 128 || spotAnim.resizeY != 128)
                     model_3.method478(spotAnim.resizeX, spotAnim.resizeX, spotAnim.resizeY);
                 model_3.setLighting(64 + spotAnim.ambient, 850 + spotAnim.contrast, -30, -50, -30, true);
-                Model aclass30_sub2_sub4_sub6_1s[] = {
+                Model[] aclass30_sub2_sub4_sub6_1s = {
                         model, model_3
                 };
                 model = new Model(aclass30_sub2_sub4_sub6_1s);
@@ -48,7 +48,7 @@ public final class Player extends Entity {
                     model_1.method473();
                 } else if (super.turnDirection == 1536)
                     model_1.method473();
-                Model aclass30_sub2_sub4_sub6s[] = {
+                Model[] aclass30_sub2_sub4_sub6s = {
                         model, model_1
                 };
                 model = new Model(aclass30_sub2_sub4_sub6s);
@@ -201,7 +201,7 @@ public final class Player extends Entity {
             }
         }
         if (model_1 == null) {
-            Model aclass30_sub2_sub4_sub6s[] = new Model[12];
+            Model[] aclass30_sub2_sub4_sub6s = new Model[12];
             int j2 = 0;
             for (int l2 = 0; l2 < 12; l2++) {
                 int i3 = equipment[l2];

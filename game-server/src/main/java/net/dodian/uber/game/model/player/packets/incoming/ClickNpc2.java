@@ -85,7 +85,7 @@ public class ClickNpc2 implements Packet {
         if (npcId == 8532) {
             client.WanneShop = 39;
         }
-        if (npcId == 394 || npcId == 395 || npcId == 7677) { /* Banking */
+        if (npcId == 1613 || npcId == 1618 || npcId == 7677) { /* Banking */
             client.WanneBank = 1;
         } else if (npcId == 11433) {
             client.stairs = 26;
@@ -101,7 +101,6 @@ public class ClickNpc2 implements Packet {
             client.NpcWanneTalk = 13;
         }
 
-//3, 9, 10, 11, 15, 18, 20, 25, 34, 40, 55
         /*Shops Start*/
         else if (npcId == 522 || npcId == 523) { // shopkeeper + Assistant General Store
             client.WanneShop = 1;
@@ -185,6 +184,7 @@ public class ClickNpc2 implements Packet {
         /*Ends*/
         else {
             client.println_debug("atNPC 2: " + npcId);
+            client.send(new SendMessage("Please inform Admin of click2 on " + npcId + "."));
         }
     }
 }

@@ -1,10 +1,8 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 final class WorldController {
 
-    public WorldController(int ai[][][]) {
+    public WorldController(int[][][] ai) {
         int i = 104;//was parameter
         int j = 104;//was parameter
         int k = 4;//was parameter
@@ -35,9 +33,7 @@ final class WorldController {
             for (int k = 0; k < anInt438; k++) {
                 for (int i1 = 0; i1 < anInt439; i1++)
                     groundArray[j][k][i1] = null;
-
             }
-
         }
         for (int l = 0; l < anInt472; l++) {
             for (int j1 = 0; j1 < anIntArray473[l]; j1++)
@@ -52,7 +48,6 @@ final class WorldController {
         obj5CacheCurrPos = 0;
         for (int l1 = 0; l1 < aClass28Array462.length; l1++)
             aClass28Array462[l1] = null;
-
     }
 
     public void method275(int i) {
@@ -61,9 +56,7 @@ final class WorldController {
             for (int l = 0; l < anInt439; l++)
                 if (groundArray[i][k][l] == null)
                     groundArray[i][k][l] = new Ground(i, k, l);
-
         }
-
     }
 
     public void method276(int i, int j) {
@@ -77,7 +70,6 @@ final class WorldController {
                     if ((class28.uid >> 29 & 3) == 2 && class28.anInt523 == j && class28.anInt525 == i)
                         class28.anInt517--;
                 }
-
             }
         }
         if (groundArray[0][j][i] == null)
@@ -86,8 +78,7 @@ final class WorldController {
         groundArray[3][j][i] = null;
     }
 
-    public static void method277(int i, int j, int k, int l, int i1, int j1, int l1,
-                                 int i2) {
+    public static void method277(int i, int j, int k, int l, int i1, int j1, int l1, int i2) {
         Class47 class47 = new Class47();
         class47.anInt787 = j / 128;
         class47.anInt788 = l / 128;
@@ -139,8 +130,7 @@ final class WorldController {
         groundArray[i][j][k].aClass40_1312 = class40;
     }
 
-    public void method280(int i, int j, int k, Animable class30_sub2_sub4, byte byte0, int i1,
-                          int j1) {
+    public void method280(int i, int j, int k, Animable class30_sub2_sub4, byte byte0, int i1, int j1) {
         if (class30_sub2_sub4 == null)
             return;
         Object3 class49 = new Object3();
@@ -155,8 +145,7 @@ final class WorldController {
         groundArray[i][j1][k].obj3 = class49;
     }
 
-    public void method281(int i, int j, Animable class30_sub2_sub4, int k, Animable class30_sub2_sub4_1, Animable class30_sub2_sub4_2,
-                          int l, int i1) {
+    public void method281(int i, int j, Animable class30_sub2_sub4, int k, Animable class30_sub2_sub4_1, Animable class30_sub2_sub4_2, int l, int i1) {
         Object4 object4 = new Object4();
         object4.aClass30_Sub2_Sub4_48 = class30_sub2_sub4_2;
         object4.anInt46 = i * 128 + 64;
@@ -174,7 +163,6 @@ final class WorldController {
                     if (l1 > j1)
                         j1 = l1;
                 }
-
         }
         object4.anInt52 = j1;
         if (groundArray[l][i][i1] == null)
@@ -182,8 +170,7 @@ final class WorldController {
         groundArray[l][i][i1].obj4 = object4;
     }
 
-    public void method282(int i, Animable class30_sub2_sub4, int j, int k, byte byte0, int l,
-                          Animable class30_sub2_sub4_1, int i1, int j1, int k1) {
+    public void method282(int i, Animable class30_sub2_sub4, int j, int k, byte byte0, int l, Animable class30_sub2_sub4_1, int i1, int j1, int k1) {
         if (class30_sub2_sub4 == null && class30_sub2_sub4_1 == null)
             return;
         Object1 object1 = new Object1();
@@ -203,8 +190,7 @@ final class WorldController {
         groundArray[k1][l][k].obj1 = object1;
     }
 
-    public void method283(int i, int j, int k, int i1, int j1, int k1,
-                          Animable class30_sub2_sub4, int l1, byte byte0, int i2, int j2) {
+    public void method283(int i, int j, int k, int i1, int j1, int k1, Animable class30_sub2_sub4, int l1, byte byte0, int i2, int j2) {
         if (class30_sub2_sub4 == null)
             return;
         Object2 class26 = new Object2();
@@ -223,8 +209,7 @@ final class WorldController {
         groundArray[i1][l1][j].obj2 = class26;
     }
 
-    public boolean method284(int i, byte byte0, int j, int k, Animable class30_sub2_sub4, int l, int i1,
-                             int j1, int k1, int l1) {
+    public boolean method284(int i, byte byte0, int j, int k, Animable class30_sub2_sub4, int l, int i1, int j1, int k1, int l1) {
         if (class30_sub2_sub4 == null) {
             return true;
         } else {
@@ -234,8 +219,7 @@ final class WorldController {
         }
     }
 
-    public boolean method285(int i, int j, int k, int l, int i1, int j1,
-                             int k1, Animable class30_sub2_sub4, boolean flag) {
+    public boolean method285(int i, int j, int k, int l, int i1, int j1, int k1, Animable class30_sub2_sub4, boolean flag) {
         if (class30_sub2_sub4 == null)
             return true;
         int l1 = k1 - j1;
@@ -259,13 +243,11 @@ final class WorldController {
         return method287(i, l1, i2, (j2 - l1) + 1, (k2 - i2) + 1, k1, i1, k, class30_sub2_sub4, j, true, l, (byte) 0);
     }
 
-    public boolean method286(int j, int k, Animable class30_sub2_sub4, int l, int i1, int j1,
-                             int k1, int l1, int i2, int j2, int k2) {
+    public boolean method286(int j, int k, Animable class30_sub2_sub4, int l, int i1, int j1, int k1, int l1, int i2, int j2, int k2) {
         return class30_sub2_sub4 == null || method287(j, l1, k2, (i2 - l1) + 1, (i1 - k2) + 1, j1, k, k1, class30_sub2_sub4, l, true, j2, (byte) 0);
     }
 
-    private boolean method287(int i, int j, int k, int l, int i1, int j1, int k1,
-                              int l1, Animable class30_sub2_sub4, int i2, boolean flag, int j2, byte byte0) {
+    private boolean method287(int i, int j, int k, int l, int i1, int j1, int k1, int l1, Animable class30_sub2_sub4, int i2, boolean flag, int j2, byte byte0) {
         for (int k2 = j; k2 < j + l; k2++) {
             for (int l2 = k; l2 < k + i1; l2++) {
                 if (k2 < 0 || l2 < 0 || k2 >= anInt438 || l2 >= anInt439)
@@ -274,7 +256,6 @@ final class WorldController {
                 if (class30_sub3 != null && class30_sub3.anInt1317 >= 5)
                     return false;
             }
-
         }
 
         Object5 class28 = new Object5();
@@ -311,7 +292,6 @@ final class WorldController {
                 class30_sub3_1.anInt1320 |= k3;
                 class30_sub3_1.anInt1317++;
             }
-
         }
 
         if (flag)
@@ -325,7 +305,6 @@ final class WorldController {
             method289(object5);
             obj5Cache[i] = null;
         }
-
         obj5CacheCurrPos = 0;
     }
 
@@ -342,20 +321,15 @@ final class WorldController {
                             class30_sub3.obj5Array[i1] = class30_sub3.obj5Array[i1 + 1];
                             class30_sub3.anIntArray1319[i1] = class30_sub3.anIntArray1319[i1 + 1];
                         }
-
                         class30_sub3.obj5Array[class30_sub3.anInt1317] = null;
                         break;
                     }
-
                     class30_sub3.anInt1320 = 0;
                     for (int j1 = 0; j1 < class30_sub3.anInt1317; j1++)
                         class30_sub3.anInt1320 |= class30_sub3.anIntArray1319[j1];
-
                 }
             }
-
         }
-
     }
 
     public void method290(int i, int k, int l, int i1) {
@@ -398,7 +372,6 @@ final class WorldController {
                 return;
             }
         }
-
     }
 
     public void method294(int i, int j, int k) {
@@ -476,7 +449,6 @@ final class WorldController {
             if ((class28.uid >> 29 & 3) == 2 && class28.anInt523 == j && class28.anInt525 == k)
                 return class28.uid;
         }
-
         return 0;
     }
 
@@ -501,7 +473,6 @@ final class WorldController {
         for (int i1 = 0; i1 < class30_sub3.anInt1317; i1++)
             if (class30_sub3.obj5Array[i1].uid == l)
                 return class30_sub3.obj5Array[i1].aByte530 & 0xff;
-
         return -1;
     }
 
@@ -540,11 +511,8 @@ final class WorldController {
                         }
                     }
                 }
-
             }
-
         }
-
     }
 
     private void method306(int i, int j, Model model, int k) {
@@ -598,22 +566,18 @@ final class WorldController {
                                             method308(model, (Model) class28.aClass30_Sub2_Sub4_521, (class28.anInt523 - l) * 128 + (k3 - j) * 64, i3, (class28.anInt525 - i1) * 128 + (l3 - k) * 64, flag);
                                         }
                                     }
-
                                 }
                             }
-
                     }
-
                 j1--;
                 flag = false;
             }
-
     }
 
     private void method308(Model model, Model model_1, int i, int j, int k, boolean flag) {
         anInt488++;
         int l = 0;
-        int ai[] = model_1.anIntArray1627;
+        int[] ai = model_1.anIntArray1627;
         int i1 = model_1.anInt1626;
         for (int j1 = 0; j1 < model.anInt1626; j1++) {
             Class33 class33 = model.aClass33Array1425[j1];
@@ -642,7 +606,6 @@ final class WorldController {
                                     anIntArray487[l2] = anInt488;
                                 }
                             }
-
                         }
                     }
                 }
@@ -658,10 +621,9 @@ final class WorldController {
         for (int l1 = 0; l1 < model_1.anInt1630; l1++)
             if (anIntArray487[model_1.anIntArray1631[l1]] == anInt488 && anIntArray487[model_1.anIntArray1632[l1]] == anInt488 && anIntArray487[model_1.anIntArray1633[l1]] == anInt488)
                 model_1.anIntArray1637[l1] = -1;
-
     }
 
-    public void method309(int ai[], int i, int k, int l, int i1) {
+    public void method309(int[] ai, int i, int k, int l, int i1) {
         int j = 512;//was parameter
         Ground class30_sub3 = groundArray[k][l][i1];
         if (class30_sub3 == null)
@@ -678,7 +640,6 @@ final class WorldController {
                 ai[i + 3] = j1;
                 i += j;
             }
-
             return;
         }
         Class40 class40 = class30_sub3.aClass40_1312;
@@ -688,8 +649,8 @@ final class WorldController {
         int i2 = class40.anInt685;
         int j2 = class40.anInt686;
         int k2 = class40.anInt687;
-        int ai1[] = anIntArrayArray489[l1];
-        int ai2[] = anIntArrayArray490[i2];
+        int[] ai1 = anIntArrayArray489[l1];
+        int[] ai2 = anIntArrayArray490[i2];
         int l2 = 0;
         if (j2 != 0) {
             for (int i3 = 0; i3 < 4; i3++) {
@@ -699,7 +660,6 @@ final class WorldController {
                 ai[i + 3] = ai1[ai2[l2++]] != 0 ? k2 : j2;
                 i += j;
             }
-
             return;
         }
         for (int j3 = 0; j3 < 4; j3++) {
@@ -713,17 +673,16 @@ final class WorldController {
                 ai[i + 3] = k2;
             i += j;
         }
-
     }
 
-    public static void method310(int i, int j, int k, int l, int ai[]) {
+    public static void method310(int i, int j, int k, int l, int[] ai) {
         anInt495 = 0;
         anInt496 = 0;
         anInt497 = k;
         anInt498 = l;
         anInt493 = k / 2;
         anInt494 = l / 2;
-        boolean aflag[][][][] = new boolean[9][32][53][53];
+        boolean[][][][] aflag = new boolean[9][32][53][53];
         for (int i1 = 128; i1 <= 384; i1 += 32) {
             for (int j1 = 0; j1 < 2048; j1 += 64) {
                 anInt458 = Model.modelIntArray1[i1];
@@ -743,14 +702,10 @@ final class WorldController {
                             flag2 = true;
                             break;
                         }
-
                         aflag[l1][j2][l2 + 25 + 1][j3 + 25 + 1] = flag2;
                     }
-
                 }
-
             }
-
         }
 
         for (int k1 = 0; k1 < 8; k1++) {
@@ -774,18 +729,12 @@ final class WorldController {
                                 }
                                 break label0;
                             }
-
                         }
-
                         aBooleanArrayArrayArrayArray491[k1][i2][k2 + 25][i3 + 25] = flag1;
                     }
-
                 }
-
             }
-
         }
-
     }
 
     private static boolean method311(int i, int j, int k) {
@@ -844,7 +793,7 @@ final class WorldController {
         method319();
         anInt446 = 0;
         for (int k1 = anInt442; k1 < anInt437; k1++) {
-            Ground aclass30_sub3[][] = groundArray[k1];
+            Ground[][] aclass30_sub3 = groundArray[k1];
             for (int i2 = anInt449; i2 < anInt450; i2++) {
                 for (int k2 = anInt451; k2 < anInt452; k2++) {
                     Ground class30_sub3 = aclass30_sub3[i2][k2];
@@ -860,13 +809,11 @@ final class WorldController {
                             anInt446++;
                         }
                 }
-
             }
-
         }
 
         for (int l1 = anInt442; l1 < anInt437; l1++) {
-            Ground aclass30_sub3_1[][] = groundArray[l1];
+            Ground[][] aclass30_sub3_1 = groundArray[l1];
             for (int l2 = -25; l2 <= 0; l2++) {
                 int i3 = anInt453 + l2;
                 int k3 = anInt453 - l2;
@@ -903,14 +850,12 @@ final class WorldController {
                             return;
                         }
                     }
-
                 }
             }
-
         }
 
         for (int j2 = anInt442; j2 < anInt437; j2++) {
-            Ground aclass30_sub3_2[][] = groundArray[j2];
+            Ground[][] aclass30_sub3_2 = groundArray[j2];
             for (int j3 = -25; j3 <= 0; j3++) {
                 int l3 = anInt453 + j3;
                 int j4 = anInt453 - j3;
@@ -947,12 +892,9 @@ final class WorldController {
                             return;
                         }
                     }
-
                 }
             }
-
         }
-
         aBoolean467 = false;
     }
 
@@ -969,7 +911,7 @@ final class WorldController {
             int j = class30_sub3_1.anInt1309;
             int k = class30_sub3_1.anInt1307;
             int l = class30_sub3_1.anInt1310;
-            Ground aclass30_sub3[][] = groundArray[k];
+            Ground[][] aclass30_sub3 = groundArray[k];
             if (class30_sub3_1.aBoolean1322) {
                 if (flag) {
                     if (k > 0) {
@@ -1016,7 +958,6 @@ final class WorldController {
                         if (class28 != null)
                             class28.aClass30_Sub2_Sub4_521.method443(class28.anInt522, anInt458, anInt459, anInt460, anInt461, class28.anInt519 - anInt455, class28.anInt518 - anInt456, class28.anInt520 - anInt457, class28.uid);
                     }
-
                 }
                 boolean flag1 = false;
                 if (class30_sub3_1.aClass43_1311 != null) {
@@ -1187,7 +1128,6 @@ final class WorldController {
                                 }
                                 continue label0;
                             }
-
                         }
 
                         aClass28Array462[l1++] = class28_1;
@@ -1236,9 +1176,7 @@ final class WorldController {
                                 else if ((k7 != i || l8 != j) && class30_sub3_22.aBoolean1323)
                                     aClass19_477.insertHead(class30_sub3_22);
                             }
-
                         }
-
                     }
                     if (class30_sub3_1.aBoolean1324)
                         continue;
@@ -1496,7 +1434,6 @@ final class WorldController {
                 }
             }
         }
-
     }
 
     private int method317(int j, int k) {
@@ -1527,7 +1464,7 @@ final class WorldController {
 
     private void method319() {
         int j = anIntArray473[anInt447];
-        Class47 aclass47[] = aClass47ArrayArray474[anInt447];
+        Class47[] aclass47 = aClass47ArrayArray474[anInt447];
         anInt475 = 0;
         for (int k = 0; k < j; k++) {
             Class47 class47 = aclass47[k];
@@ -1622,7 +1559,6 @@ final class WorldController {
                                 flag2 = true;
                                 break label0;
                             }
-
                         }
 
                         if (flag2) {
@@ -1637,7 +1573,6 @@ final class WorldController {
                 }
             }
         }
-
     }
 
     private boolean method320(int i, int j, int k) {
@@ -1834,7 +1769,6 @@ final class WorldController {
                 }
             }
         }
-
         return false;
     }
 

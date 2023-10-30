@@ -26,7 +26,7 @@ final class Animable_Sub5 extends Animable {
                 int i1 = varBit.anInt650;
                 int j1 = Client.anIntArray1232[i1 - l];
                 i = clientInstance.variousSettings[k] >> l & j1;
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
         } else if (anInt1602 != -1)
             i = clientInstance.variousSettings[anInt1602];

@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public final class VarBit {
 
@@ -32,14 +30,13 @@ public final class VarBit {
         } else {
             System.out.println(opcode);
         }
-
     }
 
     private VarBit() {
         aBoolean651 = false;
     }
 
-    public static VarBit cache[];
+    public static VarBit[] cache;
     public int anInt648;
     public int anInt649;
     public int anInt650;

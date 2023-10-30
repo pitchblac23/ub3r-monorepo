@@ -26,7 +26,7 @@ final class Decompressor {
             //	return null;
             if (j1 <= 0 || (long) j1 > dataFile.length() / 520L)
                 return null;
-            byte abyte0[] = new byte[i1];
+            byte[] abyte0 = new byte[i1];
             int k1 = 0;
             for (int l1 = 0; k1 < i1; l1++) {
                 if (j1 == 0)
@@ -55,21 +55,20 @@ final class Decompressor {
 
                 j1 = i3;
             }
-
             return abyte0;
         } catch (IOException _ex) {
             return null;
         }
     }
 
-    public synchronized boolean method234(int i, byte abyte0[], int j) {
+    public synchronized boolean method234(int i, byte[] abyte0, int j) {
         boolean flag = method235(true, j, i, abyte0);
         if (!flag)
             flag = method235(false, j, i, abyte0);
         return flag;
     }
 
-    private synchronized boolean method235(boolean flag, int j, int k, byte abyte0[]) {
+    private synchronized boolean method235(boolean flag, int j, int k, byte[] abyte0) {
         try {
             int l;
             if (flag) {
@@ -146,7 +145,6 @@ final class Decompressor {
                 j1 += k2;
                 l = i2;
             }
-
             return true;
         } catch (IOException _ex) {
             return false;
@@ -165,5 +163,4 @@ final class Decompressor {
     private final RandomAccessFile dataFile;
     private final RandomAccessFile indexFile;
     private final int anInt311;
-
 }

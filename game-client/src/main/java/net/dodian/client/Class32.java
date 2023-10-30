@@ -1,7 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
-
+package net.dodian.client;
 
 final class Class32 {
 
@@ -22,12 +19,12 @@ final class Class32 {
         anIntArray600 = new int[6];
     }
 
-    byte aByteArray563[];
+    byte[] aByteArray563;
     int anInt564;
     int anInt565;
     int anInt566;
     int anInt567;
-    byte aByteArray568[];
+    byte[] aByteArray568;
     int anInt569;
     int anInt570;
     int anInt571;
@@ -45,7 +42,7 @@ final class Class32 {
     final int[] anIntArray583;
     int anInt584;
     final int[] anIntArray585;
-    public static int anIntArray587[];
+    public static int[] anIntArray587;
     int anInt588;
     final boolean[] aBooleanArray589;
     final boolean[] aBooleanArray590;

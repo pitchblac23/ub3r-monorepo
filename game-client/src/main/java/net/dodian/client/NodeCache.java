@@ -11,7 +11,6 @@ final class NodeCache {
             node.prev = node;
             node.next = node;
         }
-
     }
 
     public Node findNodeByID(long l) {

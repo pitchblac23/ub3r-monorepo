@@ -4,7 +4,6 @@ public final class Animation {
 
     public static void unpackConfig(StreamLoader streamLoader) {
         Stream stream = new Stream(streamLoader.getDataForName("seq.dat"));
-        //net.dodian.client.Stream stream = new net.dodian.client.Stream(net.dodian.client.FileOperations.ReadFile(signlink.findcachedir()+ "seq.dat"));
         int length = stream.readUnsignedWord();
         if (anims == null)
             anims = new Animation[length + 10000];
@@ -127,13 +126,13 @@ public final class Animation {
         anInt365 = 1;
     }
 
-    public static Animation anims[];
+    public static Animation[] anims;
     public int anInt352;
-    public int anIntArray353[];
-    public int anIntArray354[];
+    public int[] anIntArray353;
+    public int[] anIntArray354;
     public int[] anIntArray355;
     public int anInt356;
-    public int anIntArray357[];
+    public int[] anIntArray357;
     public boolean aBoolean358;
     public int anInt359;
     public int anInt360;

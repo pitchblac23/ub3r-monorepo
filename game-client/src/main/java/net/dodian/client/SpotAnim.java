@@ -1,7 +1,5 @@
 package net.dodian.client;
 
-import java.io.FileWriter;
-
 public final class SpotAnim {
 
     public static void unpackConfig(StreamLoader streamLoader) {
@@ -84,7 +82,7 @@ public final class SpotAnim {
         resizeY = 128;
     }
 
-    public static SpotAnim cache[];
+    public static SpotAnim[] cache;
     private int anInt404;
     private int modelId;
     private int animationId;

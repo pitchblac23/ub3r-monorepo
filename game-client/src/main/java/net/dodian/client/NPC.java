@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 public final class NPC extends Entity {
 
@@ -39,7 +37,7 @@ public final class NPC extends Entity {
                 if (spotAnim.resizeX != 128 || spotAnim.resizeY != 128)
                     model_2.method478(spotAnim.resizeX, spotAnim.resizeX, spotAnim.resizeY);
                 model_2.setLighting(64 + spotAnim.ambient, 850 + spotAnim.contrast, -30, -50, -30, true);
-                Model aModel[] = {
+                Model[] aModel = {
                         model, model_2
                 };
                 model = new Model(aModel);

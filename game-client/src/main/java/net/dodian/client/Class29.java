@@ -1,6 +1,4 @@
-package net.dodian.client;// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
+package net.dodian.client;
 
 final class Class29 {
 
@@ -19,7 +17,6 @@ final class Class29 {
             anIntArray536[i] = stream.readUnsignedWord();
             anIntArray537[i] = stream.readUnsignedWord();
         }
-
     }
 
     void resetValues() {

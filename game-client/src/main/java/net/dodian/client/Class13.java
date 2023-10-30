@@ -2,7 +2,7 @@ package net.dodian.client;
 
 final class Class13 {
 
-    public static int method225(byte abyte0[], int i, byte abyte1[], int j, int k) {
+    public static int method225(byte[] abyte0, int i, byte[] abyte1, int j, int k) {
         synchronized (aClass32_305) {
             aClass32_305.aByteArray563 = abyte1;
             aClass32_305.anInt564 = k;
@@ -28,9 +28,9 @@ final class Class13 {
         int i = class32.anInt574;
         int j = class32.anInt584;
         int k = class32.anInt582;
-        int ai[] = Class32.anIntArray587;
+        int[] ai = Class32.anIntArray587;
         int l = class32.anInt581;
-        byte abyte0[] = class32.aByteArray568;
+        byte[] abyte0 = class32.aByteArray568;
         int i1 = class32.anInt569;
         int j1 = class32.anInt570;
         int k1 = j1;
@@ -184,7 +184,6 @@ final class Class13 {
                         if (byte2 == 1)
                             class32.aBooleanArray589[l * 16 + i3] = true;
                     }
-
                 }
 
             method231(class32);
@@ -202,7 +201,7 @@ final class Class13 {
                 class32.aByteArray595[i1] = (byte) j3;
             }
 
-            byte abyte0[] = new byte[6];
+            byte[] abyte0 = new byte[6];
             for (byte byte16 = 0; byte16 < j4; byte16++)
                 abyte0[byte16] = byte16;
 
@@ -231,7 +230,6 @@ final class Class13 {
                     } while (true);
                     class32.aByteArrayArray596[k3][k1] = (byte) l6;
                 }
-
             }
 
             for (int l3 = 0; l3 < j4; l3++) {
@@ -260,7 +258,6 @@ final class Class13 {
                     class32.aByteArray592[j9] = (byte) (l8 * 16 + i9);
                     j9--;
                 }
-
                 class32.anIntArray593[l8] = j9 + 1;
             }
 
@@ -320,7 +317,6 @@ final class Class13 {
                         Class32.anIntArray587[i6] = byte5 & 0xff;
                         i6++;
                     }
-
                 } else {
                     int j11 = k5 - 1;
                     byte byte6;
@@ -362,10 +358,8 @@ final class Class13 {
                                     class32.aByteArray592[i10] = class32.aByteArray592[class32.anIntArray593[k9] + l9];
                                     i10--;
                                 }
-
                                 class32.anIntArray593[k9] = i10 + 1;
                             }
-
                         }
                     }
                     class32.anIntArray583[class32.aByteArray591[byte6 & 0xff] & 0xff]++;
@@ -388,7 +382,6 @@ final class Class13 {
                         k7++;
                         byte11 = method229(class32);
                     }
-
                     k5 = ai2[j8 - ai1[k7]];
                 }
 
@@ -454,10 +447,9 @@ final class Class13 {
                 class32.aByteArray591[class32.anInt588] = (byte) i;
                 class32.anInt588++;
             }
-
     }
 
-    private static void method232(int ai[], int ai1[], int ai2[], byte abyte0[], int i, int j, int k) {
+    private static void method232(int[] ai, int[] ai1, int[] ai2, byte[] abyte0, int i, int j, int k) {
         int l = 0;
         for (int i1 = i; i1 <= j; i1++) {
             for (int l2 = 0; l2 < k; l2++)
@@ -465,7 +457,6 @@ final class Class13 {
                     ai2[l] = l2;
                     l++;
                 }
-
         }
 
         for (int j1 = 0; j1 < 23; j1++)
@@ -489,9 +480,7 @@ final class Class13 {
 
         for (int k2 = i + 1; k2 <= j; k2++)
             ai1[k2] = (ai[k2 - 1] + 1 << 1) - ai1[k2];
-
     }
 
     private static final Class32 aClass32_305 = new Class32();
-
 }

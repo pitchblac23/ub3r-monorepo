@@ -81,8 +81,7 @@ final class TextInput {
         method526(s, stream);
         int j = stream.currentOffset;
         stream.currentOffset = 0;
-        String s1 = method525(j, stream);
-        return s1;
+        return method525(j, stream);
     }
 
     private static final char[] aCharArray631 = new char[100];
@@ -96,5 +95,4 @@ final class TextInput {
             '\'', '@', '#', '+', '=', '\243', '$', '%', '"', '[',
             ']'
     };
-
 }

@@ -8,13 +8,9 @@ public class Dialogue implements Packet {
 
     @Override
     public void ProcessPacket(Client client, int packetType, int packetSize) {
-        if (client.NpcDialogue == 1 || client.NpcDialogue == 3 || client.NpcDialogue == 5 || client.NpcDialogue == 21) {
+        if (client.NpcDialogue == 21) {
             client.NpcDialogue += 1;
             client.NpcDialogueSend = false;
-        } else if (client.NpcDialogue == 6 || client.NpcDialogue == 7) {
-            client.NpcDialogue = 0;
-            client.NpcDialogueSend = false;
-            client.send(new RemoveInterfaces());
         } else if (client.NpcDialogue == 23) {
             client.NpcDialogue += 2;
             client.NpcDialogueSend = false;
