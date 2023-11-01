@@ -3,7 +3,6 @@ package net.dodian.uber.game.model.player.packets.incoming;
 import net.dodian.uber.game.Server;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 
 public class PickUpGroundItem implements Packet {
 
@@ -13,11 +12,11 @@ public class PickUpGroundItem implements Packet {
         int itemID = client.getInputStream().readUnsignedWord();
         int itemX = client.getInputStream().readSignedWordBigEndian();
         if (!client.hasSpace() && Server.itemManager.isStackable(itemID) && !client.playerHasItem(itemID)) {
-            client.send(new SendMessage("Your inventory is full!"));
+            client.sendMessage("Your inventory is full!");
             return;
         }
         if (itemID >= 5509 && itemID <= 5515 && client.checkItem(itemID)) {
-            client.send(new SendMessage("You already got this item!"));
+            client.sendMessage("You already got this item!");
             return;
         }
         if (System.currentTimeMillis() - client.lastAction <= 600) {
@@ -34,5 +33,4 @@ public class PickUpGroundItem implements Packet {
             client.pickUpItem(itemID, itemX, itemY);
         }
     }
-
 }

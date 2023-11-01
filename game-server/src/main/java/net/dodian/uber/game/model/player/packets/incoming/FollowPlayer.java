@@ -10,5 +10,4 @@ public class FollowPlayer implements Packet {
         @SuppressWarnings("unused")
         int followId = client.getInputStream().readSignedWordBigEndian();
     }
-
 }

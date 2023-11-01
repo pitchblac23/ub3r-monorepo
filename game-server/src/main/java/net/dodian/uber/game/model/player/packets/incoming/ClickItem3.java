@@ -12,7 +12,7 @@ public class ClickItem3 implements Packet {
         int itemSlot = c.getInputStream().readUnsignedWordA();
         int itemId = c.getInputStream().readUnsignedWordBigEndian();
         int itemId1 = c.getInputStream().readUnsignedWordA();
-        c.println_debug("" + packetType);
+        c.println("" + packetType);
 
         switch (itemId1) {
             case 12019:

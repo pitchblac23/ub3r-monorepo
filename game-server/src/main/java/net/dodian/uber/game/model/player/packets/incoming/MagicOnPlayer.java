@@ -5,7 +5,6 @@ import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.entity.player.PlayerHandler;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.player.packets.Packet;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.utilities.Utils;
@@ -28,7 +27,7 @@ public class MagicOnPlayer implements Packet {
             return;
         }
         if (!client.canAttack) {
-            client.send(new SendMessage("You cannot attack your oppenent yet!"));
+            client.sendMessage("You cannot attack your oppenent yet!");
             return;
         }
         int magicID = client.getInputStream().readSignedWordBigEndian();
@@ -38,15 +37,15 @@ public class MagicOnPlayer implements Packet {
         int diff = Math.abs(castOnPlayer.determineCombatLevel() - client.determineCombatLevel());
         if (!((castOnPlayer.inWildy() && diff <= client.wildyLevel && diff <= castOnPlayer.wildyLevel)
                 || client.duelFight && client.duel_with == castOnPlayer.getSlot()) || castOnPlayer.saving) {
-            client.send(new SendMessage("You can't attack that player"));
+            client.sendMessage("You can't attack that player");
             return;
         }
         if (!(client.duelFight && client.duel_with == playerIndex) && !Server.pking) {
-            client.send(new SendMessage("Pking has been disabled"));
+            client.sendMessage("Pking has been disabled");
             return;
         }
         if (client.duelFight && client.duelRule[2]) {
-            client.send(new SendMessage("Magic has been disabled for this duel!"));
+            client.sendMessage("Magic has been disabled for this duel!");
             return;
         }
         int wildLevel = client.getWildLevel();
@@ -89,8 +88,8 @@ public class MagicOnPlayer implements Packet {
                     castOnPlayer.dealDamage(hitDiff, hitCrit);
                 }
             } else
-                client.send(new SendMessage("You need a magic level of " + client.requiredLevel[slot]));
+                client.sendMessage("You need a magic level of " + client.requiredLevel[slot] + ".");
         } else
-            client.send(new SendMessage("You can't attack here!"));
+            client.sendMessage("You can't attack here!");
     }
 }

@@ -3,8 +3,6 @@ package net.dodian.uber.game.model.player.skills.smithing;
 import net.dodian.uber.game.Constants;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.entity.player.Player;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.skills.Skills;
 
 //TODO: fix loop bug
@@ -37,7 +35,7 @@ public class Smithing {
     public static int CheckSmithing(int ItemID, Client c) {
         int Type = -1;
         if (!c.IsItemInBag(2347)) {
-            c.send(new SendMessage("You need a " + c.GetItemName(2347).toLowerCase() + "."));
+            c.sendMessage("You need a " + c.GetItemName(2347).toLowerCase() + ".");
             return -1;
         }
         switch (ItemID) {
@@ -66,7 +64,7 @@ public class Smithing {
                 break;
         }
         if (Type == -1)
-            c.send(new SendMessage("You cannot smith this item."));
+            c.sendMessage("You cannot smith this item.");
         else
             c.smithing[3] = ItemID;
         return Type;
@@ -80,7 +78,7 @@ public class Smithing {
                 }
             }
         }
-        c.send(new SendMessage("Client hack detected!"));
+        c.sendMessage("Client hack detected!");
         return false;
     }
 
@@ -92,12 +90,12 @@ public class Smithing {
             Length += 1;
         }
         // Sending amount of bars + make text green if lvl is highenough
-        c.send(new SendString("", 1132)); // Wire
-        c.send(new SendString("", 1096));
-        c.send(new SendString("", 11459)); // Lantern
-        c.send(new SendString("", 11461));
-        c.send(new SendString("", 1135)); // Studs
-        c.send(new SendString("", 1134));
+        c.sendString("", 1132); // Wire
+        c.sendString("", 1096);
+        c.sendString("", 11459); // Lantern
+        c.sendString("", 11461);
+        c.sendString("", 1135); // Studs
+        c.sendString("", 1134);
         String bar, color, color2, name = "";
 
         if (Type == 1) {
@@ -131,12 +129,12 @@ public class Smithing {
             if (c.AreXItemsInBag((2349 + (Type3 * 2)), Constants.smithing_frame[Type2][i][3])) {
                 color = "@gre@";
             }
-            c.send(new SendString(color + "" + Constants.smithing_frame[Type2][i][3] + "" + bar, Constants.smithing_frame[Type2][i][4]));
+            c.sendString(color + "" + Constants.smithing_frame[Type2][i][3] + "" + bar, Constants.smithing_frame[Type2][i][4]);
             String linux_hack = c.GetItemName(Constants.smithing_frame[Type2][i][0]);
             int index = c.GetItemName(Constants.smithing_frame[Type2][i][0]).indexOf(name);
             if (index > 0) {
                 linux_hack = linux_hack.substring(index + 1);
-                c.send(new SendString(linux_hack, Constants.smithing_frame[Type2][i][5]));
+                c.sendString(linux_hack, Constants.smithing_frame[Type2][i][5]);
             }
             // send(new SendString(color2 + "" + GetItemName(Constants.smithing_frame[Type2][i][0]).replace(name, ""), Constants.smithing_frame[Type2][i][5]);
         }
@@ -193,7 +191,7 @@ public class Smithing {
             }
             Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][22][0];
             Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][22][1];
-            c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 11461));
+            c.sendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 11461);
         }
         Smithing.SetSmithing(1121, c);
 
@@ -231,14 +229,14 @@ public class Smithing {
             }
             Constants.SmithingItems[3][0] = Constants.smithing_frame[Type2][22][0];
             Constants.SmithingItems[3][1] = Constants.smithing_frame[Type2][22][1];
-            c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 1096));
+            c.sendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][22][0]).replace(name, ""), 1096);
         }
         for (int i = 0; i < 23; i++) {
             if (c.getLevel(Skills.SMITHING) >= Constants.smithing_frame[Type2][i][2]) {
                 color2 = "@whi@";
             } else
                 color2 = "@bla@";
-            c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][i][0]).replace(name, ""), Constants.smithing_frame[Type2][i][5]));
+            c.sendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][i][0]).replace(name, ""), Constants.smithing_frame[Type2][i][5]);
         }
 
         Constants.SmithingItems[4][0] = -1; // Studs
@@ -250,7 +248,7 @@ public class Smithing {
             }
             Constants.SmithingItems[4][0] = Constants.smithing_frame[Type2][23][0];
             Constants.SmithingItems[4][1] = Constants.smithing_frame[Type2][23][1];
-            c.send(new SendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][23][0]).replace(name, ""), 1134));
+            c.sendString(color2 + "" + c.GetItemName(Constants.smithing_frame[Type2][23][0]).replace(name, ""), 1134);
         }
         Smithing.SetSmithing(1123, c);
 
@@ -286,7 +284,7 @@ public class Smithing {
                     for (int i2 = 0; i2 < Constants.smithing_frame[i][i1].length; i2++) {
                         if (Constants.smithing_frame[i][i1][0] == c.smithing[4]) {
                             if (!c.AreXItemsInBag(possibleBars[i], Constants.smithing_frame[i][i1][3])) {
-                                c.send(new SendMessage("You are missing bars needed to smith this."));
+                                c.sendMessage("You are missing bars needed to smith this.");
                                 Player.IsAnvil = true;
                                 c.resetAction();
                                 return false;
@@ -325,7 +323,7 @@ public class Smithing {
                         int experience = xp * bars * 30;
                         c.giveExperience(experience, Skills.SMITHING);
                         c.addItem(c.smithing[4], ItemN);
-                        c.send(new SendMessage("You hammer the " + c.GetItemName(c.smithing[3]).toLowerCase() + " and make a " + c.GetItemName(c.smithing[4]).toLowerCase() + "."));
+                        c.sendMessage("You hammer the " + c.GetItemName(c.smithing[3]).toLowerCase() + " and make a " + c.GetItemName(c.smithing[4]).toLowerCase() + ".");
                         c.requestAnim(0x382, 0);
                         c.triggerRandom(experience);
                     }
@@ -334,18 +332,18 @@ public class Smithing {
                         c.resetAction();
                     }
                 } else {
-                    c.send(new SendMessage("You need " + bars + " " + c.GetItemName(barid) + " to smith a " + c.GetItemName(c.smithing[4]) + "."));
+                    c.sendMessage("You need " + bars + " " + c.GetItemName(barid) + " to smith a " + c.GetItemName(c.smithing[4]) + ".");
                     c.rerequestAnim();
                     c.resetAction();
                 }
             } else {
-                c.send(new SendMessage("You need " + c.smithing[1] + " Smithing to smith a " + c.GetItemName(c.smithing[4]) + "."));
+                c.sendMessage("You need " + c.smithing[1] + " Smithing to smith a " + c.GetItemName(c.smithing[4]) + ".");
                 Player.IsAnvil = true;
                 c.resetAction();
                 return false;
             }
         } else {
-            c.send(new SendMessage("You need a " + c.GetItemName(2347).toLowerCase() + "."));
+            c.sendMessage("You need a " + c.GetItemName(2347).toLowerCase() + ".");
             Player.IsAnvil = true;
             c.resetAction();
             return false;

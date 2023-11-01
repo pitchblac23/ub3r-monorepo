@@ -14,7 +14,7 @@ public class DropItem implements Packet {
         int slot = client.getInputStream().readUnsignedWordA();
         if (droppedItem == 5733) {
             client.deleteItem(droppedItem, slot, 1);
-            client.send(new SendMessage("A magical force removed this item from your inventory!"));
+            client.sendMessage("A magical force removed this item from your inventory!");
             return;
         }
         if (droppedItem == 1927) {
@@ -22,7 +22,7 @@ public class DropItem implements Packet {
             client.addItemSlot(1925, 1, slot);
             client.requestAnim(0x33D, 0);
             client.animationReset = System.currentTimeMillis() + 800;
-            client.send(new SendMessage("You drank the milk and gained 15% magic penetration!"));
+            client.sendMessage("You drank the milk and gained 15% magic penetration!");
             return;
         }
         if (client.wearing == false) {

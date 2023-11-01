@@ -3,7 +3,6 @@ package net.dodian.uber.game.model.player.skills.fletching;
 import net.dodian.uber.game.Constants;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 
 public class Fletching {
@@ -31,7 +30,7 @@ public class Fletching {
             player.triggerRandom(player.fletchOtherXp * player.fletchOtherAmt);
         } else {
             if (player.fletchOtherAmt == 15)
-                player.send(new SendMessage("You need at least 15 " + player.GetItemName(player.fletchOtherId1).toLowerCase() + " and " + player.GetItemName(player.fletchOtherId2).toLowerCase() + ""));
+                player.sendMessage("You need at least 15 " + player.GetItemName(player.fletchOtherId1).toLowerCase() + " and " + player.GetItemName(player.fletchOtherId2).toLowerCase() + ".");
             player.resetAction();
         }
     }
@@ -40,7 +39,7 @@ public class Fletching {
         player.send(new RemoveInterfaces());
         if (shortBow) {
             if (player.getLevel(Skills.FLETCHING) < Constants.shortreq[player.fletchLog]) {
-                player.send(new SendMessage("Requires fletching " + Constants.shortreq[player.fletchLog] + "!"));
+                player.sendMessage("Requires fletching " + Constants.shortreq[player.fletchLog] + "!");
                 player.resetAction();
                 return;
             }
@@ -48,7 +47,7 @@ public class Fletching {
             player.fletchExp = Constants.shortexp[player.fletchLog];
         } else {
             if (player.getLevel(Skills.FLETCHING) < Constants.longreq[player.fletchLog]) {
-                player.send(new SendMessage("Requires fletching " + Constants.longreq[player.fletchLog] + "!"));
+                player.sendMessage("Requires fletching " + Constants.longreq[player.fletchLog] + "!");
                 player.resetAction();
                 return;
             }
@@ -93,7 +92,8 @@ public class Fletching {
         }
     }
 
-    public static void pickHandle(Client c) {
+    //TODO: make pickaxe and axe handles fletched
+    /*public static void pickHandle(Client c) {
         if (c.IsCutting || c.isFiremaking)
             c.resetAction();
         c.send(new RemoveInterfaces());
@@ -121,5 +121,5 @@ public class Fletching {
         } else {
             c.resetAction();
         }
-    }
+    }*/
 }

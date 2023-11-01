@@ -5,7 +5,6 @@ import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.object.Stairs;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.utilities.Utils;
 
 public class Walking implements Packet {
@@ -45,11 +44,11 @@ public class Walking implements Packet {
         client.convoId = -1;
         long currentTime = System.currentTimeMillis();
         if (currentTime < client.snaredUntil) {
-            client.send(new SendMessage("You are ensnared!"));
+            client.sendMessage("You are ensnared!");
             return;
         }
         if (!client.validClient) {
-            client.send(new SendMessage("You can't move on this account"));
+            client.sendMessage("You can't move on this account");
             return;
         }
         if(client.attackingNpc || client.attackingPlayer) //Adding a check for reset due to walking away!
@@ -63,7 +62,7 @@ public class Walking implements Packet {
             client.newWalkCmdSteps = packetSize - 5;
             if (client.inDuel/* && (duelRule[5] || duelRule[9]) */) {
                 if (client.newWalkCmdSteps > 0)
-                    client.send(new SendMessage("You cannot move during this duel!"));
+                    client.sendMessage("You cannot move during this duel!");
                 client.newWalkCmdSteps = 0;
                 return;
             }

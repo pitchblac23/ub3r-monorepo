@@ -3,7 +3,6 @@ package net.dodian.uber.game.model.player.skills.prayer;
 import net.dodian.uber.game.model.UpdateFlag;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.entity.player.Player;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import java.util.HashMap;
 
@@ -173,13 +172,13 @@ public class Prayers {
      */
     public void togglePrayer(Prayer prayer) {
         if (prayer.getPrayerLevel() != -1 && Skills.getLevelForExperience(p.getExperience(Skills.PRAYER)) < prayer.getPrayerLevel()) {
-            c.send(new SendMessage("You need a prayer level of at least " + prayer.getPrayerLevel() + " to use " + formatEnum(prayer).toLowerCase() + "."));
+            c.sendMessage("You need a prayer level of at least " + prayer.getPrayerLevel() + " to use " + formatEnum(prayer).toLowerCase() + ".");
             c.frame87(prayer.getConfigId(), 0);
             //c.send(new Sound(447));
             return;
         }
         if(c.getCurrentPrayer() < 1) { //Can't use prayer with no prayer points!
-            c.send(new SendMessage("You have no prayer points currently! Recharge at a nearby altar."));
+            c.sendMessage("You have no prayer points currently! Recharge at a nearby altar.");
             reset();
             return;
         }

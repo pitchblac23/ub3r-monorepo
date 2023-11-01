@@ -13,5 +13,4 @@ public class RemoveInterfaces implements OutgoingPacket {
         client.getOutputStream().createFrame(219);
         client.flushOutStream();
     }
-
 }

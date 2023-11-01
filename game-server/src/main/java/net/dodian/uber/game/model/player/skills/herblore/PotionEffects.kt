@@ -1,9 +1,9 @@
-package net.dodian.uber.game.model.player.skills.herblore;
+package net.dodian.uber.game.model.player.skills.herblore
 
 import net.dodian.uber.game.model.entity.player.Client
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.utilities.Utils
+import java.util.*
 
 fun drinkPotion(client: Client, potion: Int, slot: Int) {
     when (potion) {
@@ -29,13 +29,13 @@ fun potion(client: Client, skill: Skills, slot: Int, i1: Int, i2: Double) {
 fun prayerPotion(client: Client, slot: Int) {
     potionDose(client, slot)
     client.pray(7 + (client.getMaxPrayer() * 0.25).toInt())
-    client.refreshSkill(Skills.PRAYER);
+    client.refreshSkill(Skills.PRAYER)
 }
 
 fun restorePotion(client: Client, slot: Int) {
     potionDose(client, slot)
     client.pray(8 + (client.getMaxPrayer() * 0.25).toInt())
-    client.refreshSkill(Skills.PRAYER);
+    client.refreshSkill(Skills.PRAYER)
     for (i in 0..20) if (i != 3) {
         client.boostedLevel[i] = 0
         client.refreshSkill(Skills.getSkill(i))
@@ -66,6 +66,6 @@ fun potionDose(client: Client, slot: Int) {
         client.addItemSlot(nextId, 1, slot)
     }
     client.requestAnim(1327, 0)
-    client.send(SendMessage(if (nextId == 229) "You have finished your potion." else "You drink some of your ${client.GetItemName(item).toLowerCase()} potion."))
+    client.sendMessage(if (nextId == 229) "You have finished your potion." else "You drink some of your ${client.GetItemName(item).lowercase(Locale.getDefault())} potion.")
     //TODO: "You have # doses of potion left." "Fix get item name -(# dose)"
 }

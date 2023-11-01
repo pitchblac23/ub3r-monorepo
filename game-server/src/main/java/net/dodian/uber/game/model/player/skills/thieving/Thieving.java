@@ -6,7 +6,6 @@ import net.dodian.uber.game.model.Position;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.object.GlobalObject;
 import net.dodian.uber.game.model.object.Object;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Range;
 
@@ -148,12 +147,12 @@ public class Thieving {
                                 (position.getX() == 2667 && position.getY() == 3303) || (position.getX() == 2667 && position.getY() == 3310) ? 3
                                         : -1;
         if (face == -1 && data.getThievingType() == ThievingType.STALL_THIEVING) {
-            player.send(new SendMessage("Not added object!"));
+            player.sendMessage("Not added object!");
             return;
         }
         final Object o = new Object(EMPTY_STALL_ID, position.getX(), position.getY(), position.getZ(), 10, face, data.getEntityId());
         if (player.getLevel(Skills.THIEVING) < data.getRequiredLevel()) {
-            player.send(new SendMessage("You need a thieving level of " + data.getRequiredLevel() + " to steal from " + data.toString().toLowerCase().replace('_', ' ') + "s."));
+            player.sendMessage("You need a thieving level of " + data.getRequiredLevel() + " to steal from " + data.toString().toLowerCase().replace('_', ' ') + "s.");
             return;
         }
         if (System.currentTimeMillis() - player.lastAction < 2000) {
@@ -163,7 +162,7 @@ public class Thieving {
         if (data.getThievingType() == ThievingType.PICKPOCKETING || data.getThievingType() == ThievingType.OTHER) {
             player.setFocus(position.getX(), position.getY());
             player.requestAnim(PICKPOCKET_EMOTE, 0);
-            player.send(new SendMessage("You attempt to steal from the " + data.toString().toLowerCase().replace('_', ' ') + "..."));
+            player.sendMessage("You attempt to steal from the " + data.toString().toLowerCase().replace('_', ' ') + "...");
         } else {
             if (GlobalObject.hasGlobalObject(o)) {
                 return;
@@ -189,7 +188,7 @@ public class Thieving {
                 }
 
                 if (failChance > 75) {
-                    player.send(new SendMessage("You fail to thieve from the " + data.toString().toLowerCase().replace('_', ' ')));
+                    player.sendMessage("You fail to thieve from the " + data.toString().toLowerCase().replace('_', ' '));
                     this.stop();
                     return;
                 }
@@ -204,18 +203,18 @@ public class Thieving {
                         for (int i = 0; i < data.getItemId().length; i++) {
                             if (rollChance < data.getItemItemChance()[i]) {
                                 player.addItem(data.getItemId()[i], data.getItemAmount()[i].getValue());
-                                player.send(new SendMessage("You receive " + aAnOrSome(player.GetItemName(data.getItemId()[i])) + " " + player.GetItemName(data.getItemId()[i]).toLowerCase()));
+                                player.sendMessage("You receive " + aAnOrSome(player.GetItemName(data.getItemId()[i])) + " " + player.GetItemName(data.getItemId()[i]).toLowerCase());
                                 break;
                             }
                         }
 
                     } else {
                         player.addItem(data.getItemId()[0], data.getItemAmount()[0].getValue());
-                        player.send(new SendMessage("You receive " + aAnOrSome(player.GetItemName(data.getItemId()[0])) + " " + player.GetItemName(data.getItemId()[0]).toLowerCase()));
+                        player.sendMessage("You receive " + aAnOrSome(player.GetItemName(data.getItemId()[0])) + " " + player.GetItemName(data.getItemId()[0]).toLowerCase());
                     }
                     if (data.getThievingType() == ThievingType.STALL_THIEVING) {
                         final Object o = new Object(EMPTY_STALL_ID, position.getX(), position.getY(), position.getZ(), 10, face, data.getEntityId());
-                        if (!GlobalObject.addGlobalObject(o, data.getRespawnTime() * 1000)) {
+                        if (GlobalObject.addGlobalObject(o, data.getRespawnTime() * 1000)) {
                             stop();
                         }
                     }
@@ -225,7 +224,7 @@ public class Thieving {
                     stop();
 
                 } else {
-                    player.send(new SendMessage("You don't have enough inventory space!"));
+                    player.sendMessage("You don't have enough inventory space!");
                     stop();
                 }
             }

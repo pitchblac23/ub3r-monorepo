@@ -10,5 +10,4 @@ public class RemoveIgnore implements Packet {
         long igtorem = client.getInputStream().readQWord();
         client.removeIgnore(igtorem);
     }
-
 }

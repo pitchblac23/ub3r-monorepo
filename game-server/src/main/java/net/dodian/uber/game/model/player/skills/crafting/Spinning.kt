@@ -1,7 +1,6 @@
-package net.dodian.uber.game.model.player.skills.crafting;
+package net.dodian.uber.game.model.player.skills.crafting
 
 import net.dodian.uber.game.model.entity.player.Client
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 
 fun getSpinSpeed(c: Client): Long {
@@ -10,7 +9,7 @@ fun getSpinSpeed(c: Client): Long {
 }
 
 fun spin(c: Client) {
-    c.requestAnim(894, 0);
+    c.requestAnim(894, 0)
 
     if (c.playerHasItem(1779)) {
         spinAction(c, 1779, 1777, 50, 50)
@@ -18,7 +17,7 @@ fun spin(c: Client) {
         spinAction(c, 1737, 1759, 100, 100)
     } else {
         c.resetAction(true)
-        c.send(SendMessage("You do not have anything to spin!"))
+        c.sendMessage("You do not have anything to spin!")
     }
     c.lastAction = System.currentTimeMillis()
 }

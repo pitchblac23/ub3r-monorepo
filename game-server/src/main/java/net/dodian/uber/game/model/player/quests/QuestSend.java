@@ -1,7 +1,6 @@
 package net.dodian.uber.game.model.player.quests;
 
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.skills.Skills;
 
 public enum QuestSend {
@@ -47,16 +46,16 @@ public enum QuestSend {
     }
 
     public static QuestSend questInterface(Client c) {
-        c.send(new SendString("Dodian Quests", 640));
-        c.send(new SendString("Premium", 663));
-        c.send(new SendString("Other Stuff", 682));
+        c.sendString("Dodian Quests", 640);
+        c.sendString("Premium", 663);
+        c.sendString("Other Stuff", 682);
         for (QuestSend quest : values()) {
             if (c.quests[quest.getId()] == 0)
-                c.send(new SendString("@red@" + quest.getName(), quest.getConfig()));
+                c.sendString("@red@" + quest.getName(), quest.getConfig());
             if (c.quests[quest.getId()] > 0 && c.quests[quest.getId()] < quest.getEnd())
-                c.send(new SendString("@yel@" + quest.getName(), quest.getConfig()));
+                c.sendString("@yel@" + quest.getName(), quest.getConfig());
             if (c.quests[quest.getId()] == quest.getEnd())
-                c.send(new SendString("@gre@" + quest.getName(), quest.getConfig()));
+                c.sendString("@gre@" + quest.getName(), quest.getConfig());
         }
         return null;
     }
@@ -67,23 +66,23 @@ public enum QuestSend {
          c.clearQuestInterface();
          if(quest.getId() == 0) {
              int stage = c.quests[quest.getId()];
-             c.send(new SendString("@dre@"+quest.getName(), 8144));
+             c.sendString("@dre@"+quest.getName(), 8144);
              if(stage == 0) {
-                 c.send(new SendString("I can start this quest by talking to the monk in Yanille", 8147));
-                 c.send(new SendString("", 8148));
-                 c.send(new SendString("", 8149));
-                 c.send(new SendString("I need to have the following levels:", 8150));
-                 c.send(new SendString(c.getLevel(Skills.HERBLORE) >= 15 ? "@str@15 herblore@str@" : "15 herblore", 8151)); //@str@ put a red line!
-                 c.send(new SendString(c.getLevel(Skills.SMITHING) >= 20 ? "@str@20 smithing@str@" : "20 smithing", 8152)); //@str@ put a red line!
-                 c.send(new SendString(c.getLevel(Skills.CRAFTING) >= 40 ? "@str@40 crafting@str@" : "40 crafting", 8153)); //@str@ put a red line!
+                 c.sendString("I can start this quest by talking to the monk in Yanille", 8147);
+                 c.sendString("", 8148);
+                 c.sendString("", 8149);
+                 c.sendString("I need to have the following levels:", 8150);
+                 c.sendString(c.getLevel(Skills.HERBLORE) >= 15 ? "@str@15 herblore@str@" : "15 herblore", 8151); //@str@ put a red line!
+                 c.sendString(c.getLevel(Skills.SMITHING) >= 20 ? "@str@20 smithing@str@" : "20 smithing", 8152); //@str@ put a red line!
+                 c.sendString(c.getLevel(Skills.CRAFTING) >= 40 ? "@str@40 crafting@str@" : "40 crafting", 8153); //@str@ put a red line!
              } else if (stage > 0) {
-                 c.send(new SendString("@str@I have talked to the monk@str@", 8147));
-                 c.send(new SendString("The monk told me to talk to someone on the Brimhaven docks.", 8148));
-                 c.send(new SendString("I wonder who that could be.", 8149));
+                 c.sendString("@str@I have talked to the monk@str@", 8147);
+                 c.sendString("The monk told me to talk to someone on the Brimhaven docks.", 8148);
+                 c.sendString("I wonder who that could be.", 8149);
              }
              c.sendQuestSomething(8143);
              c.showInterface(8134);
-             //c.flushOutStream();
+             c.flushOutStream();
              return true;
          }
          return false;

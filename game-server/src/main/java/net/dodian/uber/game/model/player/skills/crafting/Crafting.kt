@@ -1,10 +1,8 @@
-package net.dodian.uber.game.model.player.skills.crafting;
+package net.dodian.uber.game.model.player.skills.crafting
 
 import net.dodian.uber.game.Constants
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
-import net.dodian.uber.game.model.player.packets.outgoing.SendString
 import net.dodian.uber.game.model.player.skills.Skills
 import java.util.*
 
@@ -62,23 +60,19 @@ var cSelected = -1
                 cLevel = levels[index]
                 cExp = Math.round((exp[index] * 8).toFloat())
             } else if (id != -1) {
-                c.send(SendMessage("You need level " + levels[index] + " crafting to craft a " + c.GetItemName(id).lowercase(Locale.getDefault())))
+                c.sendMessage("You need level " + levels[index] + " crafting to craft a " + c.GetItemName(id).lowercase(Locale.getDefault()) + ".")
                 c.send(RemoveInterfaces())
             }
         }
 
         fun craft(c: Client) {
             if (c.getLevel(Skills.CRAFTING) < cLevel) {
-                c.send(SendMessage("You need " + cLevel + " crafting to make a " + c.GetItemName(c.cItem).lowercase(Locale.getDefault())))
+                c.sendMessage("You need " + cLevel + " crafting to make a " + c.GetItemName(c.cItem).lowercase(Locale.getDefault()) + ".")
                 c.resetAction(true)
                 return
             }
             if (!c.playerHasItem(1733) || !c.playerHasItem(1734) || !c.playerHasItem(cSelected, 1)) {
-                c.send(
-                    SendMessage(
-                        if (!c.playerHasItem(1733))
-                            "You need a needle to craft!" else if (!c.playerHasItem(1734)) "You have run out of thread!" else "You have run out of " +
-                                c.GetItemName(cSelected).lowercase(Locale.getDefault()) + "!"))
+                c.sendMessage(if (!c.playerHasItem(1733)) "You need a needle to craft!" else if (!c.playerHasItem(1734)) "You have run out of thread!" else "You have run out of " + c.GetItemName(cSelected).lowercase(Locale.getDefault()) + ".")
                 c.resetAction(true)
                 return
             }
@@ -86,7 +80,7 @@ var cSelected = -1
                 c.requestAnim(1249, 0)
                 c.deleteItem(cSelected, 1)
                 c.deleteItem(1734, 1)
-                c.send(SendMessage("You crafted a " + c.GetItemName(c.cItem).lowercase(Locale.getDefault())))
+                c.sendMessage("You crafted a " + c.GetItemName(c.cItem).lowercase(Locale.getDefault()) + ".")
                 c.addItem(c.cItem, 1)
                 c.giveExperience(cExp, Skills.CRAFTING)
                 c.cAmount--
@@ -95,10 +89,10 @@ var cSelected = -1
         }
 
         fun craftMenu(i: Int, c: Client) {
-            c.send(SendString("What would you like to make?", 8898))
-            c.send(SendString("Vambraces", 8889))
-            c.send(SendString("Chaps", 8893))
-            c.send(SendString("Body", 8897))
+            c.sendString("What would you like to make?", 8898)
+            c.sendString("Vambraces", 8889)
+            c.sendString("Chaps", 8893)
+            c.sendString("Body", 8897)
             c.sendFrame246(8883, 250, Constants.gloves[i])
             c.sendFrame246(8884, 250, Constants.legs[i])
             c.sendFrame246(8885, 250, Constants.chests[i])
@@ -136,7 +130,7 @@ var cSelected = -1
                 c.crafting = true
                 c.send(RemoveInterfaces())
             } else if (required >= 0 && c.cItem != -1) {
-                c.send(SendMessage("You need level " + required + " crafting to craft a " + c.GetItemName(c.cItem).lowercase(Locale.getDefault())))
+                c.sendMessage("You need level " + required + " crafting to craft a " + c.GetItemName(c.cItem).lowercase(Locale.getDefault()) + ".")
                 c.send(RemoveInterfaces())
-            } else c.send(SendMessage("Can't make this??"))
+            } else c.sendMessage("Can't make this??")
         }

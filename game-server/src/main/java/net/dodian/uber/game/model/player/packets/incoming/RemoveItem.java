@@ -5,7 +5,6 @@ import net.dodian.uber.game.model.ShopHandler;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.party.Balloons;
 
 import static net.dodian.uber.game.model.player.skills.crafting.GoldCraftingKt.*;
@@ -18,7 +17,7 @@ public class RemoveItem implements Packet {
         int removeSlot = client.getInputStream().readUnsignedWordA();
         int removeID = client.getInputStream().readUnsignedWordA();
         if (client.playerGroup >= 3) {
-            client.println_debug("RemoveItem: " + removeID + " InterID: " + interfaceID + " slot: " + removeSlot);
+            client.println("RemoveItem: " + removeID + " InterID: " + interfaceID + " slot: " + removeSlot);
         }
         if (interfaceID == 3322 && client.inDuel) { // remove from bag to duel window
             client.stakeItem(removeID, removeSlot, 1);
@@ -30,8 +29,7 @@ public class RemoveItem implements Packet {
                 int amount = client.getEquipmentN()[removeSlot];
                     if(client.remove(removeSlot, false))
                         client.addItem(id, amount);
-            } else client.send(
-                    new SendMessage("Not enough space to unequip this item!"));
+            } else client.sendMessage("Not enough space to unequip this item!");
         } else if (interfaceID == 5064) { // remove from bag to bank
             if (client.IsBanking)
                 client.bankItem(removeID, removeSlot, 1);
@@ -49,11 +47,11 @@ public class RemoveItem implements Packet {
             startGoldCrafting(interfaceID, removeSlot, 1, client);
         } else if (interfaceID == 3823) { // Show value to sell items
             if (!Server.shopping || client.tradeLocked) {
-                client.send(new SendMessage(client.tradeLocked ? "You are trade locked!" : "Currently selling stuff to the store has been disabled!"));
+                client.sendMessage(client.tradeLocked ? "You are trade locked!" : "Currently selling stuff to the store has been disabled!");
                 return;
             }
             if (Server.itemManager.getShopBuyValue(removeID) < 1) {
-                client.send(new SendMessage("You cannot sell " + client.GetItemName(removeID).toLowerCase() + " in this store."));
+                client.sendMessage("You cannot sell " + client.GetItemName(removeID).toLowerCase() + " in this store.");
                 return;
             }
             boolean IsIn = false;
@@ -67,7 +65,7 @@ public class RemoveItem implements Packet {
                 IsIn = true;
             }
             if (IsIn == false && (ShopHandler.ShopBModifier[client.MyShopID] == 2 && !ShopHandler.findDefaultItem(client.MyShopID, removeID))) {
-                client.send(new SendMessage("You cannot sell " + client.GetItemName(removeID).toLowerCase() + " in this store."));
+                client.sendMessage("You cannot sell " + client.GetItemName(removeID).toLowerCase() + " in this store.");
             } else {
                 int currency = client.MyShopID == 55 ? 11997 : 995;
                 int ShopValue = client.MyShopID == 55 ? 1000 : (int) Math.floor(client.GetShopBuyValue(removeID, 1, removeSlot));
@@ -80,7 +78,7 @@ public class RemoveItem implements Packet {
                     int leftover = ShopValue - ((ShopValue / million) * million);
                     ShopAdd = " (" + (ShopValue / 1000000) + "" + ((leftover / 100000) > 0 ? "."+ (leftover / 100000) : "") + " million)";
                 }
-                client.send(new SendMessage(client.GetItemName(removeID) + ": shop will buy for " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "." + ShopAdd));
+                client.sendMessage(client.GetItemName(removeID) + ": shop will buy for " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "." + ShopAdd);
             }
         } else if (interfaceID == 3900) { // Show value to buy items
             int currency = client.MyShopID == 55 ? 11997 : 995;
@@ -95,14 +93,14 @@ public class RemoveItem implements Packet {
                 int leftover = ShopValue - ((ShopValue / million) * million);
                 ShopAdd = " (" + (ShopValue / 1000000) + "" + ((leftover / 100000) > 0 ? "."+ (leftover / 100000) : "") + " million)";
             }
-            client.send(new SendMessage(client.GetItemName(removeID) + ": currently costs " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + "" + ShopAdd));
+            client.sendMessage(client.GetItemName(removeID) + ": currently costs " + ShopValue + " " + client.GetItemName(currency).toLowerCase() + " " + ShopAdd);
         } else if (interfaceID >= 1119 && interfaceID <= 1123) { // Smithing
             if (client.smithing[2] > 0) {
                 client.smithing[4] = removeID;
                 client.smithing[5] = 1;
                 client.send(new RemoveInterfaces());
             } else {
-                client.send(new SendMessage("Illigal Smithing !"));
+                client.sendMessage("Illigal Smithing !");
             }
         }
         client.CheckGear();

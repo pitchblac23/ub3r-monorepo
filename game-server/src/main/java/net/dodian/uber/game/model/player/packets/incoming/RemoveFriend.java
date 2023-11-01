@@ -10,5 +10,4 @@ public class RemoveFriend implements Packet {
         long friendtorem = client.getInputStream().readQWord();
         client.removeFriend(friendtorem);
     }
-
 }

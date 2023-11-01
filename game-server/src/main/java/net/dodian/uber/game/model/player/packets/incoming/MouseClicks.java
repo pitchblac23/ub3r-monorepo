@@ -14,5 +14,4 @@ public class MouseClicks implements Packet {
             System.out.println("click " + in);
         client.updatePlayerDisplay();*/
     }
-
 }

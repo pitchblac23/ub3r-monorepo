@@ -20,7 +20,7 @@ public class Bank5 implements Packet {
         int removeID = client.getInputStream().readSignedWordBigEndianA();
         int removeSlot = client.getInputStream().readSignedWordBigEndian();
         if (client.playerGroup >= 3) {
-            client.println_debug("RemoveItem 5: " + removeID + " InterID: " + interfaceID + " slot: " + removeSlot);
+            client.println("RemoveItem 5: " + removeID + " InterID: " + interfaceID + " slot: " + removeSlot);
         }
         if (interfaceID == 3322 && client.inDuel) { // remove from bag to duel window
             client.stakeItem(removeID, removeSlot, 5);
@@ -91,7 +91,7 @@ public class Bank5 implements Packet {
                 client.send(new RemoveInterfaces());
             } else {
                 client.send(new SendMessage("Illigal Smithing !"));
-                client.println_debug("Illigal Smithing !");
+                client.println("Illigal Smithing !");
             }
         }
     }

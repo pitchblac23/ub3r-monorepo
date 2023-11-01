@@ -106,7 +106,7 @@ public class ClickNpc implements Packet {
             client.NpcWanneTalk = npcId;
         } else if (npcId == 555) {
                 client.quests[0]++;
-                client.send(new SendMessage(client.playerRights > 1 ? "Set your quest to: " + client.quests[0] : "Suddenly the monk had an urge to dissapear!"));
+                client.send(new SendMessage(client.playerRights > 1 ? "Set your quest to: " + client.quests[0] : "Suddenly the monk had an urge to disappear!"));
         } else if (npcId == 683) { // Range stuff
             client.WanneShop = 11;
         } else if (npcId == 3951) {
@@ -143,7 +143,7 @@ public class ClickNpc implements Packet {
             }
             tempNpc.setText("There are currently " + num + " people in the wilderness");
         } else {
-            client.println_debug("atNPC 1: " + npcId);
+            client.println("atNPC 1: " + npcId);
             client.send(new SendMessage("Please inform Admin of click1 on " + npcId + "."));
         }
     }

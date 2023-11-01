@@ -174,7 +174,7 @@ public abstract class Player extends Entity {
     private final ArrayList<Boolean> unlocked = new ArrayList<>();
     public int unlockLength = 2;
     public int lastRecoverEffect = 0, lastRecover = 5;
-    public int boostedLevel[] = new int[21];
+    public int[] boostedLevel = new int[21];
     public int chestEvent = 0;
     public boolean chestEventOccur = false, updateAnnounced = false;
 
@@ -284,11 +284,6 @@ public abstract class Player extends Entity {
         }
         dealDamage(amount, crit);
     }
-
-    public void println_debug(String str) {
-        System.out.println("[player-" + getSlot() + "]: " + str);
-    }
-
     public void println(String str) {
         System.out.println("[player-" + getSlot() + "]: " + str);
     }
@@ -509,7 +504,7 @@ public abstract class Player extends Entity {
     }
 
     // handles anything related to character position basically walking, running
-    // and standing applies to only to "non-thisPlayer" charracters
+    // and standing applies to only "non-thisPlayer" charracters
     public void updatePlayerMovement(Stream str) {
         if (primaryDirection == -1) {
             // don't have to update the character position, because the char is just standing
@@ -642,7 +637,7 @@ public abstract class Player extends Entity {
                     dir = Utils.direction(walkingQueueX[ptr], walkingQueueY[ptr], firstX, firstY);
                     if (lastDir != dir) {
                         found = true;
-                        break; // either of those two, or a vertex between those is a candidate
+                        break; // either of those two, or a vertex between those are a candidate
                     }
 
                 } while (ptr != wQueueWritePtr);
@@ -650,7 +645,7 @@ public abstract class Player extends Entity {
                 found = true; // we didn't need to go back in time because the current position already can be connected to first
 
             if (!found) {
-                println_debug("Fatal: couldn't find connection vertex! Dropping packet.");
+                println("Fatal: couldn't find connection vertex! Dropping packet.");
                 Client temp = (Client) this;
                 temp.saveStats(true);
                 disconnected = true;
@@ -677,7 +672,7 @@ public abstract class Player extends Entity {
 
                     dir = Utils.direction(wayPointX1, wayPointY1, wayPointX2, wayPointY2);
                     if (dir == -1 || (dir & 1) != 0) {
-                        println_debug("Fatal: The walking queue is corrupt! wp1=(" + wayPointX1 + ", " + wayPointY1 + "), "
+                        println("Fatal: The walking queue is corrupt! wp1=(" + wayPointX1 + ", " + wayPointY1 + "), "
                                 + "wp2=(" + wayPointX2 + ", " + wayPointY2 + ")");
                     } else {
                         dir >>= 1;
@@ -692,7 +687,7 @@ public abstract class Player extends Entity {
                             }
                         }
                         if (!found) {
-                            println_debug("Fatal: Internal error: unable to determine connection vertex!" + "  wp1=(" + wayPointX1
+                            println("Fatal: Internal error: unable to determine connection vertex!" + "  wp1=(" + wayPointX1
                                     + ", " + wayPointY1 + "), wp2=(" + wayPointX2 + ", " + wayPointY2 + "), " + "first=(" + firstX + ", " + firstY + ")");
                         } else
                             addToWalkingQueue(wayPointX1, wayPointY1);

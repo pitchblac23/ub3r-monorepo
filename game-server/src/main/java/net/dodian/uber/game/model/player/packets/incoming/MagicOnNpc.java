@@ -7,7 +7,6 @@ import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.player.packets.Packet;
 import static net.dodian.uber.game.combat.ClientExtensionsKt.magicBonusDamage;
 import static net.dodian.uber.game.combat.PlayerAttackCombatKt.*;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Utils;
 
@@ -31,7 +30,7 @@ public class MagicOnNpc implements Packet {
         }
         if (EnemyHP2 < 1 || client.deathTimer > 0 || !canAttackNpc(client, id)) {
             if(EnemyHP2 < 1 || client.deathTimer > 0)
-                client.send(new SendMessage("That monster has already been killed!"));
+                client.sendMessage("That monster has already been killed!");
         } else {
             int slot = -1, type = 0;
             for (int i2 = 0; i2 < client.ancientId.length && slot == -1; i2++) {
@@ -73,7 +72,7 @@ public class MagicOnNpc implements Packet {
                     client.lastAttack = System.currentTimeMillis();
                 }
             } else
-                client.send(new SendMessage("You need a magic level of " + client.requiredLevel[slot]));
+                client.sendMessage("You need a magic level of " + client.requiredLevel[slot] + ".");
         }
     }
 }

@@ -6,7 +6,6 @@ import net.dodian.uber.game.model.entity.npc.Npc
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.utilities.Misc
@@ -40,7 +39,7 @@ fun Client.handleRanged(): Int {
     } else return 0
     setFocus(target.position.x, target.position.y)
     if (target is Player && duelFight && duelRule[0]) {
-        send(SendMessage("Ranged has been disabled for this duel!"))
+        sendMessage("Ranged has been disabled for this duel!")
         resetAttack()
         return 0
     }
@@ -60,7 +59,7 @@ fun Client.handleRanged(): Int {
         }
     } else {
         resetAttack()
-        send(SendMessage("You're out of arrows!"))
+        sendMessage("You're out of arrows!")
         return 0
     }
     var maxHit = rangedMaxHit().toDouble()
@@ -103,7 +102,7 @@ fun Client.handleRanged(): Int {
         giveExperience((15 * hit) * CombatExpRate, Skills.HITPOINTS)
     }
 
-    if (debug) send(SendMessage("hit = $hit, elapsed = ${time - lastAttack}"))
+    if (debug) sendMessage("hit = $hit, elapsed = ${time - lastAttack}")
     resetWalkingQueue()
     lastAttack = System.currentTimeMillis()
 

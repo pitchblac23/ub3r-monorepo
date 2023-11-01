@@ -1,12 +1,12 @@
-package net.dodian.uber.game.model.player.dialogue;
+package net.dodian.uber.game.model.player.dialogue
 
+import net.dodian.uber.api.DEFAULT
 import net.dodian.uber.game.Server
 import net.dodian.uber.game.event.Event
 import net.dodian.uber.game.event.EventManager
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces
 import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
-import net.dodian.uber.game.model.player.packets.outgoing.SendString
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.agility.Agility
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask
@@ -19,9 +19,6 @@ import kotlin.math.ceil
 
 /**~Special thanks to @Nozemi~**/
 /**~for the functions and conversions~**/
-
-fun Client.sendString(value: String, component: Int) = send(SendString(value, component))
-fun Client.sendMessage(text: String) = send(SendMessage(text))
 fun Client.playerChat(emote: Int, vararg lines: String) = showPlayerChat(lines, emote)
 fun Client.npcChat(npc: Int, emote: Int, vararg lines: String) = showNPCChat(npc, emote, lines)
 fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
@@ -79,8 +76,8 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                     p.npcChat(p.NpcTalkTo, 591, "You need a crystal key and 50 slayer", "to be assign tasks from me!")
                 } else {
                     val taskName =
-                        if (p.getSlayerData().get(0) == -1 || p.getSlayerData().get(3) <= 0) ""
-                        else "" + SlayerTask.slayerTasks.getTask(p.getSlayerData().get(1)).textRepresentation
+                        if (p.getSlayerData()[0] == -1 || p.getSlayerData()[3] <= 0) ""
+                        else "" + SlayerTask.slayerTasks.getTask(p.getSlayerData()[1]).textRepresentation
                     val slayerMaster = arrayOf("What would you like to say?", "I'd like a task please",
                         if (taskName != "") "Cancel " + taskName.lowercase(Locale.getDefault()) + " task"
                         else "No task to skip", "I'd like to upgrade my slayer mask", "Can you teleport me to west ardougne?")
@@ -101,7 +98,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                             p.sendMessage("You cant get any task!")
                             //break
                         }
-                        if (p.getSlayerData().get(3) > 0) {
+                        if (p.getSlayerData()[3] > 0) {
                             p.npcChat(p.NpcTalkTo, 591, "You already have a task!")
                             //break
                         }
@@ -305,13 +302,13 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
             164 -> {
                 val type =
                     if (p.skillX == 3002 && p.skillY == 3931) 3 else if (p.skillX == 2547 && p.skillY == 3554) 2 else 1
-                val type_gnome =
+                val gnome =
                     arrayOf("Which course do you wish to be taken to?", "Barbarian", "Wilderness", "Stay here")
-                val type_barbarian =
+                val barbarian =
                     arrayOf("Which course do you wish to be taken to?", "Gnome", "Wilderness", "Stay here")
-                val type_wilderness =
+                val wilderness =
                     arrayOf("Which course do you wish to be taken to?", "Gnome", "Barbarian", "Stay here")
-                p.showPlayerOption(if (type == 3) type_wilderness else if (type == 2) type_barbarian else type_gnome)
+                p.showPlayerOption(if (type == 3) wilderness else if (type == 2) barbarian else gnome)
                 p.NpcDialogueSend = true
             }
 
@@ -411,7 +408,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                 val coins = 13370000
                 val freeSlot = if (p.getInvAmt(995) == coins) 1 else 2
                 if (p.freeSlots() < freeSlot) {
-                    p.npcChat(p.NpcTalkTo, 591, "You need atleast " + (if (freeSlot == 1) "one" else "two") + " free inventory slot" + (if (freeSlot != 1) "s" else "") + ".")
+                    p.npcChat(p.NpcTalkTo, 591, "You need at least " + (if (freeSlot == 1) "one" else "two") + " free inventory slot" + (if (freeSlot != 1) "s" else "") + ".")
                     p.nextDiag = p.NpcTalkTo
                 } else if (!p.playerHasItem(995, coins)) p.npcChat(p.NpcTalkTo, 591, "You are missing " + NumberFormat.getNumberInstance().format((coins - p.getInvAmt(995)).toLong()) + " coins!")
                 else {
@@ -453,16 +450,15 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
     }
 
     fun triggerChat(button: Int, p: Client) {
-        if (!p.playerPotato.isEmpty()) if (p.playerPotato.get(0) == 2 && p.playerPotato.get(3) == 1) {
+        if (!p.playerPotato.isEmpty()) if (p.playerPotato[0] == 2 && p.playerPotato[3] == 1) {
             p.send(RemoveInterfaces())
-            val tempNpc = Server.npcManager.getNpc(p.playerPotato.get(1))
-            val npcId: Int = p.playerPotato.get(2)
+            val tempNpc = Server.npcManager.getNpc(p.playerPotato[1])
+            val npcId: Int = p.playerPotato[2]
             if (button == 1) {
                 try {
                     val conn = dbConnection
                     val statement = conn.createStatement()
-                    val sql =
-                        "delete from " + DbTables.GAME_NPC_SPAWNS + " where id='" + npcId + "' && x='" + tempNpc.position.x + "' && y='" + tempNpc.position.y + "' && height='" + tempNpc.position.z + "'"
+                    val sql = "delete from " + DbTables.GAME_NPC_SPAWNS + " where id='" + npcId + "' && x='" + tempNpc.position.x + "' && y='" + tempNpc.position.y + "' && height='" + tempNpc.position.z + "'"
                     if (statement.executeUpdate(sql) < 1) p.send(SendMessage("This npc has already been removed!")) else { //Functions to remove npc!
                         tempNpc.die()
                         EventManager.getInstance().registerEvent(object : Event(tempNpc.getTimeOnFloor() + 600) {
@@ -507,7 +503,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                     p.sendString(if (totalChance < 0.0 || totalChance >= 100.0) "" else "Nothing " + (100.0 - totalChance) + "%", line)
                     p.sendQuestSomething(8143)
                     p.showInterface(8134)
-                    p.flushOutStream();
+                    p.flushOutStream()
                 } else p.sendMessage("Npc " + tempNpc.npcName() + " (" + npcId + ") has no assigned drops!")
             } else if (button == 3) {
                 Server.npcManager.reloadDrops(p, npcId)
@@ -559,7 +555,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
              p.send(RemoveInterfaces())
          } else if (p.NpcDialogue == 3649) {
              if (button == 1)
-                 p.setTravelMenu();
+                 p.setTravelMenu()
              else if (button == 2)
                  p.playerChat(614, "No thank you.")
              doAction(p, -1)
@@ -612,7 +608,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                     p.deleteItem(995, total)
                     if (remain > 0) p.deleteItemBank(995, remain)
                     p.npcChat(p.NpcTalkTo, 591, "You can now step into the dungeon.")
-                } else p.npcChat(p.NpcTalkTo, 596, "You need atleast " + (300000 - amount) + " more coins to enter my dungeon!")
+                } else p.npcChat(p.NpcTalkTo, 596, "You need at least " + (300000 - amount) + " more coins to enter my dungeon!")
             }
         } else if (p.NpcDialogue == 2181) {
             if (button == 1) { //One time pay!
@@ -663,7 +659,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                     p.deleteItem(995, total)
                     if (remain > 0) p.deleteItemBank(995, remain)
                     p.npcChat(p.NpcTalkTo, 591, "You can now step into the cave.")
-                } else p.npcChat(p.NpcTalkTo, 596, "You need atleast " + (300000 - amount) + " more coins to enter my cave!")
+                } else p.npcChat(p.NpcTalkTo, 596, "You need at least " + (300000 - amount) + " more coins to enter my cave!")
             }
         } else if (p.NpcDialogue == 8053) {
             if (button == 1) {
@@ -719,7 +715,7 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                         run {
                             var slot = 0
                             while (slot < 28 && amt > 0) {
-                                if (p.playerItems.get(slot) - 1 == 536) {
+                                if (p.playerItems[slot] - 1 == 536) {
                                     p.deleteItem(536, slot, 1)
                                     amt--
                                 }
@@ -727,8 +723,8 @@ fun Client.playerOptions(vararg lines: String) = showPlayerOption(lines)
                             }
                         }
                         for (slot in 0..27) {
-                            if (p.playerItems.get(slot) - 1 == 537) {
-                                val toDelete = if (p.playerItemsN.get(slot) >= amt) amt else p.playerItemsN.get(slot)
+                            if (p.playerItems[slot] - 1 == 537) {
+                                val toDelete = if (p.playerItemsN[slot] >= amt) amt else p.playerItemsN[slot]
                                 p.deleteItem(537, slot, toDelete)
                                 amt -= toDelete
                                 break

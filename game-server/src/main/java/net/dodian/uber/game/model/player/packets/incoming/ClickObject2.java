@@ -36,7 +36,7 @@ public class ClickObject2 implements Packet {
         GameObjectData object = GameObjectData.forId(task.getWalkToId());
         client.setWalkToTask(task);
         if (getGameWorldId() > 1 && object != null)
-            client.send(new SendMessage("Obj click2: " + object.getId() + ", " + object.getName() + ", Coord: " + objectX + ", " + objectY + ", " + (def == null ? "Def is null!" : def.getFace())));
+            client.sendMessage("Obj click2: " + object.getId() + ", " + object.getName() + ", Coord: " + objectX + ", " + objectY + ", " + (def == null ? "Def is null!" : def.getFace()));
         if (objectID == 14896 || objectID == 14909) {
             client.addItem(1779, 1);
         }
@@ -66,6 +66,8 @@ public class ClickObject2 implements Packet {
                     } else if (object != null)
                         objectPosition = Misc.goodDistanceObject(task.getWalkToPosition().getX(), task.getWalkToPosition().getY(), client.getPosition().getX(), client.getPosition().getY(), object.getSizeX(), object.getSizeY(), client.getPosition().getZ());
                 }
+                if (client.playerGroup >= 3 && object != null)
+                    client.sendMessage("Obj click2: " + object.getId() + ", " + object.getName() + ", Coord: " + objectX + ", " + objectY + ", " + (def == null ? "Def is null!" : def.getFace()));
                 if (objectPosition == null)
                     return;
                 clickObject2(client, task.getWalkToId(), task.getWalkToPosition(), object);
@@ -77,12 +79,11 @@ public class ClickObject2 implements Packet {
     }
 
     public void clickObject2(Client client, int objectID, Position position, GameObjectData obj) {
-        //System.out.println("atObject2: " + position.getX() + "," + position.getY() + " objectID: " + objectID);
         if (client.adding) {
             client.objects.add(new RS2Object(objectID, position.getX(), position.getY(), 2));
         }
         if (getGameWorldId() > 0) {
-            client.println_debug("atObject2: " + position.getX() + "," + position.getY() + " objectID: " + objectID);
+            client.println("atObject2: " + position.getX() + "," + position.getY() + " objectID: " + objectID);
         }
         if (System.currentTimeMillis() < client.walkBlock) {
             return;
@@ -166,5 +167,4 @@ public class ClickObject2 implements Packet {
             client.WanneShop = -1;
         }
     }
-
 }

@@ -27,8 +27,8 @@ public class ClickObject3 implements Packet {
         GameObjectDef def = Misc.getObject(objectID, objectX, objectY, client.getPosition().getZ());
         GameObjectData object = GameObjectData.forId(task.getWalkToId());
         client.setWalkToTask(task);
-        if (getGameWorldId() > 1 && object != null)
-            client.send(new SendMessage("Obj click3: " + object.getId() + ", " + object.getName() + ", Coord: " + objectX + ", " + objectY + ", def: " + (def == null ? "Def is null!" : def.getType())));
+        if (client.playerGroup >= 3 && object != null)
+            client.sendMessage("Obj click3: " + object.getId() + ", " + object.getName() + ", Coord: " + objectX + ", " + objectY + ", " + (def == null ? "Def is null!" : def.getFace()));
         if (client.randomed) {
             return;
         }
@@ -63,14 +63,13 @@ public class ClickObject3 implements Packet {
                 client.setWalkToTask(null);
                 this.stop();
             }
-
         });
     }
 
     public void clickObject3(Client client, int objectID, Position position, GameObjectData obj) {
         String objectName = obj == null ? "" : obj.getName().toLowerCase();
-        if (objectName.contains("trading post")) {
-            //client.send(new SendMessage("I am here!"));
+        if (getGameWorldId() > 0) {
+            client.println("atObject3: " + position.getX() + "," + position.getY() + " objectID: " + objectID);
         }
         if (objectID == 1739) {
             client.moveTo(client.getPosition().getX(), client.getPosition().getY(), client.getPosition().getZ() - 1);

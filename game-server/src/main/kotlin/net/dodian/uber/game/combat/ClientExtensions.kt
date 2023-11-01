@@ -5,7 +5,6 @@ import net.dodian.uber.game.model.entity.Entity
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask
@@ -27,19 +26,19 @@ fun Client.requireKey(keyId: Int, vararg npcId: Int): Boolean {
 fun Client.slayerLevelRequired(npcId: Int): Boolean {
     when (npcId) {
         2266 -> if(getLevel(Skills.SLAYER) < 90) {
-            send(SendMessage("You need a slayer level of 90 to harm this monster."))
+            sendMessage("You need a slayer level of 90 to harm this monster.")
             return false
         }
         3209 -> if(getLevel(Skills.SLAYER) < 65) {
-            send(SendMessage("You need a slayer level of 65 to harm this monster."))
+            sendMessage("You need a slayer level of 65 to harm this monster.")
             return false
         }
         3204 -> if(getLevel(Skills.SLAYER) < 45) {
-            send(SendMessage("You need a slayer level of 45 to harm this monster."))
+            sendMessage("You need a slayer level of 45 to harm this monster.")
             return false
         }
         3201 -> if(getLevel(Skills.SLAYER) < 25) {
-            send(SendMessage("You need a slayer level of 25 to harm this monster."))
+            sendMessage("You need a slayer level of 25 to harm this monster.")
             return false
         }
     }
@@ -52,7 +51,7 @@ fun Client.checkSlayerTask(npcId: Int): Boolean {
             || (slayerTask == SlayerTask.slayerTasks.MUMMY && getPositionName(position) == Player.positions.KEYDUNG)
 
     if (!slayExceptions && slayerTask.isSlayerOnly && (slayerTask.ordinal != slayerData[1] || slayerData[3] <= 0)) {
-        send(SendMessage("You need a slayer task to kill this monster."))
+        sendMessage("You need a slayer task to kill this monster.")
         resetAttack()
         return false
     }

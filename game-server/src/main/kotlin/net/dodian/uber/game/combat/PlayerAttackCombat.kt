@@ -4,7 +4,6 @@ import net.dodian.uber.game.Server
 import net.dodian.uber.game.model.entity.npc.Npc
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 
 fun Client.canAttackNpc(npcId: Int): Boolean {
     if (!checkSlayerTask(npcId))
@@ -20,7 +19,7 @@ fun Client.canAttackNpc(npcId: Int): Boolean {
         return false
 
     if (npcId == 4130 && (determineCombatLevel() <= 59)) {
-        send(SendMessage("You need a combat level of 60 to harm this monster."))
+        sendMessage("You need a combat level of 60 to harm this monster.")
         return false
     }
 

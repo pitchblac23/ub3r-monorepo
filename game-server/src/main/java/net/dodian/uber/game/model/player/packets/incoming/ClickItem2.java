@@ -1,12 +1,8 @@
 package net.dodian.uber.game.model.player.packets.incoming;
 
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.entity.player.Player;
 import net.dodian.uber.game.model.player.packets.Packet;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.utilities.Misc;
-
-import java.util.Arrays;
 
 public class ClickItem2 implements Packet {
 
@@ -19,10 +15,10 @@ public class ClickItem2 implements Packet {
         }
         int pouches = itemId == 5509 ? 0 : ((itemId - 5508) / 2);
         if (pouches >= 0 && pouches <= 3) {
-            client.send(new SendMessage("There is " + client.runePouchesAmount[pouches] + " rune essence in this pouch!"));
+            client.sendMessage("There is " + client.runePouchesAmount[pouches] + " rune essence in this pouch!");
         }
         if (itemId == 12019) {
-            client.send(new SendMessage("Your coal bag has " + client.coalBagAmount + " pieces of coal in it."));
+            client.sendMessage("Your coal bag has " + client.coalBagAmount + " pieces of coal in it.");
         }
         if (itemId == 13203) {
             String[] quotes = {
@@ -36,10 +32,10 @@ public class ClickItem2 implements Packet {
                     "You are the real M.V.P. dude!",
                     "More lazier then Spunky is Ivan :D"
             };
-            client.send(new SendMessage(quotes[Misc.random(quotes.length - 1)]));
+            client.sendMessage(quotes[Misc.random(quotes.length - 1)]);
         }
         if (itemId == 11997) {
-            client.send(new SendMessage("Event is over! Will use in the future?!")); //I need to bring these back to Duke!
+            client.sendMessage("Event is over! Will use in the future?!"); //I need to bring these back to Duke!
         }
         if (itemId == 4566) {
             client.requestAnim(1835, 0);

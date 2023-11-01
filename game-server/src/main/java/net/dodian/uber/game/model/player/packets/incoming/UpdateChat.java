@@ -23,5 +23,4 @@ public class UpdateChat implements Packet {
             }
         }
     }
-
 }

@@ -16,7 +16,6 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
-import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.party.Balloons;
 import net.dodian.utilities.Utils;
 
@@ -25,6 +24,7 @@ import static net.dodian.uber.game.model.player.skills.SkillGuidesKt.*;
 import static net.dodian.uber.game.model.player.skills.Skills.*;
 import static net.dodian.uber.game.model.player.skills.crafting.CraftingKt.*;
 import static net.dodian.uber.game.model.player.skills.crafting.TanningKt.*;
+import static net.dodian.uber.game.model.player.skills.smithing.SmeltingKt.*;
 import static net.dodian.utilities.DotEnvKt.getServerDebugMode;
 
 public class ClickingButtons implements Packet {
@@ -32,7 +32,7 @@ public class ClickingButtons implements Packet {
     @Override
     public void ProcessPacket(Client client, int packetType, int packetSize) {
         int actionButton = Utils.HexToInt(client.getInputStream().buffer, 0, packetSize);
-        if (getServerDebugMode()) { client.println_debug("button= " + actionButton); }
+        if (getServerDebugMode()) { client.println("button= " + actionButton); }
         if (System.currentTimeMillis() - client.lastButton < 600 || !client.validClient) { //To prevent some shiez!
             client.lastButton = System.currentTimeMillis();
             return;
@@ -259,7 +259,7 @@ public class ClickingButtons implements Packet {
             case 95224:
             case 95223:
             case 95222:
-                Smelting.startSmelt(client.actionButtonId, client);
+                startSmelt(client.actionButtonId, client);
                 break;
 
             case 34185:
@@ -1069,7 +1069,7 @@ public class ClickingButtons implements Packet {
             default:
                 // System.out.println("Player stands in: X="+absX+" Y="+absY);
                 if (client.playerRights > 1) {
-                    client.println_debug("Case 185: Action Button: " + client.actionButtonId);
+                    client.println("Case 185: Action Button: " + client.actionButtonId);
                 }
                 break;
         }

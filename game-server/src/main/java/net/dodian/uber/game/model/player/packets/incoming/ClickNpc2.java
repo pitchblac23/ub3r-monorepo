@@ -47,7 +47,6 @@ public class ClickNpc2 implements Packet {
                 client.setWalkToTask(null);
                 this.stop();
             }
-
         });
     }
 
@@ -183,8 +182,8 @@ public class ClickNpc2 implements Packet {
         }
         /*Ends*/
         else {
-            client.println_debug("atNPC 2: " + npcId);
-            client.send(new SendMessage("Please inform Admin of click2 on " + npcId + "."));
+            client.println("atNPC 2: " + npcId);
+            client.sendMessage("Please inform Admin of click2 on " + npcId + ".");
         }
     }
 }

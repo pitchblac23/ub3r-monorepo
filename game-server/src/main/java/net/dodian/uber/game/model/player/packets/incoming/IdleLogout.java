@@ -2,12 +2,14 @@ package net.dodian.uber.game.model.player.packets.incoming;
 
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
+
+//TODO make logout timer
 public class IdleLogout implements Packet {
 
     @Override
     public void ProcessPacket(Client c, int packetType, int packetSize) {
         //if (!c.getPlayerName().equals("null"));
-            //c.logout(); TODO make logout timer
+            //c.logout();
         c.requestForceChat("zZzzZz..");
     }
 }

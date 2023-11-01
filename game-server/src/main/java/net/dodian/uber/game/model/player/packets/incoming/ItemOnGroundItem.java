@@ -23,5 +23,4 @@ public class ItemOnGroundItem implements Packet {
         System.out.println("Unknown3 = " + unknown3);
         System.out.println("FloorX = " + floorX);
     }
-
 }

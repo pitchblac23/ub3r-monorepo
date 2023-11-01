@@ -87,7 +87,6 @@ public class NpcUpdating extends EntityUpdating<Npc> {
         if(z < 0)
             z += 32;
         stream.writeBits(5, z); // y coordinate relative to thisPlayer
-
         stream.writeBits(1, 0); // something??
         stream.writeBits(14, npc.getId());
         stream.writeBits(1, npc.getUpdateFlags().isUpdateRequired() ? 1 : 0);
@@ -203,5 +202,4 @@ public class NpcUpdating extends EntityUpdating<Npc> {
             }
         }
     }
-
 }

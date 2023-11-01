@@ -1,11 +1,11 @@
 package net.dodian.uber.game.combat
 
+import net.dodian.uber.api.Animation.CAST_MAGIC_SPELL
 import net.dodian.uber.game.Server
 import net.dodian.uber.game.model.entity.npc.Npc
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.utilities.Misc
@@ -16,7 +16,7 @@ fun Client.handleMagic(): Int {
     if (!canReach(target, 5))
         return 0
 
-    val staves = listOf(2415, 2416, 2417, 4675, 4710, 6914, 6526)
+    val staves = listOf(1381, 2415, 2416, 2417, 4675, 4710, 6914, 6526)
     if (equipment[Equipment.Slot.WEAPON.id] !in staves || autocast_spellIndex < 0)
         return -1
 
@@ -28,7 +28,7 @@ fun Client.handleMagic(): Int {
     } else return 0
     setFocus(target.position.x, target.position.y)
     if (getLevel(Skills.MAGIC) < requiredLevel[autocast_spellIndex]) {
-        send(SendMessage("You need a magic level of ${requiredLevel[autocast_spellIndex]} to cast this spell!"))
+        sendMessage("You need a magic level of ${requiredLevel[autocast_spellIndex]} to cast this spell!")
         return 0
     }
     if (!runeCheck()) {
@@ -36,13 +36,12 @@ fun Client.handleMagic(): Int {
         return 0
     }
     if (target is Player && duelFight && duelRule[2]) {
-        send(SendMessage("Magic has been disabled for this duel!"))
+        sendMessage("Magic has been disabled for this duel!")
         resetAttack()
         return 0
     }
-    //TODO make spells cost more
-    deleteItem(565, 1)
-    requestAnim(1979, 0)
+    deleteItem(requiredRune[autocast_spellIndex], requiredAmount[autocast_spellIndex])
+    requestAnim(CAST_MAGIC_SPELL, 0)
     var maxHit = baseDamage[autocast_spellIndex] * magicBonusDamage()
     if (target is Npc) { // Slayer damage!
         val checkNpc = Server.npcManager.getNpc(target.slot)
@@ -107,7 +106,7 @@ fun Client.handleMagic(): Int {
         giveExperience(15 * hit, Skills.HITPOINTS)
     }
 
-    if (debug) send(SendMessage("hit = $hit, elapsed = ${time - lastAttack}"))
+    if (debug) sendMessage("hit = $hit, elapsed = ${time - lastAttack}")
     resetWalkingQueue()
     lastAttack = System.currentTimeMillis()
 

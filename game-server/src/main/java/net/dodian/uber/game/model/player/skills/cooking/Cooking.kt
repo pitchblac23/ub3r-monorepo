@@ -1,16 +1,15 @@
-package net.dodian.uber.game.model.player.skills.cooking;
+package net.dodian.uber.game.model.player.skills.cooking
 
 import net.dodian.uber.game.Server
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.item.Equipment
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.utilities.Utils
 import java.util.*
 
 fun startCooking(id: Int, c: Client) {
     if (c.inTrade || c.inDuel) {
-        c.send(SendMessage("Cannot cook in duel or trade"))
+        c.sendMessage("Cannot cook in duel or trade.")
         return
     }
     var valid = false
@@ -32,7 +31,7 @@ fun cook(c: Client) {
         return
     }
     if (!c.playerHasItem(Utils.rawIds[c.cookIndex])) {
-        c.send(SendMessage("You are out of fish"))
+        c.sendMessage("You are out of fish.")
         c.resetAction(true)
         return
     }
@@ -45,7 +44,7 @@ fun cook(c: Client) {
         }
     }
     if (c.getLevel(Skills.COOKING) < Utils.cookLevel[index]) {
-        c.send(SendMessage("You need " + Utils.cookLevel[index] + " cooking to cook the " + Server.itemManager.getName(id).lowercase(Locale.getDefault()) + "."))
+        c.sendMessage("You need " + Utils.cookLevel[index] + " cooking to cook the " + Server.itemManager.getName(id).lowercase(Locale.getDefault()) + ".")
         c.resetAction(true)
         return
     }
@@ -74,11 +73,11 @@ fun cook(c: Client) {
         c.requestAnim(883, 0)
         if (!burn) {
             c.addItem(Utils.cookedIds[index], 1)
-            c.send(SendMessage("You cook the " + c.GetItemName(id).lowercase(Locale.getDefault()) + "."))
+            c.sendMessage("You cook the " + c.GetItemName(id).lowercase(Locale.getDefault()) + ".")
             c.giveExperience(Utils.cookExp[index], Skills.COOKING)
         } else {
             c.addItem(Utils.burnId[index], 1)
-            c.send(SendMessage("You burn the " + c.GetItemName(id).lowercase(Locale.getDefault()) + "."))
+            c.sendMessage("You burn the " + c.GetItemName(id).lowercase(Locale.getDefault()) + ".")
         }
         c.triggerRandom(Utils.cookExp[index])
     }

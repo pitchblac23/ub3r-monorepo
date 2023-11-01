@@ -3,7 +3,6 @@ package net.dodian.uber.game.model.player.skills.farming;
 import net.dodian.uber.game.event.Event;
 import net.dodian.uber.game.event.EventManager;
 import net.dodian.uber.game.model.entity.player.Client;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Misc;
 
@@ -104,19 +103,19 @@ public class Farming {
             time = Settings[1][3];
             HarvestID = Settings[0][Settings[0].length - 1];
         } else {
-            c.send(new SendMessage("Nothing interesting happens."));
+            c.sendMessage("Nothing interesting happens.");
             return;
         }
 
         if (!c.playerHasItem(5343, 1)) {
             Settings = null;
             HarvestID = 1;
-            c.send(new SendMessage("You need a seed dibber to plant seeds."));
+            c.sendMessage("You need a seed dibber to plant seeds.");
             return;
         }
 
         if (farmingLevel < lvlReq) {
-            c.send(new SendMessage("You need a farming level of " + lvlReq + " to plant this."));
+            c.sendMessage("You need a farming level of " + lvlReq + " to plant this.");
             return;
         }
 
@@ -142,7 +141,7 @@ public class Farming {
                         if (!seedWatered) {
                             patch = 0;
                             updatePatches(dead, c);
-                            c.send(new SendMessage(messages[1]));
+                            c.sendMessage(messages[1]);
                             stop();
                             return;
                         }
@@ -156,12 +155,12 @@ public class Farming {
                     patch++;
                     if (patch == max) {
                         patch = 0;
-                        c.send(new SendMessage(messages[0]));
+                        c.sendMessage(messages[0]);
                         stop();
                     }
                 } else {
                     patch = 0;
-                    c.send(new SendMessage(messages[0]));
+                    c.sendMessage(messages[0]);
                     stop();
                 }
             }

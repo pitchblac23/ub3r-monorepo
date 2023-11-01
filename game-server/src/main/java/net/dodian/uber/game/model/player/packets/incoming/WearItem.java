@@ -1,6 +1,5 @@
 package net.dodian.uber.game.model.player.packets.incoming;
 
-import net.dodian.uber.game.model.combat.impl.CombatStyleHandler;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
 
@@ -13,5 +12,4 @@ public class WearItem implements Packet {
         int interfaceID = client.getInputStream().readUnsignedWordA();
         client.wear(wearID, wearSlot, interfaceID);
     }
-
 }

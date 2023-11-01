@@ -27,7 +27,6 @@ import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
-import net.dodian.uber.game.model.player.skills.smithing.Smelting;
 import net.dodian.uber.game.model.player.skills.smithing.Smithing;
 import net.dodian.uber.game.model.player.skills.woodcutting.Woodcutting;
 import net.dodian.uber.game.party.RewardItem;
@@ -59,6 +58,7 @@ import static net.dodian.uber.game.model.player.skills.fishing.FishingKt.*;
 import static net.dodian.uber.game.model.player.skills.mining.MiningKt.*;
 import static net.dodian.uber.game.model.player.skills.prayer.PrayerKt.*;
 import static net.dodian.uber.game.model.player.skills.runecrafting.EssBagsKt.*;
+import static net.dodian.uber.game.model.player.skills.smithing.SmeltingKt.*;
 import static net.dodian.utilities.DatabaseKt.getDbConnection;
 import static net.dodian.utilities.DotEnvKt.*;
 
@@ -195,9 +195,8 @@ public class Client extends Player implements Runnable {
 	public int[] sizes = {100, 75, 120, 11067};
 	public int[] moulds = {1592, 1597, 1595, 11065};
 	public int[] strungAmulets = {1692, 1694, 1696, 1698, 1700, 1702, 6581};
-	/**End*/
 
-	/**Skills*/
+    /**Skills*/
 	//cooking
 	public int cookAmount = 0, cookIndex = 0, enterAmountId = 0;
 	public boolean cooking = false;
@@ -228,10 +227,9 @@ public class Client extends Player implements Runnable {
 	public boolean smelting = false;
 	public int smelt_id, smeltCount, smeltExperience;
 	public int[] smithing = {0, 0, 0, -1, -1, 0};
-	/**End*/
 
-	/**Magic*/
-	public int[] staffs = {2415, 2416, 2417, 4675, 4710, 6526, 6914};
+    /**Magic*/
+	public int[] staffs = {1381, 2415, 2416, 2417, 4675, 4710, 6526, 6914};
 	public int autocast_spellIndex = -1;
 	public int ancients = 1;
 	public int[] ancientId = {12939, 12987, 12901, 12861, 12963, 13011, 12919, 12881, 12951, 12999, 12911, 12871, 12975, 13023, 12929, 12891};
@@ -241,11 +239,12 @@ public class Client extends Player implements Runnable {
 			"Smoke Blitz", "Shadow Blitz", "Blood Blitz", "Ice Blitz",
 			"Smoke Barrage", "Shadow Barrage", "Blood Barrage", "Ice Barrage"};
 	public int[] requiredLevel = {1, 10, 20, 30, 40, 50, 60, 70, 74, 76, 80, 82, 86, 88, 92, 94, 96};
+	public int[] requiredRune = {558, 558, 558, 558, 558, 558, 558, 558, 565, 565, 565, 565, 565, 565, 565, 565, 565};
+	public int[] requiredAmount = {1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2};
 	public int[] baseDamage = {2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32};
 	public long[] coolDown = {2400, 2400, 3000, 3000};
-	/**End*/
 
-	/**Quests*/
+    /**Quests*/
 	public int maxQuests = QuestSend.values().length;
 	public int[] quests = new int[maxQuests];
 	public int[] QuestInterface = {8145, 8147, 8148, 8149, 8150, 8151, 8152, 8153, 8154, 8155, 8156, 8157, 8158, 8159,
@@ -424,11 +423,6 @@ public class Client extends Player implements Runnable {
 		}
 	}
 
-	public void println_debug(String str) {
-		String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
-		System.out.println("[" + timestamp + "] [client-" + getSlot() + "-" + getPlayerName() + "]: " + str);
-	}
-
 	public void println(String str) {
 		String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
 		System.out.println("[" + timestamp + "] [client-" + getSlot() + "-" + getPlayerName() + "]: " + str);
@@ -535,6 +529,33 @@ public class Client extends Player implements Runnable {
 
 	public void send(OutgoingPacket packet) {
 		packet.send(this);
+	}
+
+	public void sendMessage(String message) {
+		send(new SendMessage(message));
+	}
+
+	public void sendString(String value, int component) {
+		send(new SendString(value, component));
+	}
+
+	public void sendConfig(int id, int value) {
+		if (getOutputStream() != null) {
+			if (value < Byte.MIN_VALUE || value > Byte.MAX_VALUE) {
+				getOutputStream().createFrame(86);
+				getOutputStream().writeWordBigEndian(id);
+				getOutputStream().writeDWord(value);
+			} else {
+				getOutputStream().createFrame(36);
+				getOutputStream().writeWordBigEndian(id);
+				getOutputStream().writeByte(value);
+			}
+		}
+		flushOutStream();
+	}
+
+	public void removeinterfaces() {
+		send(new RemoveInterfaces());
 	}
 
 	// writes any data in outStream to the relaying buffer
@@ -934,7 +955,7 @@ public class Client extends Player implements Runnable {
 				//println_debug("Save:  " + getPlayerName() + " (" + (System.currentTimeMillis() - start) + "ms)");
 			} catch (Exception e) {
 				e.printStackTrace();
-				println_debug("Save Exception: " + getSlot() + ", " + getPlayerName());
+				println("Save Exception: " + getSlot() + ", " + getPlayerName());
 			}
 	}
 
@@ -944,7 +965,7 @@ public class Client extends Player implements Runnable {
 
 	public void fromBank(int itemID, int fromSlot, int amount) {
 		if (!IsBanking) {
-			send(new RemoveInterfaces());
+			removeinterfaces();
 			return;
 		}
 		if (bankItems[fromSlot] - 1 != itemID || (bankItems[fromSlot] - 1 != itemID && bankItemsN[fromSlot] != amount)) {
@@ -1776,7 +1797,7 @@ public class Client extends Player implements Runnable {
 			send(new SendMessage("Dropping has been disabled.  Please try again later"));
 			return;
 		}
-		send(new RemoveInterfaces()); //Need this to stop interface abuse
+		removeinterfaces(); //Need this to stop interface abuse
 		int amount = 0;
 		if (playerItems[slot] == (id + 1) && playerItemsN[slot] > 0) {
 			amount = playerItemsN[slot];
@@ -2447,7 +2468,7 @@ public class Client extends Player implements Runnable {
 		// woodcutting check
 		if (woodcuttingIndex >= 0) {
 			if (GoodDistance(skillX, skillY, getPosition().getX(), getPosition().getY(), 3)) {
-				send(new RemoveInterfaces());
+				removeinterfaces();
 				Woodcutting.woodcutting(this);
 			}
 		}
@@ -2510,7 +2531,7 @@ public class Client extends Player implements Runnable {
 		}
 		if (smelting && now - lastAction >= 1800) {
 			lastAction = now;
-			Smelting.smelt(smelt_id, this);
+			smelt(smelt_id, this);
 		} else if (goldCrafting && now - lastAction >= 1800) {
 			lastAction = now;
 			goldCraft(this);
@@ -3866,9 +3887,9 @@ public class Client extends Player implements Runnable {
 	}
 
 	public boolean runeCheck() {
-		if (playerHasItem(565))
+		if (playerHasItem(requiredRune[autocast_spellIndex]))
 			return true;
-		send(new SendMessage("This spell requires 1 blood rune"));
+		sendMessage("You do not have enough " + GetItemName(requiredRune[autocast_spellIndex]) + "s to cast this spell.");
 		return false;
 	}
 
@@ -3880,7 +3901,7 @@ public class Client extends Player implements Runnable {
 
 	public void debug(String text) {
 		if (debug) {
-			send(new SendMessage(text));
+			sendMessage(text);
 		}
 	}
 
@@ -3987,7 +4008,7 @@ public class Client extends Player implements Runnable {
 		// smithing check
 		if (smithing[0] > 0) {
 			Smithing.resetSM(this);
-			send(new RemoveInterfaces());
+			removeinterfaces();
 		}
 
 		if (fletchings || fletchingOther) {	getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true); }
@@ -4021,6 +4042,9 @@ public class Client extends Player implements Runnable {
 		}
 	}
 	public void triggerTele(int x, int y, int height, boolean prem) {
+		removeinterfaces();
+		resetAction();
+		resetWalkingQueue();
 		triggerTele(x, y, height, prem, 1816);
 	}
 
@@ -4037,6 +4061,7 @@ public class Client extends Player implements Runnable {
 			return;
 		}
 		lastTeleport = System.currentTimeMillis();
+		removeinterfaces();
 		resetAction();
 		resetWalkingQueue();
 		tX = x;
@@ -4093,7 +4118,7 @@ public class Client extends Player implements Runnable {
 				}
 			}
 		}
-		send(new RemoveInterfaces());
+		removeinterfaces();
 		canOffer = true;
 		tradeConfirmed = false;
 		tradeConfirmed2 = false;
@@ -4227,12 +4252,12 @@ public class Client extends Player implements Runnable {
 				for (GameItem item : other.offeredItems) {
 					if (item.getId() > 0) {
 						addItem(item.getId(), item.getAmount());
-						println_debug("TradeConfirmed, item=" + item.getId());
+						println("TradeConfirmed, item=" + item.getId());
 					}
 				}
 				if (this.dbId > other.dbId)
 					TradeLog.recordTrade(dbId, other.dbId, offerCopy, otherOfferCopy, true);
-				send(new RemoveInterfaces());
+				removeinterfaces();
 				tradeResetNeeded = true;
 				saveStats(false);
 				tradeSuccessful = true;
@@ -4250,7 +4275,7 @@ public class Client extends Player implements Runnable {
 		canOffer = true;
 		tradeConfirmed = false;
 		tradeConfirmed2 = false;
-		send(new RemoveInterfaces());
+		removeinterfaces();
 		tradeResetNeeded = false;
 		send(new SendString("Are you sure you want to make this trade?", 3535));
 	}
@@ -4318,7 +4343,7 @@ public class Client extends Player implements Runnable {
 		if (validClient(duel_with) && other.inDuel) {
 			other.declineDuel();
 		}
-		send(new RemoveInterfaces());
+		removeinterfaces();
 		canOffer = true;
 		duel_with = 0;
 		duelRequested = false;
@@ -4329,7 +4354,7 @@ public class Client extends Player implements Runnable {
 			if (item.getAmount() < 1) {
 				continue;
 			}
-			println_debug("adding " + item.getId() + ", " + item.getAmount());
+			println("adding " + item.getId() + ", " + item.getAmount());
 			if (Server.itemManager.isStackable(item.getId()) || Server.itemManager.isNote(item.getId())) {
 				addItem(item.getId(), item.getAmount());
 			} else {
@@ -4381,7 +4406,7 @@ public class Client extends Player implements Runnable {
 		canAttack = false;
 		// canAttack = true;
 		canOffer = false;
-		send(new RemoveInterfaces());
+		removeinterfaces();
 		duelFight = true;
 		prayers.reset();
 		GetBonus(true); //Set bonus due to blessing!
@@ -4421,7 +4446,7 @@ public class Client extends Player implements Runnable {
 	 * Danno: Edited for new duel rules, for future use.
 	 */
 	public void resetDuel() {
-		send(new RemoveInterfaces());
+		removeinterfaces();
 		duelWin = false;
 		canOffer = true;
 		duel_with = 0;
@@ -4448,6 +4473,13 @@ public class Client extends Player implements Runnable {
 		getOutputStream().createFrame(87);
 		getOutputStream().writeWordBigEndian(Interface); // The button
 		getOutputStream().writeDWord_v1(Status); // The Status of the button
+	}
+
+	public void frame(int Interface, int value) {
+		if(value < 128)
+			frame36(Interface, value);
+		else
+			frame87(Interface, value);
 	}
 
 	public boolean duelButton(int button) {
@@ -5557,7 +5589,7 @@ public class Client extends Player implements Runnable {
 							getPosition().moveTo(travel[pos][1], travel[pos][2], 0); //Update position!
 							teleportToX = getPosition().getX();
 							teleportToY = getPosition().getY();
-							send(new RemoveInterfaces());
+							removeinterfaces();
 							travelInitiate = false;
 							this.stop();
 						}
@@ -5620,7 +5652,7 @@ public class Client extends Player implements Runnable {
 			if(!rewardList.isEmpty()) {
 				refundSlot = 0;
 				setRefundOptions();
-			} else send(new RemoveInterfaces());
+			} else removeinterfaces();
 			/* Refund item function */
 			int amount = item.getAmount() - getFreeSpace();
 			if(Server.itemManager.isStackable(item.getId())) {

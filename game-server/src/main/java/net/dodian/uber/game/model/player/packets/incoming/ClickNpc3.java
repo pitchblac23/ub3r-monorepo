@@ -61,10 +61,10 @@ public class ClickNpc3 implements Packet {
                 return;
             if(Balloons.eventActive()) {
                 client.triggerTele(3045, 3372, 0, false);
-                client.send(new SendMessage("Welcome to the party room!"));
+                client.sendMessage("Welcome to the party room!");
             } else {
                 client.triggerTele(3086 + Utils.random(2), 3488 + Utils.random(2), 0, false);
-                client.send(new SendMessage("Welcome to Edgeville!"));
+                client.sendMessage("Welcome to Edgeville!");
             }
         } else if (NPCID == 70) {
             client.skillX = tempNpc.getPosition().getX();

@@ -2,7 +2,6 @@ package net.dodian.uber.game.model.player.skills.woodcutting;
 
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.item.Equipment;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.utilities.Misc;
 import net.dodian.utilities.Utils;
@@ -167,23 +166,23 @@ public class Woodcutting {
 
         int WCAxe = findAxe(c);
         if (WCAxe < 0) {
-            c.send(new SendMessage("You need a axe in which you got the required woodcutting level for."));
+            c.sendMessage("You need a axe in which you got the required woodcutting level for.");
             c.resetAction();
             return false;
         }
         if (woodcuttingLevels[c.woodcuttingIndex] > c.getLevel(Skills.WOODCUTTING)) {
-            c.send(new SendMessage("You need a woodcutting level of " + woodcuttingLevels[c.woodcuttingIndex] + " to cut this tree."));
+            c.sendMessage("You need a woodcutting level of " + woodcuttingLevels[c.woodcuttingIndex] + " to cut this tree.");
             c.resetAction();
             return false;
         }
         if (c.freeSlots() < 1) {
-            c.send(new SendMessage("Your inventory is too full to hold anymore " + c.GetItemName(woodcuttingLogs[c.woodcuttingIndex]).toLowerCase() + "."));
+            c.sendMessage("Your inventory is too full to hold anymore " + c.GetItemName(woodcuttingLogs[c.woodcuttingIndex]).toLowerCase() + ".");
             c.resetAction();
             return false;
         }
         if (System.currentTimeMillis() - c.lastAction >= 600 && !c.IsCutting) {
             c.lastAction = System.currentTimeMillis();
-            c.send(new SendMessage("You swing your axe at the tree..."));
+            c.sendMessage("You swing your axe at the tree...");
             c.requestAnim(getWoodcuttingEmote(Utils.axes[WCAxe]), 0);
             c.IsCutting = true;
         }
@@ -192,7 +191,7 @@ public class Woodcutting {
         if (System.currentTimeMillis() - c.lastAction >= getWoodcuttingSpeed(c) && c.IsCutting) {
             c.lastAction = System.currentTimeMillis();
             c.giveExperience(woodcuttingExp[c.woodcuttingIndex], Skills.WOODCUTTING);
-            c.send(new SendMessage("You cut some " + c.GetItemName(woodcuttingLogs[c.woodcuttingIndex]).toLowerCase() + "."));
+            c.sendMessage("You cut some " + c.GetItemName(woodcuttingLogs[c.woodcuttingIndex]).toLowerCase() + ".");
             c.addItem(woodcuttingLogs[c.woodcuttingIndex], 1);
             c.triggerRandom(woodcuttingExp[c.woodcuttingIndex]);
         }

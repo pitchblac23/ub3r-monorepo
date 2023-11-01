@@ -3,7 +3,6 @@ package net.dodian.uber.game.model.player.packets.incoming;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.item.Equipment;
 import net.dodian.uber.game.model.player.packets.Packet;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 
 public class TradeRequest implements Packet {
 
@@ -17,7 +16,7 @@ public class TradeRequest implements Packet {
             return;
         }
         if (client.inDuel || client.duelFight) {
-            client.send(new SendMessage("You are busy at the moment"));
+            client.sendMessage("You are busy at the moment");
             return;
         }
         if (!client.inTrade && !client.inDuel && !client.duelFight) {
@@ -26,5 +25,4 @@ public class TradeRequest implements Packet {
             client.duelReq(tw);
         }
     }
-
 }

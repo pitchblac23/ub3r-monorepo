@@ -651,19 +651,20 @@ var slot = 8720;
             player.changeInterfaceStatus(8813, false)
             slot = 8760
             val s = arrayOf(
+                "Mind rune",
                 "Small pouch",
-                "Nature rune",
                 "Medium pouch",
+                "Cosmic Rune",
                 "Large pouch",
-                "Blood rune",
+                "Nature rune",
                 "Giant pouch",
-                "Cosmic rune",
+                "Blood rune",
                 "Skillcape")
-            val s1 = arrayOf("1", "1", "20", "40", "50", "60", "75", "99")
+            val s1 = arrayOf("1", "1", "20", "30", "40", "45", "60", "70", "99")
             for (i in s.indices) { player.send(SendString(s[i], slot + i)) }
             slot = 8720
             for (i in s1.indices) { player.send(SendString(s1[i], slot + i)) }
-            val items = intArrayOf(5509, 561, 5510, 5512, 565, 5514, 564, 9765)
+            val items = intArrayOf(558, 5509, 5510, 564, 5512, 561, 5514, 565, 9765)
             player.setMenuItems(items)
         } else if (skillID == Skills.SLAYER.id) {
             player.send(SendString("Master", 8846))

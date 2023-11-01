@@ -1,8 +1,7 @@
-package net.dodian.uber.game.model.player.skills.mining;
+package net.dodian.uber.game.model.player.skills.mining
 
 import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.item.Equipment
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.utilities.Misc
 import net.dodian.utilities.Utils
@@ -48,7 +47,7 @@ import java.util.*
         return time.toLong()
     }
 
-    fun Gemchance(player: Client) {
+    fun gemChance(player: Client) {
         val chance = doubleArrayOf(7.03, 3.91, 3.91, 3.12)
         val gemId = intArrayOf(1623, 1621, 1619, 1617)
         var rolledChance = 0
@@ -62,28 +61,28 @@ import java.util.*
         }
         if (player.freeSlots() > 0) {
             player.addItem(gem, 1)
-            player.send(SendMessage("You managed to find a " + player.GetItemName(gem).lowercase(Locale.getDefault()) + " while mining."))
+            player.sendMessage("You managed to find a " + player.GetItemName(gem).lowercase(Locale.getDefault()) + " while mining.")
         }
     }
 
     fun mining(index: Int, player: Client) {
         if (index != 6) {
-            player.send(SendMessage("You mine some " + player.GetItemName(Utils.ore[index]).lowercase(Locale.getDefault()) + "."))
+            player.sendMessage("You mine some " + player.GetItemName(Utils.ore[index]).lowercase(Locale.getDefault()) + ".")
         }
         doAction(player, Utils.ore[index], Utils.oreExp[index])
         if (Misc.chance(86) == 1) { //256 without glory
-            Gemchance(player)
+            gemChance(player)
         }
     }
 
     fun miningEss(p: Client) {
-        p.send(SendMessage("You mine some " + p.GetItemName(1436).lowercase(Locale.getDefault()) + "."))
+        p.sendMessage("You mine some " + p.GetItemName(1436).lowercase(Locale.getDefault()) + ".")
         doAction(p, 1436, 50)
     }
 
     fun doAction(p: Client, i: Int, xp: Int) {
         if (!p.playerHasItem(-1)) {
-            p.send(SendMessage("There is not enough space in your inventory."))
+            p.sendMessage("There is not enough space in your inventory.")
             p.resetAction(true)
             return
         }

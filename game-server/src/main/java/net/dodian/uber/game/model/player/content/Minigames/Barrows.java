@@ -71,11 +71,11 @@ public class Barrows {
             public void execute() {
 
                 final Object o = new Object(id1, x1, y1, h, 10, 2, id1);
-                if (!GlobalObject.addGlobalObject(o, 1000)) {
+                if (GlobalObject.addGlobalObject(o, 1000)) {
                     stop();
                 }
                 final Object o2 = new Object(id2, x2, y2, h, 10, 2, id2);
-                if (!GlobalObject.addGlobalObject(o2, 1000)) {
+                if (GlobalObject.addGlobalObject(o2, 1000)) {
                     stop();
                 }
             }
@@ -105,11 +105,11 @@ public class Barrows {
             public void execute() {
 
                 final Object o = new Object(id1, x1, y1, h, 10, 2, id1);
-                if (!GlobalObject.addGlobalObject(o, 1000)) {
+                if (GlobalObject.addGlobalObject(o, 1000)) {
                     stop();
                 }
                 final Object o2 = new Object(id2, x2, y2, h, 10, 2, id2);
-                if (!GlobalObject.addGlobalObject(o2, 1000)) {
+                if (GlobalObject.addGlobalObject(o2, 1000)) {
                     stop();
                 }
             }

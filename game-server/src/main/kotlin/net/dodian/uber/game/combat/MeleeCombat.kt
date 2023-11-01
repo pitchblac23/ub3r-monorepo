@@ -7,7 +7,6 @@ import net.dodian.uber.game.model.entity.player.Client
 import net.dodian.uber.game.model.entity.player.Player
 import net.dodian.uber.game.model.item.Equipment
 import net.dodian.uber.game.model.item.SpecialsHandler
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage
 import net.dodian.uber.game.model.player.skills.Skills
 import net.dodian.uber.game.model.player.skills.prayer.Prayers
 import net.dodian.utilities.Misc
@@ -28,7 +27,7 @@ fun Client.handleMelee(): Int {
         val emote = Server.itemManager.getAttackAnim(equipment[Equipment.Slot.WEAPON.id])
         setFocus(target.position.x, target.position.y)
         if (target is Player && duelFight && duelRule[1]) {
-            send(SendMessage("Melee has been disabled for this duel!"))
+            sendMessage("Melee has been disabled for this duel!")
             resetAttack()
             return 0
         }
@@ -49,7 +48,7 @@ fun Client.handleMelee(): Int {
                 if(Misc.chance(8) == 1) {
                     maxHit *= 2
                     //Server.npcManager.getNpc(target.slot).setGfx(274, 50) //TODO: fix gfx for npc!
-                    send(SendMessage("<col=8B0000>You put a deep wound into your target!"))
+                    sendMessage("<col=8B0000>You put a deep wound into your target!")
                 }
             }
         }
@@ -94,7 +93,7 @@ fun Client.handleMelee(): Int {
 
             giveExperience((15 * hit) * CombatExpRate, Skills.HITPOINTS)
         }
-        if (debug) send(SendMessage("hit = $hit, elapsed = ${time - lastAttack}"))
+        if (debug) sendMessage("hit = $hit, elapsed = ${time - lastAttack}")
     lastAttack = System.currentTimeMillis()
 
     return 1

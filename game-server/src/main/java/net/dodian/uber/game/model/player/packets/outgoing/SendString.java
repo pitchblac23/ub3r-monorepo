@@ -21,5 +21,4 @@ public class SendString implements OutgoingPacket {
         client.getOutputStream().endFrameVarSizeWord();
         client.flushOutStream();
     }
-
 }

@@ -4,7 +4,6 @@ import net.dodian.uber.game.Server;
 import net.dodian.uber.game.model.entity.npc.Npc;
 import net.dodian.uber.game.model.entity.player.Client;
 import net.dodian.uber.game.model.player.packets.Packet;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 
 public class UseItemOnNpc implements Packet {
 
@@ -29,8 +28,7 @@ public class UseItemOnNpc implements Packet {
             client.playerPotato.add(1, npcIndex);
             client.playerPotato.add(2, npcId);
             client.playerPotato.add(3, 1);
-            client.showPlayerOption(new String[]{
-                    "What do you wish to do?", "Remove spawn", "Check drops", "Reload drops", "Check config", "Reload config!"});
+            client.showPlayerOption(new String[]{"What do you wish to do?", "Remove spawn", "Check drops", "Reload drops", "Check config", "Reload config!"});
             client.NpcDialogueSend = true;
             return;
         }
@@ -55,10 +53,8 @@ public class UseItemOnNpc implements Packet {
             if (item == 1735) {
                 client.addItem(1737, 1);
             } else {
-                client.send(new SendMessage("You need some shears to shear this sheep!"));
+                client.sendMessage("You need some shears to shear this sheep!");
             }
-            return;
         }
     }
-
 }

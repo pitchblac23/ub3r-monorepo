@@ -424,7 +424,7 @@ public final class ObjectDef {
                 ambientLighting = stream.readSignedByte();
             else if (opcode == 39)
                 contrast = (byte) (stream.readSignedByte() * 25);
-            else if (opcode >= 30 && opcode < 39) {
+            else if (opcode >= 30 && opcode < 35) {
                 if (actions == null)
                     actions = new String[5];
                 actions[opcode - 30] = stream.readString();

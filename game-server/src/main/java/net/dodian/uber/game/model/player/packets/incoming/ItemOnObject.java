@@ -94,7 +94,7 @@ public class ItemOnObject implements Packet {
                 Smithing.OpenSmithingFrame(Type, client);
             }
         } else {
-            client.println_debug("Item: " + ItemID + " - Used On Object: " + UsedOnObjectID + " -  X: " + UsedOnX + " - Y: " + UsedOnY);
+            client.println("Item: " + ItemID + " - Used On Object: " + UsedOnObjectID + " -  X: " + UsedOnX + " - Y: " + UsedOnY);
         }
     }
 }
