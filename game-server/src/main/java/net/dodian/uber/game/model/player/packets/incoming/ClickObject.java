@@ -15,7 +15,6 @@ import net.dodian.uber.game.model.object.*;
 import net.dodian.uber.game.model.object.Object;
 import net.dodian.uber.game.model.player.content.Minigames.Barrows;
 import net.dodian.uber.game.model.player.packets.Packet;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.agility.Agility;
 import net.dodian.uber.game.model.player.skills.farming.Farming;
@@ -45,7 +44,7 @@ public class ClickObject implements Packet {
         GameObjectData object = GameObjectData.forId(task.getWalkToId());
         client.setWalkToTask(task);
         if (client.playerGroup >= 3 && object != null)
-            client.send(new SendMessage("Obj click1: " + object.getId() + ", " + object.getName() + ", Coord: " + objectX + ", " + objectY + ", " + (def == null ? "Def is null!" : def.getFace())));
+            client.sendMessage("Obj click1: " + object.getId() + ", " + object.getName() + ", Coord: " + objectX + ", " + objectY + ", " + (def == null ? "Def is null!" : def.getFace()));
         if (client.randomed) {
             return;
         }
@@ -137,7 +136,7 @@ public class ClickObject implements Packet {
                     });
                 }
             } else {
-                client.send(new SendMessage("Nothing interesting happens."));
+                client.sendMessage("Nothing interesting happens.");
             }
         }
         if (Balloons.lootBalloon(client, position.copy()) && objectID >= 115 && objectID <= 122) {
@@ -182,7 +181,7 @@ public class ClickObject implements Packet {
                 client.setSkillY(position.getY());
                 Smithing.OpenSmithingFrame(Smithing.CheckSmithing(type, client), client);
             } else if (type == -1)
-                client.send(new SendMessage("You do not have any bars to smith."));
+                client.sendMessage("You do not have any bars to smith.");
         }
         if (objectID == 1294) {
             client.teleportToX = 2485;
@@ -253,7 +252,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 16466) {
             if (client.getLevel(Skills.AGILITY) < 75) {
-                client.send(new SendMessage("You need level 75 agility to use this shortcut!"));
+                client.sendMessage("You need level 75 agility to use this shortcut!");
                 return;
             }
             client.teleportToX = 2863;
@@ -262,7 +261,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 882 && position.getX() == 2899 && position.getY() == 9728) {
             if (client.getLevel(Skills.AGILITY) < 85) {
-                client.send(new SendMessage("You need level 85 agility to use this shortcut!"));
+                client.sendMessage("You need level 85 agility to use this shortcut!");
                 return;
             }
             client.teleportToX = 2885;
@@ -271,7 +270,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 882 && position.getX() == 2885 && position.getY() == 9794) {
             if (client.getLevel(Skills.AGILITY) < 85) {
-                client.send(new SendMessage("You need level 85 agility to use this shortcut!"));
+                client.sendMessage("You need level 85 agility to use this shortcut!");
                 return;
             }
             client.teleportToX = 2899;
@@ -280,7 +279,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 16509) {
             if (!client.checkItem(989) || client.getLevel(Skills.AGILITY) < 70) {
-                client.send(new SendMessage("You need a crystal key and 70 agility to use this shortcut!"));
+                client.sendMessage("You need a crystal key and 70 agility to use this shortcut!");
                 return;
             }
             if (client.getPosition().getX() == 2886 && client.getPosition().getY() == 9799) {
@@ -293,7 +292,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 16510) {
             if (!client.checkItem(989) || client.getLevel(Skills.AGILITY) < 70) {
-                client.send(new SendMessage("You need a crystal key and 70 agility to use this shortcut!"));
+                client.sendMessage("You need a crystal key and 70 agility to use this shortcut!");
                 return;
             }
             if (client.getPosition().getX() == 2880 && client.getPosition().getY() == 9813) {
@@ -311,7 +310,7 @@ public class ClickObject implements Packet {
         if (objectID == 133) { // new dragon teleport?
             client.teleportToX = 3235;
             client.teleportToY = 9366;
-            client.send(new SendMessage("Welcome to the dragon lair!"));
+            client.sendMessage("Welcome to the dragon lair!");
         }
         if (objectID == 3994 || objectID == 11666 || objectID == 16469) {
             for (int fi = 0; fi < Utils.smelt_frame.length; fi++) {
@@ -321,7 +320,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 2309 && position.getX() == 2998 && position.getY() == 3917) {
             if (client.getLevel(Skills.AGILITY) < 75) {
-                client.send(new SendMessage("You need at least 75 agility to enter!"));
+                client.sendMessage("You need at least 75 agility to enter!");
                 return;
             }
             client.ReplaceObject(2998, 3917, 2309, 2, 0);
@@ -336,11 +335,11 @@ public class ClickObject implements Packet {
         }
         if (objectID == 1516 && position.getX() == 2908 && position.getY() == 9698) {
             if (!client.checkItem(989)) {
-                client.send(new SendMessage("You need a crystal key to open this door."));
+                client.sendMessage("You need a crystal key to open this door.");
                 return;
             }
             if (client.getLevel(Skills.SLAYER) < 90) {
-                client.send(new SendMessage("You need at least 90 slayer to enter!"));
+                client.sendMessage("You need at least 90 slayer to enter!");
                 return;
             }
             client.ReplaceObject(2908, 9698, -1, 0, 0);
@@ -351,11 +350,11 @@ public class ClickObject implements Packet {
         }
         if (objectID == 1519 && position.getX() == 2907 && position.getY() == 9698) {
             if (!client.checkItem(989)) {
-                client.send(new SendMessage("You need a crystal key to open this door."));
+                client.sendMessage("You need a crystal key to open this door.");
                 return;
             }
             if (client.getLevel(Skills.SLAYER) < 90) {
-                client.send(new SendMessage("You need at least 90 slayer to enter!"));
+                client.sendMessage("You need at least 90 slayer to enter!");
                 return;
             }
             client.ReplaceObject(2908, 9698, -1, 0, 0);
@@ -368,8 +367,8 @@ public class ClickObject implements Packet {
             if (client.checkItem(989)) {
                 client.ReplaceObject(2924, 9803, 2623, -3, 0);
             } else {
-                client.send(new SendMessage("You need the crystal key to enter"));
-                client.send(new SendMessage("The crystal key is made from 2 crystal pieces"));
+                client.sendMessage("You need the crystal key to enter");
+                client.sendMessage("The crystal key is made from 2 crystal pieces");
             }
         }
         if (objectID == 16680 && position.getX() == 2884 && position.getY() == 3397) {
@@ -377,7 +376,7 @@ public class ClickObject implements Packet {
                 client.teleportToX = 2884;
                 client.teleportToY = 9798;
             } else {
-                client.send(new SendMessage("You need 50 slayer to enter the Taverly Dungeon"));
+                client.sendMessage("You need 50 slayer to enter the Taverly Dungeon");
             }
         }
         if (objectID == 17385 && position.getX() == 2884 && position.getY() == 9797) {
@@ -518,7 +517,7 @@ public class ClickObject implements Packet {
         if (objectID == 1558 || objectID == 1557 && client.distanceToPoint(2758, 3482) < 5 && client.playerRights > 0) {
             client.ReplaceObject(2758, 3482, 1558, -2, 0);
             client.ReplaceObject(2757, 3482, 1557, 0, 0);
-            client.send(new SendMessage("Welcome to the Castle"));
+            client.sendMessage("Welcome to the Castle");
         }
         if (objectID == 2104) {
             objectID = 2105;
@@ -531,20 +530,20 @@ public class ClickObject implements Packet {
         for (int r = 0; r < Utils.rocks.length; r++) {
             if (objectID == Utils.rocks[r]) {
                 if (client.getPositionName(client.getPosition()) == Client.positions.TZHAAR) {
-                    client.send(new SendMessage("You can not mine here or the Tzhaar's will be angry!"));
+                    client.sendMessage("You can not mine here or the Tzhaar's will be angry!");
                     return;
                 }
                 int pickaxe = findPick(client);
                 if (pickaxe < 0) {
                     client.minePick = -1;
                     client.resetAction();
-                    client.send(new SendMessage("You need a pickaxe to mine this rock."));
+                    client.sendMessage("You need a pickaxe to mine this rock.");
                     return;
                 } else if (client.getLevel(Skills.MINING) < Utils.rockLevels[r]) {
-                    client.send(new SendMessage("You need a Mining level of " + Utils.rockLevels[r] + " to mine this rock."));
+                    client.sendMessage("You need a Mining level of " + Utils.rockLevels[r] + " to mine this rock.");
                     return;
                 } else if (!client.playerHasItem(-1)) {
-                    client.send(new SendMessage("There is not enough space in your inventory."));
+                    client.sendMessage("There is not enough space in your inventory.");
                     client.resetAction(true);
                     return;
                 }
@@ -553,17 +552,17 @@ public class ClickObject implements Packet {
                 client.mining = true;
                 client.lastAction = System.currentTimeMillis() + getMiningSpeed(client);
                 client.requestAnim(getMiningEmote(Utils.picks[pickaxe]), 0);
-                client.send(new SendMessage("You swing your pick at the rock."));
+                client.sendMessage("You swing your pick at the rock.");
                 return;
             } else if (objectID == 7471) {
                 int pickaxe = findPick(client);
                 if (pickaxe < 0) {
                     client.minePick = -1;
                     client.resetAction();
-                    client.send(new SendMessage("You need a pickaxe to mine this rock."));
+                    client.sendMessage("You need a pickaxe to mine this rock.");
                     return;
                 } else if (!client.playerHasItem(-1)) {
-                    client.send(new SendMessage("There is not enough space in your inventory."));
+                    client.sendMessage("There is not enough space in your inventory.");
                     client.resetAction(true);
                     return;
                 }
@@ -572,7 +571,7 @@ public class ClickObject implements Packet {
                 client.miningEss = true;
                 client.lastAction = System.currentTimeMillis() + getMiningSpeed(client);
                 client.requestAnim(getMiningEmote(Utils.picks[pickaxe]), 0);
-                client.send(new SendMessage("You swing your pick at the rock."));
+                client.sendMessage("You swing your pick at the rock.");
                 return;
             }
         }
@@ -583,7 +582,7 @@ public class ClickObject implements Packet {
         if (objectID == 2634 && position.getX() == 2838 && position.getY() == 3517) { //2838, 3517
             client.teleportToX = 2840;
             client.teleportToY = 3517;
-            client.send(new SendMessage("You jump to the other side of the rubble"));
+            client.sendMessage("You jump to the other side of the rubble");
 //      if (client.getLevel(Skill.MINING) < 40) {
 //        client.send(new SendMessage("You need 40 mining to clear this rubble"));
 //        return;
@@ -623,7 +622,7 @@ public class ClickObject implements Packet {
         if (objectID == 733) {
             int chance = Misc.chance(100);
             if (chance <= 50) {
-                client.send(new SendMessage("You failed to cut the web!"));
+                client.sendMessage("You failed to cut the web!");
                 return;
             }
             if (System.currentTimeMillis() - client.lastAction < 2000) {
@@ -639,7 +638,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 16520 || objectID == 16519) {
             if (client.getLevel(Skills.AGILITY) < 50) {
-                client.send(new SendMessage("You need level 50 agility to use this shortcut!"));
+                client.sendMessage("You need level 50 agility to use this shortcut!");
                 return;
             }
             if (position.getX() == 2575 && position.getY() == 3108) {
@@ -776,11 +775,11 @@ public class ClickObject implements Packet {
                 return;
             }
             if (client.getLevel(Skills.THIEVING) < 70) {
-                client.send(new SendMessage("You must be level 70 thieving to open this chest"));
+                client.sendMessage("You must be level 70 thieving to open this chest");
                 return;
             }
             if (client.freeSlots() < 1) {
-                client.send(new SendMessage("You need atleast one free inventory slot!"));
+                client.sendMessage("you don't have enough inventory space to hold that item.");
                 return;
             }
             if (System.currentTimeMillis() - client.lastAction < 1200) {
@@ -795,16 +794,16 @@ public class ClickObject implements Packet {
                                10422, 10424, 10426, 10428, 10430, 10432, 10434, 10436,
                                10438, 12339, 12341};
                 int r = (int) (Math.random() * items.length);
-                client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "!"));
+                client.sendMessage("You have received a " + client.GetItemName(items[r]) + "!");
                 client.addItem(items[r], 1);
                 client.yell("@bla@[@yel@Server@bla@] - @blu@" + client.getPlayerName() + " @or2@has received a " + client.GetItemName(items[r]).toLowerCase() +  " from a chest.");
             } else if (roll <= 2.5) {
                 int natures = 50 + Utils.random(100);
-                client.send(new SendMessage("You find " + natures + " natures inside the chest."));
+                client.sendMessage("You find " + natures + " natures inside the chest.");
                 client.addItem(561, natures);
             } else {
                 int coins = 300 + Utils.random(1200);
-                client.send(new SendMessage("You find " + coins + " coins inside the chest."));
+                client.sendMessage("You find " + coins + " coins inside the chest.");
                 client.addItem(995, coins);
             }
             if (client.getEquipment()[Equipment.Slot.HEAD.getId()] == 2631)
@@ -823,11 +822,11 @@ public class ClickObject implements Packet {
                 return;
             }
             if (client.getLevel(Skills.THIEVING) < 85) {
-                client.send(new SendMessage("You must be level 85 thieving to open this chest"));
+                client.sendMessage("You must be level 85 thieving to open this chest.");
                 return;
             }
             if (client.freeSlots() < 1) {
-                client.send(new SendMessage("You need atleast one free inventory slot!"));
+                client.sendMessage("You don't have enough inventory space to hold that item.");
                 return;
             }
             if (System.currentTimeMillis() - client.lastAction < 1200) {
@@ -849,16 +848,16 @@ public class ClickObject implements Packet {
                         int[] items = {1038, 1040, 1042, 1044, 1046, 1048, 1050,
                                 2581, 2631, 12343, 12345, 12347, 12349, 4565};
                         int r = (int) (Math.random() * items.length);
-                        client.send(new SendMessage("You have recieved a " + client.GetItemName(items[r]) + "."));
+                        client.sendMessage("You have received a " + client.GetItemName(items[r]) + ".");
                         client.addItem(items[r], 1);
                         client.yell("@bla@[@yel@Server@bla@] - @blu@" + client.getPlayerName() + " @or2@has received a " + client.GetItemName(items[r]).toLowerCase() + " from the burnt chest.");
                     } else if (roll <= 2.5) {
                         int bloods = 100 + Utils.random(150);
-                        client.send(new SendMessage("You find " + bloods + " bloods inside the chest."));
+                        client.sendMessage("You find " + bloods + " bloods inside the chest.");
                         client.addItem(565, bloods);
                     } else {
                         int coins = 500 + Utils.random(2000);
-                        client.send(new SendMessage("You find " + coins + " coins inside the chest"));
+                        client.sendMessage("You find " + coins + " coins inside the chest");
                         client.addItem(995, coins);
                     }
                     if (client.getEquipment()[Equipment.Slot.HEAD.getId()] == 2631)
@@ -907,7 +906,7 @@ public class ClickObject implements Packet {
         }
         if (objectID == 23140) {
             if (!client.checkItem(1544)) {
-                client.send(new SendMessage("You need a orange key to use this pipe!"));
+                client.sendMessage("You need a orange key to use this pipe!");
                 return;
             }
             if (position.getX() == 2576 && position.getY() == 9506) {
@@ -930,8 +929,8 @@ public class ClickObject implements Packet {
             if(client.getCurrentPrayer() != client.getMaxPrayer()) {
                 client.requestAnim(PRAY_AT_ALTAR, 0);
                 client.pray(client.getMaxPrayer());
-                client.send(new SendMessage("You restore your prayer points!"));
-            } else client.send(new SendMessage("You are at maximum prayer points!"));
+                client.sendMessage("You restore your prayer points!");
+            } else client.sendMessage("You are at maximum prayer points!");
         }
         //if (objectID == 6836) {
         //  client.skillX = position.getX();
@@ -946,8 +945,8 @@ public class ClickObject implements Packet {
                 client.teleportToX = 2540;
                 client.teleportToY = 4716;
             } else {
-                client.send(new SendMessage("You need to be level 80 or above to enter the mage arena."));
-                client.send(new SendMessage("The skeletons at the varrock castle are a good place until then."));
+                client.sendMessage("You need to be level 80 or above to enter the mage arena.");
+                client.sendMessage("The skeletons at the varrock castle are a good place until then.");
             }
         }
         if (objectID == 5960 && position.getX() == 2539 && position.getY() == 4712) {
@@ -988,13 +987,13 @@ public class ClickObject implements Packet {
         {
             client.teleportToX = 2413;
             client.teleportToY = 5117;
-            client.send(new SendMessage("You have entered the Jad Cave."));
+            client.sendMessage("You have entered the Jad Cave.");
         }
         if (objectID == 11834 && position.getX() == 2412 && position.getY() == 5118) // Jad exit
         {
             client.teleportToX = 2438;
             client.teleportToY = 5168;
-            client.send(new SendMessage("You have left the Jad Cave."));
+            client.sendMessage("You have left the Jad Cave.");
         }
         // End of Tzhaar Objects
 
@@ -1160,7 +1159,7 @@ public class ClickObject implements Packet {
             } else if (objectID == 16664) {
                 if (position.getX() == 2603 && position.getY() == 3078) {
                     if (!client.checkItem(1543)) {
-                        client.send(new SendMessage("You need a red key to go down these stairs!"));
+                        client.sendMessage("You need a red key to go down these stairs!");
                         return;
                     }
                     client.teleportToX = 2602;
@@ -1168,7 +1167,7 @@ public class ClickObject implements Packet {
                     client.getPosition().setZ(0);
                 } else if (position.getX() == 2569 && position.getY() == 3122) {
                     if (!client.checkItem(1545)) {
-                        client.send(new SendMessage("You need a yellow key to use this staircase!"));
+                        client.sendMessage("You need a yellow key to use this staircase!");
                         return;
                     }
                     client.teleportToX = 2570;
@@ -1212,7 +1211,7 @@ public class ClickObject implements Packet {
                     client.setSkillY(position.getY());
                     client.stairDistance = 1;
                 } else {
-                    client.send(new SendMessage("You need 60 mining to enter the mining guild."));
+                    client.sendMessage("You need 60 mining to enter the mining guild.");
                 }
             } else if (objectID == 492) {
                 client.stairs = 11;

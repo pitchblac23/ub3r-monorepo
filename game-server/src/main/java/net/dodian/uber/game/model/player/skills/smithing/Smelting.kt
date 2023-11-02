@@ -146,7 +146,7 @@ import net.dodian.utilities.Utils
             c.resetAction()
             return
         }
-        c.requestAnim(0x383, 0)
+        c.requestAnim(899, 0)
         for (removeId in removed) {
             c.deleteItem(removeId, 1)
         }

@@ -104,9 +104,9 @@ public final class RSInterface {
                     if (rsInterface.actions[l3].isEmpty())
                         rsInterface.actions[l3] = null;
                     if(rsInterface.id == 3900)
-                        rsInterface.actions[4] = "Buy 50";
+                        rsInterface.actions[4] = "Buy X";
                     if(rsInterface.parentID == 3822)
-                        rsInterface.actions[4] = "Sell All";
+                        rsInterface.actions[4] = "Sell X";
                     if (rsInterface.parentID == 1644)
                         rsInterface.actions[2] = "Operate";
                 }

@@ -211,7 +211,7 @@ public class ClickItem implements Packet {
                         if (client.playerHasItem(xPresents[i]))
                             slotNeeded--;
                     if (client.freeSlots() < slotNeeded) {
-                        client.send(new SendMessage("You need atleast " + slotNeeded + " free slot to open this!"));
+                        client.send(new SendMessage("You need at least " + slotNeeded + " free slot to open this!"));
                         break;
                     }
                     /* Delete item and add stuff! */
@@ -225,7 +225,7 @@ public class ClickItem implements Packet {
                 case 13346:
                     used = false;
                     if (client.freeSlots() < 1) {
-                        client.send(new SendMessage("You need atleast one free slot to open this!"));
+                        client.send(new SendMessage("You need at least one free slot to open this!"));
                         break;
                     }
                     int[] randomEventItem = {12887, 12888, 12889, 12890, 12891, 13343, 13344, 13203};
@@ -242,7 +242,7 @@ public class ClickItem implements Packet {
                 case 11918:
                     used = false;
                     if (client.freeSlots() < 1) {
-                        client.send(new SendMessage("You need atleast one free slot to open this!"));
+                        client.send(new SendMessage("You need at least one free slot to open this!"));
                         break;
                     }
                     int[] halloweenMasks = {1053, 1055, 1057};

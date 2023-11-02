@@ -19,9 +19,9 @@ public class ClickNpc3 implements Packet {
         Npc tempNpc = Server.npcManager.getNpc(npcIndex);
         if (tempNpc == null)
             return;
-        int NPCID = tempNpc.getId();
+        int npcId = tempNpc.getId();
 
-        final WalkToTask task = new WalkToTask(WalkToTask.Action.NPC_THIRD_CLICK, NPCID, tempNpc.getPosition());
+        final WalkToTask task = new WalkToTask(WalkToTask.Action.NPC_THIRD_CLICK, npcId, tempNpc.getPosition());
         client.setWalkToTask(task);
         if (client.randomed) {
             return;
@@ -38,10 +38,10 @@ public class ClickNpc3 implements Packet {
                     return;
                 }
 
-                if (client.getWalkToTask() != task) {
+                /*if (client.getWalkToTask() != task) {
                     this.stop();
                     return;
-                }
+                }*/
 
                 if (!client.goodDistanceEntity(tempNpc, 1)) {
                     return;
@@ -55,8 +55,8 @@ public class ClickNpc3 implements Packet {
     }
 
     public void clickNpc3(Client client, Npc tempNpc) {
-        int NPCID = tempNpc.getId();
-        if (NPCID == 637) { /* Mage arena tele */
+        int npcId = tempNpc.getId();
+        if (npcId == 637) { /* Mage arena tele */
             if (client.inDuel || client.inTrade)
                 return;
             if(Balloons.eventActive()) {
@@ -66,16 +66,25 @@ public class ClickNpc3 implements Packet {
                 client.triggerTele(3086 + Utils.random(2), 3488 + Utils.random(2), 0, false);
                 client.sendMessage("Welcome to Edgeville!");
             }
-        } else if (NPCID == 70) {
+        } else if (npcId == 70) {
             client.skillX = tempNpc.getPosition().getX();
             client.setSkillY(tempNpc.getPosition().getY());
             client.WanneShop = 2; // Crafting shop
-        } else if (NPCID >= 402 && NPCID <= 405) {
+        } else if (npcId >= 402 && npcId <= 405) {
             client.skillX = tempNpc.getPosition().getX();
             client.setSkillY(tempNpc.getPosition().getY());
             client.WanneShop = 15; // Slayer Store
-        } else if (NPCID == 1307) { // Make-over mage
+        } else if (npcId == 1307) { // Make-over mage
             client.NpcWanneTalk = 25;
+        } else if (npcId == 11435) {
+            client.skillX = tempNpc.getPosition().getX();
+            client.setSkillY(tempNpc.getPosition().getY());
+            client.stairs = 26;
+            client.stairDistance = 1;
+            client.Essence = 1;
+        } else {
+            client.println("atNPC 3: " + npcId);
+            client.sendMessage("Please inform Admin of click3 on " + npcId + ".");
         }
     }
 }

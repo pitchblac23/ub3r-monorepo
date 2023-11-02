@@ -198,17 +198,18 @@ var slot = 8720;
             var s1 = arrayOfNulls<String>(0)
             if (child == 0) {
                 s = arrayOf(
-                    "High Alch",
                     "Smoke Rush",
                     "Enchant Sapphire",
                     "Shadow Rush",
                     "Blood Rush",
+                    "Low Alch",
                     "Enchant Emerald",
                     "Ice Rush",
                     "Smoke Burst",
                     "Superheat",
                     "Enchant Ruby",
                     "Shadow Burst",
+                    "High Alch",
                     "Enchant Diamond",
                     "Blood Burst",
                     "Enchant Dragonstone",
@@ -222,7 +223,7 @@ var slot = 8720;
                     "Shadow Barrage",
                     "Blood Barrage",
                     "Ice Barrage")
-                s1 = arrayOf("1", "1", "7", "10", "20", "27", "30", "40", "43", "49", "50",
+                s1 = arrayOf("1", "7", "10", "20", "21", "27", "30", "40", "43", "49", "50", "55",
                              "57", "60", "68", "70", "74", "76", "80", "82", "86", "87", "88", "92", "94")
             } else if (child == 1) {
                 s = arrayOf(
@@ -236,6 +237,7 @@ var slot = 8720;
                 s1 = arrayOf("1", "20", "20", "35", "45", "45", "50")
             } else if (child == 2) {
                 s = arrayOf(
+                    "Staff of air",
                     "Zamorak staff",
                     "Saradomin staff",
                     "Guthix staff",
@@ -243,17 +245,22 @@ var slot = 8720;
                     "Obsidian staff",
                     "Master wand",
                     "Skillcape")
-                s1 = arrayOf("1", "1", "1", "25", "40", "50", "99")
+                s1 = arrayOf("1", "1", "1", "1", "25", "40", "50", "99")
             }
             for (i in s.indices) { player.send(SendString(s[i], slot + i)) }
             slot = 8720
             for (i in s1.indices) { player.send(SendString(s1[i], slot + i)) }
             if (child == 0) player.setMenuItems(
-                intArrayOf(561, 565, 564, 565, 565, 564, 565, 565, 561, 564, 565, 564, 565, 564,
-                           565, 565, 565, 565, 565, 565, 564, 565, 565, 565),
-                intArrayOf(1, 1, 10, 1, 1, 10, 1, 1, 1, 10, 1, 10, 1, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1))
+                intArrayOf(558, 564, 558, 558, 561, 564,
+                           558, 558, 561, 564, 558, 561,
+                           564, 558, 564, 558, 565, 565,
+                           565, 565, 565, 564, 565, 565, 565),
+                intArrayOf(1, 2, 1, 1, 1, 4,
+                           1, 2, 2, 6, 2, 2,
+                           8, 2, 10, 2, 1, 1,
+                           1, 1, 2, 10, 2, 2, 2))
             else if (child == 1) player.setMenuItems(intArrayOf(4089, 4109, 3385, 4099, 3840, 20220, 6918))
-            else if (child == 2) player.setMenuItems(intArrayOf(2417, 2415, 2416, 4675, 6526, 6914, 9762))
+            else if (child == 2) player.setMenuItems(intArrayOf(1381, 2417, 2415, 2416, 4675, 6526, 6914, 9762))
 
         } else if (skillID == Skills.WOODCUTTING.id) {
             player.send(SendString("Axes", 8846))

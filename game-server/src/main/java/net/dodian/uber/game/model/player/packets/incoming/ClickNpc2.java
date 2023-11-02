@@ -86,11 +86,11 @@ public class ClickNpc2 implements Packet {
         }
         if (npcId == 1613 || npcId == 1618 || npcId == 7677) { /* Banking */
             client.WanneBank = 1;
-        } else if (npcId == 11433) {
+        } /*else if (npcId == 11435) {
             client.stairs = 26;
             client.stairDistance = 1;
             client.Essence = 1;
-        } else if (npcId == 2345) {
+        }*/ else if (npcId == 2345) {
             client.NpcWanneTalk = npcId + 1;
         } else if (npcId == 2180) {
             client.NpcWanneTalk = npcId + 1;

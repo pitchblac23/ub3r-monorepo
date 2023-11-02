@@ -26,19 +26,7 @@ public class MagicOnItems implements Packet {
         if (client.randomed || client.randomed2) {
             return;
         }
-        if (castSpell == 1173) {
-            client.resetAction();
-            if (client.getLevel(Skills.MAGIC) < 45) {
-                client.sendMessage("You need a magic level of 45 to cast this spell.");
-                return;
-            }
-            if (!client.hasRunes(new int[]{561}, new int[]{1})) {
-                client.sendMessage("You need 1 nature runes to cast this spell.");
-                return;
-            }
-            superHeat(castOnItem, client);
-        }
-        if (castSpell == 1155) {// Sapphire
+        if (castSpell == 1155) {// Sapphire enchant
             if (client.getLevel(Skills.MAGIC) < 7) {
                 client.sendMessage("You need a magic level of 7 to cast this spell.");
                 return;
@@ -68,7 +56,31 @@ public class MagicOnItems implements Packet {
             client.addItem(item, 1);
             client.giveExperience(175, Skills.MAGIC);
         }
-        if (castSpell == 1165) {// Emerald
+        if (castSpell == 1162) { //LowAlch
+            if (client.getLevel(Skills.MAGIC) < 21) {
+                client.sendMessage("You need a magic level of 21 to cast this spell.");
+                return;
+            }
+            if (!client.playerHasItem(561) || (castOnItem == 561 && !client.playerHasItem(561, 2))) {
+                client.sendMessage("Requires nature rune.");
+                return;
+            }
+            if (castOnItem == 995 || (castOnItem >= 2415 && castOnItem <= 2417) || lowAlch < 1) {
+                client.sendMessage("This item can't be alched.");
+                return;
+            }
+            client.lastMagic = System.currentTimeMillis();
+            client.giveExperience(600, Skills.MAGIC);
+            client.animationReset = System.currentTimeMillis() + 3200;
+            client.requestAnim(713, 0);
+            client.callGfxMask(113, 100);
+            client.send(new SendSideTab(6));
+            client.deleteItem(castOnItem, castOnSlot, 1);
+            client.deleteItem(561, 1);
+            client.addItem(995, lowAlch);
+            client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
+        }
+        if (castSpell == 1165) {// Emerald enchant
             if (client.getLevel(Skills.MAGIC) < 27) {
                 client.sendMessage("You need a magic level of 27 to cast this spell.");
                 return;
@@ -97,6 +109,18 @@ public class MagicOnItems implements Packet {
             client.deleteRunes(new int[]{564}, new int[]{4});
             client.addItem(item, 1);
             client.giveExperience(370, Skills.MAGIC);
+        }
+        if (castSpell == 1173) { //Super heat
+            client.resetAction();
+            if (client.getLevel(Skills.MAGIC) < 43) {
+                client.sendMessage("You need a magic level of 43 to cast this spell.");
+                return;
+            }
+            if (!client.hasRunes(new int[]{561}, new int[]{2})) {
+                client.sendMessage("You need 2 nature runes to cast this spell.");
+                return;
+            }
+            superHeat(castOnItem, client);
         }
         if (castSpell == 1176) {// Ruby
             if (client.getLevel(Skills.MAGIC) < 49) {
@@ -127,6 +151,30 @@ public class MagicOnItems implements Packet {
             client.deleteRunes(new int[]{564}, new int[]{6});
             client.addItem(item, 1);
             client.giveExperience(590, Skills.MAGIC);
+        }
+        if (castSpell == 1178) { //HighAlch
+            if (client.getLevel(Skills.MAGIC) < 55) {
+                client.sendMessage("You need a magic level of 55 to cast this spell.");
+                return;
+            }
+            if (!client.playerHasItem(561) || (castOnItem == 561 && !client.playerHasItem(561, 2))) {
+                client.sendMessage("Requires two nature runes to cast this spell.");
+                return;
+            }
+            if (castOnItem == 995 || (castOnItem >= 2415 && castOnItem <= 2417) || lowAlch < 1) {
+                client.sendMessage("This item can't be alched.");
+                return;
+            }
+            client.lastMagic = System.currentTimeMillis();
+            client.giveExperience(600, Skills.MAGIC);
+            client.animationReset = System.currentTimeMillis() + 3200;
+            client.requestAnim(713, 0);
+            client.callGfxMask(113, 100);
+            client.send(new SendSideTab(6));
+            client.deleteItem(castOnItem, castOnSlot, 1);
+            client.deleteItem(561, 2);
+            client.addItem(995, highAlch);
+            client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
         }
         if (castSpell == 1180) {// Diamond
             if (client.getLevel(Skills.MAGIC) < 57) {
@@ -217,54 +265,6 @@ public class MagicOnItems implements Packet {
             client.deleteRunes(new int[]{564}, new int[]{10});
             client.addItem(item, 1);
             client.giveExperience(1150, Skills.MAGIC);
-        }
-        if (castSpell == 1162) {
-            if (client.getLevel(Skills.MAGIC) < 21) {
-                client.sendMessage("You need a magic level of 21 to cast this spell.");
-                return;
-            }
-            if (!client.playerHasItem(561) || (castOnItem == 561 && !client.playerHasItem(561, 2))) {
-                client.sendMessage("Requires nature rune.");
-                return;
-            }
-            if (castOnItem == 995 || (castOnItem >= 2415 && castOnItem <= 2417) || lowAlch < 1) {
-                client.sendMessage("This item can't be alched.");
-                return;
-            }
-            client.lastMagic = System.currentTimeMillis();
-            client.giveExperience(600, Skills.MAGIC);
-            client.animationReset = System.currentTimeMillis() + 3200;
-            client.requestAnim(713, 0);
-            client.callGfxMask(113, 100);
-            client.send(new SendSideTab(6));
-            client.deleteItem(castOnItem, castOnSlot, 1);
-            client.deleteItem(561, 1);
-            client.addItem(995, lowAlch);
-            client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
-        }
-        if (castSpell == 1178) {
-            if (client.getLevel(Skills.MAGIC) < 55) {
-                client.sendMessage("You need a magic level of 55 to cast this spell.");
-                return;
-            }
-            if (!client.playerHasItem(561) || (castOnItem == 561 && !client.playerHasItem(561, 2))) {
-                client.sendMessage("Requires nature rune.");
-                return;
-            }
-            if (castOnItem == 995 || (castOnItem >= 2415 && castOnItem <= 2417) || lowAlch < 1) {
-                client.sendMessage("This item can't be alched.");
-                return;
-            }
-            client.lastMagic = System.currentTimeMillis();
-            client.giveExperience(600, Skills.MAGIC);
-            client.animationReset = System.currentTimeMillis() + 3200;
-            client.requestAnim(713, 0);
-            client.callGfxMask(113, 100);
-            client.send(new SendSideTab(6));
-            client.deleteItem(castOnItem, castOnSlot, 1);
-            client.deleteItem(561, 2);
-            client.addItem(995, highAlch);
-            client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
         }
     }
 }
