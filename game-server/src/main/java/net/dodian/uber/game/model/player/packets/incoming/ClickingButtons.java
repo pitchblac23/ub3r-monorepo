@@ -11,8 +11,6 @@ import net.dodian.uber.game.model.item.GroundItem;
 import net.dodian.uber.game.model.player.content.Skillcape;
 import net.dodian.uber.game.model.player.packets.Packet;
 import net.dodian.uber.game.model.player.packets.outgoing.RemoveInterfaces;
-import net.dodian.uber.game.model.player.packets.outgoing.SendMessage;
-import net.dodian.uber.game.model.player.packets.outgoing.SendString;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skills;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
@@ -79,7 +77,7 @@ public class ClickingButtons implements Packet {
         Emotes.doEmote(actionButton, client);
         switch (actionButton) {
             case 58073:
-                client.send(new SendMessage("Visit the Dodian.net UserCP and click edit pin to remove your pin"));
+                client.sendMessage("Visit the Dodian.net UserCP and click edit pin to remove your pin");
                 break;
             case 151:
                 client.NpcDialogue = 27;
@@ -103,11 +101,11 @@ public class ClickingButtons implements Packet {
                 break;
             case 24136:
                 client.yellOn = true;
-                client.send(new SendMessage("You enabled the boss yell messages."));
+                client.sendMessage("You enabled the boss yell messages.");
                 break;
             case 24137:
                 client.yellOn = false;
-                client.send(new SendMessage("You disabled the boss yell messages."));
+                client.sendMessage("You disabled the boss yell messages.");
                 break;
             case 89223: // TODO: Check what this button do!
                 for (int i = 0; i < client.playerItems.length; i++) {
@@ -163,11 +161,11 @@ public class ClickingButtons implements Packet {
                 if (client.ancients == 1) {
                     client.setSidebarInterface(6, 1151); // magic tab (ancient = 12855);
                     client.ancients = 0;
-                    client.send(new SendMessage("Normal magic enabled"));
+                    client.sendMessage("You feel a strange drain upon your power...");
                 } else {
                     client.setSidebarInterface(6, 12855); // magic tab (ancient = 12855);
                     client.ancients = 1;
-                    client.send(new SendMessage("Ancient magic enabled"));
+                    client.sendMessage("You feel a strange power fill your mind...");
                 }
                 break;
             case 26076:
@@ -216,8 +214,8 @@ public class ClickingButtons implements Packet {
                     client.startDuel();
                     dw.startDuel();
                 } else {
-                    client.send(new SendString("Waiting for other player...", 6571));
-                    dw.send(new SendString("Other player has accepted", 6571));
+                    client.sendString("Waiting for other player...", 6571);
+                    dw.sendString("Other player has accepted", 6571);
                 }
                 break;
             case 95197://Bronze
@@ -439,7 +437,7 @@ public class ClickingButtons implements Packet {
                             int level = Skills.getLevelForExperience(client.getExperience(trainedSkill));
                             int experience = 250 * level;
                             client.giveExperience(experience, trainedSkill);
-                            client.send(new SendMessage("You rub the lamp and gained " + experience + " experience in " + trainedSkill.getName() + "."));
+                            client.sendMessage("You rub the lamp and gained " + experience + " experience in " + trainedSkill.getName() + ".");
                         }
                     }
                 } else if (client.randomed && client.actionButtonId == client.statId[client.random_skill]) {
@@ -448,23 +446,29 @@ public class ClickingButtons implements Packet {
                     if (!client.addItem(2528, 1)) {
                         GroundItem item = new GroundItem(client.getPosition(), 2528, 1, client.getSlot(), -1);
                         Ground.items.add(item);
-                        client.send(new SendMessage("You dropped the lamp on the floor!"));
+                        client.sendMessage("You dropped the lamp on the floor!");
                     }
                 }
                 break;
-            case 1097:
-            case 1094:
-            case 1093:
-                client.FightType = 0;
+            case 1097: //?
+            case 1094: //?
+            case 1093: //Autocast spellbook
                 client.setSidebarInterface(0, 1689);
+                client.FightType = 0;
+                client.frame87(43, 4);
+                client.frame87(108, 1);
+                client.setCombatStyle(CombatStyleHandler.CombatStyles.ATTACK_WITH_SPELL);
                 break;
 
             case 94047:
-                client.FightType = 1;
                 client.setSidebarInterface(0, 1689);
+                client.FightType = 1;
+                client.frame87(43, 4);
+                client.frame87(108, 2);
+                client.setCombatStyle(CombatStyleHandler.CombatStyles.ATTACK_WITH_SPELL_DEFENCE);
                 break;
             case 94051:
-                client.send(new SendMessage("TODO"));
+                client.sendMessage("TODO");
                 break;
             case 51133:
             case 51185:
@@ -493,6 +497,7 @@ public class ClickingButtons implements Packet {
                 break;
             case 24017:
                 CombatStyleHandler.setWeaponHandler(client, -1);
+                client.frame87(108, 0);
                 break;
 
             case 2171: // Retribution
@@ -525,6 +530,10 @@ public class ClickingButtons implements Packet {
             case 17102: // accurate (darts)
             case 8234: // stab (dagger)
                 client.FightType = 0;
+                client.frame87(43, 0);
+                client.frame87(108, 0);
+                client.autocast_spellIndex = -1;
+                client.setCombatStyle(CombatStyleHandler.CombatStyles.ACCURATE_MELEE);
                 break;
 
             case 1175: // Gmaul!
@@ -538,6 +547,10 @@ public class ClickingButtons implements Packet {
             case 18078: // block (spear)
             case 8235: // block (dagger)
                 client.FightType = 1;
+                client.frame87(43, 2);
+                client.frame87(108, 0);
+                client.autocast_spellIndex = -1;
+                client.setCombatStyle(CombatStyleHandler.CombatStyles.DEFENSIVE_MELEE);
                 break;
 
             case 9127: // Controlled
@@ -549,7 +562,11 @@ public class ClickingButtons implements Packet {
             case 18079: // pound (spear)
             case 17100: // longrange (darts)
                 client.FightType = 3;
+                client.frame87(43, 3);
+                client.frame87(108, 0);
+                client.autocast_spellIndex = -1;
                 // client.SkillID = 3;
+                client.setCombatStyle(CombatStyleHandler.CombatStyles.CONTROLLED_MELEE);
                 break;
 
             case 1176: // Gmaul!
@@ -566,24 +583,28 @@ public class ClickingButtons implements Packet {
             case 8237: // lunge (dagger)
             case 8236: // slash (dagger)
                 client.FightType = 2;
+                client.frame87(43, 1);
+                client.frame87(108, 0);
+                client.autocast_spellIndex = -1;
+                client.setCombatStyle(CombatStyleHandler.CombatStyles.AGGRESSIVE_MELEE);
                 break;
 
             case 9154: // Log out
                 if (System.currentTimeMillis() < client.walkBlock) {
-                    client.send(new SendMessage("You are unable to logout right now."));
+                    client.sendMessage("You are unable to logout right now.");
                     break;
                 }
                 if (client.isInCombat()) {
-                    client.send(new SendMessage("You must wait until you are out of combat before logging out!"));
+                    client.sendMessage("You must wait until you are out of combat before logging out!");
                     break;
                 }
                 if (System.currentTimeMillis() - client.getLastCombat() <= 7000 && client.inWildy()) {
-                    client.send(new SendMessage("You must wait 7 seconds after npc combat to logout."));
+                    client.sendMessage("You must wait 7 seconds after npc combat to logout.");
                     break;
                 }
                 if (System.currentTimeMillis() - client.lastPlayerCombat <= 30000 && client.inWildy()) {
-                    client.send(new SendMessage("You must wait 30 seconds after combat in the wilderness to logout."));
-                    client.send(new SendMessage("If you X out or disconnect you will stay online for up to a minute"));
+                    client.sendMessage("You must wait 30 seconds after combat in the wilderness to logout.");
+                    client.sendMessage("If you X out or disconnect you will stay online for up to a minute");
                     break;
                 }
                 // if(currentHealth > 0)
@@ -602,9 +623,9 @@ public class ClickingButtons implements Packet {
                         for (int i = 0; i < client.playerItems.length; i++)
                             if (client.playerItems[i] > 0)
                                 client.bankItem(client.playerItems[i] - 1, i, client.playerItemsN[i]);
-                        client.send(new SendMessage("You banked all your items."));
+                        client.sendMessage("You banked all your items.");
                     } else
-                        client.send(new SendMessage("You do not have anything that can be banked."));
+                        client.sendMessage("You do not have anything that can be banked.");
                 }
                 break;
 
@@ -619,8 +640,8 @@ public class ClickingButtons implements Packet {
                         client.tradeConfirmed = true;
                         if (other != null && other.tradeConfirmed) {
                             if (!other.hasTradeSpace() || !client.hasTradeSpace()) {
-                                client.send(new SendMessage(client.failer));
-                                other.send(new SendMessage(client.failer));
+                                client.sendMessage(client.failer);
+                                other.sendMessage(client.failer);
                                 client.declineTrade();
                                 return;
                             }
@@ -628,9 +649,9 @@ public class ClickingButtons implements Packet {
                             other.confirmScreen();
                             break;
                         }
-                        client.send(new SendString("Waiting for other player...", 3431));
+                        client.sendString("Waiting for other player...", 3431);
                         if (other != null && client.validClient(client.trade_reqId)) {
-                            other.send(new SendString("Other player has accepted", 3431));
+                            other.sendString("Other player has accepted", 3431);
                         }
                     }
                 } catch (Exception e) {
@@ -652,8 +673,8 @@ public class ClickingButtons implements Packet {
                             other.giveItems();
                             break;
                         }
-                        other.send(new SendString("Other player has accepted.", 3535));
-                        client.send(new SendString("Waiting for other player...", 3535));
+                        other.sendString("Other player has accepted.", 3535);
+                        client.sendString("Waiting for other player...", 3535);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -695,9 +716,9 @@ public class ClickingButtons implements Packet {
                 Client o = client.getClient(client.duel_with);
                 boolean sendMsgToOther = client.getMaxHealth() - client.getCurrentHealth() == 0 && o.getMaxHealth() - o.getCurrentHealth() != 0;
                 if (o.getMaxHealth() - o.getCurrentHealth() != 0 || client.getMaxHealth() - client.getCurrentHealth() != 0) {
-                    client.send(new SendMessage(sendMsgToOther ? "Your opponent is low on health!" : "You are low on health, so please heal up!"));
+                    client.sendMessage(sendMsgToOther ? "Your opponent is low on health!" : "You are low on health, so please heal up!");
                     if(sendMsgToOther)
-                        o.send(new SendMessage("You are low on health, so please heal up!"));
+                        o.sendMessage("You are low on health, so please heal up!");
                     break;
                 }
                 if (System.currentTimeMillis() - client.lastButton < 1000) {
@@ -717,13 +738,13 @@ public class ClickingButtons implements Packet {
                      */
                     if (client.duelRule[0] && client.duelRule[1] && client.duelRule[2]) {
                         client.declineDuel();
-                        client.send(new SendMessage("At least one combat style must be enabled!"));
-                        o.send(new SendMessage("At least one combat style must be enabled!"));
+                        client.sendMessage("At least one combat style must be enabled!");
+                        o.sendMessage("At least one combat style must be enabled!");
                         return;
                     }
                     if (!client.hasEnoughSpace() || !o.hasEnoughSpace()) {
-                        client.send(new SendMessage(client.failer));
-                        o.send(new SendMessage(client.failer));
+                        client.sendMessage(client.failer);
+                        o.sendMessage(client.failer);
                         client.declineDuel();
                         return;
                     }
@@ -732,30 +753,12 @@ public class ClickingButtons implements Packet {
                     client.confirmDuel();
                     o.confirmDuel();
                 } else {
-                    client.send(new SendString("Waiting for other player...", 6684));
-                    o.send(new SendString("Other player has accepted.", 6684));
+                    client.sendString("Waiting for other player...", 6684);
+                    o.sendString("Other player has accepted.", 6684);
                 }
 
                 break;
 
-            /*
-             * case 33206: try { client.showSkillMenu(0, 0); } catch (IOException e) { }
-             * break; case 33212: try { client.showSkillMenu(1, 0); } catch (IOException
-             * e) { } break; case 33215: try { client.showSkillMenu(4, 0); } catch
-             * (IOException e) { } break; case 33216: try { client.showSkillMenu(17, 0);
-             * } catch (IOException e) { } break; case 34142: try { if
-             * (client.currentSkill < 2) client.showSkillMenu(0, 0); else if
-             * (client.currentSkill == 4) client.showSkillMenu(4, 0); } catch
-             * (IOException e) { } break; case 34119: try { if (client.currentSkill < 2)
-             * client.showSkillMenu(1, 0); else if (client.currentSkill == 4)
-             * client.showSkillMenu(4, 1); } catch (IOException e) { } break; case
-             * 34120: try { if (client.currentSkill < 2) client.showSkillMenu(4, 0); }
-             * catch (IOException e) { } break; case 34123: // try { if
-             * (client.currentSkill < 2) client.send(new SendMessage("Coming soon!"));
-             * // showSkillMenu(6, 0); // } catch (IOException e) { } break;
-             */
-
-            case 33206:
             case 94167:
                 try {
                     showSkillMenu(ATTACK.getId(), 0, client);
@@ -763,7 +766,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33207:
             case 94168:
                 try {
                     showSkillMenu(HITPOINTS.getId(), 0, client);
@@ -771,7 +773,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33208:
             case 94169:
                 try {
                     showSkillMenu(MINING.getId(), 0, client);
@@ -779,7 +780,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33209:
             case 94170:
                 try {
                     showSkillMenu(STRENGTH.getId(), 0, client);
@@ -787,7 +787,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33210:
             case 94171:
                 try {
                     showSkillMenu(AGILITY.getId(), 0, client);
@@ -795,7 +794,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33212:
             case 94173:
                 try {
                     showSkillMenu(DEFENCE.getId(), 0, client);
@@ -803,7 +801,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33215:
             case 94176:
                 try {
                     showSkillMenu(RANGED.getId(), 0, client);
@@ -811,7 +808,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33216:
             case 94177:
                 try {
                     showSkillMenu(THIEVING.getId(), 0, client);
@@ -819,7 +815,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33213:
             case 94174:
                 try {
                     showSkillMenu(HERBLORE.getId(), 0, client);
@@ -827,7 +822,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33219:
             case 94180:
                 try {
                     showSkillMenu(CRAFTING.getId(), 0, client);
@@ -835,7 +829,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33211:
             case 94172:
                 try {
                     showSkillMenu(SMITHING.getId(), 0, client);
@@ -843,7 +836,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33220:
             case 94184:
                 try {
                     showSkillMenu(WOODCUTTING.getId(), 0, client);
@@ -851,7 +843,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33221:
             case 94182:
                 try {
                     showSkillMenu(MAGIC.getId(), 0, client);
@@ -859,7 +850,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33222:
             case 94181:
                 try {
                     showSkillMenu(FIREMAKING.getId(), 0, client);
@@ -867,7 +857,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33223:
             case 94178:
                 try {
                     showSkillMenu(COOKING.getId(), 0, client);
@@ -875,7 +864,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33224:
             case 95053:
                 try {
                     showSkillMenu(RUNECRAFTING.getId(), 0, client);
@@ -883,7 +871,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33214:
             case 94183:
                 try {
                     showSkillMenu(FLETCHING.getId(), 0, client);
@@ -891,7 +878,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 33217:
             case 94175:
                 try {
                     showSkillMenu(FISHING.getId(), 0, client);
@@ -899,83 +885,6 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
-            case 34142:
-                try {
-                    if (client.currentSkill < 2)
-                        showSkillMenu(ATTACK.getId(), 0, client);
-                    else
-                        showSkillMenu(client.currentSkill, 0, client);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case 34119:
-                try {
-                    if (client.currentSkill < 2)
-                        showSkillMenu(DEFENCE.getId(), 0, client);
-                    else
-                        showSkillMenu(client.currentSkill, 1, client);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case 34120:
-                if (client.currentSkill < 2)
-                    try {
-                        showSkillMenu(RANGED.getId(), 0, client);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                else
-                    try {
-                        showSkillMenu(client.currentSkill, 2, client);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                break;
-            case 34123:
-                if (client.currentSkill < 2)
-                    client.send(new SendMessage("Coming soon!"));
-                else
-                    try {
-                        showSkillMenu(client.currentSkill, 3, client);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                break;
-            case 95068:
-            case 94179:
-                client.send(new SendMessage("Coming soon!"));
-                break;
-            case 34133:
-                try {
-                    showSkillMenu(client.currentSkill, 4, client);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case 34136:
-                try {
-                    showSkillMenu(client.currentSkill, 5, client);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case 34139:
-                try {
-                    showSkillMenu(client.currentSkill, 6, client);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case 34155:
-                try {
-                    showSkillMenu(client.currentSkill, 7, client);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                break;
-            case 47130:
             case 95061:
                 try {
                     showSkillMenu(SLAYER.getId(), 0, client);
@@ -983,6 +892,11 @@ public class ClickingButtons implements Packet {
                     throw new RuntimeException(e);
                 }
                 break;
+            case 95068:
+            case 94179:
+                client.sendMessage("Coming soon!");
+                break;
+
             case 88060: //Idea
                 client.requestAnim(4276, 0);
                 client.gfx0(712);
@@ -1022,47 +936,47 @@ public class ClickingButtons implements Packet {
                     client.requestAnim(skillcape.getEmote(), 0);
                     client.gfx0(skillcape.getGfx());
                 } else {
-                    client.send(new SendMessage("You need to be wearing a skillcape to do that!"));
+                    client.sendMessage("You need to be wearing a skillcape to do that!");
                 }
                 break;
             case 32195:
             case 32196:
                 if (client.playerHasItem(2996)) {
                     client.giveExperience(700, Skills.AGILITY);
-                    client.send(new SendMessage("You exchange your agility tickets"));
+                    client.sendMessage("You exchange your agility tickets");
                     client.deleteItem(2996, 1);
                 } else {
-                    client.send(new SendMessage("You have no agility tickets!"));
+                    client.sendMessage("You have no agility tickets!");
                 }
                 break;
             case 32197:
             case 32203:
                 if (client.playerHasItem(2996, 10)) {
                     client.giveExperience(10 * 700, Skills.AGILITY);
-                    client.send(new SendMessage("You exchange your agility tickets."));
+                    client.sendMessage("You exchange your agility tickets.");
                     client.deleteItem(2996, 10);
                 } else {
-                    client.send(new SendMessage("You need 10 agility tickets."));
+                    client.sendMessage("You need 10 agility tickets.");
                 }
                 break;
             case 32204:
             case 32198:
                 if (client.playerHasItem(2996, 25)) {
                     client.giveExperience(25 * 700, Skills.AGILITY);
-                    client.send(new SendMessage("You exchange your agility tickets."));
+                    client.sendMessage("You exchange your agility tickets.");
                     client.deleteItem(2996, 25);
                 } else {
-                    client.send(new SendMessage("You need 25 agility tickets."));
+                    client.sendMessage("You need 25 agility tickets.");
                 }
                 break;
             case 32193:
             case 32189:
                 if (client.playerHasItem(2996, 10)) {
-                    client.send(new SendMessage("You exchange your agility tickets."));
+                    client.sendMessage("You exchange your agility tickets.");
                     client.addItem(11738, 1);
                     client.deleteItem(2996, 10);
                 } else {
-                    client.send(new SendMessage("You need 10 agility tickets."));
+                    client.sendMessage("You need 10 agility tickets.");
                 }
                 break;
 

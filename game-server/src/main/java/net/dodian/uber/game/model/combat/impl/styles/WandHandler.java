@@ -28,6 +28,16 @@ public class WandHandler extends CombatStyleHandler {
                     client.setCombatStyle(CombatStyles.DEFENSIVE_MELEE);
                     client.frame87(43, 2);
                     break;
+                case ATTACK_WITH_SPELL:
+                    client.FightType = 0;
+                    client.frame87(43, 4);
+                    client.frame87(108, 1);
+                    break;
+                case ATTACK_WITH_SPELL_DEFENCE:
+                    client.FightType = 1;
+                    client.frame87(43, 4);
+                    client.frame87(108, 2);
+                    break;
             }
         }
 
@@ -41,7 +51,12 @@ public class WandHandler extends CombatStyleHandler {
             case 1078:
                 client.setCombatStyle(CombatStyles.DEFENSIVE_MELEE);
                 break;
+            case 1093:
+                client.setCombatStyle(CombatStyles.ATTACK_WITH_SPELL);
+                break;
+            case 94047:
+                client.setCombatStyle(CombatStyles.ATTACK_WITH_SPELL_DEFENCE);
+                break;
         }
     }
-
 }
