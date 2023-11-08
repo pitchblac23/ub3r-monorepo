@@ -161,6 +161,8 @@ public class ObjectDefinitionParser {
                         case 60:
                             buf.getShort();
                             break;
+                        case 61:
+                            buf.getShort();
                         case 62:
                             break;
                         case 64:
@@ -216,5 +218,4 @@ public class ObjectDefinitionParser {
 
         }
     }
-
 }

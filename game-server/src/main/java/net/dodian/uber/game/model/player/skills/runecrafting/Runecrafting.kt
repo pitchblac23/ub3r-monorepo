@@ -9,31 +9,36 @@ import java.util.*
 //TODO: add in pure ess
 
 fun runecraft(player: Client, rune: Int, level: Int, xp: Int) {
-    if (!player.contains(1436)) {
-        player.sendMessage("You do not have any rune essence!")
-        return
-    }
-
-    if (player.getLevel(Skills.RUNECRAFTING) < level) {
-        player.sendMessage("You must have " + level + " runecrafting to craft " + player.GetItemName(rune).lowercase(Locale.getDefault()) + ".")
-        return
-    }
-    var count = 0
-    var extra = 0
-    for (c in player.playerItems.indices) {
-        if (player.playerItems[c] == 1437 && player.playerItemsN[c] > 0) {
-            count++
-            player.deleteItem(1436, 1)
-            val chance: Int = (player.getLevel(Skills.RUNECRAFTING) + 1) / 2
-            val roll = 1 + Misc.random(99)
-            if (roll <= chance) extra++
+    if (player.getLevel(Skills.RUNECRAFTING) > level) {
+        if (player.playerHasItem(1436) || player.playerHasItem(7936)) {
+            var count = 0
+            var extra = 0
+            for (c in player.playerItems.indices) {
+                if (player.playerItems[c] == 1437 && player.playerItemsN[c] > 0) {
+                    count++
+                    player.deleteItem(1436, 1)
+                }
+                if (player.playerItems[c] == 7937 && player.playerItemsN[c] > 0) {
+                    count++
+                    player.deleteItem(7936, 1)
+                    val chance: Int = (player.getLevel(Skills.RUNECRAFTING) + 1) / 2
+                    val roll = 1 + Misc.random(99)
+                    if (roll <= chance) extra++
+                }
+            }
+            player.requestAnim(RUNECRAFTING_CRAFT_RUNES, 0)
+            player.sendMessage("You craft " + (count + extra) + " " + player.GetItemName(rune).lowercase(Locale.getDefault()) + "s.")
+            player.addItem(rune, count + extra)
+            player.giveExperience(xp * count, Skills.RUNECRAFTING)
+            player.triggerRandom(xp * count)
+        } else {
+            player.sendMessage("You do not have any rune essence!")
+            return
         }
+    } else {
+        player.sendMessage("You must have " + level + " runecrafting to craft " + player.GetItemName(rune).lowercase(Locale.getDefault()) + "s.")
+        return
     }
-    player.requestAnim(RUNECRAFTING_CRAFT_RUNES, 0)
-    player.sendMessage("You craft " + (count + extra) + " " + player.GetItemName(rune).lowercase(Locale.getDefault()) + "s.")
-    player.addItem(rune, count + extra)
-    player.giveExperience(xp * count, Skills.RUNECRAFTING)
-    player.triggerRandom(xp * count)
 }
 
 fun runeAltar(client: Client, objectId: Int) {

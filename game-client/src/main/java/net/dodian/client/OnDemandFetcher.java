@@ -399,8 +399,9 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                 completedCount++;
 
         while (uncompletedCount < 10) {
+            OnDemandData onDemandData_1 = null;
             try {
-                OnDemandData onDemandData_1 = (OnDemandData) aClass19_1368.popHead();
+                onDemandData_1 = (OnDemandData) aClass19_1368.popHead();
                 if (onDemandData_1 == null)
                     break;
                 if (fileStatus[onDemandData_1.dataType][onDemandData_1.ID] != 0)
@@ -411,7 +412,8 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                 closeRequest(onDemandData_1);
                 waiting = true;
                 System.out.println("Error: file is missing  [ type = " + onDemandData_1.dataType + "]  [id = " + onDemandData_1.ID + "]");
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                System.out.println("Error: file is missing  [ type = " + onDemandData_1.dataType + "]  [id = " + onDemandData_1.ID + "]");
             }
         }
     }

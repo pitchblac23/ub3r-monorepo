@@ -687,12 +687,12 @@ public class Commands implements Packet {
                 if (cmd[0].equalsIgnoreCase("pnpc")) {
                     try {
                         int npcId = Integer.parseInt(cmd[1]);
-                        if (npcId <= 12512) {
+                        if (npcId <= 12560) {
                             client.setNpcMode(npcId >= 0);
                             client.setPlayerNpc(npcId >= 0 ? npcId : -1);
                             client.getUpdateFlags().setRequired(UpdateFlag.APPEARANCE, true);
                         }
-                        client.sendMessage(npcId > 12512 ? "Maximum 12512 in npc id!" : npcId >= 0 ? "Setting npc to " + client.getPlayerNpc() : "Setting you normal!");
+                        client.sendMessage(npcId > 12560 ? "Maximum 12560 in npc id!" : npcId >= 0 ? "Setting npc to " + client.getPlayerNpc() : "Setting you normal!");
                     } catch (Exception e) {
                         client.sendMessage("Wrong usage.. ::" + cmd[0] + " npcid");
                     }

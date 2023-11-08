@@ -135,7 +135,7 @@ public final class EntityDef {
                         fw.write("Npc.description = " + test + ";");
                         fw.write(System.getProperty("line.separator"));
                     }
-                    fw.write(System.getProperty("line.separator"));
+                    //fw.write(System.getProperty("line.separator"));
                     fw.write("break;");
                     fw.write(System.getProperty("line.separator"));
                     fw.write(System.getProperty("line.separator"));

@@ -956,9 +956,7 @@ public class Client extends RSApplet {
                     if (k8 != -1)
                         onDemandFetcher.method560(k8, 3);
                 }
-
         }
-
     }
 
     private void unlinkMRUNodes() {
@@ -2586,6 +2584,7 @@ public class Client extends RSApplet {
         currentSong = -1;
         nextSong = -1;
         prevSong = 0;
+        frame.setTitle(WINDOW_TITLE);
     }
 
     private void method45() {
@@ -3014,8 +3013,6 @@ public class Client extends RSApplet {
     public static Client getClient() {
         return instance;
     }
-
-    public static Jframe jframe;
 
     public static void main(String[] args) {
         try {
@@ -6805,6 +6802,7 @@ public class Client extends RSApplet {
                 anInt1022 = 0;
                 mouseDetection.coordsIndex = 0;
                 super.awtFocus = true;
+                frame.setTitle("Dodian - " + myUsername);
                 aBoolean954 = true;
                 loggedIn = true;
                 stream.currentOffset = 0;
@@ -9772,21 +9770,21 @@ public class Client extends RSApplet {
         int maxHP2 = Integer.parseInt(mHP);
         health = (int) (((double) currentHP / (double) maxHP2) * 100D);
         /* Draws empty orb */
-        hitPointsBg.drawSprite(clientSize == 0 ? 190 : clientWidth - 55, clientSize == 0 ? 22 : 10);
-        hitPointsFill.drawSprite(clientSize == 0 ? 217 : clientWidth - 28, clientSize == 0 ? 26 : 14);
-        heartIcon.drawSprite(clientSize == 0 ? 222 : clientWidth - 23, clientSize == 0 ? 32 : 20);
+        hitPointsBg.drawSprite(clientSize == 0 ? 0 : clientWidth - 55, clientSize == 0 ? 42 : 10);
+        hitPointsFill.drawSprite(clientSize == 0 ? 27 : clientWidth - 28, clientSize == 0 ? 46 : 14);
+        heartIcon.drawSprite(clientSize == 0 ? 33 : clientWidth - 23, clientSize == 0 ? 52 : 20);
         /* Draws current HP text */
         if (health > 100) {
-            smallText.method382(65280, clientSize == 0 ? 205 : clientWidth - 42, cHP, clientSize == 0 ? 48 : 36, true);
+            smallText.method382(65280, clientSize == 0 ? 14 : clientWidth - 42, cHP, clientSize == 0 ? 63 : 36, true);
         }
         if (health <= 100 && health >= 75) {
-            smallText.method382(65280, clientSize == 0 ? 205 : clientWidth - 42, cHP, clientSize == 0 ? 48 : 36, true);
+            smallText.method382(65280, clientSize == 0 ? 14 : clientWidth - 42, cHP, clientSize == 0 ? 68 : 36, true);
         } else if (health <= 74 && health >= 50) {
-            smallText.method382(0xffff00, clientSize == 0 ? 205 : clientWidth - 42, cHP, clientSize == 0 ? 48 : 36, true);
+            smallText.method382(0xffff00, clientSize == 0 ? 14 : clientWidth - 42, cHP, clientSize == 0 ? 68 : 36, true);
         } else if (health <= 49 && health >= 25) {
-            smallText.method382(0xfca607, clientSize == 0 ? 205 : clientWidth - 42, cHP, clientSize == 0 ? 48 : 36, true);
+            smallText.method382(0xfca607, clientSize == 0 ? 14 : clientWidth - 42, cHP, clientSize == 0 ? 68 : 36, true);
         } else if (health <= 24 && health >= 0) {
-            smallText.method382(0xf50d0d, clientSize == 0 ? 205 : clientWidth - 42, cHP, clientSize == 0 ? 48 : 36, true);
+            smallText.method382(0xf50d0d, clientSize == 0 ? 14 : clientWidth - 42, cHP, clientSize == 0 ? 68 : 36, true);
         }
         /* Draws inside orb sprites */
     }
@@ -9799,21 +9797,21 @@ public class Client extends RSApplet {
         int maxPrayer = Integer.parseInt(mP);
         prayer = (int) (((double) currentPrayer / (double) maxPrayer) * 100D);
         /* Draws Prayer orb */
-        prayerBg.drawSprite(clientSize == 0 ? 195 : clientWidth - 55, clientSize == 0 ? 52 : 41);
-        prayerFill.drawSprite(clientSize == 0 ? 222 : clientWidth - 28, clientSize == 0 ? 56 : 45);
-        prayerIcon.drawSprite(clientSize == 0 ? 225 : clientWidth - 25, clientSize == 0 ? 59 : 48);
+        prayerBg.drawSprite(clientSize == 0 ? 0 : clientWidth - 55, clientSize == 0 ? 75 : 41);
+        prayerFill.drawSprite(clientSize == 0 ? 27 : clientWidth - 28, clientSize == 0 ? 79 : 45);
+        prayerIcon.drawSprite(clientSize == 0 ? 30 : clientWidth - 25, clientSize == 0 ? 82 : 48);
         /* Draws current Prayer text */
 		if(prayer <= 100 && prayer >= 75) {
-			smallText.method382(65280, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
+			smallText.method382(65280, clientSize == 0 ? 14 : clientWidth - 42, cP, clientSize == 0 ? 101 : 67, true);
 		}
 		else if(prayer <= 74 && prayer >= 50) {
-			smallText.method382(0xffff00, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
+			smallText.method382(0xffff00, clientSize == 0 ? 14 : clientWidth - 42, cP, clientSize == 0 ? 101 : 67, true);
 		}
 		else if(prayer <= 49 && prayer >= 25) {
-			smallText.method382(0xfca607, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
+			smallText.method382(0xfca607, clientSize == 0 ? 14 : clientWidth - 42, cP, clientSize == 0 ? 101 : 67, true);
 		}
 		else if(prayer <= 24 && prayer >= 0) {
-			smallText.method382(0xf50d0d, clientSize == 0 ? 209 : clientWidth - 42, cP, clientSize == 0 ? 78 : 67, true);
+			smallText.method382(0xf50d0d, clientSize == 0 ? 14 : clientWidth - 42, cP, clientSize == 0 ? 101 : 67, true);
 		}
         /* Draws inside orb sprites */
     }
@@ -10647,7 +10645,6 @@ public class Client extends RSApplet {
                     anIntArray840[anInt839++] = j1;
             }
         }
-
     }
 
     private void processLoginScreenInput() {

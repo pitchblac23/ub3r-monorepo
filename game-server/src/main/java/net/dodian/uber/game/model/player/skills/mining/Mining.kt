@@ -66,9 +66,6 @@ import java.util.*
     }
 
     fun mining(index: Int, player: Client) {
-        if (index != 6) {
-            player.sendMessage("You mine some " + player.GetItemName(Utils.ore[index]).lowercase(Locale.getDefault()) + ".")
-        }
         doAction(player, Utils.ore[index], Utils.oreExp[index])
         if (Misc.chance(86) == 1) { //256 without glory
             gemChance(player)
@@ -76,8 +73,10 @@ import java.util.*
     }
 
     fun miningEss(p: Client) {
-        p.sendMessage("You mine some " + p.GetItemName(1436).lowercase(Locale.getDefault()) + ".")
-        doAction(p, 1436, 50)
+        if (p.getLevel(Skills.MINING) < 30) {
+            doAction(p, 1436, 50)
+        } else
+            doAction(p, 7936, 50)
     }
 
     fun doAction(p: Client, i: Int, xp: Int) {
@@ -86,6 +85,7 @@ import java.util.*
             p.resetAction(true)
             return
         }
+        p.sendMessage("You mine some " + p.GetItemName(i).lowercase(Locale.getDefault()) + ".")
         p.addItem(i, 1)
         p.giveExperience(xp, Skills.MINING)
         p.triggerRandom(xp)

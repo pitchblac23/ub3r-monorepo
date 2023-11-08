@@ -15,7 +15,6 @@ import static net.dodian.client.config.Constants.WINDOW_TITLE;
 public class Jframe extends Client implements ActionListener {
 
     private static JMenuItem menuItem;
-    private JFrame frame;
     private static final long serialVersionUID = 1L;
 
     public Jframe(String[] args) {

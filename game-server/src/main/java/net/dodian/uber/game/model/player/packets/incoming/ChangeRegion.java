@@ -45,8 +45,6 @@ public class ChangeRegion implements Packet {
             client.ReplaceObject2(new Position(2542, 3097, 0), 12260, 0, 10); //Teleport
 
             client.ReplaceObject2(new Position(2613, 3084, 0), 3994, -3, 11);
-            client.ReplaceObject2(new Position(2628, 3151, 0), 2104, -3, 11);
-            client.ReplaceObject2(new Position(2629, 3151, 0), 2105, -3, 11);
             client.ReplaceObject2(new Position(2733, 3374, 0), 6420, -1, 11);
             client.ReplaceObject2(new Position(2688, 3481, 0), 27978, 1, 11); //Blood altar
             client.ReplaceObject2(new Position(2782, 3465, 0), 14905, 0, 10); //Nature altar
@@ -71,21 +69,13 @@ public class ChangeRegion implements Packet {
             client.ReplaceObject2(new Position(2772, 3142, 0), 2050, 0, 10);
             client.ReplaceObject2(new Position(2772, 3143, 0), 2050, 0, 10);
 
-            /* ? */
-            client.ReplaceObject2(new Position(2998, 3931, 0), 6951, 0, 0);
-            client.ReplaceObject2(new Position(2904, 9678, 0), 6951, 0, 10);
-
-            // slayer update
-            //ReplaceObject2(2904, 9678, -1, -1, 11);
-            // ReplaceObject2(2691, 9774, 2107, 0, 11);
-
             // Ancient slayer dunegon
             client.ReplaceObject(2661, 9815, 2391, 0, 0);
             client.ReplaceObject(2662, 9815, 2392, -2, 0);
 
-            /* Gnome mining cavern */
-            client.ReplaceObject2(new Position(2492, 9916, 0), 7491, 0, 10);
-            client.ReplaceObject2(new Position(2493, 9915, 0), 7491, 0, 10);
+            /* GoldOre Mining Area */
+            client.ReplaceObject2(new Position(3026, 9734, 0), 7491, 0, 10);
+            client.ReplaceObject2(new Position(3028, 9733, 0), 7491, 0, 10);
 
             /*Cooking oven fishing guild*/
             client.ReplaceObject2(new Position(2593, 3423, 0), 21302, 0, 10);

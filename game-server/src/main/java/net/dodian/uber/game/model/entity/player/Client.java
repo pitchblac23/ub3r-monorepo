@@ -4041,6 +4041,7 @@ public class Client extends Player implements Runnable {
 			}
 		}
 	}
+
 	public void triggerTele(int x, int y, int height, boolean prem) {
 		removeinterfaces();
 		resetAction();

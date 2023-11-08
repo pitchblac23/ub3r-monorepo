@@ -446,6 +446,8 @@ public final class ObjectDef {
                     modifiedModelColors[i2] = stream.readUnsignedWord();
                     originalModelColors[i2] = stream.readUnsignedWord();
                 }
+            } else if (opcode == 61) {
+                stream.readUnsignedShort();
             } else if (opcode == 62)
                 inverted = true;
             else if (opcode == 64)

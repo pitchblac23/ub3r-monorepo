@@ -2,26 +2,13 @@ package net.dodian.client;
 
 import java.awt.*;
 
-import static net.dodian.client.config.Constants.WINDOW_TITLE;
-
 final class RSFrame extends Frame {
 
     private static final long serialVersionUID = 1L;
-    private String title = WINDOW_TITLE;
-
-    public RSFrame(RSApplet RSApplet_, int i, int j) {
-        rsApplet = RSApplet_;
-        setTitle(title);
-        setVisible(true);
-        toFront();
-        setSize(i + 8, j + 28);
-        setResizable(Client.clientSize == 0 ? false : true);
-        setLocationRelativeTo(null);
-    }
 
     public RSFrame(RSApplet rsapplet, int width, int height, boolean undecorative, boolean resizable) {
         rsApplet = rsapplet;
-        setTitle(title);
+        //rsApplet = RSApplet_;
         setUndecorated(undecorative);
         setBackground(Color.BLACK);
         setVisible(true);

@@ -184,9 +184,7 @@ public class ClickObject implements Packet {
                 client.sendMessage("You do not have any bars to smith.");
         }
         if (objectID == 1294) {
-            client.teleportToX = 2485;
-            client.teleportToY = 9912;
-            client.newheightLevel = 0;
+            client.teleportTo(3021, 9739, 0);
         }
         if (objectID == 17384 && position.getX() == 2892 && position.getY() == 3507) {
             client.teleportToX = 2893;
@@ -952,6 +950,59 @@ public class ClickObject implements Packet {
         if (objectID == 5960 && position.getX() == 2539 && position.getY() == 4712) {
             client.teleportToX = 3105;
             client.teleportToY = 3933;
+        }
+
+        if (objectID == 30365) {
+            if (client.getSkillLevel(Skills.MINING) < 60) {
+                client.sendMessage("You need a mining level of 60 to access the Mining Guild.");
+            } else {
+                if (client.getPosition().getX() == 3019 && client.getPosition().getY() == 9733) {
+                    client.AddToCords(0, -1, 2);
+                    EventManager.getInstance().registerEvent(new Event(0) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(3019, 9732, -1, 1, 0);
+                            client.ReplaceObject(3019, 9733, 30365, 2, 0);
+                            stop();
+                        }
+                    });
+                    EventManager.getInstance().registerEvent(new Event(1000) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(3019, 9732, 30365, 1, 0);
+                            client.ReplaceObject(3019, 9733, -1, 1, 0);
+                            stop();
+                        }
+                    });
+                }
+            }
+        }
+
+        if (objectID == 30366) {
+            if (client.getSkillLevel(Skills.MINING) < 60) {
+                client.sendMessage("You need a mining level of 60 to access the Mining Guild.");
+            } else {
+                if (client.getPosition().getX() == 3043 && client.getPosition().getY() == 9730) {
+                    client.AddToCords(0, -1, 2);
+                    EventManager.getInstance().registerEvent(new Event(0) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(3043, 9729, -1, 1, 0);
+                            client.ReplaceObject(3043, 9730, 30366, 2, 0);
+                            stop();
+                        }
+                    });
+                    EventManager.getInstance().registerEvent(new Event(1000) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(3043, 9729, 30366, 1, 0);
+                            client.ReplaceObject(3043, 9730, -1, 1, 0);
+                            GlobalObject.updateObject(client);
+                            stop();
+                        }
+                    });
+                }
+            }
         }
 
         // Wo0t Tzhaar Objects
