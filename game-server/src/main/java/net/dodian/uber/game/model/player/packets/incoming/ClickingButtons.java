@@ -129,28 +129,36 @@ public class ClickingButtons implements Packet {
                 client.triggerTele(2606, 3102, 0, false);
                 break;
 
+            case 4140:
             case 50235: //Seers
                 client.triggerTele(2723, 3485, 0, false);
                 break;
+            case 29031:
             case 50245: //Ardougne
                 client.triggerTele(2662, 3309, 0, false);
                 break;
+            case 4143:
             case 50253: // Catherby
                 client.triggerTele(2804, 3434, 0, false);
                 break;
+            case 4150:
             case 51005: //Legends guild
                 client.triggerTele(2728, 3346, 0, false);
                 break;
+            case 4146:
             case 51013: //Taverly
                 client.triggerTele(2895, 3457, 0, false);
                 break;
+            case 6004:
             case 51023: //Fishing guild
                 client.triggerTele(2597, 3409, 0, true);
                 break;
+            case 6005:
             case 51031: //Gnome village
                 client.triggerTele(2472, 3438, 0, false);
                 break;
-            case 51039: //Empty teleport
+            case 75008:
+            case 51039: //Edgeville
                 client.triggerTele(3087, 3492, 0, false);
                 break;
             case 74212:
