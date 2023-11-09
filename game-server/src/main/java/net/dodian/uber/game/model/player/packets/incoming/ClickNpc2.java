@@ -182,7 +182,6 @@ public class ClickNpc2 implements Packet {
         }
         /*Ends*/
         else {
-            client.println("atNPC 2: " + npcId);
             client.sendMessage("Please inform Admin of click2 on " + npcId + ".");
         }
     }
