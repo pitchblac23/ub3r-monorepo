@@ -31,5 +31,4 @@ public class Sound implements OutgoingPacket {
         client.getOutputStream().writeByte(0);
         client.getOutputStream().writeWord(delay);
     }
-
 }

@@ -17,5 +17,4 @@ public class SetRegionSong implements OutgoingPacket {
         client.getOutputStream().writeWordBigEndian(songId);
         //client.flushOutStream();
     }
-
 }

@@ -979,6 +979,30 @@ public class ClickingButtons implements Packet {
                     client.sendMessage("You need 10 agility tickets.");
                 }
                 break;
+            case 6026:
+                    if (client.getLevel(Skills.MAGIC) < 68) {
+                        client.sendMessage("You need a magic level of 68 to cast this spell.");
+                        return;
+                    }
+                    if (!client.playerHasItem(564, 5)) {
+                        client.sendMessage("Requires five cosmic runes to cast this spell.");
+                        return;
+                    }
+                    if (!client.playerHasItem(229)) {
+                        client.sendMessage("you need a empty vial.");
+                        return;
+                    }
+                    for (int i = 0; i < 28; i++) {
+                        if (client.playerHasItem(229)) {
+                            client.deleteItem(229, client.GetItemSlot(229),1);
+                            client.addItem((227), 1);
+                        }
+                    }
+                client.requestAnim(722, 0);//6294
+                client.callGfxMask(1061, 0);
+                client.giveExperience(600, Skills.MAGIC);
+                client.deleteItem(561, 2);
+                break;
 
             default:
                 // System.out.println("Player stands in: X="+absX+" Y="+absY);

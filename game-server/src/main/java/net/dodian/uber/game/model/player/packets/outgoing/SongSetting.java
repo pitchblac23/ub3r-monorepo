@@ -25,5 +25,4 @@ public class SongSetting implements OutgoingPacket {
         client.getOutputStream().writeByte(enabled);
         client.getOutputStream().writeWord(unlocked);
     }
-
 }

@@ -8,6 +8,7 @@ import net.dodian.uber.game.model.player.packets.outgoing.SendSideTab;
 import net.dodian.uber.game.model.player.skills.Skills;
 
 import static net.dodian.uber.game.model.player.skills.smithing.SmeltingKt.*;
+import static net.dodian.utilities.DotEnvKt.getServerDebugMode;
 
 public class MagicOnItems implements Packet {
 
@@ -19,6 +20,7 @@ public class MagicOnItems implements Packet {
         int castSpell = client.getInputStream().readSignedWordA();
         int lowAlch = (int) Math.floor(Server.itemManager.getShopBuyValue(castOnItem));
         int highAlch = (int) Math.floor(Server.itemManager.getAlchemy(castOnItem));
+        if (getServerDebugMode()) { client.println("castSpell = " + castSpell); }
         if (!(System.currentTimeMillis() - client.lastMagic >= 1800) || !client.playerHasItem(castOnItem) || !(client.playerItems[castOnSlot] == (castOnItem + 1))) {
             client.send(new SendSideTab(6));
             return;
@@ -235,6 +237,36 @@ public class MagicOnItems implements Packet {
             client.deleteRunes(new int[]{564}, new int[]{10});
             client.addItem(item, 1);
             client.giveExperience(780, Skills.MAGIC);
+        }
+        if (castSpell == 24559) {
+            if (client.getLevel(Skills.MAGIC) < 87) {
+                client.sendMessage("You need a magic level of 87 to cast this spell.");
+                return;
+            }
+            if (!client.hasRunes(new int[]{564}, new int[]{10})) {
+                client.sendMessage("You need 10 cosmic runes to cast this spell.");
+                return;
+            }
+            int item = 0;
+            if (castOnItem == 6575)
+                item = 6583;
+            else if (castOnItem == 6577)
+                item = 11128;
+            else if (castOnItem == 6581)
+                item = 6585;
+            else
+                client.sendMessage("Cant enchant this item.");
+            if (item == 0) {
+                return;
+            }
+            client.lastMagic = System.currentTimeMillis();
+            client.requestAnim(720, 0);
+            client.callGfxMask(115, 100);
+            client.send(new SendSideTab(6));
+            client.deleteItem(castOnItem, 1);
+            client.deleteRunes(new int[]{564}, new int[]{10});
+            client.addItem(item, 1);
+            client.giveExperience(1150, Skills.MAGIC);
         }
         if (castSpell == 6003) {// Onyx
             if (client.getLevel(Skills.MAGIC) < 87) {

@@ -19,5 +19,4 @@ public class Frame171 implements OutgoingPacket {
         client.getOutputStream().writeWord(subFrame);
         client.flushOutStream();
     }
-
 }

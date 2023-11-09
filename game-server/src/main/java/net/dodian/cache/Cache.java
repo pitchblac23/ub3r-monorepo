@@ -217,5 +217,4 @@ public class Cache implements Closeable {
         }
         return (int) (indexFiles[cache].length() / INDEX_SIZE) - 1;
     }
-
 }

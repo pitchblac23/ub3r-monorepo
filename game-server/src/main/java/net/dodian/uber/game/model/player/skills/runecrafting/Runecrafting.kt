@@ -52,7 +52,7 @@ fun runeAltar(client: Client, objectId: Int) {
             return
         }
         14905 -> {
-            runecraft(client, 561, 45, 85)
+            runecraft(client, 561, 44, 85)
             return
         }
         27978 -> {

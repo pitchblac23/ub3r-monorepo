@@ -831,7 +831,6 @@ public class Client extends RSApplet {
                         objectManager.method190(l8, aClass11Array1230, k9, worldController, abyte1);
                     }
                 }
-
             }
             if (aBoolean1159) {
                 for (int j3 = 0; j3 < 4; j3++) {
@@ -850,7 +849,6 @@ public class Client extends RSApplet {
                                     objectManager.method179(i9, l9, aClass11Array1230, k4 * 8, (j10 & 7) * 8, aByteArrayArray1183[l11], (l10 & 7) * 8, j3, j6 * 8);
                                     break;
                                 }
-
                             }
                         }
                     }
@@ -882,14 +880,10 @@ public class Client extends RSApplet {
                                     objectManager.method183(aClass11Array1230, worldController, k10, j8 * 8, (i12 & 7) * 8, l6, aByteArrayArray1247[k12], (k11 & 7) * 8, i11, j9 * 8);
                                     break;
                                 }
-
                             }
                         }
-
                     }
-
                 }
-
             }
             stream.createFrame(0);
             objectManager.method171(aClass11Array1230, worldController);

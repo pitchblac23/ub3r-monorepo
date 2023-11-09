@@ -667,7 +667,7 @@ var slot = 8720;
                 "Giant pouch",
                 "Blood rune",
                 "Skillcape")
-            val s1 = arrayOf("1", "1", "20", "30", "40", "45", "60", "70", "99")
+            val s1 = arrayOf("1", "1", "20", "30", "40", "44", "60", "70", "99")
             for (i in s.indices) { player.send(SendString(s[i], slot + i)) }
             slot = 8720
             for (i in s1.indices) { player.send(SendString(s1[i], slot + i)) }

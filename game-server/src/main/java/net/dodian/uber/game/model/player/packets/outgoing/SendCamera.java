@@ -61,5 +61,4 @@ public class SendCamera implements OutgoingPacket {
         }
         client.flushOutStream();
     }
-
 }

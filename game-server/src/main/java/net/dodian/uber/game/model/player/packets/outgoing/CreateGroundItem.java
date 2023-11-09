@@ -24,5 +24,4 @@ public class CreateGroundItem implements OutgoingPacket {
         client.getOutputStream().writeByte(position.getY() > 4000 && position.getY() < 5500 ? 0 : position.getZ());
         //Apperently in the essence zone we need to apply height '0'! Client shiez?!
     }
-
 }

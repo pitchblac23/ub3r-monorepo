@@ -166,6 +166,8 @@ final class ObjectManager {
                                     } else {
                                         int k22 = aByteArrayArrayArray136[l][l6][k17] + 1;
                                         byte byte4 = aByteArrayArrayArray148[l][l6][k17];
+                                        /*if((i19 - 1) > Flo.cache.length)
+                                            i19 = Flo.cache.length;*/
                                         Flo flo_2 = Flo.overlays[i19 - 1];
                                         if ((i19 - 1) != 54) {
                                             int i23 = flo_2.texture;
@@ -192,8 +194,7 @@ final class ObjectManager {
                                                 i23 = 1;
                                             } else if (j23 == 6363) { // river
                                                 // bank
-                                                // (brown
-                                                // shit)
+                                                // (brown shit)
                                                 // 508
                                                 k23 = 0x483B21;
                                                 j23 = method177(25, 146, 24);
