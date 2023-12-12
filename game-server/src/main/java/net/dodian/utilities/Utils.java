@@ -47,18 +47,8 @@ public class Utils {
     public static int[] axes = {1351, 1349, 1353, 1355, 1357, 1359, 6739, 20011};
     public static double[] axeBonus = {0.06, 0.08, 0.1, 0.15, 0.2, 0.35, 0.55, 0.55};
     public static int[] axeReq = {1, 1, 6, 21, 31, 41, 61, 61};
-    public static int[] shortExp = {80, 120, 160, 200, 250, 320};
-    public static int[] longExp = {90, 135, 180, 230, 290, 360};
 
-
-    /*Fishing & Cooking*/
-    public static int[] fishSpots = {1510, 1510, 1511, 1511, 1514, 1514, 1517, 1517};
-    public static int[] fishId = {317, 335, 377, 371, 7944, 383, 395, 389};
-    public static int[] fishAnim = {621, 622, 619, 618, 621, 618, 619, 618};
-    public static int[] fishReq = {1, 20, 40, 50, 60, 70, 85, 95};
-    public static int[] fishTime = {1200, 1800, 2400, 3000, 2400, 4200, 4800, 5400};
-    public static int[] fishTool = {303, 309, 301, 311, 303, 311, 301, 311};
-    public static int[] fishExp = {110, 130, 200, 440, 650, 780, 1100, 1450, 1900};
+    /*Cooking*/
     public static int[] rawIds = {317, 321, 2134, 2132, 2307, 3363, 335, 331, 377, 371, 7944, 383, 395, 389};
     public static int[] cookedIds = {315, 319, 2142, 2142, 2309, 3369, 333, 329, 379, 373, 7946, 385, 397, 391};
     public static int[] burnId = {323, 323, 2146, 2146, 2311, 3375, 343, 343, 381, 375, 7948, 387, 399, 393};

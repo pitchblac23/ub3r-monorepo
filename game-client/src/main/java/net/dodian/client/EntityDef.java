@@ -17,21 +17,15 @@ public final class EntityDef {
         stream.currentOffset = streamIndices[i];
         entityDef.interfaceType = i;
         entityDef.readValues(stream);
-        customValues(entityDef);
+        //customValues(entityDef);
         return entityDef;
     }
 
-    private static void customValues(EntityDef def) {
+    /*private static void customValues(EntityDef def) {
         int id = (int) def.interfaceType;
-        if (id == 1510)
-            def.actions = new String[]{"Shrimp", null, "Trout", null, null};
-        if (id == 1511)
-            def.actions = new String[]{"Lobster", null, "Swordfish", null, null};
         if (id == 1514)
-            def.actions = new String[]{"Monkfish", null, "Shark", null, null};
-        if (id == 1517)
-            def.actions = new String[]{"Sea Turtle", null, "Manta Ray", null, null};
-    }
+            def.actions = new String[]{"Net", null, "Bait", null, null};
+    }*/
 
     public Model method160() {
         if (childrenIDs != null) {

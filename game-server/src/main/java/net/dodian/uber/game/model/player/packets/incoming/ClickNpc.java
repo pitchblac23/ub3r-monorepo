@@ -69,6 +69,7 @@ public class ClickNpc implements Packet {
         client.skillX = tempNpc.getPosition().getX();
         client.setSkillY(tempNpc.getPosition().getY());
         startFishing(client, npcId, 1);
+
         if (npcId == 5809) {
             client.NpcWanneTalk = 804;
             // openTan();
@@ -142,9 +143,6 @@ public class ClickNpc implements Packet {
                     num++;
             }
             tempNpc.setText("There are currently " + num + " people in the wilderness");
-        } else {
-            client.println("atNPC 1: " + npcId);
-            client.send(new SendMessage("Please inform Admin of click1 on " + npcId + "."));
         }
     }
 }

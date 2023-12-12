@@ -1005,6 +1005,49 @@ public class ClickObject implements Packet {
             }
         }
 
+        if (objectID == 20925) {
+            if (client.getSkillLevel(Skills.FISHING) < 68) {
+                client.sendMessage("You need a fishing level of 68 to access the Fishing Guild.");
+            } else {
+                if (client.getPosition().getX() == 2611 && client.getPosition().getY() == 3393) {
+                    client.AddToCords(0, 1, 2);
+                    EventManager.getInstance().registerEvent(new Event(0) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(2611, 3394, -1, 1, 0);
+                            client.ReplaceObject(2611, 3394, 20925, 4, 0);
+                            stop();
+                        }
+                    });
+                    EventManager.getInstance().registerEvent(new Event(1050) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(2611, 3394, 20925, 3, 0);
+                            stop();
+                        }
+                    });
+                }
+                if (client.getPosition().getX() == 2611 && client.getPosition().getY() == 3394) {
+                    client.AddToCords(0, -1, 2);
+                    EventManager.getInstance().registerEvent(new Event(0) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(2611, 3394, -1, 1, 0);
+                            client.ReplaceObject(2611, 3394, 20925, 4, 0);
+                            stop();
+                        }
+                    });
+                    EventManager.getInstance().registerEvent(new Event(1050) {
+                        @Override
+                        public void execute() {
+                            client.ReplaceObject(2611, 3394, 20925, 3, 0);
+                            stop();
+                        }
+                    });
+                }
+            }
+        }
+
         // Wo0t Tzhaar Objects
         if (objectID == 9369 && (position.getX() == 2399) && (position.getY() == 5176)) {
             if (client.getPosition().getY() == 5177) {
@@ -1255,7 +1298,7 @@ public class ClickObject implements Packet {
                 client.skillX = position.getX();
                 client.setSkillY(position.getY());
                 client.stairDistance = 1;
-            } else if (objectID == 2113) { // Mining guild stairs
+            } else if (objectID == 2113) { // Mining guild
                 if (client.getLevel(Skills.MINING) >= 60) {
                     client.stairs = 3;
                     client.skillX = position.getX();

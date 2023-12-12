@@ -180,9 +180,5 @@ public class ClickNpc2 implements Packet {
         } else if (npcId == 932) { // Legends General Store
             client.WanneShop = 38;
         }
-        /*Ends*/
-        else {
-            client.sendMessage("Please inform Admin of click2 on " + npcId + ".");
-        }
     }
 }

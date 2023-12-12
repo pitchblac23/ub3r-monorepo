@@ -151,7 +151,7 @@ public class ClickingButtons implements Packet {
                 break;
             case 6004:
             case 51023: //Fishing guild
-                client.triggerTele(2597, 3409, 0, true);
+                client.triggerTele(2611, 3391, 0, true);
                 break;
             case 6005:
             case 51031: //Gnome village

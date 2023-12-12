@@ -290,6 +290,14 @@ public class Npc extends Entity {
                 enemy.dealDamage(hitDiff, false, this, damageType.MELEE);
                 setLastAttack(getAttackTimer());
             }
+            /*if (getId() == 1870) {
+                int hitDiff;
+                hitDiff = Utils.random((int)Math.floor(maxHit * this.getMagic()));
+                enemy.dealDamage(hitDiff, false, this, damageType.MAGIC);
+                String[] text = {"Begone, " +enemy.getPlayerName()+ "!", "Flee from me, " +enemy.getPlayerName()+ "!", "Bwaaaaaauk bwuk bwuk", "Bwuk", "MUAHAHAHAHAAA!", "Bwuk bwuk bwuk"};
+                String displayText = text[Misc.random(text.length - 1)];
+                setText(displayText);
+            }*/
         } else { //Jad!
             Client enemy = null;
             Client target = getTarget(true);
@@ -873,7 +881,6 @@ public class Npc extends Entity {
                 setLastAttack(getAttackTimer() - delay + 1);
                 stop();
             }
-
         });
     }
 }

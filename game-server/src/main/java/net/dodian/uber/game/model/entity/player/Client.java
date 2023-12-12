@@ -24,6 +24,7 @@ import net.dodian.uber.game.model.player.packets.PacketHandler;
 import net.dodian.uber.game.model.player.packets.outgoing.*;
 import net.dodian.uber.game.model.player.quests.QuestSend;
 import net.dodian.uber.game.model.player.skills.Skills;
+import net.dodian.uber.game.model.player.skills.fishing.FishingKt;
 import net.dodian.uber.game.model.player.skills.fletching.Fletching;
 import net.dodian.uber.game.model.player.skills.prayer.Prayers;
 import net.dodian.uber.game.model.player.skills.slayer.SlayerTask;
@@ -2564,7 +2565,7 @@ public class Client extends Player implements Runnable {
 		} else if (crafting && now - lastAction >= 1800) {
 			lastAction = now;
 			craft(this);
-		} else if (fishing && now - lastAction >= Utils.fishTime[fishIndex]) {
+		} else if (fishing && now - lastAction >= FishingKt.getFishTime()[fishIndex]) {
 			lastAction = now;
 			fish(this);
 		} else if (mining && now - lastAction >= getMiningSpeed(this)) {

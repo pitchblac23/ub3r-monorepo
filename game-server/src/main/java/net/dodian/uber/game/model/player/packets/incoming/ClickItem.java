@@ -186,6 +186,22 @@ public class ClickItem implements Packet {
                         client.addItem(228, 100);
                     used = false;
                     break;
+                case 11881:
+                    client.deleteItem(11881, slot, 1);
+                    if(!client.playerHasItem(314))
+                        client.addItemSlot(314,100, slot);
+                    else
+                        client.addItem(314, 100);
+                    used = false;
+                    break;
+                case 11883:
+                    client.deleteItem(11883, slot, 1);
+                    if(!client.playerHasItem(313))
+                        client.addItemSlot(313,100, slot);
+                    else
+                        client.addItem(313, 100);
+                    used = false;
+                    break;
                 case 12859:
                     client.deleteItem(12859, slot,1);
                     if(!client.playerHasItem(222))
